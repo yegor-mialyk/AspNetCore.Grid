@@ -1,0 +1,6 @@
+/artifacts/
+/.vs/
+
+project.lock.json
+*.user
+*.suo
