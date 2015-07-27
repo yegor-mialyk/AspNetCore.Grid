@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Internal;
 using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -17,8 +18,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public HtmlGridTests()
         {
-            html = HtmlHelperFactory.CreateHtmlHelper("id=3&name=jim");
             grid = new Grid<GridModel>(new GridModel[8]);
+            html = HtmlHelperFactory.CreateHtmlHelper();
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
             grid.Columns.Add(model => model.Name);
@@ -55,7 +56,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeExistingHttpContext()
         {
-            HttpContext httpContext = grid.HttpContext = HttpContextFactory.CreateHttpContext();
+            HttpContext httpContext = grid.HttpContext = new DefaultHttpContext();
 
             Object actual = new HtmlGrid<GridModel>(html, grid).Grid.HttpContext;
             Object expected = httpContext;

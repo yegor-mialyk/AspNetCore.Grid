@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNet.Http.Internal;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
-using System;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
     public class HtmlHelperFactory
     {
-        public static IHtmlHelper CreateHtmlHelper(String queryString = null)
+        public static IHtmlHelper CreateHtmlHelper()
         {
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
 
             html.ViewContext.Returns(new ViewContext());
-            html.ViewContext.HttpContext = HttpContextFactory.CreateHttpContext();
+            html.ViewContext.HttpContext = new DefaultHttpContext();
 
             return html;
         }
