@@ -4,11 +4,11 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public interface IGridColumns : IEnumerable<IGridColumn>
+    public interface IGridColumns<out T> : IEnumerable<T> where T : IGridColumn
     {
     }
 
-    public interface IGridColumns<T> : IGridColumns
+    public interface IGridColumnsOf<T> : IGridColumns<IGridColumn<T>>
     {
         IGrid<T> Grid { get; set; }
 

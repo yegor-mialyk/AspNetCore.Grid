@@ -103,12 +103,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Build(Action<IGridColumns<T>> builder)
+        #region Method: Build(Action<IGridColumnsOf<T>> builder)
 
         [Fact]
         public void Build_BuildsColumns()
         {
-            IGridColumns expected = htmlGrid.Grid.Columns;
+            IGridColumnsOf<GridModel> expected = htmlGrid.Grid.Columns;
             Boolean builderCalled = false;
 
             htmlGrid.Build(actual =>

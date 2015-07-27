@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridRows<T> : IGridRows<T>
+    public class GridRows<T> : IGridRowsOf<T>
     {
-        public IGrid<T> Grid { get; set; }
+        public IEnumerable<IGridRow<T>> CurrentRows { get; set; }
         public Func<T, String> CssClasses { get; set; }
-        public IEnumerable<IGridRow> CurrentRows { get; set; }
+        public IGrid<T> Grid { get; set; }
 
         public GridRows(IGrid<T> grid)
         {
             Grid = grid;
         }
 
-        public virtual IEnumerator<IGridRow> GetEnumerator()
+        public virtual IEnumerator<IGridRow<T>> GetEnumerator()
         {
             if (CurrentRows == null)
             {
@@ -29,7 +29,7 @@ namespace NonFactors.Mvc.Grid
 
                 CurrentRows = items
                     .ToList()
-                    .Select(model => new GridRow(model)
+                    .Select(model => new GridRow<T>(model)
                     {
                         CssClasses = (CssClasses != null)
                             ? CssClasses(model)

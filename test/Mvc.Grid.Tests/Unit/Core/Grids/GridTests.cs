@@ -13,8 +13,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            IGridColumns actual = ((IGrid)grid).Columns;
-            IGridColumns expected = grid.Columns;
+            IGridColumns<IGridColumn> actual = (grid as IGrid).Columns;
+            IGridColumns<IGridColumn> expected = grid.Columns;
 
             Assert.Same(expected, actual);
         }
@@ -28,8 +28,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            IGridRows actual = ((IGrid)grid).Rows;
-            IGridRows expected = grid.Rows;
+            IGridRows<Object> actual = (grid as IGrid).Rows;
+            IGridRows<Object> expected = grid.Rows;
 
             Assert.Same(expected, actual);
         }

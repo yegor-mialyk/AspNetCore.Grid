@@ -86,7 +86,7 @@ namespace NonFactors.Mvc.Grid
 
             return items.OrderByDescending(Expression);
         }
-        public override HtmlString ValueFor(IGridRow row)
+        public override HtmlString ValueFor(IGridRow<Object> row)
         {
             String value = GetValueFor(row);
             if (IsEncoded) value = WebUtility.HtmlEncode(value);
@@ -112,7 +112,7 @@ namespace NonFactors.Mvc.Grid
 
             return display.GetName();
         }
-        private String GetValueFor(IGridRow row)
+        private String GetValueFor(IGridRow<Object> row)
         {
             Object value;
             try

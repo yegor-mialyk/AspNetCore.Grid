@@ -16,11 +16,11 @@ namespace NonFactors.Mvc.Grid
         public IReadableStringCollection Query { get; set; }
         public IList<IGridProcessor<T>> Processors { get; set; }
 
-        public IGridColumns<T> Columns { get; set; }
-        IGridColumns IGrid.Columns { get { return Columns; } }
+        IGridColumns<IGridColumn> IGrid.Columns { get { return Columns; } }
+        public IGridColumnsOf<T> Columns { get; set; }
 
-        public IGridRows<T> Rows { get; set; }
-        IGridRows IGrid.Rows { get { return Rows; } }
+        IGridRows<Object> IGrid.Rows { get { return Rows; } }
+        public IGridRowsOf<T> Rows { get; set; }
 
         public IGridPager<T> Pager { get; set; }
         IGridPager IGrid.Pager { get { return Pager; } }

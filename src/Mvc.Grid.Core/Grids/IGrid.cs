@@ -14,9 +14,9 @@ namespace NonFactors.Mvc.Grid
         HttpContext HttpContext { get; set; }
         IReadableStringCollection Query { get; set; }
 
-        IGridColumns Columns { get; }
+        IGridColumns<IGridColumn> Columns { get; }
 
-        IGridRows Rows { get; }
+        IGridRows<Object> Rows { get; }
 
         IGridPager Pager { get; }
     }
@@ -26,8 +26,8 @@ namespace NonFactors.Mvc.Grid
         IList<IGridProcessor<T>> Processors { get; set; }
         IQueryable<T> Source { get; set; }
 
-        new IGridColumns<T> Columns { get; }
-        new IGridRows<T> Rows { get; }
+        new IGridColumnsOf<T> Columns { get; }
+        new IGridRowsOf<T> Rows { get; }
 
         new IGridPager<T> Pager { get; set; }
     }

@@ -108,6 +108,6 @@ namespace NonFactors.Mvc.Grid
         }
 
         public abstract IQueryable<T> Process(IQueryable<T> items);
-        public abstract HtmlString ValueFor(IGridRow row);
+        public abstract HtmlString ValueFor(IGridRow<Object> row);
     }
 }

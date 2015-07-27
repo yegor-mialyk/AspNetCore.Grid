@@ -2,12 +2,12 @@
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridRow : IGridRow
+    public class GridRow<T> : IGridRow<T>
     {
-        public Object Model { get; set; }
         public String CssClasses { get; set; }
+        public T Model { get; set; }
 
-        public GridRow(Object model)
+        public GridRow(T model)
         {
             Model = model;
         }

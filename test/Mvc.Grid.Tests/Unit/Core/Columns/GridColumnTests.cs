@@ -561,14 +561,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: ValueFor(IGridRow row)
+        #region Method: ValueFor(IGridRow<Object> row)
 
         [Fact]
         public void ValueFor_UsesExpressionValueToGetValue()
         {
             column.ExpressionValue = (model) => "TestValue";
 
-            String actual = column.ValueFor(new GridRow(null)).ToString();
+            String actual = column.ValueFor(new GridRow<Object>(null)).ToString();
             String expected = "TestValue";
 
             Assert.Equal(expected, actual);
@@ -580,7 +580,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.RenderValue = (model) => "RenderValue";
             column.ExpressionValue = (model) => "ExpressionValue";
 
-            String actual = column.ValueFor(new GridRow(null)).ToString();
+            String actual = column.ValueFor(new GridRow<Object>(null)).ToString();
             String expected = "RenderValue";
 
             Assert.Equal(expected, actual);
@@ -591,7 +591,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.ExpressionValue = (model) => (null as String).Length;
 
-            String actual = column.ValueFor(new GridRow(null)).ToString();
+            String actual = column.ValueFor(new GridRow<Object>(null)).ToString();
             String expected = "";
 
             Assert.Equal(expected, actual);
@@ -603,7 +603,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.RenderValue = (model) => (null as String).Length.ToString();
             column.ExpressionValue = (model) => "ExpressionValue";
 
-            String actual = column.ValueFor(new GridRow(null)).ToString();
+            String actual = column.ValueFor(new GridRow<Object>(null)).ToString();
             String expected = "";
 
             Assert.Equal(expected, actual);
@@ -614,7 +614,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.ExpressionValue = (model) => Int32.Parse("Zero");
 
-            Assert.Throws<FormatException>(() => column.ValueFor(new GridRow(null)));
+            Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(null)));
         }
 
         [Fact]
@@ -622,7 +622,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.RenderValue = (model) => Int32.Parse("Zero").ToString();
 
-            Assert.Throws<FormatException>(() => column.ValueFor(new GridRow(null)));
+            Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(null)));
         }
 
         [Theory]
@@ -634,7 +634,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
         public void ValueFor_GetsRenderValue(String value, String format, Boolean isEncoded, String expected)
         {
-            IGridRow row = new GridRow(new GridModel { Name = value });
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.RenderValue = (model) => model.Name;
             column.ExpressionValue = null;
             column.IsEncoded = isEncoded;
@@ -654,7 +654,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
         public void ValueFor_GetsExpressionValue(String value, String format, Boolean isEncoded, String expected)
         {
-            IGridRow row = new GridRow(new GridModel { Name = value });
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.IsEncoded = isEncoded;
             column.Format = format;
 

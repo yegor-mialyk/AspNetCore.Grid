@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace NonFactors.Mvc.Grid
 {
-    public interface IGridRows : IEnumerable<IGridRow>
+    public interface IGridRows<out T> : IEnumerable<IGridRow<T>>
     {
     }
 
-    public interface IGridRows<T> : IGridRows
+    public interface IGridRowsOf<T> : IGridRows<T>
     {
-        IGrid<T> Grid { get; }
         Func<T, String> CssClasses { get; set; }
+        IGrid<T> Grid { get; }
     }
 }

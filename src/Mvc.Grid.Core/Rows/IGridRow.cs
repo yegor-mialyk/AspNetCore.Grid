@@ -2,9 +2,9 @@
 
 namespace NonFactors.Mvc.Grid
 {
-    public interface IGridRow
+    public interface IGridRow<out T>
     {
-        Object Model { get; }
         String CssClasses { get; set; }
+        T Model { get; }
     }
 }

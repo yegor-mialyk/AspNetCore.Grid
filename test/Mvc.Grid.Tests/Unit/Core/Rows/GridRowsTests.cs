@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.Processors.Add(preProcessor);
 
             GridRows<GridModel> rows = new GridRows<GridModel>(grid);
-            IEnumerable<IGridRow> currentRows = rows.CurrentRows;
+            IEnumerable<IGridRow<GridModel>> currentRows = rows.CurrentRows;
 
             IEnumerable<Object> actual = rows.ToList().Select(row => row.Model);
             IEnumerable<Object> expected = postProcesseditems;
@@ -98,7 +98,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerator expected = rows.GetEnumerator();
 
             while (expected.MoveNext() | actual.MoveNext())
-                Assert.Same((expected.Current as IGridRow).Model, (actual.Current as IGridRow).Model);
+                Assert.Same((expected.Current as IGridRow<GridModel>).Model, (actual.Current as IGridRow<GridModel>).Model);
         }
 
         #endregion

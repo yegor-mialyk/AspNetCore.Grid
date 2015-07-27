@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid
         IGrid<T> Grid { get; }
         String PartialViewName { get; set; }
 
-        IHtmlGrid<T> Build(Action<IGridColumns<T>> builder);
+        IHtmlGrid<T> Build(Action<IGridColumnsOf<T>> builder);
         IHtmlGrid<T> ProcessWith(IGridProcessor<T> processor);
 
         IHtmlGrid<T> Filterable(Boolean isFilterable);
