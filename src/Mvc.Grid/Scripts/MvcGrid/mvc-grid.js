@@ -366,7 +366,7 @@ var MvcGridTextFilter = (function () {
 
     MvcGridTextFilter.prototype = {
         render: function (popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter || $.fn.mvcgrid.defaultLang.Filter;
+            var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Text;
 
@@ -479,7 +479,7 @@ var MvcGridNumberFilter = (function () {
 
     MvcGridNumberFilter.prototype = {
         render: function (popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter || $.fn.mvcgrid.defaultLang.Filter;
+            var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Number;
 
@@ -622,7 +622,7 @@ var MvcGridDateFilter = (function () {
     MvcGridDateFilter.prototype = {
         render: function (popup, filter) {
             var filterInput = '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">';
-            var filterLang = $.fn.mvcgrid.lang.Filter || $.fn.mvcgrid.defaultLang.Filter;
+            var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Date;
 
@@ -741,7 +741,7 @@ var MvcGridBooleanFilter = (function () {
 
     MvcGridBooleanFilter.prototype = {
         render: function (popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter || $.fn.mvcgrid.defaultLang.Filter;
+            var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Boolean;
 
@@ -839,7 +839,7 @@ $.fn.mvcgrid = function (options) {
         }
     });
 };
-$.fn.mvcgrid.defaultLang = {
+$.fn.mvcgrid.lang = {
     Text: {
         Contains: 'Contains',
         Equals: 'Equals',
@@ -874,7 +874,6 @@ $.fn.mvcgrid.defaultLang = {
         Or: 'or'
     }
 };
-$.fn.mvcgrid.lang = $.fn.mvcgrid.defaultLang;
 $(function () {
     $('body').append('<div class="mvc-grid-popup"></div>');
     $(window).resize(function () {
