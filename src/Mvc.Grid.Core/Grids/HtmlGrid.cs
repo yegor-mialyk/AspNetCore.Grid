@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Framework.WebEncoders;
 using System;
+using System.IO;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -105,9 +107,9 @@ namespace NonFactors.Mvc.Grid
             return Pageable(builder => { });
         }
 
-        public override String ToString()
+        public void WriteTo(TextWriter writer, IHtmlEncoder encoder)
         {
-            return Html.Partial(PartialViewName, Grid).ToString();
+            writer.Write(Html.Partial(PartialViewName, Grid));
         }
     }
 }

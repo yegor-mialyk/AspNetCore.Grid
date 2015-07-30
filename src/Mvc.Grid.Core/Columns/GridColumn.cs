@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.Rendering.Expressions;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -86,7 +87,7 @@ namespace NonFactors.Mvc.Grid
 
             return items.OrderByDescending(Expression);
         }
-        public override HtmlString ValueFor(IGridRow<Object> row)
+        public override IHtmlContent ValueFor(IGridRow<Object> row)
         {
             String value = GetValueFor(row);
             if (IsEncoded) value = WebUtility.HtmlEncode(value);

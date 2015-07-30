@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Html.Abstractions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -108,6 +108,6 @@ namespace NonFactors.Mvc.Grid
         }
 
         public abstract IQueryable<T> Process(IQueryable<T> items);
-        public abstract HtmlString ValueFor(IGridRow<Object> row);
+        public abstract IHtmlContent ValueFor(IGridRow<Object> row);
     }
 }

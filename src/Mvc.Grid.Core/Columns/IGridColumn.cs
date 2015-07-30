@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Html.Abstractions;
 using System;
 using System.Linq.Expressions;
 
@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid
         String CssClasses { get; set; }
         Boolean IsEncoded { get; set; }
 
-        HtmlString ValueFor(IGridRow<Object> row);
+        IHtmlContent ValueFor(IGridRow<Object> row);
     }
 
     public interface IGridColumn<T> : IFilterableColumn<T>, ISortableColumn<T>, IGridColumn

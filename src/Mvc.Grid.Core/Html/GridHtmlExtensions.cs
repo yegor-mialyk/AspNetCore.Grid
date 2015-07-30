@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 
@@ -18,7 +19,7 @@ namespace NonFactors.Mvc.Grid
             return grid;
         }
 
-        public static HtmlString AjaxGrid(this IHtmlHelper html, String dataSource)
+        public static IHtmlContent AjaxGrid(this IHtmlHelper html, String dataSource)
         {
             return html.Partial("MvcGrid/_AjaxGrid", dataSource);
         }

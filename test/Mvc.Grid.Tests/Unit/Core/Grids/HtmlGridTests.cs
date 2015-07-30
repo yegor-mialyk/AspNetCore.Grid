@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Internal;
 using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -560,15 +562,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: ToString()
+        #region Method: WriteTo(TextWriter writer, IHtmlEncoder encoder)
 
         [Fact]
-        public void ToHtmlString_RendersPartialView()
+        public void WriteTo_WritesPartialView()
         {
-            Task<HtmlString> view = Task.FromResult(new HtmlString("Test"));
+            Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
             html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
+            StringWriter writer = new StringWriter();
 
-            String actual = htmlGrid.ToString();
+            htmlGrid.WriteTo(writer, null);
+
+            String actual = writer.GetStringBuilder().ToString();
             String expected = "Test";
 
             Assert.Equal(expected, actual);

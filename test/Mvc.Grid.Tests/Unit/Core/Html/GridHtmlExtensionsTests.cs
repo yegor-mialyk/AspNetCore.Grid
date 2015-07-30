@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void AjaxGrid_RendersAjaxGridPartial()
         {
-            Task<HtmlString> view = Task.FromResult(new HtmlString("Test"));
+            Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
             html.PartialAsync("MvcGrid/_AjaxGrid", "DataSource", null).Returns(view);
 
             String actual = html.AjaxGrid("DataSource").ToString();

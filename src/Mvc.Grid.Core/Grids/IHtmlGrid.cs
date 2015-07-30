@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using System;
 
 namespace NonFactors.Mvc.Grid
 {
-    public interface IHtmlGrid<T>
+    public interface IHtmlGrid<T> : IHtmlContent
     {
         IGrid<T> Grid { get; }
         String PartialViewName { get; set; }

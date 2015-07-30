@@ -7,6 +7,6 @@
   "version": "0.5.0",
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc.Core": "6.0.0-beta5"
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta6"
   }
 }
