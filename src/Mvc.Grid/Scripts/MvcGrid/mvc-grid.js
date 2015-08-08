@@ -1,6 +1,6 @@
 ﻿/*!
  * Mvc.Grid 0.5.0
- * https://github.com/NonFactors/MVC.Grid
+ * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
  *
