@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NonFactors.Mvc.Grid
 {
-    public static class GridHtmlExtensions
+    public static class MvcGridExtensions
     {
         public static HtmlGrid<T> Grid<T>(this IHtmlHelper html, IEnumerable<T> source) where T : class
         {
