@@ -25,6 +25,10 @@ namespace NonFactors.Mvc.Grid
             return html.Partial("MvcGrid/_AjaxGrid", dataSource);
         }
 
+        public static IServiceCollection AddMvcGrid(this IServiceCollection services)
+        {
+            return services.AddMvcGrid(filters => { });
+        }
         public static IServiceCollection AddMvcGrid(this IServiceCollection services, Action<IGridFilters> configure)
         {
             IGridFilters filters = new GridFilters();

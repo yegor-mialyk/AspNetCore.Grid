@@ -1,4 +1,4 @@
-﻿{
+{
   "description": "Unit tests for Mvc.Grid projects code base",
   "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
   "licenseUrl": "http://opensource.org/licenses/MIT",
@@ -11,7 +11,8 @@
 
     "xunit": "2.1.0-*",
     "NSubstitute": "1.8.2",
-    "xunit.runner.dnx": "2.1.0-*"
+    "xunit.runner.dnx": "2.1.0-*",
+    "Microsoft.Framework.DependencyInjection": "1.0.0-beta6"
   },
 
   "commands": {

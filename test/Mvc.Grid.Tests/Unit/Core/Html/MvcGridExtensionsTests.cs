@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Http.Internal;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Framework.DependencyInjection;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -15,7 +18,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         static MvcGridExtensions()
         {
-            html = HtmlHelperFactory.CreateHtmlHelper();
+            html = Substitute.For<IHtmlHelper>();
+            html.ViewContext.Returns(new ViewContext());
+            html.ViewContext.HttpContext = new DefaultHttpContext();
         }
 
         #region Extension: Grid<T>(this HtmlHelper html, IEnumerable<T> source)
@@ -83,6 +88,53 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             String expected = "Test";
 
             Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region Extension: AddMvcGrid(this IServiceCollection services)
+
+        [Fact]
+        public void AddMvcGrid_AddsGridFiltersInstance()
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddMvcGrid();
+
+            ServiceDescriptor actual = services.Single();
+
+            Assert.Equal(typeof(IGridFilters), actual.ServiceType);
+            Assert.IsType<GridFilters>(actual.ImplementationInstance);
+        }
+
+        #endregion
+
+        #region Extension: AddMvcGrid(this IServiceCollection services, Action<IGridFilters> configure)
+
+        [Fact]
+        public void AddMvcGrid_AddsConfiguredGridFiltersInstance()
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddMvcGrid(filters => { });
+
+            ServiceDescriptor actual = services.Single();
+
+            Assert.Equal(typeof(IGridFilters), actual.ServiceType);
+            Assert.IsType<GridFilters>(actual.ImplementationInstance);
+        }
+
+        [Fact]
+        public void AddMvcGrid_ConfiguresGridFiltersInstance()
+        {
+            IServiceCollection services = new ServiceCollection();
+            Action<IGridFilters> configure = Substitute.For<Action<IGridFilters>>();
+
+            services.AddMvcGrid(configure);
+
+            ServiceDescriptor actual = services.Single();
+
+            configure.Received()(actual.ImplementationInstance as IGridFilters);
         }
 
         #endregion

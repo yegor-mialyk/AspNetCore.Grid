@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Internal;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -20,8 +21,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public HtmlGridTests()
         {
+            html = Substitute.For<IHtmlHelper>();
+            html.ViewContext.Returns(new ViewContext());
+            html.ViewContext.HttpContext = new DefaultHttpContext();
             grid = new Grid<GridModel>(new GridModel[8]);
-            html = HtmlHelperFactory.CreateHtmlHelper();
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
             grid.Columns.Add(model => model.Name);
@@ -89,7 +92,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsHtml()
         {
-            IHtmlHelper expected = HtmlHelperFactory.CreateHtmlHelper();
+            IHtmlHelper expected = Substitute.For<IHtmlHelper>();
             IHtmlHelper actual = new HtmlGrid<GridModel>(expected, grid).Html;
 
             Assert.Same(expected, actual);
