@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Framework.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
@@ -22,6 +23,14 @@ namespace NonFactors.Mvc.Grid
         public static IHtmlContent AjaxGrid(this IHtmlHelper html, String dataSource)
         {
             return html.Partial("MvcGrid/_AjaxGrid", dataSource);
+        }
+
+        public static IServiceCollection AddMvcGrid(this IServiceCollection services, Action<IGridFilters> configure)
+        {
+            IGridFilters filters = new GridFilters();
+            configure(filters);
+
+            return services.AddInstance<IGridFilters>(filters);
         }
     }
 }

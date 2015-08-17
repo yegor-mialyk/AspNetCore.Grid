@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNet.Http.Internal;
 using Microsoft.AspNet.Mvc.Rendering.Expressions;
-using Microsoft.AspNet.WebUtilities;
+using Microsoft.Framework.DependencyInjection;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,16 +12,12 @@ using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class GridColumnTests : IDisposable
+    public class GridColumnTests
     {
         private GridColumn<GridModel, Object> column;
-        private static IGridFilters oldFilters;
         private IGrid<GridModel> grid;
+        private IGridFilters filters;
 
-        static GridColumnTests()
-        {
-            oldFilters = MvcGrid.Filters;
-        }
         public GridColumnTests()
         {
             IDictionary<String, String[]> query = new Dictionary<String, String[]>();
@@ -32,11 +27,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
 
-            MvcGrid.Filters = Substitute.For<IGridFilters>();
-        }
-        public void Dispose()
-        {
-            MvcGrid.Filters = oldFilters;
+            filters = Substitute.For<IGridFilters>();
+            grid.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(filters);
         }
 
         #region Property: SortOrder
@@ -104,10 +96,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Property: Filter
 
         [Fact]
+        public void Filter_OnNotRegisteredGridFiltersThrows()
+        {
+            grid.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(null as IGridFilters);
+            IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
+            filters.GetFilter(column).Returns(filter);
+
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => column.Filter);
+            Assert.Equal($"No service for type '{typeof(IGridFilters).FullName}' has been registered.", exception.Message);
+        }
+
+        [Fact]
         public void Filter_SetsFilterThenItsNotSet()
         {
             IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
-            MvcGrid.Filters.GetFilter(column).Returns(filter);
+            filters.GetFilter(column).Returns(filter);
 
             Object actual = column.Filter;
             Object expected = filter;
@@ -119,11 +122,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Filter_DoesNotChangeFilterAfterFirstGet()
         {
             IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
-            MvcGrid.Filters.GetFilter(column).Returns(filter);
+            filters.GetFilter(column).Returns(filter);
 
             IGridColumnFilter<GridModel> currentFilter = column.Filter;
             filter = Substitute.For<IGridColumnFilter<GridModel>>();
-            MvcGrid.Filters.GetFilter(column).Returns(filter);
+            filters.GetFilter(column).Returns(filter);
 
             Object expected = currentFilter;
             Object actual = column.Filter;
@@ -135,7 +138,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Filter_DoesNotChangeFilterAfterItsSet()
         {
             IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
-            MvcGrid.Filters.GetFilter(column).Returns(filter);
+            filters.GetFilter(column).Returns(filter);
 
             column.Filter = null;
 

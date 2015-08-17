@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.Rendering.Expressions;
+using Microsoft.Framework.DependencyInjection;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (!FilterIsSet)
-                    Filter = MvcGrid.Filters.GetFilter(this);
+                    Filter = Grid.HttpContext.ApplicationServices.GetRequiredService<IGridFilters>().GetFilter(this);
 
                 return base.Filter;
             }
