@@ -1,10 +1,10 @@
 {
-  "description": "Grid controls for ASP.NET MVC 6 projects",
+  "description": "Mvc.Grid core dll without content files.",
   "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
   "licenseUrl": "http://opensource.org/licenses/MIT",
+  "tags": [ "asp net mvc grid" ],
   "authors": [ "NonFactors" ],
-  "tags": [ "mvc grid" ],
-  "version": "0.5.0",
+  "version": "0.6.0",
 
   "dependencies": {
     "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta6",

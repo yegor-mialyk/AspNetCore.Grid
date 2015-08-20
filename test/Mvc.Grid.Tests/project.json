@@ -4,7 +4,7 @@
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "authors": [ "NonFactors" ],
   "tags": [ "mvc grid" ],
-  "version": "0.5.0",
+  "version": "0.6.0",
 
   "dependencies": {
     "Mvc.Grid.Core": "",

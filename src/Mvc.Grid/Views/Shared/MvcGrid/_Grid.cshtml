@@ -45,7 +45,7 @@
         <tbody>
             @if (Model.Rows.Count() > 0)
             {
-                foreach (IGridRow row in Model.Rows)
+                foreach (IGridRow<object> row in Model.Rows)
                 {
                     <tr class="mvc-grid-row @row.CssClasses">
                         @foreach (IGridColumn column in Model.Columns)
