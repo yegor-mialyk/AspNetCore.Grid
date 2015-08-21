@@ -15,10 +15,10 @@ namespace NonFactors.Mvc.Grid
 
         private Object GetBooleanValue()
         {
-            if (String.Equals(Value, "true", StringComparison.InvariantCultureIgnoreCase))
+            if (String.Equals(Value, "true", StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if (String.Equals(Value, "false", StringComparison.InvariantCultureIgnoreCase))
+            if (String.Equals(Value, "false", StringComparison.OrdinalIgnoreCase))
                 return false;
 
             return null;
