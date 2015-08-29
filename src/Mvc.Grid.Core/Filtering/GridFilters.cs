@@ -126,7 +126,10 @@ namespace NonFactors.Mvc.Grid
             else
                 Table.Add(underlyingType, typedFilters);
 
-            typedFilters.Add(filterType, filter);
+            if (typedFilters.ContainsKey(filterType))
+                typedFilters[filterType] = filter;
+            else
+                typedFilters.Add(filterType, filter);
         }
         public void Unregister(Type forType, String filterType)
         {

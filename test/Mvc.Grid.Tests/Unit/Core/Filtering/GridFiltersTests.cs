@@ -307,6 +307,38 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Register_OverridesAlreadyRegisteredNullableFilter()
+        {
+            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+
+            filters.Table.Remove(typeof(Int32));
+            filters.Table.Add(typeof(Int32), filterPairs);
+
+            filters.Register(typeof(Int32?), "Test", typeof(String));
+
+            Type actual = filterPairs["Test"];
+            Type expected = typeof(String);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Register_OverridesAlreadyRegisteredFilter()
+        {
+            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+
+            filters.Table.Remove(typeof(Int32));
+            filters.Table.Add(typeof(Int32), filterPairs);
+
+            filters.Register(typeof(Int32), "Test", typeof(String));
+
+            Type actual = filterPairs["Test"];
+            Type expected = typeof(String);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Register_RegistersNullableTypeAsNotNullable()
         {
             filters.Register(typeof(Int32?), "Test", typeof(String));
