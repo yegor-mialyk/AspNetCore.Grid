@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Mvc.Rendering.Expressions;
+﻿using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Internal;
+using Microsoft.AspNet.Mvc.ViewFeatures;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Primitives;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -20,9 +22,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnTests()
         {
-            IDictionary<String, String[]> query = new Dictionary<String, String[]>();
+            IReadableStringCollection query = new ReadableStringCollection(new Dictionary<String, StringValues>());
             grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = new ReadableStringCollection(query);
+            grid.Query = query;
             grid.Name = "Grid";
 
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);

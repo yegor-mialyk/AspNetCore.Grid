@@ -160,7 +160,7 @@ namespace NonFactors.Mvc.Grid
 
             if (keys.Length == 1)
             {
-                IList<String> values = column.Grid.Query.GetValues(keys[0]);
+                IList<String> values = column.Grid.Query[keys[0]];
                 if (values.Count > 1)
                 {
                     String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
@@ -172,7 +172,7 @@ namespace NonFactors.Mvc.Grid
             }
 
             String type = keys[1].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
-            String value = column.Grid.Query.GetValues(keys[1])[0];
+            String value = column.Grid.Query[keys[1]][0];
 
             return GetFilter(column, type, value);
         }
@@ -181,16 +181,16 @@ namespace NonFactors.Mvc.Grid
             if (keys.Length == 0) return null;
 
             String type = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
-            String value = column.Grid.Query.GetValues(keys[0])[0];
+            String value = column.Grid.Query[keys[0]][0];
 
             return GetFilter(column, type, value);
         }
         private String GetOperator<T>(IGridColumn<T> column)
         {
-            IList<String> values = column.Grid.Query.GetValues(column.Grid.Name + "-" + column.Name + "-Op");
+            IList<String> values = column.Grid.Query[column.Grid.Name + "-" + column.Name + "-Op"];
             if (column.IsMultiFilterable != true || values == null) return null;
 
-            return values[0];
+            return values.FirstOrDefault();
         }
     }
 }

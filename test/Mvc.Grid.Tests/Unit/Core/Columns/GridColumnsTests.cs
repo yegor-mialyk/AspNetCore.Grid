@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http.Internal;
+using Microsoft.Framework.Primitives;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnsTests()
         {
+            IDictionary<String, StringValues> query = new Dictionary<String, StringValues>();
             columns = new GridColumns<GridModel>(Substitute.For<IGrid<GridModel>>());
-            IDictionary<String, String[]> query = new Dictionary<String, String[]>();
             columns.Grid.Processors = new List<IGridProcessor<GridModel>>();
             columns.Grid.Query = new ReadableStringCollection(query);
         }
