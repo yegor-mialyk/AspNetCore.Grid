@@ -4,7 +4,7 @@
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "tags": [ "asp net mvc grid" ],
   "authors": [ "NonFactors" ],
-  "version": "0.7.0",
+  "version": "0.8.0",
 
   "frameworks": {
     "dnx451": { }

@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Internal;
 using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Framework.WebEncoders;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -573,7 +574,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
             StringWriter writer = new StringWriter();
 
-            htmlGrid.WriteTo(writer, null);
+            htmlGrid.WriteTo(writer, new HtmlEncoder());
 
             String actual = writer.GetStringBuilder().ToString();
             String expected = "Test";

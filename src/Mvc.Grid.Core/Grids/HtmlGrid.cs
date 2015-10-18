@@ -109,7 +109,7 @@ namespace NonFactors.Mvc.Grid
 
         public void WriteTo(TextWriter writer, IHtmlEncoder encoder)
         {
-            writer.Write(Html.Partial(PartialViewName, Grid));
+            Html.Partial(PartialViewName, Grid).WriteTo(writer, encoder);
         }
     }
 }
