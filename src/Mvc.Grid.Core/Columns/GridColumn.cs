@@ -6,7 +6,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
@@ -91,7 +90,7 @@ namespace NonFactors.Mvc.Grid
         public override IHtmlContent ValueFor(IGridRow<Object> row)
         {
             String value = GetValueFor(row);
-            if (IsEncoded) value = WebUtility.HtmlEncode(value);
+            if (IsEncoded) value = HtmlEncoder.Default.HtmlEncode(value);
 
             return new HtmlString(value);
         }
