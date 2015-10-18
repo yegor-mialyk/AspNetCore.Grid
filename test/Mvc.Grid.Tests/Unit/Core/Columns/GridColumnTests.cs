@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Internal;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.ViewFeatures;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Primitives;
@@ -29,8 +30,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
 
+            grid.ViewContext = new ViewContext();
             filters = Substitute.For<IGridFilters>();
-            grid.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(filters);
+            grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+            grid.ViewContext.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(filters);
         }
 
         #region Property: SortOrder
@@ -100,7 +103,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_OnNotRegisteredGridFiltersThrows()
         {
-            grid.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(null as IGridFilters);
+            grid.ViewContext.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(null as IGridFilters);
             IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
             filters.GetFilter(column).Returns(filter);
 

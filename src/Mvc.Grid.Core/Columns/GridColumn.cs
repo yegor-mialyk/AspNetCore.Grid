@@ -51,7 +51,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (!FilterIsSet)
-                    Filter = Grid.HttpContext.ApplicationServices.GetRequiredService<IGridFilters>().GetFilter(this);
+                    Filter = Grid.ViewContext.HttpContext.ApplicationServices.GetRequiredService<IGridFilters>().GetFilter(this);
 
                 return base.Filter;
             }

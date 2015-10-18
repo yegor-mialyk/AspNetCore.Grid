@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace NonFactors.Mvc.Grid
         String EmptyText { get; set; }
         String CssClasses { get; set; }
 
-        HttpContext HttpContext { get; set; }
+        ViewContext ViewContext { get; set; }
         IReadableStringCollection Query { get; set; }
 
         IGridColumns<IGridColumn> Columns { get; }

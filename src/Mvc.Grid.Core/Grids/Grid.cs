@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace NonFactors.Mvc.Grid
         public String CssClasses { get; set; }
 
         public IQueryable<T> Source { get; set; }
-        public HttpContext HttpContext { get; set; }
+        public ViewContext ViewContext { get; set; }
         public IReadableStringCollection Query { get; set; }
         public IList<IGridProcessor<T>> Processors { get; set; }
 

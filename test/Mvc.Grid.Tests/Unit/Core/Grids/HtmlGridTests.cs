@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -61,10 +60,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeExistingHttpContext()
         {
-            HttpContext httpContext = grid.HttpContext = new DefaultHttpContext();
+            ViewContext viewContext = grid.ViewContext = new ViewContext();
 
-            Object actual = new HtmlGrid<GridModel>(html, grid).Grid.HttpContext;
-            Object expected = httpContext;
+            Object actual = new HtmlGrid<GridModel>(html, grid).Grid.ViewContext;
+            Object expected = viewContext;
 
             Assert.Same(expected, actual);
         }
@@ -72,10 +71,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsHttpContext()
         {
-            grid.HttpContext = null;
+            grid.ViewContext = null;
 
-            HttpContext actual = new HtmlGrid<GridModel>(html, grid).Grid.HttpContext;
-            HttpContext expected = html.ViewContext.HttpContext;
+            ViewContext actual = new HtmlGrid<GridModel>(html, grid).Grid.ViewContext;
+            ViewContext expected = html.ViewContext;
 
             Assert.Same(expected, actual);
         }
