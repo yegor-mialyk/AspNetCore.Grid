@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NonFactors.Mvc.Grid.Tests
@@ -8,6 +9,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Display(Name = "Text")]
         public String Text { get; set; }
 
+        public IHtmlContent Content { get; set; }
         public Boolean? NIsChecked { get; set; }
         public Boolean IsChecked { get; set; }
         public DateTime? NDate { get; set; }

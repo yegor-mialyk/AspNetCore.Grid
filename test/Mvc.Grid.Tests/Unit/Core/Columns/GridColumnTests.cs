@@ -4,10 +4,12 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.ViewFeatures;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Primitives;
+using Microsoft.Framework.WebEncoders;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -631,6 +633,45 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.RenderValue = (model) => Int32.Parse("Zero").ToString();
 
             Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(null)));
+        }
+
+        [Theory]
+        [InlineData(null, "For {0}", true, "")]
+        [InlineData(null, "For {0}", false, "")]
+        [InlineData("<name>", null, true, "<name>")]
+        [InlineData("<name>", null, false, "<name>")]
+        [InlineData("<name>", "For <{0}>", true, "<name>")]
+        [InlineData("<name>", "For <{0}>", false, "<name>")]
+        public void ValueFor_GetsHtmlContentRenderValue(String value, String format, Boolean isEncoded, String expected)
+        {
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
+            column.RenderValue = (model) => model.Content;
+            column.ExpressionValue = null;
+            column.IsEncoded = isEncoded;
+            column.Format = format;
+
+            String actual = column.ValueFor(row).ToString();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, "For {0}", true, "")]
+        [InlineData(null, "For {0}", false, "")]
+        [InlineData("<name>", null, true, "<name>")]
+        [InlineData("<name>", null, false, "<name>")]
+        [InlineData("<name>", "For <{0}>", true, "<name>")]
+        [InlineData("<name>", "For <{0}>", false, "<name>")]
+        public void ValueFor_GetsHtmlContentExpressionValue(String value, String format, Boolean isEncoded, String expected)
+        {
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
+            column = new GridColumn<GridModel, Object>(grid, model => model.Content);
+            column.IsEncoded = isEncoded;
+            column.Format = format;
+
+            String actual = column.ValueFor(row).ToString();
+
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
