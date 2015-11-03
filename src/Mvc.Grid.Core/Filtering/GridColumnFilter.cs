@@ -23,8 +23,8 @@ namespace NonFactors.Mvc.Grid
 
         private Expression CreateFilterExpression()
         {
-            Expression right = Second != null ? Second.Apply(Column.Expression.Body) : null;
-            Expression left = First != null ? First.Apply(Column.Expression.Body) : null;
+            Expression right = Second?.Apply(Column.Expression.Body);
+            Expression left = First?.Apply(Column.Expression.Body);
 
             if (left != null && right != null)
             {

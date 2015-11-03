@@ -31,9 +31,7 @@ namespace NonFactors.Mvc.Grid
                     .ToList()
                     .Select(model => new GridRow<T>(model)
                     {
-                        CssClasses = (CssClasses != null)
-                            ? CssClasses(model)
-                            : null
+                        CssClasses = CssClasses?.Invoke(model)
                     });
             }
 

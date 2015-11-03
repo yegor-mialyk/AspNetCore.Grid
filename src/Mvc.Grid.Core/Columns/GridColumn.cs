@@ -77,10 +77,10 @@ namespace NonFactors.Mvc.Grid
 
         public override IQueryable<T> Process(IQueryable<T> items)
         {
-            if (Filter != null && IsFilterable == true)
+            if (IsFilterable == true && Filter != null)
                 items = Filter.Process(items);
 
-            if (SortOrder == null || IsSortable != true)
+            if (IsSortable != true || SortOrder == null)
                 return items;
 
             if (SortOrder == GridSortOrder.Asc)

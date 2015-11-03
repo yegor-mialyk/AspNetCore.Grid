@@ -16,15 +16,11 @@
                         data-filterable="@column.IsFilterable"
                         data-filter-name="@column.FilterName"
                         data-filter-multi="@column.IsMultiFilterable"
-                        data-filter-first-type="@(column.Filter != null && column.Filter.First != null
-                            ? column.Filter.First.Type : "")"
-                        data-filter-first-val="@(column.Filter != null && column.Filter.First != null
-                            ? column.Filter.First.Value : "")"
-                        data-filter-operator="@(column.Filter != null ? column.Filter.Operator : "")"
-                        data-filter-second-type="@(column.Filter != null && column.Filter.Second != null
-                            ? column.Filter.Second.Type : "")"
-                        data-filter-second-val="@(column.Filter != null && column.Filter.Second != null
-                            ? column.Filter.Second.Value : "")"
+                        data-filter-first-type="@column.Filter?.First?.Type"
+                        data-filter-first-val="@column.Filter?.First?.Value"
+                        data-filter-operator="@column.Filter?.Operator"
+                        data-filter-second-type="@column.Filter?.Second?.Type"
+                        data-filter-second-val="@column.Filter?.Second?.Value"
                         data-sortable="@column.IsSortable"
                         data-sort-order="@column.SortOrder"
                         data-sort-first="@column.FirstSortOrder">
