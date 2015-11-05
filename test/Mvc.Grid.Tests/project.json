@@ -16,6 +16,10 @@
     "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
   },
 
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
   "commands": {
     "test": "xunit.runner.dnx"
   },

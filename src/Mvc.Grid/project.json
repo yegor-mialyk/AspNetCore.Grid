@@ -6,6 +6,10 @@
   "authors": [ "NonFactors" ],
   "version": "0.8.0",
 
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
   "frameworks": {
     "dnx451": { }
   }

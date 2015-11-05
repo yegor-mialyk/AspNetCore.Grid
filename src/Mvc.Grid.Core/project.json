@@ -11,6 +11,10 @@
     "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8"
   },
 
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
   "frameworks": {
     "dnx451": { }
   }
