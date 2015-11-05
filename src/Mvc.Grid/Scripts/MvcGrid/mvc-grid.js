@@ -167,7 +167,7 @@ var MvcGrid = (function () {
             var gridFilter = grid.filters[column.filter.name];
 
             if (gridFilter) {
-                gridFilter.render(popup, column.filter);
+                gridFilter.render(grid, popup, column.filter);
                 gridFilter.init(grid, column, popup);
 
                 grid.setFilterPosition(grid, column, popup);
@@ -366,7 +366,7 @@ var MvcGridTextFilter = (function () {
     }
 
     MvcGridTextFilter.prototype = {
-        render: function (popup, filter) {
+        render: function (grid, popup, filter) {
             var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Text;
@@ -479,7 +479,7 @@ var MvcGridNumberFilter = (function () {
     }
 
     MvcGridNumberFilter.prototype = {
-        render: function (popup, filter) {
+        render: function (grid, popup, filter) {
             var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Number;
@@ -621,7 +621,7 @@ var MvcGridDateFilter = (function () {
     }
 
     MvcGridDateFilter.prototype = {
-        render: function (popup, filter) {
+        render: function (grid, popup, filter) {
             var filterInput = '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">';
             var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
@@ -741,7 +741,7 @@ var MvcGridBooleanFilter = (function () {
     }
 
     MvcGridBooleanFilter.prototype = {
-        render: function (popup, filter) {
+        render: function (grid, popup, filter) {
             var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Boolean;
