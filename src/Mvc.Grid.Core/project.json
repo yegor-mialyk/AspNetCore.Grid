@@ -4,11 +4,10 @@
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "tags": [ "asp net mvc grid" ],
   "authors": [ "NonFactors" ],
-  "version": "0.8.0",
+  "version": "0.9.0",
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta8",
-    "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8"
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final"
   },
 
   "compilationOptions": {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNet.Html.Abstractions;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.WebEncoders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.WebEncoders;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace NonFactors.Mvc.Grid
                     if (Enum.TryParse(orderValue, out order))
                         SortOrder = order;
                 }
-                else if (Grid.Query[Grid.Name + "-Sort"] == null)
+                else if (Grid.Query[Grid.Name + "-Sort"] == StringValues.Empty)
                 {
                     SortOrder = InitialSortOrder;
                 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Http.Internal;
-using Microsoft.Framework.Primitives;
+using Microsoft.Extensions.Primitives;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
