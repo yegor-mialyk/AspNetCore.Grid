@@ -24,10 +24,13 @@
                         data-sortable="@column.IsSortable"
                         data-sort-order="@column.SortOrder"
                         data-sort-first="@column.FirstSortOrder">
-                        <span class="mvc-grid-header-title">@column.Title</span>
                         @if (column.IsSortable == true)
                         {
-                            <span class="mvc-grid-sort @column.SortOrder.ToString().ToLower()"></span>
+                            <span class="mvc-grid-header-title @column.SortOrder.ToString().ToLower()">@column.Title</span>
+                        }
+                        else
+                        {
+                            <span class="mvc-grid-header-title">@column.Title</span>
                         }
                         @if (column.IsFilterable == true)
                         {

@@ -18,18 +18,18 @@
         cursor: pointer;
     }
 
-.mvc-grid-sort {
-    display: inline-block;
-    min-width: 7px;
+.mvc-grid-header-title.asc:after,
+.mvc-grid-header-title.desc:after {
+    padding-left: 3px;
 }
 
-    .mvc-grid-sort.asc:after {
-        content: "\2193";
-    }
+.mvc-grid-header-title.asc:after {
+    content: '\2193';
+}
 
-    .mvc-grid-sort.desc:after {
-        content: "\2191";
-    }
+.mvc-grid-header-title.desc:after {
+    content: '\2191';
+}
 
 .mvc-grid-header.filterable {
     padding-right: 30px;
