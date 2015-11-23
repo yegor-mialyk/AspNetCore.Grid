@@ -42,7 +42,7 @@ var MvcGrid = (function () {
             return;
         }
 
-        var headers = grid.find('.mvc-grid-header');
+        var headers = grid.find('th');
         for (var i = 0; i < headers.length; i++) {
             var column = this.createColumn(this, $(headers[i]));
             this.applyFiltering(this, column);
@@ -318,7 +318,7 @@ var MvcGrid = (function () {
         },
 
         bindGridEvents: function (grid) {
-            grid.element.find('.mvc-grid-row').on('click.mvcgrid', function () {
+            grid.element.find('tbody tr').on('click.mvcgrid', function () {
                 if (grid.rowClicked) {
                     var cells = $(this).find('td');
                     var data = [];

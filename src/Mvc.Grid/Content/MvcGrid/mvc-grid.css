@@ -8,31 +8,31 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-.mvc-grid-table .mvc-grid-header {
+.mvc-grid th {
     background-clip: padding-box;
     position: relative;
 }
 
-    .mvc-grid-table .mvc-grid-header.sortable,
-    .mvc-grid-table .mvc-grid-header .mvc-grid-filter {
-        cursor: pointer;
-    }
+.mvc-grid .filterable {
+    padding-right: 30px;
+}
 
-.mvc-grid-header-title.asc:after,
-.mvc-grid-header-title.desc:after {
+.mvc-grid .sortable,
+.mvc-grid .mvc-grid-filter {
+    cursor: pointer;
+}
+
+.mvc-grid .asc:after,
+.mvc-grid .desc:after {
     padding-left: 3px;
 }
 
-.mvc-grid-header-title.asc:after {
+.mvc-grid .asc:after {
     content: '\2193';
 }
 
-.mvc-grid-header-title.desc:after {
+.mvc-grid .desc:after {
     content: '\2191';
-}
-
-.mvc-grid-header.filterable {
-    padding-right: 30px;
 }
 
 .mvc-grid-filter {
@@ -147,7 +147,7 @@
         padding: 5px 8px;
     }
 
-.mvc-grid-table-empty {
+.mvc-grid-empty {
     text-align: center;
 }
 
