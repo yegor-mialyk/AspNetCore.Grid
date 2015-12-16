@@ -413,37 +413,13 @@ var MvcGridTextFilter = (function () {
         },
 
         init: function (grid, column, popup) {
-            this.bindType(grid, column, popup);
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
-            this.bindOperator(grid, column, popup);
-        },
-        bindType: function (grid, column, popup) {
-            var firstType = popup.find('.first-filter .mvc-grid-type');
-            firstType.on('change.mvcgrid', function () {
-                column.filter.first.type = this.value;
-            });
-            firstType.change();
-
-            var secondType = popup.find('.second-filter .mvc-grid-type');
-            secondType.on('change.mvcgrid', function () {
-                column.filter.second.type = this.value;
-            });
-            secondType.change();
         },
         bindValue: function (grid, column, popup) {
-            var firstValue = popup.find('.first-filter .mvc-grid-input');
-            firstValue.on('keyup.mvcgrid', function (e) {
-                column.filter.first.val = this.value;
-                if (e.which == 13) {
-                    popup.find('.mvc-grid-apply').click();
-                }
-            });
-
-            var secondValue = popup.find('.second-filter .mvc-grid-input');
-            secondValue.on('keyup.mvcgrid', function (e) {
-                column.filter.second.val = this.value;
+            var inputs = popup.find('.mvc-grid-input');
+            inputs.on('keyup.mvcgrid', function (e) {
                 if (e.which == 13) {
                     popup.find('.mvc-grid-apply').click();
                 }
@@ -453,6 +429,12 @@ var MvcGridTextFilter = (function () {
             var apply = popup.find('.mvc-grid-apply');
             apply.on('click.mvcgrid', function () {
                 popup.removeClass('open');
+                column.filter.operator = popup.find('.mvc-grid-operator').val();
+                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
+                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
+                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
+                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+
                 grid.reload(grid, grid.formFilterQuery(grid, column));
             });
         },
@@ -461,12 +443,6 @@ var MvcGridTextFilter = (function () {
             cancel.on('click.mvcgrid', function () {
                 popup.removeClass('open');
                 grid.reload(grid, grid.formFilterQueryWithout(grid, column));
-            });
-        },
-        bindOperator: function (grid, column, popup) {
-            var operator = popup.find('.mvc-grid-operator');
-            operator.on('change.mvcgrid', function () {
-                column.filter.operator = this.value;
             });
         }
     };
@@ -528,31 +504,15 @@ var MvcGridNumberFilter = (function () {
         },
 
         init: function (grid, column, popup) {
-            this.bindType(grid, column, popup);
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
-            this.bindOperator(grid, column, popup);
-        },
-        bindType: function (grid, column, popup) {
-            var firstType = popup.find('.first-filter .mvc-grid-type');
-            firstType.on('change.mvcgrid', function () {
-                column.filter.first.type = this.value;
-            });
-            firstType.change();
-
-            var secondType = popup.find('.second-filter .mvc-grid-type');
-            secondType.on('change.mvcgrid', function () {
-                column.filter.second.type = this.value;
-            });
-            secondType.change();
         },
         bindValue: function (grid, column, popup) {
             var filter = this;
 
-            var firstValue = popup.find('.first-filter .mvc-grid-input');
-            firstValue.on('keyup.mvcgrid', function (e) {
-                column.filter.first.val = this.value;
+            var inputs = popup.find('.mvc-grid-input');
+            inputs.on('keyup.mvcgrid', function (e) {
                 if (filter.isValid(this.value)) {
                     $(this).removeClass('invalid');
                     if (e.which == 13) {
@@ -563,31 +523,22 @@ var MvcGridNumberFilter = (function () {
                 }
             });
 
-            if (!filter.isValid(column.filter.first.val)) {
-                firstValue.addClass('invalid');
-            }
-
-            var secondValue = popup.find('.second-filter .mvc-grid-input');
-            secondValue.on('keyup.mvcgrid', function (e) {
-                column.filter.second.val = this.value;
-                if (filter.isValid(this.value)) {
-                    $(this).removeClass('invalid');
-                    if (e.which == 13) {
-                        popup.find('.mvc-grid-apply').click();
-                    }
-                } else {
-                    $(this).addClass('invalid');
+            for (var i = 0; i < inputs.length; i++) {
+                if (!filter.isValid(inputs[i].value)) {
+                    $(inputs[i]).addClass('invalid');
                 }
-            });
-
-            if (!filter.isValid(column.filter.second.val)) {
-                secondValue.addClass('invalid');
             }
         },
         bindApply: function (grid, column, popup) {
             var apply = popup.find('.mvc-grid-apply');
             apply.on('click.mvcgrid', function () {
                 popup.removeClass('open');
+                column.filter.operator = popup.find('.mvc-grid-operator').val();
+                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
+                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
+                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
+                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+
                 grid.reload(grid, grid.formFilterQuery(grid, column));
             });
         },
@@ -596,12 +547,6 @@ var MvcGridNumberFilter = (function () {
             cancel.on('click.mvcgrid', function () {
                 popup.removeClass('open');
                 grid.reload(grid, grid.formFilterQueryWithout(grid, column));
-            });
-        },
-        bindOperator: function (grid, column, popup) {
-            var operator = popup.find('.mvc-grid-operator');
-            operator.on('change.mvcgrid', function () {
-                column.filter.operator = this.value;
             });
         },
 
@@ -671,41 +616,15 @@ var MvcGridDateFilter = (function () {
         },
 
         init: function (grid, column, popup) {
-            this.bindType(grid, column, popup);
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
-            this.bindOperator(grid, column, popup);
-        },
-        bindType: function (grid, column, popup) {
-            var firstType = popup.find('.first-filter .mvc-grid-type');
-            firstType.on('change.mvcgrid', function () {
-                column.filter.first.type = this.value;
-            });
-            firstType.change();
-
-            var secondType = popup.find('.second-filter .mvc-grid-type');
-            secondType.on('change.mvcgrid', function () {
-                column.filter.second.type = this.value;
-            });
-            secondType.change();
         },
         bindValue: function (grid, column, popup) {
-            var firstValue = popup.find('.first-filter .mvc-grid-input');
-            if ($.fn.datepicker) { firstValue.datepicker(); }
+            var inputs = popup.find('.mvc-grid-input');
+            if ($.fn.datepicker) { inputs.datepicker(); }
 
-            firstValue.on('change.mvcgrid keyup.mvcgrid', function (e) {
-                column.filter.first.val = this.value;
-                if (e.which == 13) {
-                    popup.find('.mvc-grid-apply').click();
-                }
-            });
-
-            var secondValue = popup.find('.second-filter .mvc-grid-input');
-            if ($.fn.datepicker) { secondValue.datepicker(); }
-
-            secondValue.on('change.mvcgrid keyup.mvcgrid', function (e) {
-                column.filter.second.val = this.value;
+            inputs.on('change.mvcgrid keyup.mvcgrid', function (e) {
                 if (e.which == 13) {
                     popup.find('.mvc-grid-apply').click();
                 }
@@ -715,6 +634,12 @@ var MvcGridDateFilter = (function () {
             var apply = popup.find('.mvc-grid-apply');
             apply.on('click.mvcgrid', function () {
                 popup.removeClass('open');
+                column.filter.operator = popup.find('.mvc-grid-operator').val();
+                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
+                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
+                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
+                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+
                 grid.reload(grid, grid.formFilterQuery(grid, column));
             });
         },
@@ -723,12 +648,6 @@ var MvcGridDateFilter = (function () {
             cancel.on('click.mvcgrid', function () {
                 popup.removeClass('open');
                 grid.reload(grid, grid.formFilterQueryWithout(grid, column));
-            });
-        },
-        bindOperator: function (grid, column, popup) {
-            var operator = popup.find('.mvc-grid-operator');
-            operator.on('change.mvcgrid', function () {
-                column.filter.operator = this.value;
             });
         }
     };
@@ -781,35 +700,23 @@ var MvcGridBooleanFilter = (function () {
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
-            this.bindOperator(grid, column, popup);
         },
         bindValue: function (grid, column, popup) {
-            var firstValues = popup.find('.first-filter .mvc-grid-boolean-filter li');
-            column.filter.first.type = 'Equals';
-
-            firstValues.on('click.mvcgrid', function () {
-                var item = $(this);
-
-                column.filter.first.val = item.data('value');
-                item.siblings().removeClass('active');
-                item.addClass('active');
-            });
-
-            var secondValues = popup.find('.second-filter .mvc-grid-boolean-filter li');
-            column.filter.second.type = 'Equals';
-
-            secondValues.on('click.mvcgrid', function () {
-                var item = $(this);
-
-                column.filter.second.val = item.data('value');
-                item.siblings().removeClass('active');
-                item.addClass('active');
+            var inputs = popup.find('.mvc-grid-boolean-filter li');
+            inputs.on('click.mvcgrid', function () {
+                $(this).addClass('active').siblings().removeClass('active');
             });
         },
         bindApply: function (grid, column, popup) {
             var apply = popup.find('.mvc-grid-apply');
             apply.on('click.mvcgrid', function () {
                 popup.removeClass('open');
+                column.filter.first.type = 'Equals';
+                column.filter.second.type = 'Equals';
+                column.filter.operator = popup.find('.mvc-grid-operator').val();
+                column.filter.first.val = popup.find('.first-filter .mvc-grid-boolean-filter li').data('value');
+                column.filter.second.val = popup.find('.second-filter .mvc-grid-boolean-filter li').data('value');
+
                 grid.reload(grid, grid.formFilterQuery(grid, column));
             });
         },
@@ -818,12 +725,6 @@ var MvcGridBooleanFilter = (function () {
             cancel.on('click.mvcgrid', function () {
                 popup.removeClass('open');
                 grid.reload(grid, grid.formFilterQueryWithout(grid, column));
-            });
-        },
-        bindOperator: function (grid, column, popup) {
-            var operator = popup.find('.mvc-grid-operator');
-            operator.on('change.mvcgrid', function () {
-                column.filter.operator = this.value;
             });
         }
     };
