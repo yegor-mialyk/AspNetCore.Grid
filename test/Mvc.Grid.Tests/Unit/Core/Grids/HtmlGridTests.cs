@@ -214,7 +214,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void MultiFilterable_ReturnsSameGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Filterable();
+            IHtmlGrid<GridModel> actual = htmlGrid.MultiFilterable();
             IHtmlGrid<GridModel> expected = htmlGrid;
 
             Assert.Same(expected, actual);
