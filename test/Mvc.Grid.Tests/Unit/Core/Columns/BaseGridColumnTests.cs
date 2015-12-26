@@ -55,7 +55,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void RenderedAs_ReturnsSameColumn()
+        public void RenderedAs_ReturnsItself()
         {
             IGridColumn actual = column.RenderedAs(model => model.Name);
             IGridColumn expected = column;
@@ -77,7 +77,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void MultiFilterable_ReturnsSameGrid()
+        public void MultiFilterable_ReturnsItself()
         {
             IGridColumn actual = column.MultiFilterable(true);
             IGridColumn expected = column;
@@ -99,7 +99,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Filterable_ReturnsSameGrid()
+        public void Filterable_ReturnsItself()
         {
             IGridColumn actual = column.Filterable(true);
             IGridColumn expected = column;
@@ -121,7 +121,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void FilteredAs_ReturnsSameGrid()
+        public void FilteredAs_ReturnsItself()
         {
             IGridColumn actual = column.FilteredAs("Numeric");
             IGridColumn expected = column;
@@ -143,7 +143,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void InitialSort_ReturnsSameGrid()
+        public void InitialSort_ReturnsItself()
         {
             IGridColumn actual = column.InitialSort(GridSortOrder.Desc);
             IGridColumn expected = column;
@@ -156,7 +156,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: FirstSort(GridSortOrder order)
 
         [Fact]
-        public void FirstSort_SetsFirstSortOrder()
+        public void FirstSort_SetsFirstOrder()
         {
             GridSortOrder? actual = column.FirstSort(GridSortOrder.Desc).FirstSortOrder;
             GridSortOrder? expected = GridSortOrder.Desc;
@@ -165,7 +165,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void FirstSort_ReturnsSameGrid()
+        public void FirstSort_ReturnsItself()
         {
             IGridColumn actual = column.FirstSort(GridSortOrder.Desc);
             IGridColumn expected = column;
@@ -187,7 +187,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Sortable_ReturnsSameGrid()
+        public void Sortable_ReturnsItself()
         {
             IGridColumn actual = column.Sortable(true);
             IGridColumn expected = column;
@@ -206,7 +206,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Encoded_ReturnsSameGrid()
+        public void Encoded_ReturnsItself()
         {
             IGridColumn actual = column.Encoded(true);
             IGridColumn expected = column;
@@ -228,7 +228,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Formatted_ReturnsSameGrid()
+        public void Formatted_ReturnsItself()
         {
             IGridColumn actual = column.Formatted("Format");
             IGridColumn expected = column;
@@ -250,7 +250,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Css_ReturnsSameGrid()
+        public void Css_ReturnsItself()
         {
             IGridColumn actual = column.Css("column-class");
             IGridColumn expected = column;
@@ -272,7 +272,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Titled_ReturnsSameGrid()
+        public void Titled_ReturnsItself()
         {
             IGridColumn actual = column.Titled("Title");
             IGridColumn expected = column;
@@ -294,7 +294,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Named_ReturnsSameGrid()
+        public void Named_ReturnsItself()
         {
             IGridColumn actual = column.Named("Name");
             IGridColumn expected = column;

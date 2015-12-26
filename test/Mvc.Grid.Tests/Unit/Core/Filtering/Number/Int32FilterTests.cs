@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetNumericValue_OnNotValidValueReturnsNull()
+        public void GetNumericValue_NotValidValue_ReturnsNull()
         {
             Int32Filter filter = new Int32Filter();
             filter.Value = "1a";

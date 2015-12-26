@@ -26,8 +26,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumns_SetsGrid()
         {
-            IGrid expected = columns.Grid;
             IGrid actual = new GridColumns<GridModel>(columns.Grid).Grid;
+            IGrid expected = columns.Grid;
 
             Assert.Same(expected, actual);
         }
@@ -37,7 +37,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Add<TValue>(Expression<Func<T, TValue>> expression)
 
         [Fact]
-        public void Add_AddsGridColumn()
+        public void Add_GridColumn()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
             columns.Add(expression);
@@ -60,7 +60,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Add_AddsGridColumnProcessor()
+        public void Add_GridColumnProcessor()
         {
             columns.Add(model => model.Name);
 
@@ -84,7 +84,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
 
         [Fact]
-        public void Insert_InsertsGridColumn()
+        public void Insert_GridColumn()
         {
             Expression<Func<GridModel, Int32>> expression = (model) => model.Sum;
             columns.Add(model => model.Name);
@@ -108,7 +108,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Insert_AddsGridColumnProcessor()
+        public void Insert_GridColumnProcessor()
         {
             columns.Insert(0, model => model.Name);
 
@@ -119,7 +119,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Insert_ReturnsAddedColumn()
+        public void Insert_ReturnsInsertedColumn()
         {
             IGridColumn actual = columns.Insert(0, model => model.Name);
             IGridColumn expected = columns.Single();

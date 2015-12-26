@@ -87,7 +87,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetEnumerator_GetsSameEnumerable()
+        public void GetEnumerator_ReturnsSameEnumerable()
         {
             GridModel[] items = { new GridModel(), new GridModel() };
             Grid<GridModel> grid = new Grid<GridModel>(items);

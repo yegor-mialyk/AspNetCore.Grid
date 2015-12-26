@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNet.WebUtilities;
-using NSubstitute;
+﻿using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -121,7 +119,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: GetFilter<T>(IGridColumn<T> column)
 
         [Fact]
-        public void GetFilter_OnNotMultiFilterableColumnSetsSecondFilterToNull()
+        public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull()
         {
             column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
             column.IsMultiFilterable = false;
@@ -134,7 +132,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name=Equals")]
         [InlineData("Grid-Name-=Equals")]
         [InlineData("Grid-Name-Op=Equals")]
-        public void GetFilter_OnNotFoundFilterSetsSecondFilterToNull(String query)
+        public void GetFilter_NotFoundFilter_SetsSecondFilterToNull(String query)
         {
             column.Grid.Query = TestHelper.ParseQuery(query);
 
@@ -142,7 +140,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilter_OnNotFoundValueTypeSetsSecondFilterToNull()
+        public void GetFilter_NotFoundValueType_SetsSecondFilterToNull()
         {
             column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
             Expression<Func<GridModel, Object>> expression = (model) => model.Name;
@@ -154,7 +152,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
         [InlineData("Grid-Name-Contains=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
-        public void GetFilter_OnNotFoundFilterTypeSetsSecondFilterToNull(String query)
+        public void GetFilter_NotFoundFilterType_SetsSecondFilterToNull(String query)
         {
             column.Grid.Query = TestHelper.ParseQuery(query);
 
@@ -184,7 +182,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name=Equals")]
         [InlineData("Grid-Name-=Equals")]
         [InlineData("Grid-Name-Op=Equals")]
-        public void GetFilter_OnNotFoundFilterSetsFirstFilterToNull(String query)
+        public void GetFilter_NotFoundFilter_SetsFirstFilterToNull(String query)
         {
             column.Grid.Query = TestHelper.ParseQuery(query);
 
@@ -192,7 +190,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilter_OnNotFoundValueTypeSetsFirstFilterToNull()
+        public void GetFilter_NotFoundValueType_SetsFirstFilterToNull()
         {
             column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
             Expression<Func<GridModel, Object>> expression = (model) => model.Name;
@@ -204,7 +202,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
         [InlineData("Grid-Name-Eq=a&Grid-Name-Contains=b&Grid-Name-Op=And")]
-        public void GetFilter_OnNotFoundFilterTypeSetsFirstFilterToNull(String query)
+        public void GetFilter_NotFoundFilterType_SetsFirstFilterToNull(String query)
         {
             column.Grid.Query = TestHelper.ParseQuery(query);
 
@@ -245,11 +243,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Op=And", "And")]
         [InlineData("Grid-Name-Op-And=And", null)]
         [InlineData("Grid-Name-Op=And&Grid-Name-Op=Or", "And")]
-        public void GetFilter_SetsOperatorFromQuery(String query, String expected)
+        public void GetFilter_SetsOperatorFromQuery(String query, String filterOperator)
         {
             column.Grid.Query = TestHelper.ParseQuery(query);
 
             String actual = filters.GetFilter(column).Operator;
+            String expected = filterOperator;
 
             Assert.Equal(expected, actual);
         }
@@ -277,7 +276,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Register(Type forType, String filterType, Type filter)
 
         [Fact]
-        public void Register_RegistersFilterForExistingType()
+        public void Register_FilterForExistingType()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
             filters.Table.Add(typeof(Object), filterPairs);
@@ -291,7 +290,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_RegistersNullableFilterTypeForExistingType()
+        public void Register_NullableFilterTypeForExistingType()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
@@ -307,7 +306,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_OverridesAlreadyRegisteredNullableFilter()
+        public void Register_Overrides_NullableFilter()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
@@ -323,7 +322,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_OverridesAlreadyRegisteredFilter()
+        public void Register_Overrides_Filter()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
@@ -339,7 +338,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_RegistersNullableTypeAsNotNullable()
+        public void Register_NullableTypeAsNotNullable()
         {
             filters.Register(typeof(Int32?), "Test", typeof(String));
 
@@ -350,7 +349,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_RegistersFilterForNewType()
+        public void Register_FilterForNewType()
         {
             filters.Register(typeof(Object), "Test", typeof(String));
 
@@ -365,7 +364,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Unregister(Type forType, String filterType)
 
         [Fact]
-        public void Unregister_UnregistersExistingFilter()
+        public void Unregister_ExistingFilter()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", null } };
             filters.Table.Add(typeof(Object), filterPairs);

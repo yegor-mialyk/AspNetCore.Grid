@@ -27,7 +27,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Apply(Expression expression)
 
         [Fact]
-        public void Apply_OnInvalidBooleanValueReturnsNull()
+        public void Apply_NotBooleanValue_ReturnsNull()
         {
             Expression<Func<GridModel, Boolean>> expression = (model) => model.IsChecked;
             filter.Value = "Test";
@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("false", false)]
         [InlineData("False", false)]
         [InlineData("FALSE", false)]
-        public void Apply_FiltersNullableBooleanProperty(String value, Boolean isChecked)
+        public void Apply_NullableEqualsFilter(String value, Boolean isChecked)
         {
             Expression<Func<GridModel, Boolean?>> expression = (model) => model.NIsChecked;
             filter.Value = value;
@@ -60,7 +60,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("false", false)]
         [InlineData("False", false)]
         [InlineData("FALSE", false)]
-        public void Apply_FiltersBooleanProperty(String value, Boolean isChecked)
+        public void Apply_EqualsFilter(String value, Boolean isChecked)
         {
             Expression<Func<GridModel, Boolean?>> expression = (model) => model.IsChecked;
             filter.Value = value;

@@ -31,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Apply(Expression expression)
 
         [Fact]
-        public void Apply_OnNullNumericValueReturnsNull()
+        public void Apply_NullNumericValue_ReturnsNull()
         {
             filter.GetNumericValue().Returns(null);
 
@@ -39,7 +39,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingEquals()
+        public void Apply_NullableEqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "Equals";
@@ -51,7 +51,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingEquals()
+        public void Apply_EqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "Equals";
@@ -63,7 +63,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingLessThan()
+        public void Apply_NullableLessThanFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "LessThan";
@@ -75,7 +75,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingLessThan()
+        public void Apply_LessThanFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "LessThan";
@@ -87,7 +87,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingGreaterThan()
+        public void Apply_NullableGreaterThanFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "GreaterThan";
@@ -99,7 +99,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingGreaterThan()
+        public void Apply_GreaterThanFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "GreaterThan";
@@ -111,7 +111,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingLessThanOrEqual()
+        public void Apply_NullableLessThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "LessThanOrEqual";
@@ -123,7 +123,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingLessThanOrEqual()
+        public void Apply_LessThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "LessThanOrEqual";
@@ -135,7 +135,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingGreaterThanOrEqual()
+        public void Apply_NullableGreaterThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "GreaterThanOrEqual";
@@ -147,7 +147,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingGreaterThanOrEqual()
+        public void Apply_GreaterThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
             filter.Type = "GreaterThanOrEqual";

@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetNumericValue_OnNotValidValueReturnsNull()
+        public void GetNumericValue_NotValidValue_ReturnsNull()
         {
             UInt64Filter filter = new UInt64Filter();
             filter.Value = "-1";

@@ -54,7 +54,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Constructor: Grid(IEnumerable<T> source)
 
         [Fact]
-        public void Grid_CreatesEmptyProcessorsList()
+        public void Grid_SetsProcessors()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
@@ -80,27 +80,27 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Grid_CreatesColumns()
+        public void Grid_SetsColumns()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
             GridColumns<GridModel> actual = grid.Columns as GridColumns<GridModel>;
             GridColumns<GridModel> expected = new GridColumns<GridModel>(grid);
 
-            Assert.Equal(expected, actual);
             Assert.Same(expected.Grid, actual.Grid);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Grid_CreatesRows()
+        public void Grid_SetsRows()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
             GridRows<GridModel> actual = grid.Rows as GridRows<GridModel>;
             GridRows<GridModel> expected = new GridRows<GridModel>(grid);
 
-            Assert.Equal(expected, actual);
             Assert.Same(expected.Grid, actual.Grid);
+            Assert.Equal(expected, actual);
         }
 
         #endregion

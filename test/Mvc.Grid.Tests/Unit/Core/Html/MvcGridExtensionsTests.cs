@@ -78,7 +78,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Extension: AjaxGrid(this HtmlHelper, String dataSource)
 
         [Fact]
-        public void AjaxGrid_RendersAjaxGridPartial()
+        public void AjaxGrid_RendersPartial()
         {
             Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
             html.PartialAsync("MvcGrid/_AjaxGrid", "DataSource", null).Returns(view);
@@ -94,7 +94,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Extension: AddMvcGrid(this IServiceCollection services)
 
         [Fact]
-        public void AddMvcGrid_AddsGridFiltersInstance()
+        public void AddMvcGrid_FiltersInstance()
         {
             IServiceCollection services = new ServiceCollection();
 
@@ -111,7 +111,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Extension: AddMvcGrid(this IServiceCollection services, Action<IGridFilters> configure)
 
         [Fact]
-        public void AddMvcGrid_AddsConfiguredGridFiltersInstance()
+        public void AddMvcGrid_ConfiguredFiltersInstance()
         {
             IServiceCollection services = new ServiceCollection();
 
@@ -124,7 +124,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void AddMvcGrid_ConfiguresGridFiltersInstance()
+        public void AddMvcGrid_ConfiguresFiltersInstance()
         {
             IServiceCollection services = new ServiceCollection();
             Action<IGridFilters> configure = Substitute.For<Action<IGridFilters>>();

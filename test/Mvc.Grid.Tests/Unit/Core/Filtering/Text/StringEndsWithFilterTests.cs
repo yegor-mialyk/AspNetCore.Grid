@@ -10,7 +10,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Apply(Expression expression)
 
         [Fact]
-        public void Apply_FiltersItemsWithCaseInsensitiveComparison()
+        public void Apply_FiltersItemsByIgnoringCase()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
             StringEndsWithFilter filter = new StringEndsWithFilter();

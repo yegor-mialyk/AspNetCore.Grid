@@ -30,7 +30,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Apply(Expression expression)
 
         [Fact]
-        public void Apply_OnInvalidDateTimeValueReturnsItems()
+        public void Apply_NotDateTimeValue_ReturnsItems()
         {
             filter.Value = "Test";
 
@@ -38,7 +38,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingEquals()
+        public void Apply_NullableEqualsFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "Equals";
@@ -50,7 +50,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingEquals()
+        public void Apply_EqualsFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "Equals";
@@ -62,7 +62,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingLessThan()
+        public void Apply_NullableLessThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "LessThan";
@@ -74,7 +74,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingLessThan()
+        public void Apply_LessThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
             filter.Type = "LessThan";
@@ -86,7 +86,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingGreaterThan()
+        public void Apply_NullableGreaterThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "GreaterThan";
@@ -98,7 +98,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingGreaterThan()
+        public void Apply_GreaterThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToLongDateString();
             filter.Type = "GreaterThan";
@@ -110,7 +110,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingLessThanOrEqual()
+        public void Apply_NullableLessThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "LessThanOrEqual";
@@ -122,7 +122,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingLessThanOrEqual()
+        public void Apply_LessThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
             filter.Type = "LessThanOrEqual";
@@ -134,7 +134,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersNullableUsingGreaterThanOrEqual()
+        public void Apply_NullableGreaterThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
             filter.Type = "GreaterThanOrEqual";
@@ -146,7 +146,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_FiltersUsingGreaterThanOrEqual()
+        public void Apply_GreaterThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
             filter.Type = "GreaterThanOrEqual";
@@ -158,7 +158,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_OnNotSupportedFilterTypeReturnsNull()
+        public void Apply_NotSupportedType_ReturnsNull()
         {
             filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
             filter.Type = "Test";

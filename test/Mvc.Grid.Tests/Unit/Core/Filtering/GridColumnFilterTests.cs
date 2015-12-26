@@ -29,7 +29,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Method: Process(IQueryable<T> items)
 
         [Fact]
-        public void Process_OnNoFiltersReturnsSameItems()
+        public void Process_NoFilters_ReturnsSameItems()
         {
             filter.First = null;
             filter.Second = null;
@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Process_OnNullAppliedFiltersReturnsSameItems()
+        public void Process_NullAppliedFilter_ReturnsSameItems()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
             filter.Column.Expression.Returns(expression);
