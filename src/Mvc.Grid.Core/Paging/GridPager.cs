@@ -26,11 +26,8 @@ namespace NonFactors.Mvc.Grid
                 if (CurrentPageIsSet)
                     return CurrentPageValue;
 
-                String key = Grid.Name + "-Page";
-                String value = Grid.Query[key];
                 Int32 page;
-
-                if (Int32.TryParse(value, out page))
+                if (Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page))
                     CurrentPageValue = page;
                 else
                     CurrentPageValue = InitialPage;

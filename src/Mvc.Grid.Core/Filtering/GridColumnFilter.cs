@@ -14,11 +14,11 @@ namespace NonFactors.Mvc.Grid
 
         public IQueryable<T> Process(IQueryable<T> items)
         {
-            Expression filterExpression = CreateFilterExpression();
-            if (filterExpression == null)
+            Expression expression = CreateFilterExpression();
+            if (expression == null)
                 return items;
 
-            return items.Where(ToPredicate(filterExpression));
+            return items.Where(ToLambda(expression));
         }
 
         private Expression CreateFilterExpression()
@@ -39,7 +39,7 @@ namespace NonFactors.Mvc.Grid
 
             return left ?? right;
         }
-        private Expression<Func<T, Boolean>> ToPredicate(Expression expression)
+        private Expression<Func<T, Boolean>> ToLambda(Expression expression)
         {
             return Expression.Lambda<Func<T, Boolean>>(expression, Column.Expression.Parameters[0]);
         }
