@@ -128,11 +128,11 @@ var MvcGrid = (function () {
         },
 
         reload: function (grid) {
-            if (grid.sourceUrl != '') {
-                if (grid.reloadStarted) {
-                    grid.reloadStarted(grid);
-                }
+            if (grid.reloadStarted) {
+                grid.reloadStarted(grid);
+            }
 
+            if (grid.sourceUrl != '') {
                 $.ajax({
                     url: grid.sourceUrl + '?' + grid.query
                 }).success(function (result) {
