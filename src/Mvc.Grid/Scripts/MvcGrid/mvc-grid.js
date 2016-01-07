@@ -45,19 +45,19 @@ var MvcGrid = (function () {
         var headers = grid.find('th');
         for (var i = 0; i < headers.length; i++) {
             var column = this.createColumn(this, $(headers[i]));
-            this.applyFiltering(this, column);
-            this.applySorting(this, column);
-            this.cleanHeader(this, column);
+            this.bindFilter(this, column);
+            this.bindSort(this, column);
+            this.cleanup(this, column);
             this.columns.push(column);
         }
 
         var pages = grid.find('.mvc-grid-pager span');
         for (var ind = 0; ind < pages.length; ind++) {
-            this.applyPaging(this, $(pages[ind]));
+            this.bindPager(this, $(pages[ind]));
         }
 
         this.bindGridEvents(this);
-        this.cleanGrid(this);
+        this.clean(this);
     }
 
     MvcGrid.prototype = {
@@ -98,14 +98,14 @@ var MvcGrid = (function () {
             }
         },
 
-        applyFiltering: function (grid, column) {
+        bindFilter: function (grid, column) {
             if (column.filter.isEnabled) {
                 column.header.find('.mvc-grid-filter').on('click.mvcgrid', function () {
                     grid.renderFilter(grid, column);
                 });
             }
         },
-        applySorting: function (grid, column) {
+        bindSort: function (grid, column) {
             if (column.sort.isEnabled) {
                 column.header.on('click.mvcgrid', function (e) {
                     var target = $(e.target || e.srcElement);
@@ -116,7 +116,7 @@ var MvcGrid = (function () {
                 });
             }
         },
-        applyPaging: function (grid, pageElement) {
+        bindPager: function (grid, pageElement) {
             var page = pageElement.data('page') || '';
 
             if (page != '') {
@@ -338,7 +338,7 @@ var MvcGrid = (function () {
             });
         },
 
-        cleanHeader: function (grid, column) {
+        cleanup: function (grid, column) {
             var header = column.header;
             header.removeAttr('data-name');
 
@@ -355,7 +355,7 @@ var MvcGrid = (function () {
             header.removeAttr('data-sort-order');
             header.removeAttr('data-sort-first');
         },
-        cleanGrid: function (grid) {
+        clean: function (grid) {
             grid.element.removeAttr('data-source-url');
             grid.element.removeAttr('data-name');
         }
