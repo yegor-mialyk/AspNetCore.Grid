@@ -28,17 +28,17 @@ var MvcGrid = (function () {
         if (this.sourceUrl != '') {
             var splitIndex = this.sourceUrl.indexOf('?');
             if (splitIndex > -1) {
-                this.gridQuery = this.sourceUrl.substring(splitIndex + 1);
+                this.query = this.sourceUrl.substring(splitIndex + 1);
                 this.sourceUrl = this.sourceUrl.substring(0, splitIndex);
             } else {
-                this.gridQuery = options.query || '';
+                this.query = options.query || '';
             }
         } else {
-            this.gridQuery = window.location.search.replace('?', '');
+            this.query = window.location.search.replace('?', '');
         }
 
         if (options.reload === true || (this.sourceUrl != '' && !options.isLoaded)) {
-            this.reload(this, this.gridQuery);
+            this.reload(this);
             return;
         }
 
@@ -94,7 +94,7 @@ var MvcGrid = (function () {
             grid.reloadStarted = options.reloadStarted || grid.reloadStarted;
 
             if (options.reload === true) {
-                grid.reload(grid, grid.gridQuery);
+                grid.reload(grid);
             }
         },
 
@@ -110,7 +110,8 @@ var MvcGrid = (function () {
                 column.header.on('click.mvcgrid', function (e) {
                     var target = $(e.target || e.srcElement);
                     if (!target.hasClass('mvc-grid-filter') && target.parents('.mvc-grid-filter').length == 0) {
-                        grid.reload(grid, grid.formSortQuery(grid, column));
+                        grid.applySort(grid, column);
+                        grid.reload(grid);
                     }
                 });
             }
@@ -120,19 +121,20 @@ var MvcGrid = (function () {
 
             if (page != '') {
                 pageElement.on('click.mvcgrid', function () {
-                    grid.reload(grid, grid.formPageQuery(grid, page));
+                    grid.applyPage(grid, page);
+                    grid.reload(grid);
                 });
             }
         },
 
-        reload: function (grid, query) {
+        reload: function (grid) {
             if (grid.sourceUrl != '') {
                 if (grid.reloadStarted) {
                     grid.reloadStarted(grid);
                 }
 
                 $.ajax({
-                    url: grid.sourceUrl + '?' + query
+                    url: grid.sourceUrl + '?' + grid.query
                 }).success(function (result) {
                     if (grid.reloadEnded) {
                         grid.reloadEnded(grid);
@@ -148,8 +150,8 @@ var MvcGrid = (function () {
                         rowClicked: grid.rowClicked,
                         sourceUrl: grid.sourceUrl,
                         filters: grid.filters,
-                        isLoaded: true,
-                        query: query
+                        query: grid.query,
+                        isLoaded: true
                     });
                     grid.element.remove();
                 })
@@ -159,7 +161,7 @@ var MvcGrid = (function () {
                     }
                 });
             } else {
-                window.location.href = '?' + query;
+                window.location.href = '?' + grid.query;
             }
         },
         renderFilter: function (grid, column) {
@@ -209,7 +211,7 @@ var MvcGrid = (function () {
             popup.css('top', popupTop + 'px');
         },
 
-        formFilterQuery: function (grid, column) {
+        applyFilter: function (grid, column) {
             var secondKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.second.type);
             var firstKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.first.type);
             var operatorKey = encodeURIComponent(grid.name + '-' + column.name + '-Op');
@@ -218,7 +220,7 @@ var MvcGrid = (function () {
             var secondValue = encodeURIComponent(column.filter.second.val);
             var firstValue = encodeURIComponent(column.filter.first.val);
             var pageKey = encodeURIComponent(grid.name + '-Page');
-            var params = grid.gridQuery.split('&');
+            var params = grid.query.split('&');
             var secondParamExists = false;
             var firstParamExists = false;
             var operatorExists = false;
@@ -261,14 +263,14 @@ var MvcGrid = (function () {
                 newParams.push(secondKey + '=' + secondValue);
             }
 
-            return newParams.join('&');
+            grid.query = newParams.join('&');
         },
-        formFilterQueryWithout: function (grid, column) {
+        cancelFilter: function (grid, column) {
             var secondKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.second.type);
             var firstKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.first.type);
             var operatorKey = encodeURIComponent(grid.name + '-' + column.name + '-Op');
             var pageKey = encodeURIComponent(grid.name + '-Page');
-            var params = grid.gridQuery.split('&');
+            var params = grid.query.split('&');
             var newParams = [];
 
             for (var i = 0; i < params.length; i++) {
@@ -279,24 +281,24 @@ var MvcGrid = (function () {
                 }
             }
 
-            return newParams.join('&');
+            grid.query = newParams.join('&');
         },
-        formSortQuery: function (grid, column) {
-            var sortQuery = grid.addOrReplace(grid, grid.gridQuery, grid.name + '-Sort', column.name);
+        applySort: function (grid, column) {
+            grid.querySet(grid, grid.name + '-Sort', column.name);
             var order = column.sort.order == 'Asc' ? 'Desc' : 'Asc';
             if (column.sort.order == '' && column.sort.firstOrder != '') {
                 order = column.sort.firstOrder;
             }
 
-            return grid.addOrReplace(grid, sortQuery, grid.name + '-Order', order);
+            grid.querySet(grid, grid.name + '-Order', order);
         },
-        formPageQuery: function (grid, page) {
-            return grid.addOrReplace(grid, grid.gridQuery, grid.name + '-Page', page);
+        applyPage: function (grid, page) {
+            grid.querySet(grid, grid.name + '-Page', page);
         },
-        addOrReplace: function (grid, query, key, value) {
+        querySet: function (grid, key, value) {
+            var params = grid.query.split('&');
             value = encodeURIComponent(value);
             key = encodeURIComponent(key);
-            var params = query.split('&');
             var paramExists = false;
             var newParams = [];
 
@@ -315,7 +317,7 @@ var MvcGrid = (function () {
                 newParams.push(key + '=' + value);
             }
 
-            return newParams.join('&');
+            grid.query = newParams.join('&');
         },
 
         bindGridEvents: function (grid) {
@@ -436,7 +438,8 @@ var MvcGridTextFilter = (function () {
                 column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
                 column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
 
-                grid.reload(grid, grid.formFilterQuery(grid, column));
+                grid.applyFilter(grid, column);
+                grid.reload(grid);
             });
         },
         bindCancel: function (grid, column, popup) {
@@ -445,7 +448,8 @@ var MvcGridTextFilter = (function () {
                 popup.removeClass('open');
 
                 if (column.filter.first.type || column.filter.second.type) {
-                    grid.reload(grid, grid.formFilterQueryWithout(grid, column));
+                    grid.cancelFilter(grid, column);
+                    grid.reload(grid);
                 }
             });
         }
@@ -543,7 +547,8 @@ var MvcGridNumberFilter = (function () {
                 column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
                 column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
 
-                grid.reload(grid, grid.formFilterQuery(grid, column));
+                grid.applyFilter(grid, column);
+                grid.reload(grid);
             });
         },
         bindCancel: function (grid, column, popup) {
@@ -552,7 +557,8 @@ var MvcGridNumberFilter = (function () {
                 popup.removeClass('open');
 
                 if (column.filter.first.type || column.filter.second.type) {
-                    grid.reload(grid, grid.formFilterQueryWithout(grid, column));
+                    grid.cancelFilter(grid, column);
+                    grid.reload(grid);
                 }
             });
         },
@@ -647,7 +653,8 @@ var MvcGridDateFilter = (function () {
                 column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
                 column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
 
-                grid.reload(grid, grid.formFilterQuery(grid, column));
+                grid.applyFilter(grid, column);
+                grid.reload(grid);
             });
         },
         bindCancel: function (grid, column, popup) {
@@ -656,7 +663,8 @@ var MvcGridDateFilter = (function () {
                 popup.removeClass('open');
 
                 if (column.filter.first.type || column.filter.second.type) {
-                    grid.reload(grid, grid.formFilterQueryWithout(grid, column));
+                    grid.cancelFilter(grid, column);
+                    grid.reload(grid);
                 }
             });
         }
@@ -727,7 +735,8 @@ var MvcGridBooleanFilter = (function () {
                 column.filter.first.val = popup.find('.first-filter .mvc-grid-boolean-filter li').data('value');
                 column.filter.second.val = popup.find('.second-filter .mvc-grid-boolean-filter li').data('value');
 
-                grid.reload(grid, grid.formFilterQuery(grid, column));
+                grid.applyFilter(grid, column);
+                grid.reload(grid);
             });
         },
         bindCancel: function (grid, column, popup) {
@@ -736,7 +745,8 @@ var MvcGridBooleanFilter = (function () {
                 popup.removeClass('open');
 
                 if (column.filter.first.type || column.filter.second.type) {
-                    grid.reload(grid, grid.formFilterQueryWithout(grid, column));
+                    grid.cancelFilter(grid, column);
+                    grid.reload(grid);
                 }
             });
         }
