@@ -25,7 +25,7 @@ var MvcGrid = (function () {
             'Boolean': new MvcGridBooleanFilter()
         }, options.filters);
 
-        if (this.sourceUrl != '') {
+        if (this.sourceUrl) {
             var splitIndex = this.sourceUrl.indexOf('?');
             if (splitIndex > -1) {
                 this.query = this.sourceUrl.substring(splitIndex + 1);
@@ -37,7 +37,7 @@ var MvcGrid = (function () {
             this.query = window.location.search.replace('?', '');
         }
 
-        if (options.reload === true || (this.sourceUrl != '' && !options.isLoaded)) {
+        if (options.reload || (this.sourceUrl && !options.isLoaded)) {
             this.reload(this);
             return;
         }
@@ -93,7 +93,7 @@ var MvcGrid = (function () {
             grid.reloadFailed = options.reloadFailed || grid.reloadFailed;
             grid.reloadStarted = options.reloadStarted || grid.reloadStarted;
 
-            if (options.reload === true) {
+            if (options.reload) {
                 grid.reload(grid);
             }
         },
@@ -117,9 +117,9 @@ var MvcGrid = (function () {
             }
         },
         bindPager: function (grid, pageElement) {
-            var page = pageElement.data('page') || '';
+            var page = pageElement.data('page');
 
-            if (page != '') {
+            if (page) {
                 pageElement.on('click.mvcgrid', function () {
                     grid.applyPage(grid, page);
                     grid.reload(grid);
@@ -132,7 +132,7 @@ var MvcGrid = (function () {
                 grid.reloadStarted(grid);
             }
 
-            if (grid.sourceUrl != '') {
+            if (grid.sourceUrl) {
                 $.ajax({
                     url: grid.sourceUrl + '?' + grid.query
                 }).success(function (result) {
@@ -228,7 +228,7 @@ var MvcGrid = (function () {
 
             for (var i = 0; i < params.length; i++) {
                 var key = params[i].split('=')[0];
-                if (params[i] != '' && key != pageKey) {
+                if (params[i] && key != pageKey) {
                     if (key.indexOf(columnKey) == 0) {
                         if (key == operatorKey && !operatorExists) {
                             if (!column.filter.isMulti) {
@@ -275,7 +275,7 @@ var MvcGrid = (function () {
 
             for (var i = 0; i < params.length; i++) {
                 var key = params[i].split('=')[0];
-                if (params[i] != '' && key != pageKey && key != firstKey &&
+                if (params[i] && key != pageKey && key != firstKey &&
                     (!column.filter.isMulti || (key != operatorKey && key != secondKey))) {
                     newParams.push(params[i]);
                 }
@@ -286,7 +286,7 @@ var MvcGrid = (function () {
         applySort: function (grid, column) {
             grid.querySet(grid, grid.name + '-Sort', column.name);
             var order = column.sort.order == 'Asc' ? 'Desc' : 'Asc';
-            if (column.sort.order == '' && column.sort.firstOrder != '') {
+            if (!column.sort.order && column.sort.firstOrder) {
                 order = column.sort.firstOrder;
             }
 
@@ -303,7 +303,7 @@ var MvcGrid = (function () {
             var newParams = [];
 
             for (var i = 0; i < params.length; i++) {
-                if (params[i] != '') {
+                if (params[i]) {
                     var paramKey = params[i].split('=')[0];
                     if (paramKey == key) {
                         params[i] = key + '=' + value;
@@ -564,7 +564,7 @@ var MvcGridNumberFilter = (function () {
         },
 
         isValid: function (value) {
-            if (value == '') return true;
+            if (!value) return true;
             var pattern = new RegExp('^(?=.*\\d+.*)[-+]?\\d*[.,]?\\d*$');
 
             return pattern.test(value);
