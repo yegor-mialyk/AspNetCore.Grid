@@ -134,6 +134,7 @@ var MvcGrid = (function () {
 
             if (grid.sourceUrl) {
                 $.ajax({
+                    cache: false,
                     url: grid.sourceUrl + '?' + grid.query
                 }).success(function (result) {
                     if (grid.reloadEnded) {
