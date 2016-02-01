@@ -137,14 +137,10 @@ var MvcGrid = (function () {
                     cache: false,
                     url: grid.sourceUrl + '?' + grid.query
                 }).success(function (result) {
-                    if (grid.reloadEnded) {
-                        grid.reloadEnded(grid);
-                    }
-
                     grid.element.hide();
                     grid.element.after(result);
 
-                    grid.element.next('.mvc-grid').mvcgrid({
+                    var newGrid = grid.element.next('.mvc-grid').mvcgrid({
                         reloadStarted: grid.reloadStarted,
                         reloadFailed: grid.reloadFailed,
                         reloadEnded: grid.reloadEnded,
@@ -153,8 +149,12 @@ var MvcGrid = (function () {
                         filters: grid.filters,
                         query: grid.query,
                         isLoaded: true
-                    });
+                    }).data('mvc-grid');
                     grid.element.remove();
+
+                    if (grid.reloadEnded) {
+                        grid.reloadEnded(newGrid);
+                    }
                 })
                 .error(function (result) {
                     if (grid.reloadFailed) {
