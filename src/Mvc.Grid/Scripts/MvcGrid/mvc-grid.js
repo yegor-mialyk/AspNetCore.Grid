@@ -213,109 +213,62 @@ var MvcGrid = (function () {
         },
 
         applyFilter: function (grid, column) {
-            var secondKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.second.type);
-            var firstKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.first.type);
-            var operatorKey = encodeURIComponent(grid.name + '-' + column.name + '-Op');
-            var columnKey = encodeURIComponent(grid.name + '-' + column.name + '-');
-            var operatorValue = encodeURIComponent(column.filter.operator);
-            var secondValue = encodeURIComponent(column.filter.second.val);
-            var firstValue = encodeURIComponent(column.filter.first.val);
-            var pageKey = encodeURIComponent(grid.name + '-Page');
-            var params = grid.query.split('&');
-            var secondParamExists = false;
-            var firstParamExists = false;
-            var operatorExists = false;
-            var newParams = [];
+            grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
+            grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
 
-            for (var i = 0; i < params.length; i++) {
-                var key = params[i].split('=')[0];
-                if (params[i] && key != pageKey) {
-                    if (key.indexOf(columnKey) == 0) {
-                        if (key == operatorKey && !operatorExists) {
-                            if (!column.filter.isMulti) {
-                                continue;
-                            }
-
-                            params[i] = key + '=' + operatorValue;
-                            operatorExists = true;
-                        } else if (!firstParamExists) {
-                            params[i] = firstKey + '=' + firstValue;
-                            firstParamExists = true;
-                        } else if (firstParamExists && !secondParamExists) {
-                            if (!column.filter.isMulti) {
-                                continue;
-                            }
-
-                            params[i] = secondKey + '=' + secondValue;
-                            secondParamExists = true;
-                        }
-                    }
-
-                    newParams.push(params[i]);
-                }
+            if (column.filter.isMulti) {
+                grid.queryAdd(grid, grid.name + '-' + column.name + '-Op', column.filter.operator);
+                grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
-            if (!firstParamExists) {
-                newParams.push(firstKey + '=' + firstValue);
-            }
-            if (!operatorExists && column.filter.isMulti) {
-                newParams.push(operatorKey + '=' + operatorValue);
-            }
-            if (!secondParamExists && column.filter.isMulti) {
-                newParams.push(secondKey + '=' + secondValue);
-            }
-
-            grid.query = newParams.join('&');
         },
         cancelFilter: function (grid, column) {
-            var secondKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.second.type);
-            var firstKey = encodeURIComponent(grid.name + '-' + column.name + '-' + column.filter.first.type);
-            var operatorKey = encodeURIComponent(grid.name + '-' + column.name + '-Op');
-            var pageKey = encodeURIComponent(grid.name + '-Page');
-            var params = grid.query.split('&');
-            var newParams = [];
-
-            for (var i = 0; i < params.length; i++) {
-                var key = params[i].split('=')[0];
-                if (params[i] && key != pageKey && key != firstKey &&
-                    (!column.filter.isMulti || (key != operatorKey && key != secondKey))) {
-                    newParams.push(params[i]);
-                }
-            }
-
-            grid.query = newParams.join('&');
+            grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
         },
         applySort: function (grid, column) {
-            grid.querySet(grid, grid.name + '-Sort', column.name);
+            grid.queryRemove(grid, grid.name + '-Sort');
+            grid.queryRemove(grid, grid.name + '-Order');
+            grid.queryAdd(grid, grid.name + '-Sort', column.name);
             var order = column.sort.order == 'Asc' ? 'Desc' : 'Asc';
             if (!column.sort.order && column.sort.firstOrder) {
                 order = column.sort.firstOrder;
             }
 
-            grid.querySet(grid, grid.name + '-Order', order);
+            grid.queryAdd(grid, grid.name + '-Order', order);
         },
         applyPage: function (grid, page) {
-            grid.querySet(grid, grid.name + '-Page', page);
+            grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryAdd(grid, grid.name + '-Page', page);
         },
-        querySet: function (grid, key, value) {
+
+        queryAdd: function (grid, key, value) {
+            grid.query += (grid.query ? '&' : '') + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+        },
+        queryRemoveStartingWith: function (grid, key) {
+            var keyToRemove = encodeURIComponent(key);
             var params = grid.query.split('&');
-            value = encodeURIComponent(value);
-            key = encodeURIComponent(key);
-            var paramExists = false;
             var newParams = [];
 
             for (var i = 0; i < params.length; i++) {
-                if (params[i]) {
-                    var paramKey = params[i].split('=')[0];
-                    if (paramKey == key) {
-                        params[i] = key + '=' + value;
-                        paramExists = true;
-                    }
-
+                var key = params[i].split('=')[0];
+                if (params[i] && key.indexOf(keyToRemove) != 0) {
                     newParams.push(params[i]);
                 }
             }
-            if (!paramExists) {
-                newParams.push(key + '=' + value);
+
+            grid.query = newParams.join('&');
+        },
+        queryRemove: function (grid, key) {
+            var keyToRemove = encodeURIComponent(key);
+            var params = grid.query.split('&');
+            var newParams = [];
+
+            for (var i = 0; i < params.length; i++) {
+                var key = params[i].split('=')[0];
+                if (params[i] && key != keyToRemove) {
+                    newParams.push(params[i]);
+                }
             }
 
             grid.query = newParams.join('&');
