@@ -5,6 +5,7 @@
 @if (Model.TotalPages > 1)
 {
     <div class="mvc-grid-pager @Model.CssClasses">
+        <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
         <ul class="pagination">
             @if (Model.CurrentPage > 1)
             {

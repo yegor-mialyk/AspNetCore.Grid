@@ -64,10 +64,11 @@ namespace NonFactors.Mvc.Grid
         {
             Grid = grid;
             InitialPage = 1;
-            RowsPerPage = 20;
+            Int32 rowsPerPage;
             PagesToDisplay = 5;
             PartialViewName = "MvcGrid/_Pager";
             ProcessorType = GridProcessorType.Post;
+            RowsPerPage = Int32.TryParse(grid.Query[grid.Name + "-Rows"], out rowsPerPage) ? rowsPerPage : 20;
         }
 
         public virtual IQueryable<T> Process(IQueryable<T> items)

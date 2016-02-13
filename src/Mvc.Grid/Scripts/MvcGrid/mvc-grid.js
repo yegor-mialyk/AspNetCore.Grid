@@ -55,6 +55,7 @@ var MvcGrid = (function () {
         for (var ind = 0; ind < pages.length; ind++) {
             this.bindPager(this, $(pages[ind]));
         }
+        this.bindPagerRows(this);
 
         this.bindGridEvents(this);
         this.clean(this);
@@ -125,6 +126,15 @@ var MvcGrid = (function () {
                     grid.reload(grid);
                 });
             }
+        },
+        bindPagerRows: function (grid) {
+            var rows = grid.element.find('.mvc-grid-pager-rows');
+            grid.element.find('.mvc-grid-pager-rows').on('change', function () {
+                grid.rows = this.value;
+                grid.reload(grid);
+            });
+
+            grid.rows = rows.val();
         },
 
         reload: function (grid) {
@@ -214,6 +224,7 @@ var MvcGrid = (function () {
 
         applyFilter: function (grid, column) {
             grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryRemove(grid, grid.name + '-Rows');
             grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
             grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
 
@@ -221,9 +232,12 @@ var MvcGrid = (function () {
                 grid.queryAdd(grid, grid.name + '-' + column.name + '-Op', column.filter.operator);
                 grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
+
+            grid.queryAdd(grid, grid.name + '-Rows', grid.rows);
         },
         cancelFilter: function (grid, column) {
             grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryRemove(grid, grid.name + '-Rows');
             grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
         },
         applySort: function (grid, column) {
@@ -239,7 +253,10 @@ var MvcGrid = (function () {
         },
         applyPage: function (grid, page) {
             grid.queryRemove(grid, grid.name + '-Page');
+            grid.queryRemove(grid, grid.name + '-Rows');
+
             grid.queryAdd(grid, grid.name + '-Page', page);
+            grid.queryAdd(grid, grid.name + '-Rows', grid.rows);
         },
 
         queryAdd: function (grid, key, value) {

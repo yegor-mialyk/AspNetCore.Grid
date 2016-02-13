@@ -190,15 +190,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridPager_SetsRowsPerPage()
-        {
-            Int32 actual = new GridPager<GridModel>(grid).RowsPerPage;
-            Int32 expected = 20;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void GridPager_SetsPagesToDisplay()
         {
             Int32 actual = new GridPager<GridModel>(grid).PagesToDisplay;
@@ -221,6 +212,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             GridProcessorType actual = new GridPager<GridModel>(grid).ProcessorType;
             GridProcessorType expected = GridProcessorType.Post;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("", 20)]
+        [InlineData("Grid-=123", 20)]
+        [InlineData("Grid-A=123", 20)]
+        [InlineData("Grid-Rows=", 20)]
+        [InlineData("Grid-Rows=A", 20)]
+        [InlineData("Grid-Rows=123", 123)]
+        [InlineData("Other-Rows=1234", 20)]
+        public void GridPager_SetsRowsPerPageFromQuery(String query, Int32 rows)
+        {
+            grid.Query = TestHelper.ParseQuery(query);
+
+            Int32 actual = new GridPager<GridModel>(grid).RowsPerPage;
+            Int32 expected = rows;
 
             Assert.Equal(expected, actual);
         }
