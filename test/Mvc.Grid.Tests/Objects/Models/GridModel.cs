@@ -9,6 +9,9 @@ namespace NonFactors.Mvc.Grid.Tests
         [Display(Name = "Text")]
         public String Text { get; set; }
 
+        [Display(Name = "Text", ShortName = "Txt")]
+        public String ShortText { get; set; }
+
         public IHtmlContent Content { get; set; }
         public Boolean? NIsChecked { get; set; }
         public Boolean IsChecked { get; set; }

@@ -116,7 +116,7 @@ namespace NonFactors.Mvc.Grid
             DisplayAttribute display = body.Member.GetCustomAttribute<DisplayAttribute>();
             if (display == null) return null;
 
-            return display.GetName();
+            return display.GetShortName();
         }
         private Object GetValueFor(IGridRow<Object> row)
         {

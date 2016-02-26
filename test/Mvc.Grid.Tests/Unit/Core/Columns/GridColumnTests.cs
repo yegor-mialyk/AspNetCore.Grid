@@ -199,12 +199,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridColumn_DisplayAttribute_SetsDisplayTitle()
+        public void GridColumn_DisplayAttribute_SetsTitleFromDisplayName()
         {
             DisplayAttribute display = typeof(GridModel).GetProperty("Text").GetCustomAttribute<DisplayAttribute>();
             column = new GridColumn<GridModel, Object>(grid, model => model.Text);
 
             String expected = display.GetName();
+            String actual = column.Title;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GridColumn_DisplayAttribute_SetsTitleFromDisplayShortName()
+        {
+            DisplayAttribute display = typeof(GridModel).GetProperty("ShortText").GetCustomAttribute<DisplayAttribute>();
+            column = new GridColumn<GridModel, Object>(grid, model => model.ShortText);
+
+            String expected = display.GetShortName();
             String actual = column.Title;
 
             Assert.Equal(expected, actual);
