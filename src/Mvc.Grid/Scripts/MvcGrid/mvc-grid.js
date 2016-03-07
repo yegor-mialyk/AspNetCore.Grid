@@ -268,8 +268,8 @@ var MvcGrid = (function () {
             var newParams = [];
 
             for (var i = 0; i < params.length; i++) {
-                var key = params[i].split('=')[0];
-                if (params[i] && key.indexOf(keyToRemove) != 0) {
+                var paramKey = params[i].split('=')[0];
+                if (params[i] && paramKey.indexOf(keyToRemove) != 0) {
                     newParams.push(params[i]);
                 }
             }
@@ -282,8 +282,8 @@ var MvcGrid = (function () {
             var newParams = [];
 
             for (var i = 0; i < params.length; i++) {
-                var key = params[i].split('=')[0];
-                if (params[i] && key != keyToRemove) {
+                var paramKey = params[i].split('=')[0];
+                if (params[i] && paramKey != keyToRemove) {
                     newParams.push(params[i]);
                 }
             }

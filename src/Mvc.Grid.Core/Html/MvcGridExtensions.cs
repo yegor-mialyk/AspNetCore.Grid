@@ -34,7 +34,7 @@ namespace NonFactors.Mvc.Grid
             IGridFilters filters = new GridFilters();
             configure(filters);
 
-            return services.AddInstance<IGridFilters>(filters);
+            return services.AddInstance(filters);
         }
     }
 }

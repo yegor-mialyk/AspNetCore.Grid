@@ -17,14 +17,14 @@ namespace NonFactors.Mvc.Grid
         public IReadableStringCollection Query { get; set; }
         public IList<IGridProcessor<T>> Processors { get; set; }
 
-        IGridColumns<IGridColumn> IGrid.Columns { get { return Columns; } }
+        IGridColumns<IGridColumn> IGrid.Columns => Columns;
         public IGridColumnsOf<T> Columns { get; set; }
 
-        IGridRows<Object> IGrid.Rows { get { return Rows; } }
+        IGridRows<Object> IGrid.Rows => Rows;
         public IGridRowsOf<T> Rows { get; set; }
 
+        IGridPager IGrid.Pager => Pager;
         public IGridPager<T> Pager { get; set; }
-        IGridPager IGrid.Pager { get { return Pager; } }
 
         public Grid(IEnumerable<T> source)
         {

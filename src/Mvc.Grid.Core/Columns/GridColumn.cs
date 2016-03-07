@@ -111,12 +111,9 @@ namespace NonFactors.Mvc.Grid
         private String GetTitle(Expression<Func<T, TValue>> expression)
         {
             MemberExpression body = expression.Body as MemberExpression;
-            if (body == null) return null;
+            DisplayAttribute display = body?.Member.GetCustomAttribute<DisplayAttribute>();
 
-            DisplayAttribute display = body.Member.GetCustomAttribute<DisplayAttribute>();
-            if (display == null) return null;
-
-            return display.GetShortName();
+            return display?.GetShortName();
         }
         private Object GetValueFor(IGridRow<Object> row)
         {

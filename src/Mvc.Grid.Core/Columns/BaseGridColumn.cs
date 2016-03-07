@@ -21,15 +21,15 @@ namespace NonFactors.Mvc.Grid
         public String FilterName { get; set; }
         public Boolean? IsFilterable { get; set; }
         public Boolean? IsMultiFilterable { get; set; }
+        IGridColumnFilter IFilterableColumn.Filter => Filter;
         public virtual IGridColumnFilter<T> Filter { get; set; }
-        IGridColumnFilter IFilterableColumn.Filter { get { return Filter; } }
 
         public IGrid<T> Grid { get; set; }
         public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
         public Func<T, TValue> ExpressionValue { get; set; }
+        LambdaExpression IGridColumn<T>.Expression => Expression;
         public Expression<Func<T, TValue>> Expression { get; set; }
-        LambdaExpression IGridColumn<T>.Expression { get { return Expression; } }
 
         public virtual IGridColumn<T> RenderedAs(Func<T, Object> value)
         {

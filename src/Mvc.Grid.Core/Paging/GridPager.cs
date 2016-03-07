@@ -16,7 +16,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                return (Int32)(Math.Ceiling(TotalRows / (Double)RowsPerPage));
+                return (Int32)Math.Ceiling(TotalRows / (Double)RowsPerPage);
             }
         }
         public virtual Int32 CurrentPage
@@ -27,11 +27,7 @@ namespace NonFactors.Mvc.Grid
                     return CurrentPageValue;
 
                 Int32 page;
-                if (Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page))
-                    CurrentPageValue = page;
-                else
-                    CurrentPageValue = InitialPage;
-
+                CurrentPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page) ? page : InitialPage;
                 CurrentPageValue = CurrentPageValue > TotalPages ? TotalPages : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue <= 0 ? 1 : CurrentPageValue;
                 CurrentPageIsSet = true;

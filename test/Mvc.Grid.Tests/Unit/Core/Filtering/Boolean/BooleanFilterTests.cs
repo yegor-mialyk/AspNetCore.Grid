@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
-using Xunit.Extensions;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {

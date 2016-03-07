@@ -62,24 +62,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             GridSortOrder? actual = column.SortOrder;
             GridSortOrder? expected = order;
 
-            Assert.Equal(order, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
-        [InlineData("Grid-Sort=Name&Grid-Order=", "Grid-Sort=Name&Grid-Order=Desc", null)]
-        [InlineData("Grid-Sort=Name&Grid-Order=Asc", "Grid-Sort=Name&Grid-Order=Desc", GridSortOrder.Asc)]
-        [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc", GridSortOrder.Desc)]
-        public void SortOrder_Get_Caches(String initialQuery, String changedQuery, GridSortOrder? order)
+        [InlineData("Grid-Sort=Name&Grid-Order=", "Grid-Sort=Name&Grid-Order=Desc")]
+        [InlineData("Grid-Sort=Name&Grid-Order=Asc", "Grid-Sort=Name&Grid-Order=Desc")]
+        [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc")]
+        public void SortOrder_Get_Caches(String initialQuery, String changedQuery)
         {
             grid.Query = TestHelper.ParseQuery(initialQuery);
-            GridSortOrder? sortOrder = column.SortOrder;
+            GridSortOrder? order = column.SortOrder;
 
             grid.Query = TestHelper.ParseQuery(changedQuery);
 
             GridSortOrder? actual = column.SortOrder;
             GridSortOrder? expected = order;
 
-            Assert.Equal(order, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Theory]

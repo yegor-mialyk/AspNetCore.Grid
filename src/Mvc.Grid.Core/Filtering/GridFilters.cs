@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,6 @@ namespace NonFactors.Mvc.Grid
         public IDictionary<Type, IDictionary<String, Type>> Table
         {
             get;
-            private set;
         }
 
         public GridFilters()
@@ -187,8 +187,8 @@ namespace NonFactors.Mvc.Grid
         }
         private String GetOperator<T>(IGridColumn<T> column)
         {
-            IList<String> values = column.Grid.Query[column.Grid.Name + "-" + column.Name + "-Op"];
-            if (column.IsMultiFilterable != true || values == null) return null;
+            StringValues values = column.Grid.Query[column.Grid.Name + "-" + column.Name + "-Op"];
+            if (column.IsMultiFilterable != true) return null;
 
             return values.FirstOrDefault();
         }
