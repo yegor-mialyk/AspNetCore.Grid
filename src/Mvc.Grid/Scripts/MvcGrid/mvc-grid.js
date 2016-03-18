@@ -63,11 +63,12 @@ var MvcGrid = (function () {
 
     MvcGrid.prototype = {
         createColumn: function (grid, header) {
-            return {
-                name: header.data('name') || '',
-                header: header,
-                filter: {
-                    isEnabled: header.data('filterable') == 'True',
+            var column = {};
+            column.header = header;
+            column.name = header.data('name') || '';
+
+            if (header.data('filter') == 'True') {
+                column.filter = {
                     isMulti: header.data('filter-multi') == 'True',
                     operator: header.data('filter-operator') || '',
                     name: header.data('filter-name') || '',
@@ -79,13 +80,17 @@ var MvcGrid = (function () {
                         type: header.data('filter-second-type') || '',
                         val: header.data('filter-second-val') || ''
                     }
-                },
-                sort: {
-                    isEnabled: header.data('sortable') == 'True',
+                };
+            }
+
+            if (header.data('sort') == 'True') {
+                column.sort = {
                     firstOrder: header.data('sort-first') || '',
                     order: header.data('sort-order') || ''
                 }
-            };
+            }
+
+            return column;
         },
         set: function (grid, options) {
             grid.filters = $.extend(grid.filters, options.filters);
@@ -100,14 +105,14 @@ var MvcGrid = (function () {
         },
 
         bindFilter: function (grid, column) {
-            if (column.filter.isEnabled) {
+            if (column.filter) {
                 column.header.find('.mvc-grid-filter').on('click.mvcgrid', function () {
                     grid.renderFilter(grid, column);
                 });
             }
         },
         bindSort: function (grid, column) {
-            if (column.sort.isEnabled) {
+            if (column.sort) {
                 column.header.on('click.mvcgrid', function (e) {
                     var target = $(e.target || e.srcElement);
                     if (!target.hasClass('mvc-grid-filter') && target.parents('.mvc-grid-filter').length == 0) {
@@ -313,7 +318,7 @@ var MvcGrid = (function () {
             var header = column.header;
             header.removeAttr('data-name');
 
-            header.removeAttr('data-filterable');
+            header.removeAttr('data-filter');
             header.removeAttr('data-filter-name');
             header.removeAttr('data-filter-multi');
             header.removeAttr('data-filter-operator');
@@ -322,7 +327,7 @@ var MvcGrid = (function () {
             header.removeAttr('data-filter-second-val');
             header.removeAttr('data-filter-second-type');
 
-            header.removeAttr('data-sortable');
+            header.removeAttr('data-sort');
             header.removeAttr('data-sort-order');
             header.removeAttr('data-sort-first');
         },

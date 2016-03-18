@@ -13,7 +13,7 @@
 
                     <th class="@filterableClass @sortableClass @column.CssClasses"
                         data-name="@column.Name"
-                        data-filterable="@column.IsFilterable"
+                        data-filter="@column.IsFilterable"
                         data-filter-name="@column.FilterName"
                         data-filter-multi="@column.IsMultiFilterable"
                         data-filter-first-type="@column.Filter?.First?.Type"
@@ -21,7 +21,7 @@
                         data-filter-operator="@column.Filter?.Operator"
                         data-filter-second-type="@column.Filter?.Second?.Type"
                         data-filter-second-val="@column.Filter?.Second?.Value"
-                        data-sortable="@column.IsSortable"
+                        data-sort="@column.IsSortable"
                         data-sort-order="@column.SortOrder"
                         data-sort-first="@column.FirstSortOrder">
                         @if (column.IsSortable == true)
