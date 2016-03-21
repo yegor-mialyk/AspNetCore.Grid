@@ -51,13 +51,18 @@ var MvcGrid = (function () {
             this.columns.push(column);
         }
 
-        var pages = grid.find('.mvc-grid-pager span');
-        for (var ind = 0; ind < pages.length; ind++) {
-            this.bindPager(this, $(pages[ind]));
+        var pager = grid.find('.mvc-grid-pager');
+        if (pager.length > 0) {
+            this.pager = {
+                currentPage: pager.find('li.active').data('page') || '',
+                rowsPerPage: pager.find('.mvc-grid-pager-rows'),
+                pages: pager.find('li:not(.disabled)'),
+                element: pager
+            };
         }
-        this.bindPagerRows(this);
 
         this.bindGridEvents(this);
+        this.bindPager(this);
         this.clean(this);
     }
 
@@ -122,24 +127,17 @@ var MvcGrid = (function () {
                 });
             }
         },
-        bindPager: function (grid, pageElement) {
-            var page = pageElement.data('page');
+        bindPager: function (grid) {
+            if (grid.pager) {
+                grid.pager.rowsPerPage.on('change', function () {
+                    grid.reload(grid);
+                });
 
-            if (page) {
-                pageElement.on('click.mvcgrid', function () {
-                    grid.applyPage(grid, page);
+                grid.pager.pages.on('click.mvcgrid', function () {
+                    grid.applyPage(grid, $(this).data('page'));
                     grid.reload(grid);
                 });
             }
-        },
-        bindPagerRows: function (grid) {
-            var rows = grid.element.find('.mvc-grid-pager-rows');
-            grid.element.find('.mvc-grid-pager-rows').on('change', function () {
-                grid.rows = this.value;
-                grid.reload(grid);
-            });
-
-            grid.rows = rows.val();
         },
 
         reload: function (grid) {
@@ -238,7 +236,9 @@ var MvcGrid = (function () {
                 grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
 
-            grid.queryAdd(grid, grid.name + '-Rows', grid.rows);
+            if (grid.pager) {
+                grid.queryAdd(grid, grid.name + '-Rows', grid.pager.rowsPerPage.val());
+            }
         },
         cancelFilter: function (grid, column) {
             grid.queryRemove(grid, grid.name + '-Page');
@@ -261,7 +261,7 @@ var MvcGrid = (function () {
             grid.queryRemove(grid, grid.name + '-Rows');
 
             grid.queryAdd(grid, grid.name + '-Page', page);
-            grid.queryAdd(grid, grid.name + '-Rows', grid.rows);
+            grid.queryAdd(grid, grid.name + '-Rows', grid.pager.rowsPerPage.val());
         },
 
         queryAdd: function (grid, key, value) {

@@ -2,15 +2,15 @@
 
 @model IGridPager
 
-@if (Model.TotalPages > 1)
-{
-    <div class="mvc-grid-pager @Model.CssClasses">
-        <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
+<div class="mvc-grid-pager @Model.CssClasses">
+    <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
+    @if (Model.TotalPages > 1)
+    {
         <ul class="pagination">
             @if (Model.CurrentPage > 1)
             {
-                <li><span data-page="1">&laquo;</span></li>
-                <li><span data-page="@(Model.CurrentPage - 1)">&lsaquo;</span></li>
+                <li data-page="1"><span>&laquo;</span></li>
+                <li data-page="@(Model.CurrentPage - 1)"><span>&lsaquo;</span></li>
             }
             else
             {
@@ -21,17 +21,17 @@
             {
                 if (page == Model.CurrentPage)
                 {
-                    <li class="active"><span>@page</span></li>
+                    <li class="active" data-page="@page"><span>@page</span></li>
                 }
                 else
                 {
-                    <li><span data-page="@page">@page</span></li>
+                    <li data-page="@page"><span>@page</span></li>
                 }
             }
             @if (Model.CurrentPage < Model.TotalPages)
             {
-                <li><span data-page="@(Model.CurrentPage + 1)">&rsaquo;</span></li>
-                <li><span data-page="@(Model.TotalPages)">&raquo;</span></li>
+                <li data-page="@(Model.CurrentPage + 1)"><span>&rsaquo;</span></li>
+                <li data-page="@(Model.TotalPages)"><span>&raquo;</span></li>
             }
             else
             {
@@ -39,5 +39,5 @@
                 <li class="disabled"><span>&raquo;</span></li>
             }
         </ul>
-    </div>
-}
+    }
+</div>
