@@ -61,8 +61,8 @@ var MvcGrid = (function () {
             };
         }
 
-        this.bindGridEvents(this);
         this.bindPager(this);
+        this.bindGrid(this);
         this.clean(this);
     }
 
@@ -138,6 +138,23 @@ var MvcGrid = (function () {
                     grid.reload(grid);
                 });
             }
+        },
+        bindGrid: function (grid) {
+            grid.element.find('tbody tr').on('click.mvcgrid', function () {
+                if (grid.rowClicked) {
+                    var cells = $(this).find('td');
+                    var data = [];
+
+                    for (var ind = 0; ind < grid.columns.length; ind++) {
+                        var column = grid.columns[ind];
+                        if (cells.length > ind) {
+                            data[column.name] = $(cells[ind]).text();
+                        }
+                    }
+
+                    grid.rowClicked(grid, this, data);
+                }
+            });
         },
 
         reload: function (grid) {
@@ -225,12 +242,15 @@ var MvcGrid = (function () {
             popup.css('top', popupTop + 'px');
         },
 
-        applyFilter: function (grid, column) {
+        cancelFilter: function (grid, column) {
             grid.queryRemove(grid, grid.name + '-Page');
             grid.queryRemove(grid, grid.name + '-Rows');
             grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
-            grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
+        },
+        applyFilter: function (grid, column) {
+            cancelFilter(grid, column);
 
+            grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
             if (column.filter.isMulti) {
                 grid.queryAdd(grid, grid.name + '-' + column.name + '-Op', column.filter.operator);
                 grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.second.type, column.filter.second.val);
@@ -239,11 +259,6 @@ var MvcGrid = (function () {
             if (grid.pager) {
                 grid.queryAdd(grid, grid.name + '-Rows', grid.pager.rowsPerPage.val());
             }
-        },
-        cancelFilter: function (grid, column) {
-            grid.queryRemove(grid, grid.name + '-Page');
-            grid.queryRemove(grid, grid.name + '-Rows');
-            grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
         },
         applySort: function (grid, column) {
             grid.queryRemove(grid, grid.name + '-Sort');
@@ -294,24 +309,6 @@ var MvcGrid = (function () {
             }
 
             grid.query = newParams.join('&');
-        },
-
-        bindGridEvents: function (grid) {
-            grid.element.find('tbody tr').on('click.mvcgrid', function () {
-                if (grid.rowClicked) {
-                    var cells = $(this).find('td');
-                    var data = [];
-
-                    for (var ind = 0; ind < grid.columns.length; ind++) {
-                        var column = grid.columns[ind];
-                        if (cells.length > ind) {
-                            data[column.name] = $(cells[ind]).text();
-                        }
-                    }
-
-                    grid.rowClicked(grid, this, data);
-                }
-            });
         },
 
         cleanup: function (grid, column) {
