@@ -1,4 +1,6 @@
-﻿using NSubstitute;
+﻿using Microsoft.AspNet.Html.Abstractions;
+using Microsoft.AspNet.Mvc.Rendering;
+using NSubstitute;
 using System;
 using Xunit;
 
@@ -260,12 +262,36 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Titled(String title)
+        #region Method: Titled(Object value)
+
+        [Fact]
+        public void Titled_SetsHtmlContentTitle()
+        {
+            IHtmlContent expected = new HtmlString("HtmlContent Title");
+            IHtmlContent actual = column.Titled(expected).Title;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Titled_SetsObjectTitle()
+        {
+            String actual = column.Titled(new Object()).Title.ToString();
+            String expected = new Object().ToString();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Titled_SetsNullTitle()
+        {
+            Assert.Null(column.Titled(null).Title.ToString());
+        }
 
         [Fact]
         public void Titled_SetsTitle()
         {
-            String actual = column.Titled("Title").Title;
+            String actual = column.Titled("Title").Title.ToString();
             String expected = "Title";
 
             Assert.Equal(expected, actual);

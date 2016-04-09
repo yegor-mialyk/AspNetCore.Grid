@@ -108,12 +108,12 @@ namespace NonFactors.Mvc.Grid
             return false;
         }
 
-        private String GetTitle(Expression<Func<T, TValue>> expression)
+        private IHtmlContent GetTitle(Expression<Func<T, TValue>> expression)
         {
             MemberExpression body = expression.Body as MemberExpression;
             DisplayAttribute display = body?.Member.GetCustomAttribute<DisplayAttribute>();
 
-            return display?.GetShortName();
+            return new HtmlString(display?.GetShortName());
         }
         private Object GetValueFor(IGridRow<Object> row)
         {
