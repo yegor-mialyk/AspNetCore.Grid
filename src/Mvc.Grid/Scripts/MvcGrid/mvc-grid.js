@@ -140,7 +140,7 @@ var MvcGrid = (function () {
             }
         },
         bindGrid: function (grid) {
-            grid.element.find('tbody tr').on('click.mvcgrid', function () {
+            grid.element.find('tbody tr').on('click.mvcgrid', function (e) {
                 if (grid.rowClicked) {
                     var cells = $(this).find('td');
                     var data = [];
@@ -152,7 +152,7 @@ var MvcGrid = (function () {
                         }
                     }
 
-                    grid.rowClicked(grid, this, data);
+                    grid.rowClicked(grid, this, data, e);
                 }
             });
         },
