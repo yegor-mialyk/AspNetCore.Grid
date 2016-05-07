@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters = new GridFilters();
         }
 
-        #region Constructor: GridFilters()
+        #region GridFilters()
 
         [Theory]
         [InlineData(typeof(SByte), "Equals", typeof(SByteFilter))]
@@ -117,7 +117,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: GetFilter<T>(IGridColumn<T> column)
+        #region GetFilter<T>(IGridColumn<T> column)
 
         [Fact]
         public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull()
@@ -274,7 +274,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Register(Type forType, String filterType, Type filter)
+        #region Register(Type forType, String filterType, Type filter)
 
         [Fact]
         public void Register_FilterForExistingType()
@@ -362,7 +362,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Unregister(Type forType, String filterType)
+        #region Unregister(Type forType, String filterType)
 
         [Fact]
         public void Unregister_ExistingFilter()

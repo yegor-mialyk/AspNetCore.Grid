@@ -23,7 +23,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter = new BooleanFilter();
         }
 
-        #region Method: Apply(Expression expression)
+        #region Apply(Expression expression)
 
         [Fact]
         public void Apply_NotBooleanValue_ReturnsNull()

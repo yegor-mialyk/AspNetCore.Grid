@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class StringEndsWithFilterTests : BaseGridFilterTests
     {
-        #region Method: Apply(Expression expression)
+        #region Apply(Expression expression)
 
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()

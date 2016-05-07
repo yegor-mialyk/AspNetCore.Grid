@@ -5,7 +5,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridRowTests
     {
-        #region Constructor: GridRow(T model)
+        #region GridRow(T model)
 
         [Fact]
         public void GridRow_SetsModel()

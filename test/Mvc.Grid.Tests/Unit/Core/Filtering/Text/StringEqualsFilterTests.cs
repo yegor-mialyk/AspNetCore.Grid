@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class StringEqualsFilterTests : BaseGridFilterTests
     {
-        #region Method: Apply(Expression expression)
+        #region Apply(Expression expression)
 
         [Theory]
         [InlineData("")]

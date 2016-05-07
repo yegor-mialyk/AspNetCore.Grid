@@ -6,7 +6,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridTests
     {
-        #region Property: IGrid.Columns
+        #region IGrid.Columns
 
         [Fact]
         public void IGridColumns_ReturnsColumns()
@@ -21,7 +21,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Property: IGrid.Rows
+        #region IGrid.Rows
 
         [Fact]
         public void IGridRows_ReturnsRows()
@@ -36,7 +36,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Property: IGrid.Pager
+        #region IGrid.Pager
 
         [Fact]
         public void IGridPager_ReturnsPager()
@@ -51,7 +51,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Constructor: Grid(IEnumerable<T> source)
+        #region Grid(IEnumerable<T> source)
 
         [Fact]
         public void Grid_SetsProcessors()

@@ -28,7 +28,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             sumExpression = (model) => model.Sum;
         }
 
-        #region Method: Apply(Expression expression)
+        #region Apply(Expression expression)
 
         [Fact]
         public void Apply_NullNumericValue_ReturnsNull()

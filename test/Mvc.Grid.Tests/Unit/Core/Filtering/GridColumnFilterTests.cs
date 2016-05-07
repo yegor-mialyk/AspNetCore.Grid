@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
         }
 
-        #region Method: Process(IQueryable<T> items)
+        #region Process(IQueryable<T> items)
 
         [Fact]
         public void Process_NoFilters_ReturnsSameItems()

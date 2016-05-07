@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             pager = new GridPager<GridModel>(grid);
         }
 
-        #region Property: FirstDisplayPage
+        #region FirstDisplayPage
 
         [Theory]
         [InlineData(1, 1, 1)]
@@ -67,7 +67,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Property: CurrentPage
+        #region CurrentPage
 
         [Theory]
         [InlineData("Grid-Page=", 2, 2)]
@@ -145,7 +145,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Property: TotalPages
+        #region TotalPages
 
         [Theory]
         [InlineData(0, 20, 0)]
@@ -169,7 +169,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Constructor: GridPager(IGrid<T> grid)
+        #region GridPager(IGrid<T> grid)
 
         [Fact]
         public void GridPager_SetsGrid()
@@ -236,7 +236,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Process(IQueryable<T> items)
+        #region Process(IQueryable<T> items)
 
         [Fact]
         public void Process_SetsTotalRows()

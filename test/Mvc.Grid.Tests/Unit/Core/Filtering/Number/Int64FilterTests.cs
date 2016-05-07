@@ -5,7 +5,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class Int64FilterTests
     {
-        #region Method: GetNumericValue()
+        #region GetNumericValue()
 
         [Fact]
         public void GetNumericValue_ParsesValue()

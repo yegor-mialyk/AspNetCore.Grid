@@ -27,7 +27,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter = new DateTimeFilter();
         }
 
-        #region Method: Apply(Expression expression)
+        #region Apply(Expression expression)
 
         [Fact]
         public void Apply_NotDateTimeValue_ReturnsItems()

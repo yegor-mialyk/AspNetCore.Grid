@@ -36,7 +36,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.ViewContext.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(filters);
         }
 
-        #region Property: SortOrder
+        #region SortOrder
 
         [Fact]
         public void SortOrder_Set_Caches()
@@ -100,7 +100,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Property: Filter
+        #region Filter
 
         [Fact]
         public void Filter_NoFilters_Throws()
@@ -154,7 +154,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Constructor: GridColumn(IGrid<T> grid, Expression<Func<T, TValue>> expression)
+        #region GridColumn(IGrid<T> grid, Expression<Func<T, TValue>> expression)
 
         [Fact]
         public void GridColumn_SetsGrid()
@@ -463,7 +463,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: Process(IQueryable<T> items)
+        #region Process(IQueryable<T> items)
 
         [Fact]
         public void Process_NoFilter_ReturnsSameItems()
@@ -583,7 +583,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: ValueFor(IGridRow row)
+        #region ValueFor(IGridRow row)
 
         [Fact]
         public void ValueFor_NullReferenceInExpressionValue_ReturnsEmpty()

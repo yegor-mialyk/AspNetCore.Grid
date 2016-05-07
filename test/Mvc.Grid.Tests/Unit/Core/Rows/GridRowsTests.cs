@@ -9,7 +9,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridRowsTests
     {
-        #region Constructor: GridRows(IGrid<T> grid)
+        #region GridRows(IGrid<T> grid)
 
         [Fact]
         public void GridRows_SetsGrid()
@@ -22,7 +22,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Method: GetEnumerator()
+        #region GetEnumerator()
 
         [Fact]
         public void GetEnumerator_OnNullCurrentRowsProcessesRows()
