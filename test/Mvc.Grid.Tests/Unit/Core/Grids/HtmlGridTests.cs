@@ -427,7 +427,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected.PartialViewName, actual.PartialViewName);
             Assert.Equal(expected.PagesToDisplay, actual.PagesToDisplay);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
-            Assert.Equal(expected.InitialPage, actual.InitialPage);
             Assert.Equal(expected.CurrentPage, actual.CurrentPage);
             Assert.Equal(expected.RowsPerPage, actual.RowsPerPage);
             Assert.Equal(expected.TotalPages, actual.TotalPages);
@@ -519,7 +518,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected.PartialViewName, actual.PartialViewName);
             Assert.Equal(expected.PagesToDisplay, actual.PagesToDisplay);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
-            Assert.Equal(expected.InitialPage, actual.InitialPage);
             Assert.Equal(expected.CurrentPage, actual.CurrentPage);
             Assert.Equal(expected.RowsPerPage, actual.RowsPerPage);
             Assert.Equal(expected.TotalPages, actual.TotalPages);

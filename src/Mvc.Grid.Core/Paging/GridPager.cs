@@ -8,7 +8,6 @@ namespace NonFactors.Mvc.Grid
         public IGrid<T> Grid { get; set; }
 
         public Int32 TotalRows { get; set; }
-        public Int32 InitialPage { get; set; }
         public Int32 RowsPerPage { get; set; }
         public Int32 PagesToDisplay { get; set; }
 
@@ -23,16 +22,16 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (CurrentPageIsSet)
-                    return CurrentPageValue;
-
                 Int32 page;
-                CurrentPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page) ? page : InitialPage;
+                CurrentPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page) ? page : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue > TotalPages ? TotalPages : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue <= 0 ? 1 : CurrentPageValue;
-                CurrentPageIsSet = true;
 
                 return CurrentPageValue;
+            }
+            set
+            {
+                CurrentPageValue = value;
             }
         }
         public virtual Int32 FirstDisplayPage
@@ -49,17 +48,17 @@ namespace NonFactors.Mvc.Grid
                 return CurrentPage - middlePage + 1;
             }
         }
-        private Int32 CurrentPageValue { get; set; }
-        private Boolean CurrentPageIsSet { get; set; }
 
         public String CssClasses { get; set; }
         public String PartialViewName { get; set; }
         public GridProcessorType ProcessorType { get; set; }
 
+        private Int32 CurrentPageValue { get; set; }
+
         public GridPager(IGrid<T> grid)
         {
             Grid = grid;
-            InitialPage = 1;
+            CurrentPage = 1;
             Int32 rowsPerPage;
             PagesToDisplay = 5;
             PartialViewName = "MvcGrid/_Pager";

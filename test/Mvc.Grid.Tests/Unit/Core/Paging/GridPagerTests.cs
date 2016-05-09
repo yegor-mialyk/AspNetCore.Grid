@@ -70,35 +70,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region CurrentPage
 
         [Theory]
-        [InlineData("Grid-Page=", 2, 2)]
-        [InlineData("Grid-Page=3", 5, 3)]
-        public void CurrentPage_DoesNotChangeCurrentPageAfterFirstGet(String query, Int32 initialPage, Int32 expected)
-        {
-            pager.Grid.Query = TestHelper.ParseQuery(query);
-            pager.InitialPage = initialPage;
-            pager.TotalRows = 500;
-
-            Int32 value = pager.CurrentPage;
-
-            pager.Grid.Query = TestHelper.ParseQuery("Grid-Page=5");
-
-            Int32 actual = pager.CurrentPage;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
         [InlineData("", 3)]
         [InlineData("Grid-Page=", 3)]
         [InlineData("Grid-Page=2a", 3)]
-        public void CurrentPage_OnInvalidQueryPageUsesInitialPage(String query, Int32 initialPage)
+        public void CurrentPage_OnInvalidQueryPageUsesCurrentPage(String query, Int32 currentPage)
         {
             pager.Grid.Query = TestHelper.ParseQuery(query);
-            pager.InitialPage = initialPage;
+            pager.CurrentPage = currentPage;
             pager.TotalRows = 500;
 
             Int32 actual = pager.CurrentPage;
-            Int32 expected = initialPage;
+            Int32 expected = currentPage;
 
             Assert.Equal(expected, actual);
         }
@@ -121,7 +103,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void CurrentPage_OnLessOrEqualToZeroQueryPageReturnsOne(String query)
         {
             pager.Grid.Query = TestHelper.ParseQuery(query);
-            pager.InitialPage = 5;
+            pager.CurrentPage = 5;
 
             Int32 actual = pager.CurrentPage;
             Int32 expected = 1;
@@ -132,10 +114,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void CurrentPage_OnLessOrEqualToZeroInitialPageReturnsOne(Int32 initialPage)
+        public void CurrentPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 currentPage)
         {
             pager.Grid.Query = TestHelper.ParseQuery("");
-            pager.InitialPage = initialPage;
+            pager.CurrentPage = currentPage;
 
             Int32 actual = pager.CurrentPage;
             Int32 expected = 1;
@@ -181,9 +163,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridPager_SetsInitialPage()
+        public void GridPager_SetsCurrentPage()
         {
-            Int32 actual = new GridPager<GridModel>(grid).InitialPage;
+            Int32 actual = new GridPager<GridModel>(grid).CurrentPage;
             Int32 expected = 1;
 
             Assert.Equal(expected, actual);
