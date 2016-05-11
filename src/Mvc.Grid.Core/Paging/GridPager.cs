@@ -8,7 +8,6 @@ namespace NonFactors.Mvc.Grid
         public IGrid<T> Grid { get; set; }
 
         public Int32 TotalRows { get; set; }
-        public Int32 RowsPerPage { get; set; }
         public Int32 PagesToDisplay { get; set; }
 
         public virtual Int32 TotalPages
@@ -34,6 +33,21 @@ namespace NonFactors.Mvc.Grid
                 CurrentPageValue = value;
             }
         }
+        public virtual Int32 RowsPerPage
+        {
+            get
+            {
+                Int32 rows;
+                RowsPerPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Rows"], out rows) ? rows : RowsPerPageValue;
+                RowsPerPageValue = RowsPerPageValue <= 0 ? 1 : RowsPerPageValue;
+
+                return RowsPerPageValue;
+            }
+            set
+            {
+                RowsPerPageValue = value;
+            }
+        }
         public virtual Int32 FirstDisplayPage
         {
             get
@@ -54,16 +68,16 @@ namespace NonFactors.Mvc.Grid
         public GridProcessorType ProcessorType { get; set; }
 
         private Int32 CurrentPageValue { get; set; }
+        private Int32 RowsPerPageValue { get; set; }
 
         public GridPager(IGrid<T> grid)
         {
             Grid = grid;
             CurrentPage = 1;
-            Int32 rowsPerPage;
+            RowsPerPage = 20;
             PagesToDisplay = 5;
             PartialViewName = "MvcGrid/_Pager";
             ProcessorType = GridProcessorType.Post;
-            RowsPerPage = Int32.TryParse(grid.Query[grid.Name + "-Rows"], out rowsPerPage) ? rowsPerPage : 20;
         }
 
         public virtual IQueryable<T> Process(IQueryable<T> items)
