@@ -134,8 +134,12 @@ var MvcGrid = (function () {
                 });
 
                 grid.pager.pages.on('click.mvcgrid', function () {
-                    grid.applyPage(grid, $(this).data('page'));
-                    grid.reload(grid);
+                    var page = $(this).data('page');
+
+                    if (page) {
+                        grid.applyPage(grid, page);
+                        grid.reload(grid);
+                    }
                 });
             }
         },
