@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnTests()
         {
-            IReadableStringCollection query = new ReadableStringCollection(new Dictionary<String, StringValues>());
+            IQueryCollection query = new QueryCollection();
             grid = Substitute.For<IGrid<GridModel>>();
             grid.Query = query;
             grid.Name = "Grid";
@@ -33,7 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.ViewContext = new ViewContext();
             filters = Substitute.For<IGridFilters>();
             grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            grid.ViewContext.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(filters);
+            grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
         }
 
         #region SortOrder
@@ -105,7 +104,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_NoFilters_Throws()
         {
-            grid.ViewContext.HttpContext.ApplicationServices.GetService<IGridFilters>().Returns(null as IGridFilters);
+            grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(null as IGridFilters);
             IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
             filters.GetFilter(column).Returns(filter);
 
@@ -183,19 +182,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridColumn_NotMemberExpression_SetsNullTitle()
+        public void GridColumn_NotMemberExpression_SetsEmptyTitle()
         {
             column = new GridColumn<GridModel, Object>(grid, model => model.ToString());
 
-            Assert.Null(column.Title.ToString());
+            Assert.Empty(column.Title.ToString());
         }
 
         [Fact]
-        public void GridColumn_NoDisplayAttribute_SetsNullTitle()
+        public void GridColumn_NoDisplayAttribute_SetsEmptyTitle()
         {
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
 
-            Assert.Null(column.Title.ToString());
+            Assert.Empty(column.Title.ToString());
         }
 
         [Fact]

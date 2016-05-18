@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
+﻿using Microsoft.AspNetCore.Html;
 using System;
 
 namespace NonFactors.Mvc.Grid

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Extensions.WebEncoders;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
+using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -107,7 +107,7 @@ namespace NonFactors.Mvc.Grid
             return Pageable(builder => { });
         }
 
-        public void WriteTo(TextWriter writer, IHtmlEncoder encoder)
+        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             Html.Partial(PartialViewName, Grid).WriteTo(writer, encoder);
         }

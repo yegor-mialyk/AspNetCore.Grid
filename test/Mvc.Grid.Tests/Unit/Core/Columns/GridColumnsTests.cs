@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Http.Internal;
+﻿using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
 using System;
@@ -15,10 +15,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnsTests()
         {
-            IDictionary<String, StringValues> query = new Dictionary<String, StringValues>();
+            Dictionary<String, StringValues> query = new Dictionary<String, StringValues>();
             columns = new GridColumns<GridModel>(Substitute.For<IGrid<GridModel>>());
             columns.Grid.Processors = new List<IGridProcessor<GridModel>>();
-            columns.Grid.Query = new ReadableStringCollection(query);
+            columns.Grid.Query = new QueryCollection(query);
         }
 
         #region GridColumns(IGrid<T> grid)

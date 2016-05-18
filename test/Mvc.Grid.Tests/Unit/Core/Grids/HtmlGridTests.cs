@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Extensions.WebEncoders;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,7 +35,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
-            IReadableStringCollection query = grid.Query = TestHelper.ParseQuery("");
+            IQueryCollection query = grid.Query = TestHelper.ParseQuery("");
 
             Object actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
             Object expected = query;
@@ -49,8 +48,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             grid.Query = null;
 
-            IReadableStringCollection expected = html.ViewContext.HttpContext.Request.Query;
-            IReadableStringCollection actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
+            IQueryCollection expected = html.ViewContext.HttpContext.Request.Query;
+            IQueryCollection actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
 
             foreach (String key in expected.Keys)
                 Assert.Equal(expected[key], actual[key]);
@@ -572,7 +571,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
             StringWriter writer = new StringWriter();
 
-            htmlGrid.WriteTo(writer, new HtmlEncoder());
+            htmlGrid.WriteTo(writer, HtmlEncoder.Default);
 
             String actual = writer.GetStringBuilder().ToString();
             String expected = "Test";

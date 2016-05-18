@@ -1,20 +1,22 @@
 {
   "description": "Mvc.Grid core dll without content files.",
-  "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
-  "licenseUrl": "http://opensource.org/licenses/MIT",
-  "tags": [ "asp net mvc grid" ],
+  "packOptions": {
+    "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
+    "licenseUrl": "http://opensource.org/licenses/MIT",
+    "tags": [ "asp net mvc grid" ]
+  },
   "authors": [ "NonFactors" ],
-  "version": "0.9.0",
+  "version": "0.9.5",
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final"
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0-rc2-final"
   },
 
-  "compilationOptions": {
+  "buildOptions": {
     "warningsAsErrors": true
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }

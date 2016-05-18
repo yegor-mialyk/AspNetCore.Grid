@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace NonFactors.Mvc.Grid
             IGridFilters filters = new GridFilters();
             configure(filters);
 
-            return services.AddInstance(filters);
+            return services.AddSingleton(filters);
         }
     }
 }

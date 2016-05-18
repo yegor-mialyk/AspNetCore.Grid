@@ -1,16 +1,18 @@
 ﻿{
   "description": "Grid controls for ASP.NET MVC 6 projects.",
-  "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
-  "licenseUrl": "http://opensource.org/licenses/MIT",
-  "tags": [ "asp net mvc grid" ],
+  "packOptions": {
+    "projectUrl": "https://github.com/NonFactors/MVC6.Grid",
+    "licenseUrl": "http://opensource.org/licenses/MIT",
+    "tags": [ "asp net mvc grid" ]
+  },
   "authors": [ "NonFactors" ],
-  "version": "0.9.0",
+  "version": "0.9.5",
 
-  "compilationOptions": {
+  "buildOptions": {
     "warningsAsErrors": true
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }

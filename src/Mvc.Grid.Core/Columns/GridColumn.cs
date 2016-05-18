@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
-using Microsoft.Extensions.WebEncoders;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -52,7 +52,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (!FilterIsSet)
-                    Filter = Grid.ViewContext.HttpContext.ApplicationServices.GetRequiredService<IGridFilters>().GetFilter(this);
+                    Filter = Grid.ViewContext.HttpContext.RequestServices.GetRequiredService<IGridFilters>().GetFilter(this);
 
                 return base.Filter;
             }
@@ -95,7 +95,7 @@ namespace NonFactors.Mvc.Grid
             if (value == null) return HtmlString.Empty;
             if (value is IHtmlContent) return value as IHtmlContent;
             if (Format != null) value = String.Format(Format, value);
-            if (IsEncoded) return new HtmlString(HtmlEncoder.Default.HtmlEncode(value.ToString()));
+            if (IsEncoded) return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
 
             return new HtmlString(value.ToString());
         }

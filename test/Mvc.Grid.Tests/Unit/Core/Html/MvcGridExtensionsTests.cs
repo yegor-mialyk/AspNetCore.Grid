@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;

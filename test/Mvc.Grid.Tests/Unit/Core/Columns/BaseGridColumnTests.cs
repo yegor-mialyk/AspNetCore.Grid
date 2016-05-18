@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Html.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using Xunit;
@@ -283,9 +283,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Titled_SetsNullTitle()
+        public void Titled_SetsEmptyTitle()
         {
-            Assert.Null(column.Titled(null).Title.ToString());
+            Assert.Empty(column.Titled(null).Title.ToString());
         }
 
         [Fact]
