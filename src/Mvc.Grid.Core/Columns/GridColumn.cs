@@ -132,7 +132,7 @@ namespace NonFactors.Mvc.Grid
         private String GetFilterName()
         {
             Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-            if (type.IsEnum) return null;
+            if (type.GetTypeInfo().IsEnum) return null;
 
             switch (Type.GetTypeCode(type))
             {
