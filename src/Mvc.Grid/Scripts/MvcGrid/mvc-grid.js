@@ -252,7 +252,7 @@ var MvcGrid = (function () {
             grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
         },
         applyFilter: function (grid, column) {
-            cancelFilter(grid, column);
+            grid.cancelFilter(grid, column);
 
             grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
             if (column.filter.isMulti) {
