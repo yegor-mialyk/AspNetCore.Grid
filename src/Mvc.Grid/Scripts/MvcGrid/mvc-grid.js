@@ -709,8 +709,8 @@ var MvcGridBooleanFilter = (function () {
                 column.filter.first.type = 'Equals';
                 column.filter.second.type = 'Equals';
                 column.filter.operator = popup.find('.mvc-grid-operator').val();
-                column.filter.first.val = popup.find('.first-filter .mvc-grid-boolean-filter li').data('value');
-                column.filter.second.val = popup.find('.second-filter .mvc-grid-boolean-filter li').data('value');
+                column.filter.first.val = popup.find('.first-filter li.active').data('value');
+                column.filter.second.val = popup.find('.second-filter li.active').data('value');
 
                 grid.applyFilter(grid, column);
                 grid.reload(grid);
