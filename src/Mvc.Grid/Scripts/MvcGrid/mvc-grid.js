@@ -12,7 +12,7 @@ var MvcGrid = (function () {
         this.columns = [];
         this.element = grid;
         options = options || {};
-        this.name = grid.data('name') || '';
+        this.name = grid.attr('id') || '';
         this.rowClicked = options.rowClicked;
         this.reloadEnded = options.reloadEnded;
         this.reloadFailed = options.reloadFailed;
@@ -334,7 +334,6 @@ var MvcGrid = (function () {
         },
         clean: function (grid) {
             grid.element.removeAttr('data-source-url');
-            grid.element.removeAttr('data-name');
         }
     };
 
