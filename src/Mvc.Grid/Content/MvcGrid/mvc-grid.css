@@ -133,6 +133,7 @@
     .mvc-grid-popup .mvc-grid-input,
     .mvc-grid-popup .mvc-grid-operator {
         border: 1px solid #CCCCCC;
+        box-sizing: border-box;
         font-size: 13px;
         padding: 5px;
         width: 100%;
