@@ -148,12 +148,14 @@ namespace NonFactors.Mvc.Grid
                 case TypeCode.Double:
                 case TypeCode.Decimal:
                     return "Number";
+                case TypeCode.String:
+                    return "Text";
                 case TypeCode.DateTime:
                     return "Date";
                 case TypeCode.Boolean:
                     return "Boolean";
                 default:
-                    return "Text";
+                    return null;
             }
         }
     }
