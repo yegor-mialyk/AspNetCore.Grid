@@ -130,6 +130,7 @@ var MvcGrid = (function () {
         bindPager: function (grid) {
             if (grid.pager) {
                 grid.pager.rowsPerPage.on('change', function () {
+                    grid.applyPage(grid, grid.pager.currentPage);
                     grid.reload(grid);
                 });
 
