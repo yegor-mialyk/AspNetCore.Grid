@@ -1,4 +1,4 @@
-Grid controls for ASP.NET MVC 6 projects
+Grid controls for ASP.NET Core projects
 
 ![Semantic](https://img.shields.io/badge/sem-ver-lightgrey.svg?style=plastic)
 ![License](https://img.shields.io/badge/license-MIT-green.svg?style=plastic)
