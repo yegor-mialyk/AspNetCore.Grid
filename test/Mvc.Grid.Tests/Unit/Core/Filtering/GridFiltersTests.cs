@@ -179,7 +179,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("Grid-Name-Equals")]
         [InlineData("Grid-Name=Equals")]
         [InlineData("Grid-Name-=Equals")]
         [InlineData("Grid-Name-Op=Equals")]
@@ -211,6 +210,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
+        [InlineData("Grid-Name-Equals", "Equals", "")]
         [InlineData("Grid-Name-Equals=a&Grid-Name-Eq=b", "Equals", "a")]
         [InlineData("Grid-Name-Equals=&Grid-Name-Equals=b", "Equals", "")]
         [InlineData("Grid-Name-Equals=a&Grid-Name-Equals=b", "Equals", "a")]
@@ -238,8 +238,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
+        [InlineData("Grid-Name-Op", "")]
         [InlineData("Grid-Name-Op=", "")]
-        [InlineData("Grid-Name-Op", null)]
         [InlineData("Grid-Name-Op=Or", "Or")]
         [InlineData("Grid-Name-Op=And", "And")]
         [InlineData("Grid-Name-Op-And=And", null)]

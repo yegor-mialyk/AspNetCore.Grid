@@ -6,7 +6,7 @@
     "tags": [ "asp net mvc grid" ]
   },
   "authors": [ "NonFactors" ],
-  "version": "0.9.5",
+  "version": "1.0.0",
 
   "buildOptions": {
     "warningsAsErrors": true
