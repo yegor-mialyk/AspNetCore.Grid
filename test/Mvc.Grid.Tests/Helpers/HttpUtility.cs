@@ -5,9 +5,9 @@ using System;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
-    public class TestHelper
+    public class HttpUtility
     {
-        public static IQueryCollection ParseQuery(String queryString)
+        public static IQueryCollection ParseQueryString(String queryString)
         {
             return new QueryCollection(QueryHelpers.ParseQuery(queryString));
         }

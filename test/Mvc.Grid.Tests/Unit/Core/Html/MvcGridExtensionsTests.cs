@@ -11,11 +11,11 @@ using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class MvcGridExtensions
+    public class MvcGridExtensionsTests
     {
         private static IHtmlHelper html;
 
-        static MvcGridExtensions()
+        static MvcGridExtensionsTests()
         {
             html = Substitute.For<IHtmlHelper>();
             html.ViewContext.Returns(new ViewContext());

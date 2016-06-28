@@ -126,10 +126,7 @@ namespace NonFactors.Mvc.Grid
             else
                 Table.Add(underlyingType, typedFilters);
 
-            if (typedFilters.ContainsKey(filterType))
-                typedFilters[filterType] = filter;
-            else
-                typedFilters.Add(filterType, filter);
+            typedFilters[filterType] = filter;
         }
         public void Unregister(Type forType, String filterType)
         {
@@ -160,15 +157,12 @@ namespace NonFactors.Mvc.Grid
 
             if (keys.Length == 1)
             {
-                IList<String> values = column.Grid.Query[keys[0]];
-                if (values.Count > 1)
-                {
-                    String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
+                StringValues values = column.Grid.Query[keys[0]];
+                if (values.Count < 2) return null;
 
-                    return GetFilter(column, keyType, values[1]);
-                }
+                String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
 
-                return null;
+                return GetFilter(column, keyType, values[1]);
             }
 
             String type = keys[1].Substring((column.Grid.Name + "-" + column.Name + "-").Length);

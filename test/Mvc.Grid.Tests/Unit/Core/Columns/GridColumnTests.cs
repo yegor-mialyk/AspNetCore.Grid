@@ -22,9 +22,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnTests()
         {
-            IQueryCollection query = new QueryCollection();
             grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = query;
+            grid.Query = new QueryCollection();
             grid.Name = "Grid";
 
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
@@ -40,7 +39,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void SortOrder_Set_Caches()
         {
-            grid.Query = TestHelper.ParseQuery("Grid-Sort=Name&Grid-Order=Asc");
+            grid.Query = HttpUtility.ParseQueryString("Grid-Sort=Name&Grid-Order=Asc");
 
             column.SortOrder = null;
 
@@ -54,7 +53,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
         public void SortOrder_ReturnsFromQuery(String query, String name, GridSortOrder? initialOrder, GridSortOrder? order)
         {
-            grid.Query = TestHelper.ParseQuery(query);
+            grid.Query = HttpUtility.ParseQueryString(query);
             column.InitialSortOrder = initialOrder;
             column.Name = name;
 
@@ -70,10 +69,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc")]
         public void SortOrder_Get_Caches(String initialQuery, String changedQuery)
         {
-            grid.Query = TestHelper.ParseQuery(initialQuery);
+            grid.Query = HttpUtility.ParseQueryString(initialQuery);
             GridSortOrder? order = column.SortOrder;
 
-            grid.Query = TestHelper.ParseQuery(changedQuery);
+            grid.Query = HttpUtility.ParseQueryString(changedQuery);
 
             GridSortOrder? actual = column.SortOrder;
             GridSortOrder? expected = order;
@@ -87,7 +86,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("RGrid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
         public void SortOrder_NotFound_ReturnsInitialSortOrder(String query, String name, GridSortOrder? initialOrder)
         {
-            grid.Query = TestHelper.ParseQuery(query);
+            grid.Query = HttpUtility.ParseQueryString(query);
             column.InitialSortOrder = initialOrder;
             column.Name = name;
 
@@ -292,7 +291,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             AssertFilterNameFor(model => model.DecimalField, "Number");
         }
-        
+
         [Fact]
         public void AddProperty_SetsFilterNameForString()
         {
@@ -588,7 +587,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region ValueFor(IGridRow row)
+        #region ValueFor(IGridRow<Object> row)
 
         [Fact]
         public void ValueFor_NullReferenceInExpressionValue_ReturnsEmpty()
@@ -633,7 +632,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_RenderValue_ReturnsHtmlContent(String value, String format, Boolean isEncoded, String renderedValue)
+        public void ValueFor_RenderValue_Html(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
             column.RenderValue = (model) => model.Content;
@@ -654,7 +653,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_ExpressionValue_ReturnsHtmlContent(String value, String format, Boolean isEncoded, String expressionValue)
+        public void ValueFor_ExpressionValue_Html(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
             column = new GridColumn<GridModel, Object>(grid, model => model.Content);
@@ -674,7 +673,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_ReturnsRenderValue(String value, String format, Boolean isEncoded, String renderedValue)
+        public void ValueFor_RenderValue(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.RenderValue = (model) => model.Name;
@@ -695,7 +694,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_ReturnsExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
+        public void ValueFor_ExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.IsEncoded = isEncoded;
@@ -714,7 +713,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String filterName)
         {
             IGrid<AllTypesModel> grid = Substitute.For<IGrid<AllTypesModel>>();
-            grid.Query = TestHelper.ParseQuery("");
+            grid.Query = new QueryCollection();
 
             String actual = new GridColumn<AllTypesModel, TValue>(grid, property).FilterName;
             String expected = filterName;

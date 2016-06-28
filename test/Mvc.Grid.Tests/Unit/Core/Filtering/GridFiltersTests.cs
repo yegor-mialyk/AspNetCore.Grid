@@ -1,7 +1,7 @@
-﻿using NSubstitute;
+﻿using Microsoft.AspNetCore.Http.Internal;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -16,7 +16,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
             column = Substitute.For<IGridColumn<GridModel>>();
-            column.Grid.Query = TestHelper.ParseQuery("");
+            column.Grid.Query = new QueryCollection();
             column.Expression.Returns(expression);
             column.IsMultiFilterable = true;
             column.Grid.Name = "Grid";
@@ -122,7 +122,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull()
         {
-            column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
+            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
             column.IsMultiFilterable = false;
 
             Assert.Null(filters.GetFilter(column).Second);
@@ -135,7 +135,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Op=Equals")]
         public void GetFilter_NotFoundFilter_SetsSecondFilterToNull(String query)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             Assert.Null(filters.GetFilter(column).Second);
         }
@@ -143,7 +143,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GetFilter_NotFoundValueType_SetsSecondFilterToNull()
         {
-            column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
+            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
             Expression<Func<GridModel, Object>> expression = (model) => model.Name;
             column.Expression.Returns(expression);
 
@@ -155,7 +155,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Contains=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
         public void GetFilter_NotFoundFilterType_SetsSecondFilterToNull(String query)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             Assert.Null(filters.GetFilter(column).Second);
         }
@@ -169,7 +169,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or", "Equals", "b")]
         public void GetFilter_SetsSecondFilter(String query, String type, String value)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             IGridFilter actual = filters.GetFilter(column).Second;
 
@@ -185,7 +185,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Op=Equals")]
         public void GetFilter_NotFoundFilter_SetsFirstFilterToNull(String query)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             Assert.Null(filters.GetFilter(column).First);
         }
@@ -193,7 +193,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GetFilter_NotFoundValueType_SetsFirstFilterToNull()
         {
-            column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
+            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
             Expression<Func<GridModel, Object>> expression = (model) => model.Name;
             column.Expression.Returns(expression);
 
@@ -205,7 +205,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Eq=a&Grid-Name-Contains=b&Grid-Name-Op=And")]
         public void GetFilter_NotFoundFilterType_SetsFirstFilterToNull(String query)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             Assert.Null(filters.GetFilter(column).First);
         }
@@ -219,7 +219,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Equals=a&Grid-Name-Contains=b&Grid-Name-Op=Or", "Equals", "a")]
         public void GetFilter_SetsFirstFilter(String query, String type, String value)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             IGridFilter actual = filters.GetFilter(column).First;
 
@@ -231,7 +231,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GetFilter_OnNotMultiFilterableColumnSetsOperatorToNull()
         {
-            column.Grid.Query = TestHelper.ParseQuery("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
+            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
             column.IsMultiFilterable = false;
 
             Assert.Null(filters.GetFilter(column).Operator);
@@ -246,7 +246,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Name-Op=And&Grid-Name-Op=Or", "And")]
         public void GetFilter_SetsOperatorFromQuery(String query, String filterOperator)
         {
-            column.Grid.Query = TestHelper.ParseQuery(query);
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             String actual = filters.GetFilter(column).Operator;
             String expected = filterOperator;

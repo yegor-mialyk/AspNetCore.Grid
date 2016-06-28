@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -35,7 +36,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
-            IQueryCollection query = grid.Query = TestHelper.ParseQuery("");
+            IQueryCollection query = grid.Query = new QueryCollection();
 
             Object actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
             Object expected = query;
@@ -51,10 +52,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryCollection expected = html.ViewContext.HttpContext.Request.Query;
             IQueryCollection actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
 
-            foreach (String key in expected.Keys)
-                Assert.Equal(expected[key], actual[key]);
-
-            Assert.Equal(expected.Keys, actual.Keys);
+            Assert.Same(expected, actual);
         }
 
         [Fact]

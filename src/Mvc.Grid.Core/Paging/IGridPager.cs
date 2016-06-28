@@ -6,9 +6,11 @@ namespace NonFactors.Mvc.Grid
     {
         Int32 TotalRows { get; }
         Int32 TotalPages { get; }
+
         Int32 CurrentPage { get; set; }
-        Int32 FirstDisplayPage { get; }
         Int32 RowsPerPage { get; set; }
+
+        Int32 FirstDisplayPage { get; }
         Int32 PagesToDisplay { get; set; }
 
         String CssClasses { get; set; }

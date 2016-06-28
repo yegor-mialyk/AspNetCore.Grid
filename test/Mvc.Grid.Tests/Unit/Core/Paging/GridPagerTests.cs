@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Microsoft.AspNetCore.Http.Internal;
+using NSubstitute;
 using System;
 using System.Collections;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridPagerTests()
         {
             grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = TestHelper.ParseQuery("");
+            grid.Query = new QueryCollection();
             grid.Name = "Grid";
 
             pager = new GridPager<GridModel>(grid);
@@ -52,7 +53,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Page=2a", 3)]
         public void CurrentPage_OnInvalidQueryPageUsesCurrentPage(String query, Int32 currentPage)
         {
-            pager.Grid.Query = TestHelper.ParseQuery(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.CurrentPage = currentPage;
             pager.TotalRows = 500;
 
@@ -65,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void CurrentPage_OnGreaterThanTotalPagesReturnsTotalPages()
         {
-            pager.Grid.Query = TestHelper.ParseQuery("Grid-Page=5");
+            pager.Grid.Query = HttpUtility.ParseQueryString("Grid-Page=5");
             pager.TotalRows = 4 * pager.RowsPerPage;
 
             Int32 actual = pager.CurrentPage;
@@ -79,7 +80,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Page=-1")]
         public void CurrentPage_OnLessOrEqualToZeroQueryPageReturnsOne(String query)
         {
-            pager.Grid.Query = TestHelper.ParseQuery(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.CurrentPage = 5;
 
             Int32 actual = pager.CurrentPage;
@@ -93,7 +94,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(-1)]
         public void CurrentPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 currentPage)
         {
-            pager.Grid.Query = TestHelper.ParseQuery("");
+            pager.Grid.Query = new QueryCollection();
             pager.CurrentPage = currentPage;
 
             Int32 actual = pager.CurrentPage;
@@ -105,7 +106,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void CurrentPage_SetsCurrentPageFromQuery()
         {
-            grid.Query = TestHelper.ParseQuery("Grid-Page=2");
+            grid.Query = HttpUtility.ParseQueryString("Grid-Page=2");
             pager.TotalRows = 4 * pager.RowsPerPage;
 
             Int32 actual = pager.CurrentPage;
@@ -124,7 +125,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Rows=2a", 3)]
         public void RowsPerPage_OnInvalidQueryRowsUsesRowsPerPage(String query, Int32 rowsPerPage)
         {
-            pager.Grid.Query = TestHelper.ParseQuery(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.RowsPerPage = rowsPerPage;
             pager.TotalRows = 500;
 
@@ -139,7 +140,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid-Rows=-1")]
         public void RowsPerPage_OnLessOrEqualToZeroQueryPageReturnsOne(String query)
         {
-            pager.Grid.Query = TestHelper.ParseQuery(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.RowsPerPage = 5;
 
             Int32 actual = pager.RowsPerPage;
@@ -153,7 +154,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(-1)]
         public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rowsPerPage)
         {
-            pager.Grid.Query = TestHelper.ParseQuery("");
+            pager.Grid.Query = new QueryCollection();
             pager.RowsPerPage = rowsPerPage;
 
             Int32 actual = pager.RowsPerPage;
@@ -165,7 +166,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RowsPerPage_SetsRowsPerPageFromQuery()
         {
-            grid.Query = TestHelper.ParseQuery("Grid-Rows=123");
+            grid.Query = HttpUtility.ParseQueryString("Grid-Rows=123");
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = 123;
@@ -210,7 +211,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(6, 5, 1)]
         public void FirstDisplayPage_ReturnsFirstDisplayPage(Int32 pagesToDisplay, Int32 currentPage, Int32 expected)
         {
-            pager.Grid.Query = TestHelper.ParseQuery("Grid-Page=" + currentPage);
+            pager.Grid.Query = HttpUtility.ParseQueryString("Grid-Page=" + currentPage);
             pager.PagesToDisplay = pagesToDisplay;
             pager.RowsPerPage = 1;
             pager.TotalRows = 5;
@@ -297,7 +298,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Process_ReturnsPagedItems()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel(), new GridModel() }.AsQueryable();
-            pager.Grid.Query = TestHelper.ParseQuery("Grid-Page=2");
+            pager.Grid.Query = HttpUtility.ParseQueryString("Grid-Page=2");
             pager.RowsPerPage = 1;
 
             IEnumerable expected = items.Skip(1).Take(1);
