@@ -14,6 +14,8 @@ namespace NonFactors.Mvc.Grid
             {
                 case "Equals":
                     return Expression.Equal(expression, Expression.Constant(value, expression.Type));
+                case "NotEquals":
+                    return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
                 case "LessThan":
                     return Expression.LessThan(expression, Expression.Constant(value, expression.Type));
                 case "GreaterThan":

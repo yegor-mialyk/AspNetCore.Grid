@@ -19,8 +19,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             items = new[]
             {
                 new GridModel(),
-                new GridModel { NSum = 1, Sum = 1 },
-                new GridModel { NSum = 2, Sum = 2 }
+                new GridModel { NSum = 1, Sum = 2 },
+                new GridModel { NSum = 2, Sum = 1 }
             }.AsQueryable();
 
             filter = Substitute.ForPartsOf<NumberFilter>();
@@ -58,6 +58,30 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum == 1);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_NullableNotEqualsFilter()
+        {
+            filter.GetNumericValue().Returns(1);
+            filter.Type = "NotEquals";
+
+            IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum != 1);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_NotEqualsFilter()
+        {
+            filter.GetNumericValue().Returns(1);
+            filter.Type = "NotEquals";
+
+            IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum != 1);
 
             Assert.Equal(expected, actual);
         }

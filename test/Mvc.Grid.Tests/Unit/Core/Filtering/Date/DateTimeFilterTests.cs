@@ -18,8 +18,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             items = new[]
             {
                 new GridModel { Date = new DateTime(2013, 01, 01), NDate = null },
-                new GridModel { Date = new DateTime(2014, 01, 01), NDate = new DateTime(2014, 01, 01) },
-                new GridModel { Date = new DateTime(2015, 01, 01), NDate = new DateTime(2015, 01, 01) }
+                new GridModel { Date = new DateTime(2014, 01, 01), NDate = new DateTime(2015, 01, 01) },
+                new GridModel { Date = new DateTime(2015, 01, 01), NDate = new DateTime(2014, 01, 01) }
             }.AsQueryable();
 
             nDateExpression = (model) => model.NDate;
@@ -57,6 +57,30 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
             IEnumerable expected = items.Where(model => model.Date == new DateTime(2014, 01, 01));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_NullableNotEqualsFilter()
+        {
+            filter.Value = new DateTime(2014, 01, 01).ToString();
+            filter.Type = "NotEquals";
+
+            IEnumerable actual = Filter(items, filter.Apply(nDateExpression.Body), nDateExpression);
+            IEnumerable expected = items.Where(model => model.NDate != new DateTime(2014, 01, 01));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_NotEqualsFilter()
+        {
+            filter.Value = new DateTime(2014, 01, 01).ToString();
+            filter.Type = "NotEquals";
+
+            IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
+            IEnumerable expected = items.Where(model => model.Date != new DateTime(2014, 01, 01));
 
             Assert.Equal(expected, actual);
         }

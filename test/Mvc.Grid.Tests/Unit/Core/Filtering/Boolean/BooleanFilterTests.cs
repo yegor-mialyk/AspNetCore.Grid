@@ -16,8 +16,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             items = new[]
             {
                 new GridModel(),
-                new GridModel { IsChecked = true, NIsChecked = true },
-                new GridModel{ IsChecked = false, NIsChecked = false }
+                new GridModel { IsChecked = true, NIsChecked = false },
+                new GridModel { IsChecked = false, NIsChecked = true }
             }.AsQueryable();
 
             filter = new BooleanFilter();

@@ -17,72 +17,84 @@ namespace NonFactors.Mvc.Grid
             Table = new Dictionary<Type, IDictionary<String, Type>>();
 
             Register(typeof(SByte), "Equals", typeof(SByteFilter));
+            Register(typeof(SByte), "NotEquals", typeof(SByteFilter));
             Register(typeof(SByte), "LessThan", typeof(SByteFilter));
             Register(typeof(SByte), "GreaterThan", typeof(SByteFilter));
             Register(typeof(SByte), "LessThanOrEqual", typeof(SByteFilter));
             Register(typeof(SByte), "GreaterThanOrEqual", typeof(SByteFilter));
 
             Register(typeof(Byte), "Equals", typeof(ByteFilter));
+            Register(typeof(Byte), "NotEquals", typeof(ByteFilter));
             Register(typeof(Byte), "LessThan", typeof(ByteFilter));
             Register(typeof(Byte), "GreaterThan", typeof(ByteFilter));
             Register(typeof(Byte), "LessThanOrEqual", typeof(ByteFilter));
             Register(typeof(Byte), "GreaterThanOrEqual", typeof(ByteFilter));
 
             Register(typeof(Int16), "Equals", typeof(Int16Filter));
+            Register(typeof(Int16), "NotEquals", typeof(Int16Filter));
             Register(typeof(Int16), "LessThan", typeof(Int16Filter));
             Register(typeof(Int16), "GreaterThan", typeof(Int16Filter));
             Register(typeof(Int16), "LessThanOrEqual", typeof(Int16Filter));
             Register(typeof(Int16), "GreaterThanOrEqual", typeof(Int16Filter));
 
             Register(typeof(UInt16), "Equals", typeof(UInt16Filter));
+            Register(typeof(UInt16), "NotEquals", typeof(UInt16Filter));
             Register(typeof(UInt16), "LessThan", typeof(UInt16Filter));
             Register(typeof(UInt16), "GreaterThan", typeof(UInt16Filter));
             Register(typeof(UInt16), "LessThanOrEqual", typeof(UInt16Filter));
             Register(typeof(UInt16), "GreaterThanOrEqual", typeof(UInt16Filter));
 
             Register(typeof(Int32), "Equals", typeof(Int32Filter));
+            Register(typeof(Int32), "NotEquals", typeof(Int32Filter));
             Register(typeof(Int32), "LessThan", typeof(Int32Filter));
             Register(typeof(Int32), "GreaterThan", typeof(Int32Filter));
             Register(typeof(Int32), "LessThanOrEqual", typeof(Int32Filter));
             Register(typeof(Int32), "GreaterThanOrEqual", typeof(Int32Filter));
 
             Register(typeof(UInt32), "Equals", typeof(UInt32Filter));
+            Register(typeof(UInt32), "NotEquals", typeof(UInt32Filter));
             Register(typeof(UInt32), "LessThan", typeof(UInt32Filter));
             Register(typeof(UInt32), "GreaterThan", typeof(UInt32Filter));
             Register(typeof(UInt32), "LessThanOrEqual", typeof(UInt32Filter));
             Register(typeof(UInt32), "GreaterThanOrEqual", typeof(UInt32Filter));
 
             Register(typeof(Int64), "Equals", typeof(Int64Filter));
+            Register(typeof(Int64), "NotEquals", typeof(Int64Filter));
             Register(typeof(Int64), "LessThan", typeof(Int64Filter));
             Register(typeof(Int64), "GreaterThan", typeof(Int64Filter));
             Register(typeof(Int64), "LessThanOrEqual", typeof(Int64Filter));
             Register(typeof(Int64), "GreaterThanOrEqual", typeof(Int64Filter));
 
             Register(typeof(UInt64), "Equals", typeof(UInt64Filter));
+            Register(typeof(UInt64), "NotEquals", typeof(UInt64Filter));
             Register(typeof(UInt64), "LessThan", typeof(UInt64Filter));
             Register(typeof(UInt64), "GreaterThan", typeof(UInt64Filter));
             Register(typeof(UInt64), "LessThanOrEqual", typeof(UInt64Filter));
             Register(typeof(UInt64), "GreaterThanOrEqual", typeof(UInt64Filter));
 
             Register(typeof(Single), "Equals", typeof(SingleFilter));
+            Register(typeof(Single), "NotEquals", typeof(SingleFilter));
             Register(typeof(Single), "LessThan", typeof(SingleFilter));
             Register(typeof(Single), "GreaterThan", typeof(SingleFilter));
             Register(typeof(Single), "LessThanOrEqual", typeof(SingleFilter));
             Register(typeof(Single), "GreaterThanOrEqual", typeof(SingleFilter));
 
             Register(typeof(Double), "Equals", typeof(DoubleFilter));
+            Register(typeof(Double), "NotEquals", typeof(DoubleFilter));
             Register(typeof(Double), "LessThan", typeof(DoubleFilter));
             Register(typeof(Double), "GreaterThan", typeof(DoubleFilter));
             Register(typeof(Double), "LessThanOrEqual", typeof(DoubleFilter));
             Register(typeof(Double), "GreaterThanOrEqual", typeof(DoubleFilter));
 
             Register(typeof(Decimal), "Equals", typeof(DecimalFilter));
+            Register(typeof(Decimal), "NotEquals", typeof(DecimalFilter));
             Register(typeof(Decimal), "LessThan", typeof(DecimalFilter));
             Register(typeof(Decimal), "GreaterThan", typeof(DecimalFilter));
             Register(typeof(Decimal), "LessThanOrEqual", typeof(DecimalFilter));
             Register(typeof(Decimal), "GreaterThanOrEqual", typeof(DecimalFilter));
 
             Register(typeof(DateTime), "Equals", typeof(DateTimeFilter));
+            Register(typeof(DateTime), "NotEquals", typeof(DateTimeFilter));
             Register(typeof(DateTime), "LessThan", typeof(DateTimeFilter));
             Register(typeof(DateTime), "GreaterThan", typeof(DateTimeFilter));
             Register(typeof(DateTime), "LessThanOrEqual", typeof(DateTimeFilter));
@@ -91,6 +103,7 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(Boolean), "Equals", typeof(BooleanFilter));
 
             Register(typeof(String), "Equals", typeof(StringEqualsFilter));
+            Register(typeof(String), "NotEquals", typeof(StringNotEqualsFilter));
             Register(typeof(String), "Contains", typeof(StringContainsFilter));
             Register(typeof(String), "EndsWith", typeof(StringEndsWithFilter));
             Register(typeof(String), "StartsWith", typeof(StringStartsWithFilter));
