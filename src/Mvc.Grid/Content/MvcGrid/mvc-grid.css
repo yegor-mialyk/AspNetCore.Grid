@@ -63,9 +63,9 @@
 
 .mvc-grid-popup {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    border: 1px solid rgba(0, 0, 0, 0.15);
     background-clip: padding-box;
     background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
     position: absolute;
     border-radius: 4px;
     z-index: 1000;
@@ -77,12 +77,24 @@
     }
 
     .mvc-grid-popup .popup-arrow {
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAMAAAD+zz7+AAAAP1BMVEX////////////////////////////////////////////////////////MzMzn5+f////d3d3W1tb29vbv7+/jdafZAAAADnRSTlMAAQgRBQcCGgMLKSUZIkFRd6sAAABPSURBVHhePcoJDoVACAPQ4u5fyjb3P6ugiYWkeQQIAJncf2v12ZSPkvoHsGDfsAyOWjkgNfOgmmm5P79JN2vnDEytO84UWEQ+zAhD0N4wLuqDBO7lVsPjAAAAAElFTkSuQmCC');
+        border-right: 7px solid transparent;
+        border-left: 7px solid transparent;
+        border-bottom: 8px solid #FFFFFF;
         position: absolute;
-        height: 8px;
-        width: 14px;
+        height: 9px;
         top: -8px;
     }
+
+        .mvc-grid-popup .popup-arrow::after {
+            border-right: 8px solid transparent;
+            border-left: 8px solid transparent;
+            border-bottom: 9px solid #CCCCCC;
+            position: absolute;
+            content: " ";
+            z-index: -1;
+            left: -8px;
+            top: -1px;
+        }
 
     .mvc-grid-popup .popup-content {
         padding: 3px;
