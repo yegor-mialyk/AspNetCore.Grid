@@ -54,7 +54,7 @@ var MvcGrid = (function () {
         var pager = grid.find('.mvc-grid-pager');
         if (pager.length > 0) {
             this.pager = {
-                currentPage: pager.find('li.active').data('page') || '',
+                currentPage: pager.find('li.active').data('page') || 0,
                 rowsPerPage: pager.find('.mvc-grid-pager-rows'),
                 pages: pager.find('li:not(.disabled)'),
                 element: pager
