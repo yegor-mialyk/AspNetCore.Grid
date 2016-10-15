@@ -171,7 +171,7 @@ var MvcGrid = (function () {
                 $.ajax({
                     cache: false,
                     url: grid.sourceUrl + '?' + grid.query
-                }).success(function (result) {
+                }).done(function (result) {
                     grid.element.hide();
                     grid.element.after(result);
 
@@ -191,7 +191,7 @@ var MvcGrid = (function () {
                         grid.reloadEnded(newGrid);
                     }
                 })
-                .error(function (result) {
+                .fail(function (result) {
                     if (grid.reloadFailed) {
                         grid.reloadFailed(grid, result);
                     }
