@@ -6,10 +6,10 @@
     "tags": [ "mvc grid" ]
   },
   "authors": [ "NonFactors" ],
-  "version": "1.1.0",
+  "version": "1.2.0",
 
   "dependencies": {
-    "Mvc.Grid.Core": "1.1.0",
+    "Mvc.Grid.Core": "1.2.0",
 
     "NSubstitute": "1.8.2",
     "xunit": "2.2.0-beta2-build3300",
