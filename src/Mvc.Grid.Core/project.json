@@ -9,7 +9,7 @@
   "version": "1.2.0",
 
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0"
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.1"
   },
 
   "buildOptions": {
