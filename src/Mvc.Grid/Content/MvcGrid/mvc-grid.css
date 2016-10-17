@@ -15,6 +15,7 @@
 
 .mvc-grid .filterable {
     padding-right: 30px;
+    position: relative;
 }
 
 .mvc-grid .sortable,
