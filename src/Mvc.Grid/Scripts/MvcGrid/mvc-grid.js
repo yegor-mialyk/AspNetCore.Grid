@@ -98,6 +98,7 @@ var MvcGrid = (function () {
             return column;
         },
         set: function (grid, options) {
+            grid.query = options.query || grid.query;
             grid.filters = $.extend(grid.filters, options.filters);
             grid.rowClicked = options.rowClicked || grid.rowClicked;
             grid.reloadEnded = options.reloadEnded || grid.reloadEnded;
