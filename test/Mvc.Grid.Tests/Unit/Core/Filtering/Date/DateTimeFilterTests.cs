@@ -100,7 +100,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_LessThanFilter()
         {
-            filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
+            filter.Value = new DateTime(2014, 01, 01).ToString("d");
             filter.Type = "LessThan";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
@@ -124,7 +124,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_GreaterThanFilter()
         {
-            filter.Value = new DateTime(2014, 01, 01).ToLongDateString();
+            filter.Value = new DateTime(2014, 01, 01).ToString("D");
             filter.Type = "GreaterThan";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
@@ -148,7 +148,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_LessThanOrEqualFilter()
         {
-            filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
+            filter.Value = new DateTime(2014, 01, 01).ToString("d");
             filter.Type = "LessThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
@@ -172,7 +172,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_GreaterThanOrEqualFilter()
         {
-            filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
+            filter.Value = new DateTime(2014, 01, 01).ToString("d");
             filter.Type = "GreaterThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
@@ -184,7 +184,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_NotSupportedType_ReturnsNull()
         {
-            filter.Value = new DateTime(2014, 01, 01).ToShortDateString();
+            filter.Value = new DateTime(2014, 01, 01).ToString("d");
             filter.Type = "Test";
 
             Assert.Null(filter.Apply(dateExpression.Body));
