@@ -12,11 +12,13 @@ var MvcGrid = (function () {
         this.columns = [];
         this.element = grid;
         options = options || {};
+        this.data = options.data;
         this.name = grid.attr('id') || '';
         this.rowClicked = options.rowClicked;
         this.reloadEnded = options.reloadEnded;
         this.reloadFailed = options.reloadFailed;
         this.reloadStarted = options.reloadStarted;
+        this.requestType = options.requestType || 'get';
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
         this.filters = $.extend({
             'Text': new MvcGridTextFilter(),
@@ -98,8 +100,11 @@ var MvcGrid = (function () {
             return column;
         },
         set: function (grid, options) {
+            grid.data = options.data || grid.data;
             grid.query = options.query || grid.query;
             grid.filters = $.extend(grid.filters, options.filters);
+            grid.requestType = options.requestType || grid.requestType;
+
             grid.rowClicked = options.rowClicked || grid.rowClicked;
             grid.reloadEnded = options.reloadEnded || grid.reloadEnded;
             grid.reloadFailed = options.reloadFailed || grid.reloadFailed;
@@ -171,6 +176,8 @@ var MvcGrid = (function () {
             if (grid.sourceUrl) {
                 $.ajax({
                     cache: false,
+                    data: grid.data,
+                    type: grid.requestType,
                     url: grid.sourceUrl + '?' + grid.query
                 }).done(function (result) {
                     grid.element.hide();
