@@ -211,6 +211,8 @@ var MvcGrid = (function () {
         renderFilter: function (grid, column) {
             var popup = $('body').children('.mvc-grid-popup');
             var gridFilter = grid.filters[column.filter.name];
+            $(window).off('resize.mvcgrid');
+            $(window).off('click.mvcgrid');
 
             if (gridFilter) {
                 gridFilter.render(grid, popup, column.filter);
@@ -227,8 +229,13 @@ var MvcGrid = (function () {
                         popup.removeClass('open');
                     }
                 });
+
+                $(window).on('resize.mvcgrid', function () {
+                    if (popup.hasClass('open')) {
+                        grid.setFilterPosition(grid, column, popup);
+                    }
+                });
             } else {
-                $(window).off('click.mvcgrid');
                 popup.removeClass('open');
             }
         },
