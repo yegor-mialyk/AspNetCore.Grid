@@ -126,8 +126,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void AddMvcGrid_ConfiguresFiltersInstance()
         {
-            IServiceCollection services = new ServiceCollection();
             Action<IGridFilters> configure = Substitute.For<Action<IGridFilters>>();
+            IServiceCollection services = new ServiceCollection();
 
             services.AddMvcGrid(configure);
 

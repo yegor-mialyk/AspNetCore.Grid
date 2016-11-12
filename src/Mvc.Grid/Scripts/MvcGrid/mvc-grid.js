@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 1.2.0
+ * Mvc.Grid 1.3.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -211,13 +211,13 @@ var MvcGrid = (function () {
         },
         renderFilter: function (grid, column) {
             var popup = $('body').children('.mvc-grid-popup');
-            var gridFilter = grid.filters[column.filter.name];
+            var filter = grid.filters[column.filter.name];
             $(window).off('resize.mvcgrid');
             $(window).off('click.mvcgrid');
 
-            if (gridFilter) {
-                gridFilter.render(grid, popup, column.filter);
-                gridFilter.init(grid, column, popup);
+            if (filter) {
+                filter.render(grid, popup, column.filter);
+                filter.init(grid, column, popup);
 
                 grid.setFilterPosition(grid, column, popup);
                 popup.addClass('open');

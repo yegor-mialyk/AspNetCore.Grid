@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -14,7 +13,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridColumnFilterTests()
         {
             filter = new GridColumnFilter<GridModel>();
-            filter.Column = Substitute.For<IGridColumn<GridModel>>();
 
             items = new[]
             {
@@ -42,9 +40,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Process_NullAppliedFilter_ReturnsSameItems()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            filter.Column.Expression.Returns(expression);
-
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = Substitute.For<IGridFilter>();
             filter.First = Substitute.For<IGridFilter>();
 
@@ -57,9 +53,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Prcoess_OnNullSecondFilterAndNullFirstFiltersExpressionReturnsSameItems()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            filter.Column.Expression.Returns(expression);
-
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = null;
 
@@ -72,9 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Prcoess_OnNullFirstFilterAndNullSecondFiltersExpressionReturnsSameItems()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            filter.Column.Expression.Returns(expression);
-
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = Substitute.For<IGridFilter>();
             filter.First = null;
 
@@ -87,10 +79,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Process_UsingAndOperator()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = new StringContainsFilter { Value = "A" };
             filter.First = new StringContainsFilter { Value = "AA" };
-            filter.Column.Expression.Returns(expression);
             filter.Operator = "And";
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("AA") && item.Name.Contains("A"));
@@ -102,10 +93,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Process_UsingOrOperator()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = new StringContainsFilter { Value = "A" };
             filter.First = new StringContainsFilter { Value = "BB" };
-            filter.Column.Expression.Returns(expression);
             filter.Operator = "Or";
 
             IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("A") || item.Name.Contains("BB")));
@@ -120,10 +110,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("and")]
         public void Process_OnInvalidOperatorUsesOnlyFirstFilter(String op)
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = new StringContainsFilter { Value = "A" };
             filter.First = new StringContainsFilter { Value = "BB" };
-            filter.Column.Expression.Returns(expression);
             filter.Operator = op;
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("BB"));
@@ -138,9 +127,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("and")]
         public void Process_OnInvalidOperatorAndFirstFilterNullUsesSecondFilter(String op)
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = new StringContainsFilter { Value = "A" };
-            filter.Column.Expression.Returns(expression);
             filter.Operator = op;
             filter.First = null;
 
@@ -153,10 +141,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Process_FiltersNullableExpressions()
         {
-            Expression<Func<GridModel, Int32?>> expression = (model) => model.NSum;
+            filter.Column = new GridColumn<GridModel, Int32?>(null, model => model.NSum);
             filter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
             filter.First = new Int32Filter { Type = "Equals", Value = "10" };
-            filter.Column.Expression.Returns(expression);
             filter.Operator = "Or";
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);

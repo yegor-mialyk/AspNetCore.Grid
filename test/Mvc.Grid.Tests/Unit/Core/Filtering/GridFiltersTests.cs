@@ -1,27 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http.Internal;
-using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridFiltersTests
     {
-        private IGridColumn<GridModel> column;
         private GridFilters filters;
+        private IGridColumn<GridModel> column;
 
         public GridFiltersTests()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            column = Substitute.For<IGridColumn<GridModel>>();
+            column = new GridColumn<GridModel, String>(new Grid<GridModel>(new GridModel[0]), model => model.Name);
             column.Grid.Query = new QueryCollection();
-            column.Expression.Returns(expression);
             column.IsMultiFilterable = true;
-            column.Grid.Name = "Grid";
-            column.Name = "Name";
-
             filters = new GridFilters();
         }
 
@@ -121,9 +114,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(String), "StartsWith", typeof(StringStartsWithFilter))]
         public void GridFilters_RegistersDefaultFilters(Type type, String name, Type expected)
         {
-            GridFilters filters = new GridFilters();
-
-            Type actual = filters.Table[type][name];
+            Type actual = new GridFilters().Table[type][name];
 
             Assert.Equal(expected, actual);
         }
@@ -157,8 +148,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GetFilter_NotFoundValueType_SetsSecondFilterToNull()
         {
             column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
-            Expression<Func<GridModel, Object>> expression = (model) => model.Name;
-            column.Expression.Returns(expression);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
             Assert.Null(filters.GetFilter(column).Second);
         }
@@ -206,8 +196,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GetFilter_NotFoundValueType_SetsFirstFilterToNull()
         {
             column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
-            Expression<Func<GridModel, Object>> expression = (model) => model.Name;
-            column.Expression.Returns(expression);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
             Assert.Null(filters.GetFilter(column).First);
         }

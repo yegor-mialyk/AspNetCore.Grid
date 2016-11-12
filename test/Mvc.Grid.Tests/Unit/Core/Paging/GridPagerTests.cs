@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http.Internal;
-using NSubstitute;
 using System;
 using System.Collections;
 using System.Linq;
@@ -9,16 +8,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridPagerTests
     {
-        private GridPager<GridModel> pager;
         private IGrid<GridModel> grid;
+        private GridPager<GridModel> pager;
 
         public GridPagerTests()
         {
-            grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = new QueryCollection();
-            grid.Name = "Grid";
-
+            grid = new Grid<GridModel>(new GridModel[0]);
             pager = new GridPager<GridModel>(grid);
+            grid.Query = new QueryCollection();
         }
 
         #region TotalPages
@@ -32,13 +29,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(39, 20, 2)]
         [InlineData(40, 20, 2)]
         [InlineData(41, 20, 3)]
-        public void TotalPages_ReturnsTotalPages(Int32 totalRows, Int32 rowsPerPage, Int32 expected)
+        public void TotalPages_ReturnsTotalPages(Int32 totalRows, Int32 rowsPerPage, Int32 totalPages)
         {
-            GridPager<GridModel> pager = new GridPager<GridModel>(grid);
             pager.RowsPerPage = rowsPerPage;
             pager.TotalRows = totalRows;
 
             Int32 actual = pager.TotalPages;
+            Int32 expected = totalPages;
 
             Assert.Equal(expected, actual);
         }
