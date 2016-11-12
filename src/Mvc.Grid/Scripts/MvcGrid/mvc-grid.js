@@ -192,6 +192,7 @@ var MvcGrid = (function () {
                         sourceUrl: grid.sourceUrl,
                         filters: grid.filters,
                         query: grid.query,
+                        data: grid.data,
                         isLoaded: true
                     }).data('mvc-grid');
                     grid.element.remove();
