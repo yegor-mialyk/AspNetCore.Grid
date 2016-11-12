@@ -186,6 +186,7 @@ var MvcGrid = (function () {
                     var newGrid = grid.element.next('.mvc-grid').mvcgrid({
                         reloadStarted: grid.reloadStarted,
                         reloadFailed: grid.reloadFailed,
+                        requestType: grid.requestType,
                         reloadEnded: grid.reloadEnded,
                         rowClicked: grid.rowClicked,
                         sourceUrl: grid.sourceUrl,
