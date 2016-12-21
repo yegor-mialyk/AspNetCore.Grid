@@ -7,9 +7,9 @@ namespace NonFactors.Mvc.Grid.Tests
 {
     public class HttpUtility
     {
-        public static IQueryCollection ParseQueryString(String queryString)
+        public static IQueryCollection ParseQueryString(String query)
         {
-            return new QueryCollection(QueryHelpers.ParseQuery(queryString));
+            return new QueryCollection(QueryHelpers.ParseQuery(query));
         }
     }
 }

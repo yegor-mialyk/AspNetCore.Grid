@@ -131,15 +131,15 @@ namespace NonFactors.Mvc.Grid
 
         public void Register(Type forType, String filterType, Type filter)
         {
-            IDictionary<String, Type> typedFilters = new Dictionary<String, Type>();
+            IDictionary<String, Type> filters = new Dictionary<String, Type>();
             Type underlyingType = Nullable.GetUnderlyingType(forType) ?? forType;
 
             if (Table.ContainsKey(underlyingType))
-                typedFilters = Table[underlyingType];
+                filters = Table[underlyingType];
             else
-                Table.Add(underlyingType, typedFilters);
+                Table.Add(underlyingType, filters);
 
-            typedFilters[filterType] = filter;
+            filters[filterType] = filter;
         }
         public void Unregister(Type forType, String filterType)
         {

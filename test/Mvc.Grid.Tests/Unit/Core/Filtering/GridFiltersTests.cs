@@ -112,9 +112,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(String), "Contains", typeof(StringContainsFilter))]
         [InlineData(typeof(String), "EndsWith", typeof(StringEndsWithFilter))]
         [InlineData(typeof(String), "StartsWith", typeof(StringStartsWithFilter))]
-        public void GridFilters_RegistersDefaultFilters(Type type, String name, Type expected)
+        public void GridFilters_RegistersDefaultFilters(Type type, String name, Type filter)
         {
             Type actual = new GridFilters().Table[type][name];
+            Type expected = filter;
 
             Assert.Equal(expected, actual);
         }
@@ -281,12 +282,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Register_FilterForExistingType()
         {
-            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
-            filters.Table.Add(typeof(Object), filterPairs);
+            Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+            filters.Table.Add(typeof(Object), filter);
 
             filters.Register(typeof(Object), "TestFilter", typeof(String));
 
-            Type actual = filterPairs["TestFilter"];
+            Type actual = filter["TestFilter"];
             Type expected = typeof(String);
 
             Assert.Equal(expected, actual);
@@ -295,14 +296,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Register_NullableFilterTypeForExistingType()
         {
-            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+            Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
             filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filterPairs);
+            filters.Table.Add(typeof(Int32), filter);
 
             filters.Register(typeof(Int32?), "TestFilter", typeof(String));
 
-            Type actual = filterPairs["TestFilter"];
+            Type actual = filter["TestFilter"];
             Type expected = typeof(String);
 
             Assert.Equal(expected, actual);
@@ -311,14 +312,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Register_Overrides_NullableFilter()
         {
-            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+            Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
             filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filterPairs);
+            filters.Table.Add(typeof(Int32), filter);
 
             filters.Register(typeof(Int32?), "Test", typeof(String));
 
-            Type actual = filterPairs["Test"];
+            Type actual = filter["Test"];
             Type expected = typeof(String);
 
             Assert.Equal(expected, actual);
@@ -327,14 +328,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Register_Overrides_Filter()
         {
-            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
+            Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
             filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filterPairs);
+            filters.Table.Add(typeof(Int32), filter);
 
             filters.Register(typeof(Int32), "Test", typeof(String));
 
-            Type actual = filterPairs["Test"];
+            Type actual = filter["Test"];
             Type expected = typeof(String);
 
             Assert.Equal(expected, actual);
@@ -369,12 +370,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Unregister_ExistingFilter()
         {
-            IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", null } };
-            filters.Table.Add(typeof(Object), filterPairs);
+            Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", null } };
+            filters.Table.Add(typeof(Object), filter);
 
             filters.Unregister(typeof(Object), "Test");
 
-            Assert.Empty(filterPairs);
+            Assert.Empty(filter);
         }
 
         [Fact]

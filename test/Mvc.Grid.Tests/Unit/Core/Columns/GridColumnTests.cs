@@ -396,9 +396,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsExpressionValueAsCompiledExpression()
         {
-            GridModel gridModel = new GridModel { Name = "TestName" };
+            GridModel model = new GridModel { Name = "TestName" };
 
-            String actual = column.ExpressionValue(gridModel) as String;
+            String actual = column.ExpressionValue(model) as String;
             String expected = "TestName";
 
             Assert.Equal(expected, actual);
@@ -693,10 +693,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Test helpers
 
-        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String filterName)
+        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String name)
         {
             String actual = new GridColumn<AllTypesModel, TValue>(null, property).FilterName;
-            String expected = filterName;
+            String expected = name;
 
             Assert.Equal(expected, actual);
         }

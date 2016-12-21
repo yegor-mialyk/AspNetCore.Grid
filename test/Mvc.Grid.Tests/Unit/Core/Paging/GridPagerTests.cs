@@ -29,13 +29,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(39, 20, 2)]
         [InlineData(40, 20, 2)]
         [InlineData(41, 20, 3)]
-        public void TotalPages_ReturnsTotalPages(Int32 totalRows, Int32 rowsPerPage, Int32 totalPages)
+        public void TotalPages_ReturnsTotalPages(Int32 total, Int32 rows, Int32 pages)
         {
-            pager.RowsPerPage = rowsPerPage;
-            pager.TotalRows = totalRows;
+            pager.RowsPerPage = rows;
+            pager.TotalRows = total;
 
             Int32 actual = pager.TotalPages;
-            Int32 expected = totalPages;
+            Int32 expected = pages;
 
             Assert.Equal(expected, actual);
         }
@@ -48,14 +48,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("", 3)]
         [InlineData("Grid-Page=", 3)]
         [InlineData("Grid-Page=2a", 3)]
-        public void CurrentPage_OnInvalidQueryPageUsesCurrentPage(String query, Int32 currentPage)
+        public void CurrentPage_OnInvalidQueryPageUsesCurrentPage(String query, Int32 page)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
-            pager.CurrentPage = currentPage;
+            pager.CurrentPage = page;
             pager.TotalRows = 500;
 
             Int32 actual = pager.CurrentPage;
-            Int32 expected = currentPage;
+            Int32 expected = page;
 
             Assert.Equal(expected, actual);
         }
@@ -89,10 +89,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void CurrentPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 currentPage)
+        public void CurrentPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 page)
         {
             pager.Grid.Query = new QueryCollection();
-            pager.CurrentPage = currentPage;
+            pager.CurrentPage = page;
 
             Int32 actual = pager.CurrentPage;
             Int32 expected = 1;
@@ -120,14 +120,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("", 3)]
         [InlineData("Grid-Rows=", 3)]
         [InlineData("Grid-Rows=2a", 3)]
-        public void RowsPerPage_OnInvalidQueryRowsUsesRowsPerPage(String query, Int32 rowsPerPage)
+        public void RowsPerPage_OnInvalidQueryRowsUsesRowsPerPage(String query, Int32 rows)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
-            pager.RowsPerPage = rowsPerPage;
+            pager.RowsPerPage = rows;
             pager.TotalRows = 500;
 
             Int32 actual = pager.RowsPerPage;
-            Int32 expected = rowsPerPage;
+            Int32 expected = rows;
 
             Assert.Equal(expected, actual);
         }
@@ -149,10 +149,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rowsPerPage)
+        public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rows)
         {
             pager.Grid.Query = new QueryCollection();
-            pager.RowsPerPage = rowsPerPage;
+            pager.RowsPerPage = rows;
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = 1;
@@ -206,14 +206,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(6, 3, 1)]
         [InlineData(6, 4, 1)]
         [InlineData(6, 5, 1)]
-        public void FirstDisplayPage_ReturnsFirstDisplayPage(Int32 pagesToDisplay, Int32 currentPage, Int32 expected)
+        public void FirstDisplayPage_ReturnsFirstDisplayPage(Int32 display, Int32 page, Int32 first)
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString("Grid-Page=" + currentPage);
-            pager.PagesToDisplay = pagesToDisplay;
+            pager.Grid.Query = HttpUtility.ParseQueryString("Grid-Page=" + page);
+            pager.PagesToDisplay = display;
             pager.RowsPerPage = 1;
             pager.TotalRows = 5;
 
             Int32 actual = pager.FirstDisplayPage;
+            Int32 expected = first;
 
             Assert.Equal(expected, actual);
         }
