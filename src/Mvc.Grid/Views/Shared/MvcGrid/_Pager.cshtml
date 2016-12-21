@@ -9,7 +9,7 @@
 
 <div class="mvc-grid-pager @Model.CssClasses">
     <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
-    @if (totalPages > 1)
+    @if (totalPages > 0)
     {
         <ul class="pagination">
             @if (currentPage > 1)
