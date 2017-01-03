@@ -283,7 +283,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_FilterForExistingType()
         {
             Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
-            filters.Table.Add(typeof(Object), filter);
+            filters.Table[typeof(Object)] = filter;
 
             filters.Register(typeof(Object), "TestFilter", typeof(String));
 
@@ -297,9 +297,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_NullableFilterTypeForExistingType()
         {
             Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
-
-            filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filter);
+            filters.Table[typeof(Int32)] = filter;
 
             filters.Register(typeof(Int32?), "TestFilter", typeof(String));
 
@@ -313,9 +311,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_Overrides_NullableFilter()
         {
             Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
-
-            filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filter);
+            filters.Table[typeof(Int32)] = filter;
 
             filters.Register(typeof(Int32?), "Test", typeof(String));
 
@@ -329,9 +325,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_Overrides_Filter()
         {
             Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", typeof(Object) } };
-
-            filters.Table.Remove(typeof(Int32));
-            filters.Table.Add(typeof(Int32), filter);
+            filters.Table[typeof(Int32)] = filter;
 
             filters.Register(typeof(Int32), "Test", typeof(String));
 
@@ -371,7 +365,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Unregister_ExistingFilter()
         {
             Dictionary<String, Type> filter = new Dictionary<String, Type> { { "Test", null } };
-            filters.Table.Add(typeof(Object), filter);
+            filters.Table[typeof(Object)] = filter;
 
             filters.Unregister(typeof(Object), "Test");
 

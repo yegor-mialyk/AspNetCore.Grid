@@ -137,7 +137,7 @@ namespace NonFactors.Mvc.Grid
             if (Table.ContainsKey(underlyingType))
                 filters = Table[underlyingType];
             else
-                Table.Add(underlyingType, filters);
+                Table[underlyingType] = filters;
 
             filters[filterType] = filter;
         }
