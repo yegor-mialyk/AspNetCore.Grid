@@ -166,6 +166,49 @@
     text-align: center;
 }
 
-.mvc-grid-pager li {
-    cursor: pointer;
+.mvc-grid-pager {
+    text-align: center;
 }
+
+    .mvc-grid-pager ul {
+        padding: 0;
+    }
+
+    .mvc-grid-pager li {
+        display: inline;
+    }
+
+    .mvc-grid-pager span {
+        background-color: rgba(255, 255, 255, 0.55);
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        box-sizing: content-box;
+        display: inline-block;
+        padding: 0.4em 0.6em;
+        text-align: center;
+        min-width: 0.9em;
+        cursor: pointer;
+    }
+
+        .mvc-grid-pager span:focus,
+        .mvc-grid-pager span:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+    .mvc-grid-pager .active span {
+        background-color: #82A1D2;
+        border-color: #83AED3;
+        color: #FFFFFF;
+    }
+
+        .mvc-grid-pager .active span:hover {
+            background-color: #337AB7;
+            border-color: #337AB7;
+        }
+
+    .mvc-grid-pager .disabled span,
+    .mvc-grid-pager .disabled span:focus,
+    .mvc-grid-pager .disabled span:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.07);
+        cursor: not-allowed;
+    }
