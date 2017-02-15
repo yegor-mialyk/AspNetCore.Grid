@@ -578,7 +578,6 @@ var MvcGridDateFilter = (function () {
 
     MvcGridDateFilter.prototype = {
         render: function (grid, popup, filter) {
-            var filterInput = '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">';
             var filterLang = $.fn.mvcgrid.lang.Filter;
             var operator = $.fn.mvcgrid.lang.Operator;
             var lang = $.fn.mvcgrid.lang.Date;
@@ -597,7 +596,7 @@ var MvcGridDateFilter = (function () {
                         '</select>' +
                     '</div>' +
                     '<div class="first-filter popup-group">' +
-                        filterInput +
+                        '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">' +
                     '</div>' +
                     (filter.isMulti ?
                      '<div class="popup-group popup-group-operator">' +
@@ -618,7 +617,7 @@ var MvcGridDateFilter = (function () {
                         '</select>' +
                     '</div>' +
                     '<div class="second-filter popup-group">' +
-                        filterInput +
+                        '<input class="mvc-grid-input" type="text" value="' + filter.second.val + '">' +
                     '</div>' :
                      '') +
                     '<div class="popup-button-group">' +
