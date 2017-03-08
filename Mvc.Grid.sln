@@ -1,22 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E3D786AE-E5E2-429D-999A-AD8D3650CD70}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11043E2C-B44D-41F6-AE2E-B9006136E3FF}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mvc.Grid", "src\Mvc.Grid\Mvc.Grid.xproj", "{D0634FB5-0CD0-484E-8152-2CCD62DE6C50}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mvc.Grid.Core", "src\Mvc.Grid.Core\Mvc.Grid.Core.xproj", "{7C96E8B6-3E25-4425-98B6-2A48D658872D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7E89FAB0-623F-4F0E-8538-94D614C5059B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mvc.Grid.Tests", "test\Mvc.Grid.Tests\Mvc.Grid.Tests.xproj", "{3AEA0F2F-705C-47B5-B348-D15AD6C72BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.Grid", "src\Mvc.Grid\Mvc.Grid.csproj", "{D0634FB5-0CD0-484E-8152-2CCD62DE6C50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.Grid.Core", "src\Mvc.Grid.Core\Mvc.Grid.Core.csproj", "{7C96E8B6-3E25-4425-98B6-2A48D658872D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.Grid.Tests", "test\Mvc.Grid.Tests\Mvc.Grid.Tests.csproj", "{3AEA0F2F-705C-47B5-B348-D15AD6C72BE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
