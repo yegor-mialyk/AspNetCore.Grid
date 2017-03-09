@@ -24,9 +24,7 @@ namespace NonFactors.Mvc.Grid
                 if (Grid.Query[Grid.Name + "-Sort"] == Name)
                 {
                     String orderValue = Grid.Query[Grid.Name + "-Order"];
-                    GridSortOrder order;
-
-                    if (Enum.TryParse(orderValue, out order))
+                    if (Enum.TryParse(orderValue, out GridSortOrder order))
                         SortOrder = order;
                 }
                 else if (Grid.Query[Grid.Name + "-Sort"] == StringValues.Empty)

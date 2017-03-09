@@ -6,8 +6,7 @@ namespace NonFactors.Mvc.Grid
     {
         public override Object GetNumericValue()
         {
-            Byte number;
-            if (Byte.TryParse(Value, out number))
+            if (Byte.TryParse(Value, out Byte number))
                 return number;
 
             return null;

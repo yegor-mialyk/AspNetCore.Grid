@@ -21,8 +21,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                Int32 page;
-                CurrentPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out page) ? page : CurrentPageValue;
+                CurrentPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Page"], out Int32 page) ? page : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue > TotalPages ? TotalPages : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue <= 0 ? 1 : CurrentPageValue;
 
@@ -37,8 +36,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                Int32 rows;
-                RowsPerPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Rows"], out rows) ? rows : RowsPerPageValue;
+                RowsPerPageValue = Int32.TryParse(Grid.Query[Grid.Name + "-Rows"], out Int32 rows) ? rows : RowsPerPageValue;
                 RowsPerPageValue = RowsPerPageValue <= 0 ? 1 : RowsPerPageValue;
 
                 return RowsPerPageValue;

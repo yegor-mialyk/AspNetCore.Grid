@@ -7,8 +7,8 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
-            Object value = GetDateValue();
-            if (value == null) return null;
+            if (!DateTime.TryParse(Value, out DateTime value))
+                return null;
 
             switch (Type)
             {
@@ -27,15 +27,6 @@ namespace NonFactors.Mvc.Grid
                 default:
                     return null;
             }
-        }
-
-        private Object GetDateValue()
-        {
-            DateTime date;
-            if (DateTime.TryParse(Value, out date))
-                return date;
-
-            return null;
         }
     }
 }

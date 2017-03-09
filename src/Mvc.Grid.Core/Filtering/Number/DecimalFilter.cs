@@ -6,8 +6,7 @@ namespace NonFactors.Mvc.Grid
     {
         public override Object GetNumericValue()
         {
-            Decimal number;
-            if (Decimal.TryParse(Value, out number))
+            if (Decimal.TryParse(Value, out Decimal number))
                 return number;
 
             return null;

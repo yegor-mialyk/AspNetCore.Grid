@@ -6,8 +6,7 @@ namespace NonFactors.Mvc.Grid
     {
         public override Object GetNumericValue()
         {
-            Int16 number;
-            if (Int16.TryParse(Value, out number))
+            if (Int16.TryParse(Value, out Int16 number))
                 return number;
 
             return null;

@@ -6,8 +6,7 @@ namespace NonFactors.Mvc.Grid
     {
         public override Object GetNumericValue()
         {
-            UInt64 number;
-            if (UInt64.TryParse(Value, out number))
+            if (UInt64.TryParse(Value, out UInt64 number))
                 return number;
 
             return null;
