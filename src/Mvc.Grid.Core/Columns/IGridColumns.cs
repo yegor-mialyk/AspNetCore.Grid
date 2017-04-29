@@ -12,7 +12,10 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; set; }
 
+        IGridColumn<T> Add();
         IGridColumn<T> Add<TValue>(Expression<Func<T, TValue>> constraint);
+
+        IGridColumn<T> Insert(Int32 index);
         IGridColumn<T> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> constraint);
     }
 }
