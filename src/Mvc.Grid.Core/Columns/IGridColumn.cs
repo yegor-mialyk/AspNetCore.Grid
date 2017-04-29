@@ -19,21 +19,6 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; }
         LambdaExpression Expression { get; }
-
-        IGridColumn<T> RenderedAs(Func<T, Object> value);
-
-        IGridColumn<T> MultiFilterable(Boolean isMultiple);
-        IGridColumn<T> Filterable(Boolean isFilterable);
-        IGridColumn<T> FilteredAs(String filterName);
-
-        IGridColumn<T> InitialSort(GridSortOrder order);
-        IGridColumn<T> FirstSort(GridSortOrder order);
-        IGridColumn<T> Sortable(Boolean isSortable);
-
-        IGridColumn<T> Encoded(Boolean isEncoded);
-        IGridColumn<T> Formatted(String format);
-        IGridColumn<T> Css(String cssClasses);
-        IGridColumn<T> Titled(Object title);
-        IGridColumn<T> Named(String name);
+        Func<T, Object> RenderValue { get; set; }
     }
 }
