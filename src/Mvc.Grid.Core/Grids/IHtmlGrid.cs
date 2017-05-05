@@ -23,6 +23,8 @@ namespace NonFactors.Mvc.Grid
         IHtmlGrid<T> Empty(String text);
         IHtmlGrid<T> Named(String name);
 
+        IHtmlGrid<T> WithFooter(String partialViewName);
+
         IHtmlGrid<T> Pageable(Action<IGridPager<T>> builder);
         IHtmlGrid<T> Pageable();
     }

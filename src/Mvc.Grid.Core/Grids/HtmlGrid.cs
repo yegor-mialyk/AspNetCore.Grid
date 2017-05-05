@@ -92,6 +92,13 @@ namespace NonFactors.Mvc.Grid
             return this;
         }
 
+        public virtual IHtmlGrid<T> WithFooter(String partialViewName)
+        {
+            Grid.FooterPartialViewName = partialViewName;
+
+            return this;
+        }
+
         public virtual IHtmlGrid<T> Pageable(Action<IGridPager<T>> builder)
         {
             Grid.Pager = Grid.Pager ?? new GridPager<T>(Grid);

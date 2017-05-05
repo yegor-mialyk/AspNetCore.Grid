@@ -388,6 +388,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region WithFooter(String partialViewName)
+
+        [Fact]
+        public void WithFooter_SetsFooterPartialViewName()
+        {
+            String actual = htmlGrid.WithFooter("Partial").Grid.FooterPartialViewName;
+            String expected = "Partial";
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void WithFooter_ReturnsItself()
+        {
+            IHtmlGrid<GridModel> actual = htmlGrid.WithFooter("Partial");
+            IHtmlGrid<GridModel> expected = htmlGrid;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region Pageable(Action<IGridPager<T>> builder)
 
         [Fact]
