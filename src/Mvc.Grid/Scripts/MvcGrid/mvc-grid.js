@@ -804,7 +804,4 @@ $.fn.mvcgrid.lang = {
 };
 $(function () {
     $('body').append('<div class="mvc-grid-popup"></div>');
-    $(window).resize(function () {
-        $('.mvc-grid-popup').removeClass('open');
-    });
 });
