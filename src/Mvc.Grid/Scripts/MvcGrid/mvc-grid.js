@@ -101,9 +101,10 @@ var MvcGrid = (function () {
         },
         set: function (grid, options) {
             grid.data = options.data || grid.data;
-            grid.query = options.query || grid.query;
+            grid.sourceUrl = options.sourceUrl || grid.sourceUrl;
             grid.filters = $.extend(grid.filters, options.filters);
             grid.requestType = options.requestType || grid.requestType;
+            grid.query = options.query || (options.sourceUrl == null ? grid.query : '');
 
             grid.rowClicked = options.rowClicked || grid.rowClicked;
             grid.reloadEnded = options.reloadEnded || grid.reloadEnded;
