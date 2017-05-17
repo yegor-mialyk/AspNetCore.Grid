@@ -8,9 +8,21 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
+.mvc-grid table {
+    border-collapse: collapse;
+    max-width: 100%;
+    width: 100%;
+}
+
 .mvc-grid th {
     background-clip: padding-box;
     position: relative;
+    padding: 8px;
+}
+
+.mvc-grid td {
+    border-top: 1px solid #DDDDDD;
+    padding: 8px;
 }
 
 .mvc-grid .filterable {
