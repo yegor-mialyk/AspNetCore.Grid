@@ -19,6 +19,7 @@ var MvcGrid = (function () {
         this.reloadFailed = options.reloadFailed;
         this.reloadStarted = options.reloadStarted;
         this.requestType = options.requestType || 'get';
+        this.prefix = this.name == '' ? '' : this.name + '-';
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
         this.filters = $.extend({
             'Text': new MvcGridTextFilter(),
@@ -266,40 +267,40 @@ var MvcGrid = (function () {
         },
 
         cancelFilter: function (grid, column) {
-            grid.queryRemove(grid, grid.name + '-Page');
-            grid.queryRemove(grid, grid.name + '-Rows');
-            grid.queryRemoveStartingWith(grid, grid.name + '-' + column.name + '-');
+            grid.queryRemove(grid, grid.prefix + 'Page');
+            grid.queryRemove(grid, grid.prefix + 'Rows');
+            grid.queryRemoveStartingWith(grid, grid.prefix + column.name + '-');
         },
         applyFilter: function (grid, column) {
             grid.cancelFilter(grid, column);
 
-            grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.first.type, column.filter.first.val);
+            grid.queryAdd(grid, grid.prefix + column.name + '-' + column.filter.first.type, column.filter.first.val);
             if (column.filter.isMulti) {
-                grid.queryAdd(grid, grid.name + '-' + column.name + '-Op', column.filter.operator);
-                grid.queryAdd(grid, grid.name + '-' + column.name + '-' + column.filter.second.type, column.filter.second.val);
+                grid.queryAdd(grid, grid.prefix + column.name + '-Op', column.filter.operator);
+                grid.queryAdd(grid, grid.prefix + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
 
             if (grid.pager) {
-                grid.queryAdd(grid, grid.name + '-Rows', grid.pager.rowsPerPage.val());
+                grid.queryAdd(grid, grid.prefix + 'Rows', grid.pager.rowsPerPage.val());
             }
         },
         applySort: function (grid, column) {
-            grid.queryRemove(grid, grid.name + '-Sort');
-            grid.queryRemove(grid, grid.name + '-Order');
-            grid.queryAdd(grid, grid.name + '-Sort', column.name);
+            grid.queryRemove(grid, grid.prefix + 'Sort');
+            grid.queryRemove(grid, grid.prefix + 'Order');
+            grid.queryAdd(grid, grid.prefix + 'Sort', column.name);
             var order = column.sort.order == 'Asc' ? 'Desc' : 'Asc';
             if (!column.sort.order && column.sort.firstOrder) {
                 order = column.sort.firstOrder;
             }
 
-            grid.queryAdd(grid, grid.name + '-Order', order);
+            grid.queryAdd(grid, grid.prefix + 'Order', order);
         },
         applyPage: function (grid, page) {
-            grid.queryRemove(grid, grid.name + '-Page');
-            grid.queryRemove(grid, grid.name + '-Rows');
+            grid.queryRemove(grid, grid.prefix + 'Page');
+            grid.queryRemove(grid, grid.prefix + 'Rows');
 
-            grid.queryAdd(grid, grid.name + '-Page', page);
-            grid.queryAdd(grid, grid.name + '-Rows', grid.pager.rowsPerPage.val());
+            grid.queryAdd(grid, grid.prefix + 'Page', page);
+            grid.queryAdd(grid, grid.prefix + 'Rows', grid.pager.rowsPerPage.val());
         },
 
         queryAdd: function (grid, key, value) {

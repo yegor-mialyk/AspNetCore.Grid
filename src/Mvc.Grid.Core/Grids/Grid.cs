@@ -32,8 +32,6 @@ namespace NonFactors.Mvc.Grid
             Processors = new List<IGridProcessor<T>>();
             Source = source.AsQueryable();
 
-            Name = "Grid";
-
             Columns = new GridColumns<T>(this);
             Rows = new GridRows<T>(this);
         }

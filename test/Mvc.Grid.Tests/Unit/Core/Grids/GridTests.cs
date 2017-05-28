@@ -71,15 +71,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Grid_SetsName()
-        {
-            String actual = new Grid<GridModel>(new GridModel[0]).Name;
-            String expected = "Grid";
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Grid_SetsColumns()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);

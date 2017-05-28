@@ -124,71 +124,113 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region GetFilter<T>(IGridColumn<T> column)
 
-        [Fact]
-        public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull()
-        {
-            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
-            column.IsMultiFilterable = false;
-
-            Assert.Null(filters.GetFilter(column).Second);
-        }
-
         [Theory]
-        [InlineData("Grid-Name-Equals")]
-        [InlineData("Grid-Name=Equals")]
-        [InlineData("Grid-Name-=Equals")]
-        [InlineData("Grid-Name-Op=Equals")]
-        public void GetFilter_NotFoundFilter_SetsSecondFilterToNull(String query)
+        [InlineData("", "Name-Contains=a&Name-Equals=b&Name-Op=Or")]
+        [InlineData(null, "Name-Contains=a&Name-Equals=b&Name-Op=Or")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or")]
+        public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull(String name, String query)
         {
+            column.Grid.Name = name;
+            column.IsMultiFilterable = false;
             column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             Assert.Null(filters.GetFilter(column).Second);
         }
 
-        [Fact]
-        public void GetFilter_NotFoundValueType_SetsSecondFilterToNull()
+        [Theory]
+        [InlineData("", "Name-Equals")]
+        [InlineData("", "Name=Equals")]
+        [InlineData("", "Name-=Equals")]
+        [InlineData("", "Name-Op=Equals")]
+        [InlineData(null, "Name-Equals")]
+        [InlineData(null, "Name=Equals")]
+        [InlineData(null, "Name-=Equals")]
+        [InlineData(null, "Name-Op=Equals")]
+        [InlineData("Grid", "Grid-Name-Equals")]
+        [InlineData("Grid", "Grid-Name=Equals")]
+        [InlineData("Grid", "Grid-Name-=Equals")]
+        [InlineData("Grid", "Grid-Name-Op=Equals")]
+        public void GetFilter_NotFoundFilter_SetsSecondFilterToNull(String name, String query)
         {
-            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
+            column.Grid.Name = name;
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            Assert.Null(filters.GetFilter(column).Second);
+        }
+
+        [Theory]
+        [InlineData("", "Name-Contains=a&Name-Equals=b&Name-Op=And")]
+        [InlineData(null, "Name-Contains=a&Name-Equals=b&Name-Op=And")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And")]
+        public void GetFilter_NotFoundValueType_SetsSecondFilterToNull(String name, String query)
+        {
+            column.Grid.Name = name;
+            column.Grid.Query = HttpUtility.ParseQueryString(query);
             column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
             Assert.Null(filters.GetFilter(column).Second);
         }
 
         [Theory]
-        [InlineData("Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
-        [InlineData("Grid-Name-Contains=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
-        public void GetFilter_NotFoundFilterType_SetsSecondFilterToNull(String query)
+        [InlineData("", "Name-Eq=a&Name-Eq=b&Name-Op=And")]
+        [InlineData(null, "Name-Eq=a&Name-Eq=b&Name-Op=And")]
+        [InlineData("", "Name-Contains=a&Name-Eq=b&Name-Op=And")]
+        [InlineData(null, "Name-Contains=a&Name-Eq=b&Name-Op=And")]
+        [InlineData("Grid", "Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
+        public void GetFilter_NotFoundFilterType_SetsSecondFilterToNull(String name, String query)
         {
             column.Grid.Query = HttpUtility.ParseQueryString(query);
+            column.Grid.Name = name;
 
             Assert.Null(filters.GetFilter(column).Second);
         }
 
         [Theory]
-        [InlineData("Grid-Name-Eq=a&Grid-Name-Equals=b", "Equals", "b")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Equals=", "Equals", "")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Equals=b", "Equals", "b")]
-        [InlineData("Grid-Name-Contains=a&Grid-Name-Equals=", "Equals", "")]
-        [InlineData("Grid-Name-Contains=a&Grid-Name-Equals=b", "Equals", "b")]
-        [InlineData("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or", "Equals", "b")]
-        public void GetFilter_SetsSecondFilter(String query, String type, String value)
+        [InlineData("", "Name-Eq=a&Name-Equals=b", "b")]
+        [InlineData("", "Name-Equals=a&Name-Equals=b", "b")]
+        [InlineData("", "Name-Contains=a&Name-Equals=", "")]
+        [InlineData("", "Name-Equals=a&Name-Equals=", "")]
+        [InlineData("", "Name-Contains=a&Name-Equals=ba", "ba")]
+        [InlineData("", "Name-Contains=a&Name-Equals=b&Name-Op=Or", "b")]
+        [InlineData(null, "Name-Eq=a&Name-Equals=b", "b")]
+        [InlineData(null, "Name-Equals=a&Name-Equals=b", "b")]
+        [InlineData(null, "Name-Contains=a&Name-Equals=", "")]
+        [InlineData(null, "Name-Equals=a&Name-Equals=", "")]
+        [InlineData(null, "Name-Contains=a&Name-Equals=ba", "ba")]
+        [InlineData(null, "Name-Contains=a&Name-Equals=b&Name-Op=Or", "b")]
+        [InlineData("Grid", "Grid-Name-Eq=a&Grid-Name-Equals=b", "b")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Equals=b", "b")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=", "")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Equals=", "")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=ba", "ba")]
+        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or", "b")]
+        public void GetFilter_SetsSecondFilter(String name, String query, String value)
         {
+            column.Grid.Name = name;
             column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             IGridFilter actual = filters.GetFilter(column).Second;
 
             Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
+            Assert.Equal("Equals", actual.Type);
             Assert.Equal(value, actual.Value);
-            Assert.Equal(type, actual.Type);
         }
 
         [Theory]
-        [InlineData("Grid-Name=Equals")]
-        [InlineData("Grid-Name-=Equals")]
-        [InlineData("Grid-Name-Op=Equals")]
-        public void GetFilter_NotFoundFilter_SetsFirstFilterToNull(String query)
+        [InlineData("", "Name=Equals")]
+        [InlineData("", "Name-=Equals")]
+        [InlineData("", "Name-Op=Equals")]
+        [InlineData(null, "Name=Equals")]
+        [InlineData(null, "Name-=Equals")]
+        [InlineData(null, "Name-Op=Equals")]
+        [InlineData("Grid", "Grid-Name=Equals")]
+        [InlineData("Grid", "Grid-Name-=Equals")]
+        [InlineData("Grid", "Grid-Name-Op=Equals")]
+        public void GetFilter_NotFoundFilter_SetsFirstFilterToNull(String name, String query)
         {
             column.Grid.Query = HttpUtility.ParseQueryString(query);
+            column.Grid.Name = name;
 
             Assert.Null(filters.GetFilter(column).First);
         }
@@ -196,59 +238,89 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GetFilter_NotFoundValueType_SetsFirstFilterToNull()
         {
-            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=And");
+            column.Grid.Query = HttpUtility.ParseQueryString("Name-Contains=a&Name-Equals=b&Name-Op=And");
             column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
             Assert.Null(filters.GetFilter(column).First);
         }
 
         [Theory]
-        [InlineData("Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
-        [InlineData("Grid-Name-Eq=a&Grid-Name-Contains=b&Grid-Name-Op=And")]
-        public void GetFilter_NotFoundFilterType_SetsFirstFilterToNull(String query)
+        [InlineData("", "Name-Eq=a&Name-Eq=b&Name-Op=And")]
+        [InlineData("", "Name-Eq=a&Name-Contains=b&Name-Op=And")]
+        [InlineData(null, "Name-Eq=a&Name-Eq=b&Name-Op=And")]
+        [InlineData(null, "Name-Eq=a&Name-Contains=b&Name-Op=And")]
+        [InlineData("Grid", "Grid-Name-Eq=a&Grid-Name-Eq=b&Grid-Name-Op=And")]
+        [InlineData("Grid", "Grid-Name-Eq=a&Grid-Name-Contains=b&Grid-Name-Op=And")]
+        public void GetFilter_NotFoundFilterType_SetsFirstFilterToNull(String name, String query)
         {
             column.Grid.Query = HttpUtility.ParseQueryString(query);
+            column.Grid.Name = name;
 
             Assert.Null(filters.GetFilter(column).First);
         }
 
         [Theory]
-        [InlineData("Grid-Name-Equals", "Equals", "")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Eq=b", "Equals", "a")]
-        [InlineData("Grid-Name-Equals=&Grid-Name-Equals=b", "Equals", "")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Equals=b", "Equals", "a")]
-        [InlineData("Grid-Name-Equals=&Grid-Name-Contains=b", "Equals", "")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Contains=b", "Equals", "a")]
-        [InlineData("Grid-Name-Equals=a&Grid-Name-Contains=b&Grid-Name-Op=Or", "Equals", "a")]
-        public void GetFilter_SetsFirstFilter(String query, String type, String value)
+        [InlineData("", "Name-Equals=a&Name-Eq=b", "a")]
+        [InlineData("", "Name-Equals=&Name-Equals=b", "")]
+        [InlineData("", "Name-Equals=&Name-Contains=b", "")]
+        [InlineData("", "Name-Equals=a&Name-Contains=b", "a")]
+        [InlineData("", "Name-Equals=a&Name-Equals=b", "a")]
+        [InlineData("", "Name-Equals=a&Name-Contains=b&Name-Op=Or", "a")]
+        [InlineData(null, "Name-Equals=a&Name-Eq=b", "a")]
+        [InlineData(null, "Name-Equals=&Name-Equals=b", "")]
+        [InlineData(null, "Name-Equals=&Name-Contains=b", "")]
+        [InlineData(null, "Name-Equals=a&Name-Contains=b", "a")]
+        [InlineData(null, "Name-Equals=a&Name-Equals=b", "a")]
+        [InlineData(null, "Name-Equals=a&Name-Contains=b&Name-Op=Or", "a")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Eq=b", "a")]
+        [InlineData("Grid", "Grid-Name-Equals=&Grid-Name-Equals=b", "")]
+        [InlineData("Grid", "Grid-Name-Equals=&Grid-Name-Contains=b", "")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Contains=b", "a")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Equals=b", "a")]
+        [InlineData("Grid", "Grid-Name-Equals=a&Grid-Name-Contains=b&Grid-Name-Op=Or", "a")]
+        public void GetFilter_SetsFirstFilter(String name, String query, String value)
         {
+            column.Grid.Name = name;
             column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             IGridFilter actual = filters.GetFilter(column).First;
 
             Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
+            Assert.Equal("Equals", actual.Type);
             Assert.Equal(value, actual.Value);
-            Assert.Equal(type, actual.Type);
         }
 
         [Fact]
         public void GetFilter_OnNotMultiFilterableColumnSetsOperatorToNull()
         {
-            column.Grid.Query = HttpUtility.ParseQueryString("Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or");
+            column.Grid.Query = HttpUtility.ParseQueryString("Name-Contains=a&Name-Equals=b&Name-Op=Or");
             column.IsMultiFilterable = false;
 
             Assert.Null(filters.GetFilter(column).Operator);
         }
 
         [Theory]
-        [InlineData("Grid-Name-Op", "")]
-        [InlineData("Grid-Name-Op=", "")]
-        [InlineData("Grid-Name-Op=Or", "Or")]
-        [InlineData("Grid-Name-Op=And", "And")]
-        [InlineData("Grid-Name-Op-And=And", null)]
-        [InlineData("Grid-Name-Op=And&Grid-Name-Op=Or", "And")]
-        public void GetFilter_SetsOperatorFromQuery(String query, String filterOperator)
+        [InlineData("", "Name-Op", "")]
+        [InlineData("", "Name-Op=", "")]
+        [InlineData("", "Name-Op=Or", "Or")]
+        [InlineData("", "Name-Op=And", "And")]
+        [InlineData("", "Name-Op-And=And", null)]
+        [InlineData("", "Name-Op=And&Name-Op=Or", "And")]
+        [InlineData(null, "Name-Op", "")]
+        [InlineData(null, "Name-Op=", "")]
+        [InlineData(null, "Name-Op=Or", "Or")]
+        [InlineData(null, "Name-Op=And", "And")]
+        [InlineData(null, "Name-Op-And=And", null)]
+        [InlineData(null, "Name-Op=And&Name-Op=Or", "And")]
+        [InlineData("Grid", "Grid-Name-Op", "")]
+        [InlineData("Grid", "Grid-Name-Op=", "")]
+        [InlineData("Grid", "Grid-Name-Op=Or", "Or")]
+        [InlineData("Grid", "Grid-Name-Op=And", "And")]
+        [InlineData("Grid", "Grid-Name-Op-And=And", null)]
+        [InlineData("Grid", "Grid-Name-Op=And&Grid-Name-Op=Or", "And")]
+        public void GetFilter_SetsOperatorFromQuery(String name, String query, String filterOperator)
         {
+            column.Grid.Name = name;
             column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             String actual = filters.GetFilter(column).Operator;

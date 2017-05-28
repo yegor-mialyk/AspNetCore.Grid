@@ -21,13 +21,14 @@ namespace NonFactors.Mvc.Grid
                 if (SortOrderIsSet)
                     return base.SortOrder;
 
-                if (Grid.Query[Grid.Name + "-Sort"] == Name)
+                String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
+                if (Grid.Query[prefix + "Sort"] == Name)
                 {
-                    String orderValue = Grid.Query[Grid.Name + "-Order"];
+                    String orderValue = Grid.Query[prefix + "Order"];
                     if (Enum.TryParse(orderValue, out GridSortOrder order))
                         SortOrder = order;
                 }
-                else if (Grid.Query[Grid.Name + "-Sort"] == StringValues.Empty)
+                else if (Grid.Query[prefix + "Sort"] == StringValues.Empty)
                 {
                     SortOrder = InitialSortOrder;
                 }
