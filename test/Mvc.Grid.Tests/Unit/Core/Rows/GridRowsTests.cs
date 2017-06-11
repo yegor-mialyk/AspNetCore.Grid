@@ -30,16 +30,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             IGridProcessor<GridModel> postProcessor = Substitute.For<IGridProcessor<GridModel>>();
             IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
+            IGridProcessor<GridModel> manProcessor = Substitute.For<IGridProcessor<GridModel>>();
             IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
             IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
+            manProcessor.ProcessorType = GridProcessorType.Manual;
             postProcessor.ProcessorType = GridProcessorType.Post;
             preProcessor.ProcessorType = GridProcessorType.Pre;
             Grid<GridModel> grid = new Grid<GridModel>(items);
 
             postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
+            manProcessor.Process(items).Returns(new GridModel[0].AsQueryable());
             preProcessor.Process(items).Returns(preProcessedItems);
             grid.Processors.Add(postProcessor);
             grid.Processors.Add(preProcessor);
+            grid.Processors.Add(manProcessor);
 
             GridRows<GridModel> rows = new GridRows<GridModel>(grid);
             IEnumerable<IGridRow<GridModel>> currentRows = rows.CurrentRows;
@@ -48,8 +52,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable<Object> expected = postProcessedItems;
 
             postProcessor.Received().Process(preProcessedItems);
-            Assert.Equal(expected, actual);
+            manProcessor.DidNotReceive().Process(items);
             preProcessor.Received().Process(items);
+
+            Assert.Equal(expected, actual);
             Assert.Null(currentRows);
         }
 

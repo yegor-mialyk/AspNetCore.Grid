@@ -7,9 +7,11 @@ namespace NonFactors.Mvc.Grid
     {
         public IGrid<T> Grid { get; set; }
 
-        public Int32 TotalRows { get; set; }
-        public Int32 PagesToDisplay { get; set; }
-
+        public virtual Int32 TotalRows
+        {
+            get;
+            set;
+        }
         public virtual Int32 TotalPages
         {
             get
@@ -48,6 +50,11 @@ namespace NonFactors.Mvc.Grid
                 RowsPerPageValue = value;
             }
         }
+        public virtual Int32 PagesToDisplay
+        {
+            get;
+            set;
+        }
         public virtual Int32 FirstDisplayPage
         {
             get
@@ -82,6 +89,9 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IQueryable<T> Process(IQueryable<T> items)
         {
+            if (ProcessorType == GridProcessorType.Manual)
+                return items;
+
             TotalRows = items.Count();
 
             return items.Skip((CurrentPage - 1) * RowsPerPage).Take(RowsPerPage);

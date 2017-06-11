@@ -3,6 +3,7 @@
     public enum GridProcessorType
     {
         Pre,
-        Post
+        Post,
+        Manual
     }
 }
