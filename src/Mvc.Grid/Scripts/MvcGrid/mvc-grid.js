@@ -758,10 +758,14 @@ var MvcGridBooleanFilter = (function () {
 
 $.fn.mvcgrid = function (options) {
     return this.each(function () {
-        if (!$.data(this, 'mvc-grid')) {
-            $.data(this, 'mvc-grid', new MvcGrid($(this), options));
+        var grid = $(this).closest('.mvc-grid');
+        if (!grid.length)
+            return;
+
+        if (!$.data(grid[0], 'mvc-grid')) {
+            $.data(grid[0], 'mvc-grid', new MvcGrid(grid, options));
         } else if (options) {
-            $.data(this, 'mvc-grid').set($.data(this, 'mvc-grid'), options);
+            $.data(grid[0], 'mvc-grid').set($.data(grid[0], 'mvc-grid'), options);
         }
     });
 };
