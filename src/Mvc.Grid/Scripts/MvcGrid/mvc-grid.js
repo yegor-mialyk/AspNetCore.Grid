@@ -101,16 +101,21 @@ var MvcGrid = (function () {
             return column;
         },
         set: function (grid, options) {
-            grid.data = options.data || grid.data;
-            grid.sourceUrl = options.sourceUrl || grid.sourceUrl;
-            grid.filters = $.extend(grid.filters, options.filters);
-            grid.requestType = options.requestType || grid.requestType;
-            grid.query = options.query || (options.sourceUrl == null ? grid.query : '');
+            for (var key in options) {
+                if (grid.hasOwnProperty(key)) {
+                    if (key == 'filters') {
+                        grid.filters = $.extend(grid.filters, options.filters);
+                    } else if (key == 'sourceUrl') {
+                        if (!options.hasOwnProperty('query')) {
+                            grid.query = '';
+                        }
 
-            grid.rowClicked = options.rowClicked || grid.rowClicked;
-            grid.reloadEnded = options.reloadEnded || grid.reloadEnded;
-            grid.reloadFailed = options.reloadFailed || grid.reloadFailed;
-            grid.reloadStarted = options.reloadStarted || grid.reloadStarted;
+                        gris.sourceUrl = options.sourceUrl;
+                    } else {
+                        grid[key] = options[key];
+                    }
+                }
+            }
 
             if (options.reload) {
                 grid.reload(grid);
