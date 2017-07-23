@@ -3,7 +3,7 @@
 @model IGrid
 
 <div id="@Model.Name" class="mvc-grid">
-    <table class="table @Model.CssClasses">
+    <table class="table @Model.CssClasses"@Model.Attributes>
         <thead>
             <tr>
                 @foreach (IGridColumn column in Model.Columns)

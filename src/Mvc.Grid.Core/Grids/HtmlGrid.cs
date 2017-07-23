@@ -73,6 +73,12 @@ namespace NonFactors.Mvc.Grid
 
             return this;
         }
+        public virtual IHtmlGrid<T> Attributed(Object htmlAttributes)
+        {
+            Grid.Attributes = new GridHtmlAttributes(htmlAttributes);
+
+            return this;
+        }
         public virtual IHtmlGrid<T> Css(String cssClasses)
         {
             Grid.CssClasses = cssClasses;

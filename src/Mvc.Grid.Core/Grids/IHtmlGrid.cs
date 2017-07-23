@@ -19,6 +19,7 @@ namespace NonFactors.Mvc.Grid
         IHtmlGrid<T> Sortable();
 
         IHtmlGrid<T> RowCss(Func<T, String> cssClasses);
+        IHtmlGrid<T> Attributed(Object htmlAttributes);
         IHtmlGrid<T> Css(String cssClasses);
         IHtmlGrid<T> Empty(String text);
         IHtmlGrid<T> Named(String name);

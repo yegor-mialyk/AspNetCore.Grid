@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -315,6 +316,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void RowCss_ReturnsItself()
         {
             IHtmlGrid<GridModel> actual = htmlGrid.RowCss(null);
+            IHtmlGrid<GridModel> expected = htmlGrid;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
+        #region Attributed(Object htmlAttributes)
+
+        [Fact]
+        public void Attributed_SetsAttributes()
+        {
+            KeyValuePair<String, Object> actual = htmlGrid.Attributed(new { width = 1 }).Grid.Attributes.Single();
+            KeyValuePair<String, Object> expected = new KeyValuePair<String, Object>("width", 1);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Attributed_ReturnsItself()
+        {
+            IHtmlGrid<GridModel> actual = htmlGrid.Attributed(new { width = 1 });
             IHtmlGrid<GridModel> expected = htmlGrid;
 
             Assert.Same(expected, actual);
