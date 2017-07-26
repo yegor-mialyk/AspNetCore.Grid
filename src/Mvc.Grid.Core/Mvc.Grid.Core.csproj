@@ -5,6 +5,8 @@
     <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
+    <Copyright>Copyright © NonFactors</Copyright>
+    <Company>NonFactors</Company>
   </PropertyGroup>
 
   <ItemGroup>
