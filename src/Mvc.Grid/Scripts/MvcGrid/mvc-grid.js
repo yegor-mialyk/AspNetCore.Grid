@@ -149,7 +149,7 @@ var MvcGrid = (function () {
             var grid = this;
 
             if (grid.pager) {
-                grid.pager.rowsPerPage.on('change', function () {
+                grid.pager.rowsPerPage.on('change.mvcgrid', function () {
                     grid.applyPage(grid.pager.currentPage);
                     grid.reload();
                 });
