@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 2.1.0
+ * Mvc.Grid 2.1.1
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -167,7 +167,7 @@ var MvcGrid = (function () {
         bindGrid: function () {
             var grid = this;
 
-            grid.element.find('tbody tr').on('click.mvcgrid', function (e) {
+            grid.element.find('tbody tr:not(.mvc-grid-empty-row)').on('click.mvcgrid', function (e) {
                 if (grid.rowClicked) {
                     var cells = $(this).find('td');
                     var data = [];
