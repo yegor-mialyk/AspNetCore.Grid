@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>2.1.1</VersionPrefix>
+    <VersionPrefix>2.2.0</VersionPrefix>
     <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>

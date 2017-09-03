@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 2.1.1
+ * Mvc.Grid 2.2.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -168,24 +168,28 @@ var MvcGrid = (function () {
             var grid = this;
 
             grid.element.find('tbody tr:not(.mvc-grid-empty-row)').on('click.mvcgrid', function (e) {
-                if (grid.rowClicked) {
-                    var cells = $(this).find('td');
-                    var data = [];
+                var cells = $(this).find('td');
+                var data = [];
 
-                    for (var ind = 0; ind < grid.columns.length; ind++) {
-                        var column = grid.columns[ind];
-                        if (cells.length > ind) {
-                            data[column.name] = $(cells[ind]).text();
-                        }
+                for (var i = 0; i < grid.columns.length; i++) {
+                    var column = grid.columns[i];
+                    if (i < cells.length) {
+                        data[column.name] = $(cells[i]).text();
                     }
+                }
 
+                if (grid.rowClicked) {
                     grid.rowClicked(this, data, e);
                 }
+
+                $(this).trigger('rowclick', [data, grid]);
             });
         },
 
         reload: function () {
             var grid = this;
+
+            grid.element.trigger('reloadStarted', [grid]);
 
             if (grid.reloadStarted) {
                 grid.reloadStarted();
@@ -215,11 +219,15 @@ var MvcGrid = (function () {
                     }).data('mvc-grid');
                     grid.element.remove();
 
+                    newGrid.element.trigger('reloadEnded', [grid]);
+
                     if (grid.reloadEnded) {
                         grid.reloadEnded(newGrid);
                     }
                 })
                 .fail(function (result) {
+                    grid.element.trigger('reloadFailed', [grid]);
+
                     if (grid.reloadFailed) {
                         grid.reloadFailed(result);
                     }
