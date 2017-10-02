@@ -111,7 +111,7 @@ var MvcGrid = (function () {
                             this.query = '';
                         }
 
-                        gris.sourceUrl = options.sourceUrl;
+                        this.sourceUrl = options.sourceUrl;
                     } else {
                         this[key] = options[key];
                     }
