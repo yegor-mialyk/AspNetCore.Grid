@@ -318,33 +318,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Process(IQueryable<T> items)
 
         [Fact]
-        public void Process_Manual_ReturnsItems()
-        {
-            IQueryable<GridModel> models = new GridModel[100].AsQueryable();
-            pager.ProcessorType = GridProcessorType.Manual;
-
-            IQueryable<GridModel> actual = pager.Process(models);
-            IQueryable<GridModel> expected = models;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Process_Manual_DoesNotChangeTotalRows()
-        {
-            IQueryable<GridModel> models = new GridModel[100].AsQueryable();
-            pager.ProcessorType = GridProcessorType.Manual;
-            pager.TotalRows = 1600;
-
-            pager.Process(models);
-
-            Int32 actual = pager.TotalRows;
-            Int32 expected = 1600;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Process_SetsTotalRows()
         {
             pager.Process(new GridModel[100].AsQueryable());

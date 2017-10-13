@@ -89,9 +89,6 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IQueryable<T> Process(IQueryable<T> items)
         {
-            if (ProcessorType == GridProcessorType.Manual)
-                return items;
-
             TotalRows = items.Count();
 
             return items.Skip((CurrentPage - 1) * RowsPerPage).Take(RowsPerPage);
