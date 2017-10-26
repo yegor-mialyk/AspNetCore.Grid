@@ -219,10 +219,10 @@ var MvcGrid = (function () {
                     }).data('mvc-grid');
                     grid.element.remove();
 
-                    newGrid.element.trigger('reloadEnded', [grid]);
+                    newGrid.element.trigger('reloadEnded', [newGrid]);
 
-                    if (grid.reloadEnded) {
-                        grid.reloadEnded(newGrid);
+                    if (newGrid.reloadEnded) {
+                        newGrid.reloadEnded();
                     }
                 })
                 .fail(function (result) {
