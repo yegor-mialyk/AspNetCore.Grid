@@ -226,7 +226,7 @@ var MvcGrid = (function () {
                     }
                 })
                 .fail(function (result) {
-                    grid.element.trigger('reloadFailed', [grid]);
+                    grid.element.trigger('reloadFailed', [grid, result]);
 
                     if (grid.reloadFailed) {
                         grid.reloadFailed(result);
