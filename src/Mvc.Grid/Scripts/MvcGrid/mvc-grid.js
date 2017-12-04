@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 2.2.0
+ * Mvc.Grid 2.2.1
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -280,11 +280,11 @@ var MvcGrid = (function () {
 
             var popupTop = filterTop + filterHeight / 2 + 14;
             var popupLeft = filterLeft - 8;
-            var arrowLeft = 15;
+            var arrowLeft = 12;
 
             if (filterLeft + popupWidth + 5 > winWidth) {
                 popupLeft = winWidth - popupWidth - 14;
-                arrowLeft = filterLeft - popupLeft + 7;
+                arrowLeft = filterLeft - popupLeft + 4;
             }
 
             arrow.css('left', arrowLeft + 'px');
