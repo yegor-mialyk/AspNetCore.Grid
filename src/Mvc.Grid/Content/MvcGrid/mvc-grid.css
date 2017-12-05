@@ -95,6 +95,7 @@
     border-radius: 4px;
     z-index: 1000;
     display: none;
+    width: 180px;
 }
 
     .mvc-grid-popup.open {

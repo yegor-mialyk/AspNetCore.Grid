@@ -271,19 +271,19 @@ var MvcGrid = (function () {
         },
         setFilterPosition: function (column, popup) {
             var filter = column.header.find('.mvc-grid-filter');
+            var documentWidth = $(document).width();
             var arrow = popup.find('.popup-arrow');
             var filterLeft = filter.offset().left;
             var filterTop = filter.offset().top;
             var filterHeight = filter.height();
-            var winWidth = $(window).width();
             var popupWidth = popup.width();
 
             var popupTop = filterTop + filterHeight / 2 + 14;
             var popupLeft = filterLeft - 8;
             var arrowLeft = 12;
 
-            if (filterLeft + popupWidth + 5 > winWidth) {
-                popupLeft = winWidth - popupWidth - 14;
+            if (filterLeft + popupWidth + 5 > documentWidth) {
+                popupLeft = documentWidth - popupWidth - 5;
                 arrowLeft = filterLeft - popupLeft + 4;
             }
 
