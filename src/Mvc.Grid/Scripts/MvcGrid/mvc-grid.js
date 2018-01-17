@@ -262,7 +262,11 @@ var MvcGrid = (function () {
 
                 $(window).on('resize.mvcgrid', function () {
                     if (popup.hasClass('open')) {
+                        popup.removeClass('open');
+
                         grid.setFilterPosition(column, popup);
+
+                        popup.addClass('open');
                     }
                 });
             } else {
