@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 2.2.1
+ * Mvc.Grid 2.3.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -15,6 +15,7 @@ var MvcGrid = (function () {
         this.data = options.data;
         this.name = grid.attr('id') || '';
         this.rowClicked = options.rowClicked;
+        this.methods = { reload: this.reload };
         this.reloadEnded = options.reloadEnded;
         this.reloadFailed = options.reloadFailed;
         this.reloadStarted = options.reloadStarted;
@@ -787,15 +788,30 @@ var MvcGridBooleanFilter = (function () {
 })();
 
 $.fn.mvcgrid = function (options) {
+    var args = arguments;
+
     return this.each(function () {
-        var grid = $(this).closest('.mvc-grid');
-        if (!grid.length)
+        var container = $(this).closest('.mvc-grid');
+        if (!container.length)
             return;
 
-        if (!$.data(grid[0], 'mvc-grid')) {
-            $.data(grid[0], 'mvc-grid', new MvcGrid(grid, options));
-        } else if (options) {
-            $.data(grid[0], 'mvc-grid').set(options);
+        if (!$.data(container[0], 'mvc-grid')) {
+            if (typeof options == 'string') {
+                var grid = new MvcGrid(container);
+                grid.methods[options].apply(grid, [].slice.call(args, 1));
+            } else {
+                var grid = new MvcGrid(container, options);
+            }
+
+            $.data(container[0], 'mvc-grid', grid);
+        } else {
+            var grid = $.data(container[0], 'mvc-grid');
+
+            if (typeof options == 'string') {
+                grid.methods[options].apply(grid, [].slice.call(args, 1));
+            } else if (options) {
+                grid.set(options);
+            }
         }
     });
 };
