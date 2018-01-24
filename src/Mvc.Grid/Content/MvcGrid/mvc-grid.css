@@ -93,7 +93,7 @@
     border: 1px solid #CCCCCC;
     position: absolute;
     border-radius: 4px;
-    z-index: 1000;
+    z-index: 1100;
     display: none;
     width: 180px;
 }
