@@ -183,7 +183,7 @@ var MvcGrid = (function () {
                     grid.rowClicked(this, data, e);
                 }
 
-                $(this).trigger('rowclick', [data, grid]);
+                $(this).trigger('rowclick', [data, grid, e]);
             });
         },
 
