@@ -790,31 +790,50 @@ var MvcGridBooleanFilter = (function () {
 $.fn.mvcgrid = function (options) {
     var args = arguments;
 
+    if (options === 'instance') {
+        var instances = [];
+
+        for (var i = 0; i < this.length; i++) {
+            var grid = $(this[i]).closest('.mvc-grid');
+            if (!grid.length)
+                continue;
+
+            var instance = grid.data('mvc-grid');
+
+            if (!instance) {
+                grid.data('mvc-grid', instance = new MvcGrid(grid, options));
+            }
+
+            instances.push(instance);
+        }
+
+        return this.length <= 1 ? instances[0] : instances;
+    }
+
     return this.each(function () {
-        var container = $(this).closest('.mvc-grid');
-        if (!container.length)
+        var grid = $(this).closest('.mvc-grid');
+        if (!grid.length)
             return;
 
-        if (!$.data(container[0], 'mvc-grid')) {
+        var instance = grid.data('mvc-grid');
+
+        if (!instance) {
             if (typeof options == 'string') {
-                var grid = new MvcGrid(container);
-                grid.methods[options].apply(grid, [].slice.call(args, 1));
+                instance = new MvcGrid(grid);
+                instance.methods[options].apply(instance, [].slice.call(args, 1));
             } else {
-                var grid = new MvcGrid(container, options);
+                instance = new MvcGrid(grid, options);
             }
 
-            $.data(container[0], 'mvc-grid', grid);
-        } else {
-            var grid = $.data(container[0], 'mvc-grid');
-
-            if (typeof options == 'string') {
-                grid.methods[options].apply(grid, [].slice.call(args, 1));
-            } else if (options) {
-                grid.set(options);
-            }
+            $.data(grid[0], 'mvc-grid', instance);
+        } else if (typeof options == 'string') {
+            instance.methods[options].apply(instance, [].slice.call(args, 1));
+        } else if (options) {
+            instance.set(options);
         }
     });
 };
+
 $.fn.mvcgrid.lang = {
     Text: {
         Contains: 'Contains',
