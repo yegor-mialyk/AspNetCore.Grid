@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 2.3.0
+ * Mvc.Grid 3.0.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -187,7 +187,7 @@
         padding: 0.4em;
     }
 
-.mvc-grid-empty {
+.mvc-grid-empty-row {
     text-align: center;
 }
 
