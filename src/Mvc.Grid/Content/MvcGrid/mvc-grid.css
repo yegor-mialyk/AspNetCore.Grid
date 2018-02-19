@@ -237,3 +237,19 @@
         border-color: rgba(0, 0, 0, 0.07);
         cursor: not-allowed;
     }
+
+.mvc-grid-page-sizes {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
+}
+
+    .mvc-grid-page-sizes select {
+        height: 34px;
+    }
+
+    .mvc-grid-page-sizes input {
+        text-align: center;
+        height: 34px;
+        width: 48px;
+    }

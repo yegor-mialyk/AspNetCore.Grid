@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -309,6 +310,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             GridProcessorType actual = new GridPager<GridModel>(grid).ProcessorType;
             GridProcessorType expected = GridProcessorType.Post;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GridPager_SetsDefaultPageSizes()
+        {
+            Dictionary<Int32, String> expected = new Dictionary<Int32, String> { [10] = "10", [20] = "20", [50] = "50", [100] = "100" };
+            Dictionary<Int32, String> actual = new GridPager<GridModel>(grid).PageSizes;
 
             Assert.Equal(expected, actual);
         }

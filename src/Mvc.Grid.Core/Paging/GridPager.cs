@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NonFactors.Mvc.Grid
@@ -69,6 +70,8 @@ namespace NonFactors.Mvc.Grid
                 return CurrentPage - middlePage + 1;
             }
         }
+        public virtual Boolean ShowPageSizes { get; set; }
+        public virtual Dictionary<Int32, String> PageSizes { get; set; }
 
         public String CssClasses { get; set; }
         public String PartialViewName { get; set; }
@@ -85,6 +88,7 @@ namespace NonFactors.Mvc.Grid
             PagesToDisplay = 5;
             PartialViewName = "MvcGrid/_Pager";
             ProcessorType = GridProcessorType.Post;
+            PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20", [50] = "50", [100] = "100" };
         }
 
         public virtual IQueryable<T> Process(IQueryable<T> items)

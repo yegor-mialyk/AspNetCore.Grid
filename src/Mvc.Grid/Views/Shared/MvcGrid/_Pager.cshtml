@@ -8,7 +8,6 @@
 }
 
 <div class="mvc-grid-pager @Model.CssClasses">
-    <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
     @if (totalPages > 0)
     {
         <ul class="pagination">
@@ -44,5 +43,36 @@
                 <li class="disabled"><span>&raquo;</span></li>
             }
         </ul>
+        @if (Model.ShowPageSizes)
+        {
+            <div class="mvc-grid-page-sizes">
+                @if (Model.PageSizes.Count > 0)
+                {
+                    <select class="mvc-grid-pager-rows">
+                        @foreach (KeyValuePair
+                       <Int32, String>
+                           size in Model.PageSizes)
+                        {
+                            if (Model.RowsPerPage == size.Key)
+                            {
+                                <option value="@size.Key" selected>@size.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@size.Key">@size.Value</option>
+                            }
+                        }
+                    </select>
+                }
+                else
+                {
+                    <input class="mvc-grid-pager-rows" value="@Model.RowsPerPage" />
+                }
+            </div>
+        }
+        else
+        {
+            <input class="mvc-grid-pager-rows" type="hidden" value="@Model.RowsPerPage" />
+        }
     }
 </div>
