@@ -2,7 +2,7 @@
 
 @model IGrid
 
-<div@(Html.Raw(Model.Name != null ? " id=\"" + Model.Name + "\"" : "")) class="mvc-grid">
+<div@(Html.Raw(Model.Name != null ? " id=\"" + Model.Name + "\"" : "")) class="mvc-grid" data-source-url="@Model.SourceUrl">
     <table class="table @Model.CssClasses"@Model.Attributes>
         <thead>
             <tr>

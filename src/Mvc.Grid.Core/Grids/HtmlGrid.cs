@@ -32,6 +32,12 @@ namespace NonFactors.Mvc.Grid
 
             return this;
         }
+        public virtual IHtmlGrid<T> WithSourceUrl(String url)
+        {
+            Grid.SourceUrl = url;
+
+            return this;
+        }
 
         public virtual IHtmlGrid<T> Filterable(Boolean isFilterable)
         {

@@ -41,7 +41,8 @@ var MvcGrid = (function () {
             this.query = window.location.search.replace('?', '');
         }
 
-        if (options.reload || (this.sourceUrl && !options.isLoaded)) {
+        var isLoaded = !this.sourceUrl || (options.isLoaded == null ? grid.children().length > 0 : options.isLoaded);
+        if (options.reload || !isLoaded) {
             this.reload();
             return;
         }

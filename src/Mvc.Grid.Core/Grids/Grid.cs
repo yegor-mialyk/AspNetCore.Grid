@@ -10,6 +10,7 @@ namespace NonFactors.Mvc.Grid
     {
         public String Name { get; set; }
         public String EmptyText { get; set; }
+        public String SourceUrl { get; set; }
         public String CssClasses { get; set; }
         public String FooterPartialViewName { get; set; }
         public GridHtmlAttributes Attributes { get; set; }

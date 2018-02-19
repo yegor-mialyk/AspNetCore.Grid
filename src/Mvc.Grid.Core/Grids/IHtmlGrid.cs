@@ -10,6 +10,7 @@ namespace NonFactors.Mvc.Grid
 
         IHtmlGrid<T> Build(Action<IGridColumnsOf<T>> builder);
         IHtmlGrid<T> ProcessWith(IGridProcessor<T> processor);
+        IHtmlGrid<T> WithSourceUrl(String url);
 
         IHtmlGrid<T> Filterable(Boolean isFilterable);
         IHtmlGrid<T> MultiFilterable();

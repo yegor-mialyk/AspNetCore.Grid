@@ -155,6 +155,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region ProcessWith(IGridProcessor<T> processor)
+
+        [Fact]
+        public void WithSourceUrl_SetsSourceUrl()
+        {
+            String actual = htmlGrid.WithSourceUrl("/test/index").Grid.SourceUrl;
+            String expected = "/test/index";
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void WithSourceUrl_ReturnsItself()
+        {
+            IHtmlGrid<GridModel> actual = htmlGrid.WithSourceUrl(null);
+            IHtmlGrid<GridModel> expected = htmlGrid;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region Filterable(Boolean isFilterable)
 
         [Theory]
