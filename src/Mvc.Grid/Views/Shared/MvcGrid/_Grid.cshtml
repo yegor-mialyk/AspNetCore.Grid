@@ -46,7 +46,7 @@
             {
                 foreach (IGridRow<Object> row in Model.Rows)
                 {
-                    <tr class="@row.CssClasses">
+                    <tr class="@row.CssClasses"@row.Attributes>
                         @foreach (IGridColumn column in Model.Columns)
                         {
                             <td class="@column.CssClasses">@column.ValueFor(row)</td>

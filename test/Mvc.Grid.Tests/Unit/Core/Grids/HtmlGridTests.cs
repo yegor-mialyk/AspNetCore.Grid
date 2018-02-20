@@ -323,6 +323,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region RowAttributed(Func<T, Object> htmlAttributes)
+
+        [Fact]
+        public void RowAttributed_SetsRowAttributes()
+        {
+            Func<GridModel, Object> expected = (model) => new { data_id = 1 };
+            Func<GridModel, Object> actual = htmlGrid.RowAttributed(expected).Grid.Rows.Attributes;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void RowAttributed_ReturnsItself()
+        {
+            IHtmlGrid<GridModel> actual = htmlGrid.RowAttributed(null);
+            IHtmlGrid<GridModel> expected = htmlGrid;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region RowCss(Func<T, String> cssClasses)
 
         [Fact]

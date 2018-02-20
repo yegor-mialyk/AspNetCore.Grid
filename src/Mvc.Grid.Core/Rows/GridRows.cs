@@ -8,6 +8,7 @@ namespace NonFactors.Mvc.Grid
     public class GridRows<T> : IGridRowsOf<T>
     {
         public IEnumerable<IGridRow<T>> CurrentRows { get; set; }
+        public Func<T, Object> Attributes { get; set; }
         public Func<T, String> CssClasses { get; set; }
         public IGrid<T> Grid { get; set; }
 
@@ -31,7 +32,8 @@ namespace NonFactors.Mvc.Grid
                     .ToList()
                     .Select(model => new GridRow<T>(model)
                     {
-                        CssClasses = CssClasses?.Invoke(model)
+                        CssClasses = CssClasses?.Invoke(model),
+                        Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))
                     });
             }
 

@@ -72,6 +72,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GetEnumerator_SetsRowAttributes()
+        {
+            KeyValuePair<String, Object> attributes = new KeyValuePair<String, Object>("data-id", "1");
+            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
+            Grid<GridModel> grid = new Grid<GridModel>(items);
+
+            GridRows<GridModel> rows = new GridRows<GridModel>(grid);
+            rows.Attributes = (model) => new { data_id = "1" };
+
+            Assert.True(rows.All(row =>
+                row.Attributes.Single().Key == attributes.Key &&
+                row.Attributes.Single().Value == attributes.Value));
+        }
+
+        [Fact]
         public void GetEnumerator_ReturnsCurrentRows()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();

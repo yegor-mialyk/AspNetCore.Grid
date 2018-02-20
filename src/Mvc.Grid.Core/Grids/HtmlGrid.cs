@@ -73,6 +73,12 @@ namespace NonFactors.Mvc.Grid
             return Sortable(true);
         }
 
+        public virtual IHtmlGrid<T> RowAttributed(Func<T, Object> htmlAttributes)
+        {
+            Grid.Rows.Attributes = htmlAttributes;
+
+            return this;
+        }
         public virtual IHtmlGrid<T> RowCss(Func<T, String> cssClasses)
         {
             Grid.Rows.CssClasses = cssClasses;
