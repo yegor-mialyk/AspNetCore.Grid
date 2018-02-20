@@ -39,14 +39,6 @@ namespace NonFactors.Mvc.Grid
             return this;
         }
 
-        public virtual IHtmlGrid<T> Filterable(Boolean isFilterable)
-        {
-            foreach (IGridColumn<T> column in Grid.Columns)
-                if (column.IsFilterable == null)
-                    column.IsFilterable = isFilterable;
-
-            return this;
-        }
         public virtual IHtmlGrid<T> MultiFilterable()
         {
             foreach (IGridColumn<T> column in Grid.Columns)
@@ -55,22 +47,21 @@ namespace NonFactors.Mvc.Grid
 
             return this;
         }
-        public virtual IHtmlGrid<T> Filterable()
-        {
-            return Filterable(true);
-        }
-
-        public virtual IHtmlGrid<T> Sortable(Boolean isSortable)
+        public virtual IHtmlGrid<T> Filterable( )
         {
             foreach (IGridColumn<T> column in Grid.Columns)
-                if (column.IsSortable == null)
-                    column.IsSortable = isSortable;
+                if (column.IsFilterable == null)
+                    column.IsFilterable = true;
 
             return this;
         }
         public virtual IHtmlGrid<T> Sortable()
         {
-            return Sortable(true);
+            foreach (IGridColumn<T> column in Grid.Columns)
+                if (column.IsSortable == null)
+                    column.IsSortable = true;
+
+            return this;
         }
 
         public virtual IHtmlGrid<T> RowAttributed(Func<T, Object> htmlAttributes)

@@ -177,37 +177,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Filterable(Boolean isFilterable)
-
-        [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        [InlineData(null, true, true)]
-        [InlineData(null, false, false)]
-        public void Filterable_Set_IsFilterable(Boolean? isColumnFilterable, Boolean isGridFilterable, Boolean? filterable)
-        {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsFilterable = isColumnFilterable;
-
-            htmlGrid.Filterable(isGridFilterable);
-
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(filterable, actual.IsFilterable);
-        }
-
-        [Fact]
-        public void Filterable_Set_ReturnsItself()
-        {
-            IHtmlGrid<GridModel> actual = htmlGrid.Filterable(true);
-            IHtmlGrid<GridModel> expected = htmlGrid;
-
-            Assert.Same(expected, actual);
-        }
-
-        #endregion
-
         #region MultiFilterable()
 
         [Theory]
@@ -257,37 +226,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Filterable_ReturnsItself()
         {
             IHtmlGrid<GridModel> actual = htmlGrid.Filterable();
-            IHtmlGrid<GridModel> expected = htmlGrid;
-
-            Assert.Same(expected, actual);
-        }
-
-        #endregion
-
-        #region Sortable(Boolean isSortable)
-
-        [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        [InlineData(null, true, true)]
-        [InlineData(null, false, false)]
-        public void Sortable_Set_IsSortable(Boolean? isColumnSortable, Boolean isGridSortable, Boolean? sortable)
-        {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsSortable = isColumnSortable;
-
-            htmlGrid.Sortable(isGridSortable);
-
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(sortable, actual.IsSortable);
-        }
-
-        [Fact]
-        public void Sortable_Set_ReturnsItself()
-        {
-            IHtmlGrid<GridModel> actual = htmlGrid.Sortable(true);
             IHtmlGrid<GridModel> expected = htmlGrid;
 
             Assert.Same(expected, actual);
