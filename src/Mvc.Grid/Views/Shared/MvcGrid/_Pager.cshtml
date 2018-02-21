@@ -10,37 +10,37 @@
 <div class="mvc-grid-pager @Model.CssClasses">
     @if (totalPages > 0)
     {
-        <ul class="pagination">
+        <ul>
             @if (currentPage > 1)
             {
-                <li data-page="1"><span>&laquo;</span></li>
-                <li data-page="@(currentPage - 1)"><span>&lsaquo;</span></li>
+                <li data-page="1"><a href="#">&laquo;</a></li>
+                <li data-page="@(currentPage - 1)"><a href="#">&lsaquo;</a></li>
             }
             else
             {
-                <li class="disabled"><span>&laquo;</span></li>
-                <li class="disabled"><span>&lsaquo;</span></li>
+                <li class="disabled"><a href="#">&laquo;</a></li>
+                <li class="disabled"><a href="#">&lsaquo;</a></li>
             }
             @for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
             {
                 if (page == currentPage)
                 {
-                    <li class="active" data-page="@(page)"><span>@(page)</span></li>
+                    <li class="active" data-page="@(page)"><a href="#">@(page)</a></li>
                 }
                 else
                 {
-                    <li data-page="@(page)"><span>@(page)</span></li>
+                    <li data-page="@(page)"><a href="#">@(page)</a></li>
                 }
             }
             @if (currentPage < totalPages)
             {
-                <li data-page="@(currentPage + 1)"><span>&rsaquo;</span></li>
-                <li data-page="@totalPages"><span>&raquo;</span></li>
+                <li data-page="@(currentPage + 1)"><a href="#">&rsaquo;</a></li>
+                <li data-page="@totalPages"><a href="#">&raquo;</a></li>
             }
             else
             {
-                <li class="disabled"><span>&rsaquo;</span></li>
-                <li class="disabled"><span>&raquo;</span></li>
+                <li class="disabled"><a href="#">&rsaquo;</a></li>
+                <li class="disabled"><a href="#">&raquo;</a></li>
             }
         </ul>
         @if (Model.ShowPageSizes)
@@ -49,9 +49,7 @@
                 @if (Model.PageSizes.Count > 0)
                 {
                     <select class="mvc-grid-pager-rows">
-                        @foreach (KeyValuePair
-                       <Int32, String>
-                           size in Model.PageSizes)
+                        @foreach (KeyValuePair<Int32, String> size in Model.PageSizes)
                         {
                             if (Model.RowsPerPage == size.Key)
                             {
