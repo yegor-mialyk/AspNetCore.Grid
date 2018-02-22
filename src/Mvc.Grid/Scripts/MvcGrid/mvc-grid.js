@@ -156,6 +156,10 @@ var MvcGrid = (function () {
                     grid.reload();
                 });
 
+                grid.pager.pages.on('click.mvcgrid', 'a', function (e) {
+                    e.preventDefault();
+                });
+
                 grid.pager.pages.on('click.mvcgrid', function () {
                     var page = $(this).data('page');
 
