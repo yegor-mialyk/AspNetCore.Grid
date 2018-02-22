@@ -40,9 +40,15 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
-                RowsPerPageValue = Int32.TryParse(Grid.Query[prefix + "Rows"], out Int32 rows) ? rows : RowsPerPageValue;
-                RowsPerPageValue = RowsPerPageValue <= 0 ? 1 : RowsPerPageValue;
+                if (ShowPageSizes)
+                {
+                    String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
+                    RowsPerPageValue = Int32.TryParse(Grid.Query[prefix + "Rows"], out Int32 rows) ? rows : RowsPerPageValue;
+                    RowsPerPageValue = RowsPerPageValue <= 0 ? 1 : RowsPerPageValue;
+
+                    if (PageSizes.Count > 0 && !PageSizes.Keys.Contains(RowsPerPageValue))
+                        RowsPerPageValue = PageSizes.Keys.First();
+                }
 
                 return RowsPerPageValue;
             }

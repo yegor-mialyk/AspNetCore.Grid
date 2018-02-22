@@ -151,6 +151,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void RowsPerPage_OnInvalidQueryRowsUsesRowsPerPage(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
+            pager.ShowPageSizes = true;
+            pager.PageSizes.Clear();
             pager.Grid.Name = name;
             pager.RowsPerPage = 33;
             pager.TotalRows = 500;
@@ -171,6 +173,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void RowsPerPage_OnLessOrEqualToZeroQueryPageReturnsOne(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
+            pager.ShowPageSizes = true;
+            pager.PageSizes.Clear();
             pager.Grid.Name = name;
             pager.RowsPerPage = 5;
 
@@ -185,10 +189,35 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(-1)]
         public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rows)
         {
+            pager.ShowPageSizes = true;
             pager.RowsPerPage = rows;
+            pager.PageSizes.Clear();
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = 1;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("", "Rows=10", 10)]
+        [InlineData("", "Rows=20", 20)]
+        [InlineData("", "Rows=60", 10)]
+        [InlineData(null, "Rows=10", 10)]
+        [InlineData(null, "Rows=20", 20)]
+        [InlineData(null, "Rows=60", 10)]
+        [InlineData("Grid", "Grid-Rows=10", 10)]
+        [InlineData("Grid", "Grid-Rows=20", 20)]
+        [InlineData("Grid", "Grid-Rows=60", 10)]
+        public void RowsPerPage_AllowsOnlyFromPageSizes(String name, String query, Int32 rows)
+        {
+            pager.PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20" };
+            grid.Query = HttpUtility.ParseQueryString(query);
+            pager.ShowPageSizes = true;
+            grid.Name = name;
+
+            Int32 actual = pager.RowsPerPage;
+            Int32 expected = rows;
 
             Assert.Equal(expected, actual);
         }
@@ -200,10 +229,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void RowsPerPage_SetsRowsPerPageFromQuery(String name, String query)
         {
             grid.Query = HttpUtility.ParseQueryString(query);
+            pager.ShowPageSizes = true;
+            pager.PageSizes.Clear();
             grid.Name = name;
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = 123;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void RowsPerPage_DoesNotUseQuery()
+        {
+            grid.Query = HttpUtility.ParseQueryString("Rows=2");
+            pager.ShowPageSizes = false;
+            pager.RowsPerPage = 1;
+
+            Int32 actual = pager.RowsPerPage;
+            Int32 expected = 1;
 
             Assert.Equal(expected, actual);
         }
