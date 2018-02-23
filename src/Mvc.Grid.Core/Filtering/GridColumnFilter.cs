@@ -15,10 +15,8 @@ namespace NonFactors.Mvc.Grid
         public IQueryable<T> Process(IQueryable<T> items)
         {
             Expression expression = CreateFilterExpression();
-            if (expression == null)
-                return items;
 
-            return items.Where(ToLambda(expression));
+            return expression == null ? items : items.Where(ToLambda(expression));
         }
 
         private Expression CreateFilterExpression()

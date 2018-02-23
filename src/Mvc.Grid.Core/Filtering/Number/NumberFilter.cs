@@ -8,7 +8,8 @@ namespace NonFactors.Mvc.Grid
         public override Expression Apply(Expression expression)
         {
             Object value = GetNumericValue();
-            if (value == null) return null;
+            if (value == null)
+                return null;
 
             switch (Type)
             {

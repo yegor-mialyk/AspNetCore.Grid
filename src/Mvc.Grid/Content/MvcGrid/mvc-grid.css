@@ -40,16 +40,16 @@
     cursor: pointer;
 }
 
-.mvc-grid .asc:after,
-.mvc-grid .desc:after {
+.mvc-grid .asc::after,
+.mvc-grid .desc::after {
     padding-left: 3px;
 }
 
-.mvc-grid .asc:after {
+.mvc-grid .asc::after {
     content: '\2193';
 }
 
-.mvc-grid .desc:after {
+.mvc-grid .desc::after {
     content: '\2191';
 }
 

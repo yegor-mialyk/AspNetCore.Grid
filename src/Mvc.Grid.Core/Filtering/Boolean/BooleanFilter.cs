@@ -8,9 +8,8 @@ namespace NonFactors.Mvc.Grid
         public override Expression Apply(Expression expression)
         {
             Object value = GetBooleanValue();
-            if (value == null) return null;
 
-            return Expression.Equal(expression, Expression.Constant(value, expression.Type));
+            return value == null ? null : Expression.Equal(expression, Expression.Constant(value, expression.Type));
         }
 
         private Object GetBooleanValue()

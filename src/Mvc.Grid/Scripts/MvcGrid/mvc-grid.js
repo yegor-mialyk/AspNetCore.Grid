@@ -600,10 +600,7 @@ var MvcGridNumberFilter = (function () {
         },
 
         isValid: function (value) {
-            if (!value) return true;
-            var pattern = new RegExp('^(?=.*\\d+.*)[-+]?\\d*[.,]?\\d*$');
-
-            return pattern.test(value);
+            return !value || /^(?=.*\d+.*)[-+]?\d*[.,]?\d*$/.test(value);
         }
     };
 

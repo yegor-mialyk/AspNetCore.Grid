@@ -155,7 +155,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region ProcessWith(IGridProcessor<T> processor)
+        #region WithSourceUrl(String url)
 
         [Fact]
         public void WithSourceUrl_SetsSourceUrl()

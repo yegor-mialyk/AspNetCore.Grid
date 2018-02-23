@@ -90,10 +90,18 @@ namespace NonFactors.Mvc.Grid
         public override IHtmlContent ValueFor(IGridRow<Object> row)
         {
             Object value = GetValueFor(row);
-            if (value == null) return HtmlString.Empty;
-            if (value is IHtmlContent) return value as IHtmlContent;
-            if (Format != null) value = String.Format(Format, value);
-            if (IsEncoded) return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
+
+            if (value == null)
+                return HtmlString.Empty;
+
+            if (value is IHtmlContent content)
+                return content;
+
+            if (Format != null)
+                value = String.Format(Format, value);
+
+            if (IsEncoded)
+                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
 
             return new HtmlString(value.ToString());
         }
@@ -130,7 +138,8 @@ namespace NonFactors.Mvc.Grid
         private String GetFilterName()
         {
             Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-            if (type.GetTypeInfo().IsEnum) return null;
+            if (type.GetTypeInfo().IsEnum)
+                return null;
 
             switch (Type.GetTypeCode(type))
             {
