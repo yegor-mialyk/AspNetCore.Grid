@@ -61,6 +61,7 @@ var MvcGrid = (function () {
         if (pager.length > 0) {
             this.pager = {
                 currentPage: pager.find('li.active').data('page') || 0,
+                showPageSizes: pager.data('show-page-sizes') == 'True',
                 rowsPerPage: pager.find('.mvc-grid-pager-rows'),
                 pages: pager.find('li:not(.disabled)'),
                 element: pager
@@ -316,7 +317,7 @@ var MvcGrid = (function () {
                 this.queryAdd(this.prefix + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
 
-            if (this.pager) {
+            if (this.pager && this.pager.showPageSizes) {
                 this.queryAdd(this.prefix + 'Rows', this.pager.rowsPerPage.val());
             }
         },
@@ -336,7 +337,10 @@ var MvcGrid = (function () {
             this.queryRemove(this.prefix + 'Rows');
 
             this.queryAdd(this.prefix + 'Page', page);
-            this.queryAdd(this.prefix + 'Rows', this.pager.rowsPerPage.val());
+
+            if (this.pager.showPageSizes) {
+                this.queryAdd(this.prefix + 'Rows', this.pager.rowsPerPage.val());
+            }
         },
 
         queryAdd: function (key, value) {
@@ -390,6 +394,10 @@ var MvcGrid = (function () {
         },
         clean: function () {
             this.element.removeAttr('data-source-url');
+
+            if (this.pager) {
+                this.pager.element.removeAttr('data-show-page-sizes');
+            }
         }
     };
 
