@@ -100,10 +100,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [InlineData(typeof(DateTime), "Equals", typeof(DateTimeFilter))]
         [InlineData(typeof(DateTime), "NotEquals", typeof(DateTimeFilter))]
-        [InlineData(typeof(DateTime), "LessThan", typeof(DateTimeFilter))]
-        [InlineData(typeof(DateTime), "GreaterThan", typeof(DateTimeFilter))]
-        [InlineData(typeof(DateTime), "LessThanOrEqual", typeof(DateTimeFilter))]
-        [InlineData(typeof(DateTime), "GreaterThanOrEqual", typeof(DateTimeFilter))]
+        [InlineData(typeof(DateTime), "EarlierThan", typeof(DateTimeFilter))]
+        [InlineData(typeof(DateTime), "LaterThan", typeof(DateTimeFilter))]
+        [InlineData(typeof(DateTime), "EarlierThanOrEqual", typeof(DateTimeFilter))]
+        [InlineData(typeof(DateTime), "LaterThanOrEqual", typeof(DateTimeFilter))]
 
         [InlineData(typeof(Boolean), "Equals", typeof(BooleanFilter))]
 

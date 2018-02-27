@@ -86,10 +86,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_NullableLessThanFilter()
+        public void Apply_NullableEarlierThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
-            filter.Type = "LessThan";
+            filter.Type = "EarlierThan";
 
             IEnumerable actual = Filter(items, filter.Apply(nDateExpression.Body), nDateExpression);
             IEnumerable expected = items.Where(model => model.NDate < new DateTime(2014, 01, 01));
@@ -98,10 +98,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_LessThanFilter()
+        public void Apply_EalierThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString("d");
-            filter.Type = "LessThan";
+            filter.Type = "EarlierThan";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
             IEnumerable expected = items.Where(model => model.Date < new DateTime(2014, 01, 01));
@@ -110,10 +110,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_NullableGreaterThanFilter()
+        public void Apply_NullableLaterThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
-            filter.Type = "GreaterThan";
+            filter.Type = "LaterThan";
 
             IEnumerable actual = Filter(items, filter.Apply(nDateExpression.Body), nDateExpression);
             IEnumerable expected = items.Where(model => model.NDate > new DateTime(2014, 01, 01));
@@ -122,10 +122,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_GreaterThanFilter()
+        public void Apply_LaterThanFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString("D");
-            filter.Type = "GreaterThan";
+            filter.Type = "LaterThan";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
             IEnumerable expected = items.Where(model => model.Date > new DateTime(2014, 01, 01));
@@ -134,10 +134,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_NullableLessThanOrEqualFilter()
+        public void Apply_NullableEarlierThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
-            filter.Type = "LessThanOrEqual";
+            filter.Type = "EarlierThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(nDateExpression.Body), nDateExpression);
             IEnumerable expected = items.Where(model => model.NDate <= new DateTime(2014, 01, 01));
@@ -146,10 +146,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_LessThanOrEqualFilter()
+        public void Apply_EarlierThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString("d");
-            filter.Type = "LessThanOrEqual";
+            filter.Type = "EarlierThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
             IEnumerable expected = items.Where(model => model.Date <= new DateTime(2014, 01, 01));
@@ -158,10 +158,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_NullableGreaterThanOrEqualFilter()
+        public void Apply_NullableLaterThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString();
-            filter.Type = "GreaterThanOrEqual";
+            filter.Type = "LaterThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(nDateExpression.Body), nDateExpression);
             IEnumerable expected = items.Where(model => model.NDate >= new DateTime(2014, 01, 01));
@@ -170,10 +170,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_GreaterThanOrEqualFilter()
+        public void Apply_LaterThanOrEqualFilter()
         {
             filter.Value = new DateTime(2014, 01, 01).ToString("d");
-            filter.Type = "GreaterThanOrEqual";
+            filter.Type = "LaterThanOrEqual";
 
             IEnumerable actual = Filter(items, filter.Apply(dateExpression.Body), dateExpression);
             IEnumerable expected = items.Where(model => model.Date >= new DateTime(2014, 01, 01));

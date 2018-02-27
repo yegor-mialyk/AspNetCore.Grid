@@ -632,10 +632,10 @@ var MvcGridDateFilter = (function () {
                         '<select class="mvc-grid-type">' +
                             '<option value="Equals"' + (filter.first.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
                             '<option value="NotEquals"' + (filter.first.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="LessThan"' + (filter.first.type == 'LessThan' ? ' selected="selected"' : '') + '>' + lang.LessThan + '</option>' +
-                            '<option value="GreaterThan"' + (filter.first.type == 'GreaterThan' ? ' selected="selected"' : '') + '>' + lang.GreaterThan + '</option>' +
-                            '<option value="LessThanOrEqual"' + (filter.first.type == 'LessThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.LessThanOrEqual + '</option>' +
-                            '<option value="GreaterThanOrEqual"' + (filter.first.type == 'GreaterThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.GreaterThanOrEqual + '</option>' +
+                            '<option value="EarlierThan"' + (filter.first.type == 'EarlierThan' ? ' selected="selected"' : '') + '>' + (lang.EarlierThan || lang.LessThan) + '</option>' +
+                            '<option value="LaterThan"' + (filter.first.type == 'LaterThan' ? ' selected="selected"' : '') + '>' + (lang.LaterThan || lang.GreaterThan) + '</option>' +
+                            '<option value="EarlierThanOrEqual"' + (filter.first.type == 'EarlierThanOrEqual' ? ' selected="selected"' : '') + '>' + (lang.EarlierThanOrEqual || lang.LessThanOrEqual) + '</option>' +
+                            '<option value="LaterThanOrEqual"' + (filter.first.type == 'LaterThanOrEqual' ? ' selected="selected"' : '') + '>' + (lang.LaterThanOrEqual || lang.GreaterThanOrEqual) + '</option>' +
                         '</select>' +
                     '</div>' +
                     '<div class="first-filter popup-group">' +
@@ -863,10 +863,10 @@ $.fn.mvcgrid.lang = {
     Date: {
         Equals: 'Equals',
         NotEquals: 'Not equals',
-        LessThan: 'Is before',
-        GreaterThan: 'Is after',
-        LessThanOrEqual: 'Is before or equal',
-        GreaterThanOrEqual: 'Is after or equal'
+        EarlierThan: 'Earlier than',
+        LaterThan: 'Later than',
+        EarlierThanOrEqual: 'Earlier than or equal',
+        LaterThanOrEqual: 'Later than or equal'
     },
     Boolean: {
         Yes: 'Yes',

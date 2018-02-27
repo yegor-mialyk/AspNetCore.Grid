@@ -16,13 +16,13 @@ namespace NonFactors.Mvc.Grid
                     return Expression.Equal(expression, Expression.Constant(value, expression.Type));
                 case "NotEquals":
                     return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
-                case "LessThan":
+                case "EarlierThan":
                     return Expression.LessThan(expression, Expression.Constant(value, expression.Type));
-                case "GreaterThan":
+                case "LaterThan":
                     return Expression.GreaterThan(expression, Expression.Constant(value, expression.Type));
-                case "LessThanOrEqual":
+                case "EarlierThanOrEqual":
                     return Expression.LessThanOrEqual(expression, Expression.Constant(value, expression.Type));
-                case "GreaterThanOrEqual":
+                case "LaterThanOrEqual":
                     return Expression.GreaterThanOrEqual(expression, Expression.Constant(value, expression.Type));
                 default:
                     return null;

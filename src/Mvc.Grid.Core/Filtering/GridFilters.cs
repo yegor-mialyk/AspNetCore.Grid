@@ -95,10 +95,10 @@ namespace NonFactors.Mvc.Grid
 
             Register(typeof(DateTime), "Equals", typeof(DateTimeFilter));
             Register(typeof(DateTime), "NotEquals", typeof(DateTimeFilter));
-            Register(typeof(DateTime), "LessThan", typeof(DateTimeFilter));
-            Register(typeof(DateTime), "GreaterThan", typeof(DateTimeFilter));
-            Register(typeof(DateTime), "LessThanOrEqual", typeof(DateTimeFilter));
-            Register(typeof(DateTime), "GreaterThanOrEqual", typeof(DateTimeFilter));
+            Register(typeof(DateTime), "EarlierThan", typeof(DateTimeFilter));
+            Register(typeof(DateTime), "LaterThan", typeof(DateTimeFilter));
+            Register(typeof(DateTime), "EarlierThanOrEqual", typeof(DateTimeFilter));
+            Register(typeof(DateTime), "LaterThanOrEqual", typeof(DateTimeFilter));
 
             Register(typeof(Boolean), "Equals", typeof(BooleanFilter));
 
