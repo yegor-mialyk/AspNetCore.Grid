@@ -135,8 +135,8 @@
     }
 
     .mvc-grid-popup .filter-actions {
+        padding: 0.4em 0.4em 0 0.4em;
         text-align: center;
-        padding: 0.4em;
     }
 
         .mvc-grid-popup .filter-actions button {
@@ -186,6 +186,31 @@
     .mvc-grid-popup .mvc-grid-input {
         padding: 0.4em;
     }
+
+    .mvc-grid-popup .mvc-grid-apply,
+    .mvc-grid-popup .mvc-grid-cancel {
+        border: 1px solid #FFFFFF;
+        color: #FFFFFF;
+        outline: 0;
+    }
+
+    .mvc-grid-popup .mvc-grid-apply {
+        background-color: #28A745;
+        border-color: #28A745;
+    }
+
+        .mvc-grid-popup .mvc-grid-apply:focus {
+            box-shadow: 0 0 0 0.2em rgba(40, 167, 69, 0.5);
+        }
+
+    .mvc-grid-popup .mvc-grid-cancel {
+        background-color: #DC3545;
+        border-color: #DC3545;
+    }
+
+        .mvc-grid-popup .mvc-grid-cancel:focus {
+            box-shadow: 0 0 0 0.2em rgba(220, 53, 69, 0.5);
+        }
 
 .mvc-grid-empty-row {
     text-align: center;

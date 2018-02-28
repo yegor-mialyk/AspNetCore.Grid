@@ -462,8 +462,8 @@ var MvcGridFilter = (function () {
         },
         renderActions: function (lang) {
             return '<div class="filter-actions">' +
-                       '<button class="btn btn-success mvc-grid-apply" type="button">' + lang.Apply + '</button>' +
-                       '<button class="btn btn-danger mvc-grid-cancel" type="button">' + lang.Remove + '</button>' +
+                       '<button class="mvc-grid-apply" type="button">' + lang.Apply + '</button>' +
+                       '<button class="mvc-grid-cancel" type="button">' + lang.Remove + '</button>' +
                    '</div>';
         },
 
