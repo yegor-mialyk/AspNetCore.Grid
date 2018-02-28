@@ -194,6 +194,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 Assert.Equal(filterable, actual.IsMultiFilterable);
         }
 
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void MultiFilterable_EnablesFiltering(Boolean? isFilterable, Boolean? filterable)
+        {
+            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+                column.IsFilterable = isFilterable;
+
+            htmlGrid.MultiFilterable();
+
+            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+                Assert.Equal(filterable, actual.IsFilterable);
+        }
+
         [Fact]
         public void MultiFilterable_ReturnsItself()
         {

@@ -14,6 +14,9 @@ namespace NonFactors.Mvc.Grid
 
         public static T MultiFilterable<T>(this T column, Boolean isMultiple) where T : IGridColumn
         {
+            if (isMultiple && column.IsFilterable == null)
+                column.IsFilterable = true;
+
             column.IsMultiFilterable = isMultiple;
 
             return column;

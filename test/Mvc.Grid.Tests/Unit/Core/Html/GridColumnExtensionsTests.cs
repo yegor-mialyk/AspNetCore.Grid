@@ -41,8 +41,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void MultiFilterable_SetsIsMultiFilterable()
         {
-            Boolean? actual = column.MultiFilterable(true).IsMultiFilterable;
-            Boolean? expected = true;
+            Assert.True(column.MultiFilterable(true).IsMultiFilterable);
+        }
+
+        [Theory]
+        [InlineData(true, null, true)]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, null, null)]
+        [InlineData(false, true, true)]
+        [InlineData(false, false, false)]
+        public void MultiFilterable_EnablesFiltering(Boolean isMulti, Boolean? isFilterable, Boolean? filterable)
+        {
+            column.IsFilterable = isFilterable;
+
+            Boolean? actual = column.MultiFilterable(isMulti).IsFilterable;
+            Boolean? expected = filterable;
 
             Assert.Equal(expected, actual);
         }
@@ -63,10 +77,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filterable_SetsIsFilterable()
         {
-            Boolean? actual = column.Filterable(true).IsFilterable;
-            Boolean? expected = true;
-
-            Assert.Equal(expected, actual);
+            Assert.True(column.Filterable(true).IsFilterable);
         }
 
         [Fact]
@@ -151,10 +162,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Sortable_SetsIsSortable()
         {
-            Boolean? actual = column.Sortable(true).IsSortable;
-            Boolean? expected = true;
-
-            Assert.Equal(expected, actual);
+            Assert.True(column.Sortable(true).IsSortable);
         }
 
         [Fact]
