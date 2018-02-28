@@ -130,16 +130,16 @@
         padding: 0.2em;
     }
 
-    .mvc-grid-popup .popup-group-operator {
+    .mvc-grid-popup .operator-filter {
         text-align: center;
     }
 
-    .mvc-grid-popup .popup-button-group {
+    .mvc-grid-popup .filter-actions {
         text-align: center;
         padding: 0.4em;
     }
 
-        .mvc-grid-popup .popup-button-group button {
+        .mvc-grid-popup .filter-actions button {
             padding: 0.3em 1.5em;
             margin: 0 0.4em;
             font-size: 1em;

@@ -404,155 +404,67 @@ var MvcGrid = (function () {
     return MvcGrid;
 })();
 
-var MvcGridTextFilter = (function () {
-    function MvcGridTextFilter() {
+function MvcGridExtends(subclass, base) {
+    Object.setPrototypeOf(subclass, base);
+
+    function Subclass() {
+        this.constructor = subclass;
     }
 
-    MvcGridTextFilter.prototype = {
-        render: function (grid, popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter;
-            var operator = $.fn.mvcgrid.lang.Operator;
-            var lang = $.fn.mvcgrid.lang.Text;
+    subclass.prototype = (Subclass.prototype = base.prototype, new Subclass());
+}
 
+var MvcGridFilter = (function () {
+    function MvcGridFilter() {
+    }
+
+    MvcGridFilter.prototype = {
+        render: function (grid, popup, filter) {
             popup.html(
                 '<div class="popup-arrow"></div>' +
                 '<div class="popup-content">' +
-                    '<div class="first-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Contains"' + (filter.first.type == 'Contains' ? ' selected="selected"' : '') + '>' + lang.Contains + '</option>' +
-                            '<option value="Equals"' + (filter.first.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.first.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="StartsWith"' + (filter.first.type == 'StartsWith' ? ' selected="selected"' : '') + '>' + lang.StartsWith + '</option>' +
-                            '<option value="EndsWith"' + (filter.first.type == 'EndsWith' ? ' selected="selected"' : '') + '>' + lang.EndsWith + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="first-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">' +
-                     '</div>' +
-                     (filter.isMulti ?
-                     '<div class="popup-group popup-group-operator">' +
-                        '<select class="mvc-grid-operator">' +
-                            '<option value="">' + operator.Select + '</option>' +
-                            '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + operator.And + '</option>' +
-                            '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + operator.Or + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="second-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Contains"' + (filter.second.type == 'Contains' ? ' selected="selected"' : '') + '>' + lang.Contains + '</option>' +
-                            '<option value="Equals"' + (filter.second.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.second.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="StartsWith"' + (filter.second.type == 'StartsWith' ? ' selected="selected"' : '') + '>' + lang.StartsWith + '</option>' +
-                            '<option value="EndsWith"' + (filter.second.type == 'EndsWith' ? ' selected="selected"' : '') + '>' + lang.EndsWith + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="second-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.second.val + '">' +
-                     '</div>' :
-                     '') +
-                     '<div class="popup-button-group">' +
-                        '<button class="btn btn-success mvc-grid-apply" type="button">' + filterLang.Apply + '</button>' +
-                        '<button class="btn btn-danger mvc-grid-cancel" type="button">' + filterLang.Remove + '</button>' +
-                     '</div>' +
-                 '</div>');
-        },
-
-        init: function (grid, column, popup) {
-            this.bindValue(grid, column, popup);
-            this.bindApply(grid, column, popup);
-            this.bindCancel(grid, column, popup);
-        },
-        bindValue: function (grid, column, popup) {
-            var inputs = popup.find('.mvc-grid-input');
-            inputs.on('keyup.mvcgrid', function (e) {
-                if (e.which == 13) {
-                    popup.find('.mvc-grid-apply').click();
-                }
-            });
-        },
-        bindApply: function (grid, column, popup) {
-            var apply = popup.find('.mvc-grid-apply');
-            apply.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-                column.filter.operator = popup.find('.mvc-grid-operator').val();
-                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
-                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
-                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
-                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
-
-                grid.applyFilter(column);
-                grid.reload();
-            });
-        },
-        bindCancel: function (grid, column, popup) {
-            var cancel = popup.find('.mvc-grid-cancel');
-            cancel.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-
-                if (column.filter.first.type || column.filter.second.type) {
-                    grid.cancelFilter(column);
-                    grid.reload();
-                }
-            });
-        }
-    };
-
-    return MvcGridTextFilter;
-})();
-
-var MvcGridNumberFilter = (function () {
-    function MvcGridNumberFilter() {
-    }
-
-    MvcGridNumberFilter.prototype = {
-        render: function (grid, popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter;
-            var operator = $.fn.mvcgrid.lang.Operator;
-            var lang = $.fn.mvcgrid.lang.Number;
-
-            popup.html(
-                '<div class="popup-arrow"></div>' +
-                '<div class="popup-content">' +
-                    '<div class="first-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Equals"' + (filter.first.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.first.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="LessThan"' + (filter.first.type == 'LessThan' ? ' selected="selected"' : '') + '>' + lang.LessThan + '</option>' +
-                            '<option value="GreaterThan"' + (filter.first.type == 'GreaterThan' ? ' selected="selected"' : '') + '>' + lang.GreaterThan + '</option>' +
-                            '<option value="LessThanOrEqual"' + (filter.first.type == 'LessThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.LessThanOrEqual + '</option>' +
-                            '<option value="GreaterThanOrEqual"' + (filter.first.type == 'GreaterThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.GreaterThanOrEqual + '</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="first-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">' +
+                    '<div class="first-filter">' +
+                        this.renderFilter(filter.first) + 
                     '</div>' +
                     (filter.isMulti ?
-                     '<div class="popup-group popup-group-operator">' +
-                        '<select class="mvc-grid-operator">' +
-                            '<option value="">' + operator.Select + '</option>' +
-                            '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + operator.And + '</option>' +
-                            '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + operator.Or + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="second-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Equals"' + (filter.second.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.second.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="LessThan"' + (filter.second.type == 'LessThan' ? ' selected="selected"' : '') + '>' + lang.LessThan + '</option>' +
-                            '<option value="GreaterThan"' + (filter.second.type == 'GreaterThan' ? ' selected="selected"' : '') + '>' + lang.GreaterThan + '</option>' +
-                            '<option value="LessThanOrEqual"' + (filter.second.type == 'LessThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.LessThanOrEqual + '</option>' +
-                            '<option value="GreaterThanOrEqual"' + (filter.second.type == 'GreaterThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.GreaterThanOrEqual + '</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="second-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.second.val + '">' +
-                    '</div>' :
-                     '') +
-                    '<div class="popup-button-group">' +
-                        '<button class="btn btn-success mvc-grid-apply" type="button">' + filterLang.Apply + '</button>' +
-                        '<button class="btn btn-danger mvc-grid-cancel" type="button">' + filterLang.Remove + '</button>' +
-                    '</div>' +
+                    this.renderOperator(filter, $.fn.mvcgrid.lang.Operator) +
+                    '<div class="second-filter">' +
+                        this.renderFilter(filter.second) +
+                    '</div>'
+                    : '') +
+                    this.renderActions($.fn.mvcgrid.lang.Filter) +
                 '</div>');
+        },
+        renderFilter: function (filter, types, lang) {
+            var options = types.reduce(function (all, type) {
+                return all + '<option value="' + type + '"' + (filter.type == type ? ' selected="selected"' : '') + '>' + lang[type] + '</option>';
+            }, '');
+
+            return '<div class="popup-group">' +
+                       '<select class="mvc-grid-type">' +
+                            options +
+                        '</select>' +
+                   '</div>' +
+                   '<div class="popup-group">' +
+                       '<input class="mvc-grid-input" value="' + filter.val + '" />' +
+                   '</div>';
+        },
+        renderOperator: function (filter, lang) {
+            return '<div class="operator-filter">' +
+                       '<div class="popup-group">' +
+                           '<select class="mvc-grid-operator">' +
+                               '<option value="">' + lang.Select + '</option>' +
+                               '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + lang.And + '</option>' +
+                               '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + lang.Or + '</option>' +
+                           '</select>' +
+                       '</div>' +
+                   '</div>';
+        },
+        renderActions: function (lang) {
+            return '<div class="filter-actions">' +
+                       '<button class="btn btn-success mvc-grid-apply" type="button">' + lang.Apply + '</button>' +
+                       '<button class="btn btn-danger mvc-grid-cancel" type="button">' + lang.Remove + '</button>' +
+                   '</div>';
         },
 
         init: function (grid, column, popup) {
@@ -567,8 +479,9 @@ var MvcGridNumberFilter = (function () {
             inputs.on('keyup.mvcgrid', function (e) {
                 if (filter.isValid(this.value)) {
                     $(this).removeClass('invalid');
+
                     if (e.which == 13) {
-                        popup.find('.mvc-grid-apply').click();
+                        filter.apply(grid, column, popup);
                     }
                 } else {
                     $(this).addClass('invalid');
@@ -582,220 +495,146 @@ var MvcGridNumberFilter = (function () {
             }
         },
         bindApply: function (grid, column, popup) {
-            var apply = popup.find('.mvc-grid-apply');
-            apply.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-                column.filter.operator = popup.find('.mvc-grid-operator').val();
-                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
-                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
-                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
-                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+            var filter = this;
 
-                grid.applyFilter(column);
-                grid.reload();
+            popup.find('.mvc-grid-apply').on('click.mvcgrid', function () {
+                filter.apply(grid, column, popup);
             });
         },
         bindCancel: function (grid, column, popup) {
-            var cancel = popup.find('.mvc-grid-cancel');
-            cancel.on('click.mvcgrid', function () {
-                popup.removeClass('open');
+            var filter = this;
 
-                if (column.filter.first.type || column.filter.second.type) {
-                    grid.cancelFilter(column);
-                    grid.reload();
-                }
+            popup.find('.mvc-grid-cancel').on('click.mvcgrid', function () {
+                filter.cancel(grid, column, popup);
             });
         },
 
         isValid: function (value) {
-            return !value || /^(?=.*\d+.*)[-+]?\d*[.,]?\d*$/.test(value);
+            return true;
+        },
+        apply: function (grid, column, popup) {
+            popup.removeClass('open');
+
+            column.filter.operator = popup.find('.mvc-grid-operator').val();
+            column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
+            column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
+            column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
+            column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+
+            grid.applyFilter(column);
+            grid.reload();
+        },
+        cancel: function (grid, column, popup) {
+            popup.removeClass('open');
+
+            if (column.filter.first.type || column.filter.second.type) {
+                grid.cancelFilter(column);
+                grid.reload();
+            }
         }
+    };
+
+    return MvcGridFilter;
+})();
+
+var MvcGridTextFilter = (function (base) {
+    MvcGridExtends(MvcGridTextFilter, base);
+
+    function MvcGridTextFilter() {
+        return base.apply(this);
+    }
+
+    MvcGridTextFilter.prototype.renderFilter = function (filter) {
+        var types = ['Contains', 'Equals', 'NotEquals', 'StartsWith', 'EndsWith'];
+
+        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Text);
+    };
+
+    return MvcGridTextFilter;
+})(MvcGridFilter);
+
+var MvcGridNumberFilter = (function (base) {
+    MvcGridExtends(MvcGridNumberFilter, base);
+
+    function MvcGridNumberFilter() {
+        return base.apply(this);
+    }
+
+    MvcGridNumberFilter.prototype.renderFilter = function (filter) {
+        var types = ['Equals', 'NotEquals', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual'];
+
+        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Number);
+    };
+
+    MvcGridNumberFilter.prototype.isValid = function (value) {
+        return !value || /^(?=.*\d+.*)[-+]?\d*[.,]?\d*$/.test(value);
     };
 
     return MvcGridNumberFilter;
-})();
+})(MvcGridFilter);
 
-var MvcGridDateFilter = (function () {
+var MvcGridDateFilter = (function (base) {
+    MvcGridExtends(MvcGridDateFilter, base);
+
     function MvcGridDateFilter() {
+        return base.apply(this);
     }
 
-    MvcGridDateFilter.prototype = {
-        render: function (grid, popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter;
-            var operator = $.fn.mvcgrid.lang.Operator;
-            var lang = $.fn.mvcgrid.lang.Date;
+    MvcGridDateFilter.prototype.renderFilter = function (filter) {
+        var types = ['Equals', 'NotEquals', 'EarlierThan', 'EarlierThanOrEqual', 'LaterThan', 'LaterThanOrEqual'];
 
-            popup.html(
-                '<div class="popup-arrow"></div>' +
-                '<div class="popup-content">' +
-                    '<div class="first-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Equals"' + (filter.first.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.first.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="EarlierThan"' + (filter.first.type == 'EarlierThan' ? ' selected="selected"' : '') + '>' + (lang.EarlierThan || lang.LessThan) + '</option>' +
-                            '<option value="LaterThan"' + (filter.first.type == 'LaterThan' ? ' selected="selected"' : '') + '>' + (lang.LaterThan || lang.GreaterThan) + '</option>' +
-                            '<option value="EarlierThanOrEqual"' + (filter.first.type == 'EarlierThanOrEqual' ? ' selected="selected"' : '') + '>' + (lang.EarlierThanOrEqual || lang.LessThanOrEqual) + '</option>' +
-                            '<option value="LaterThanOrEqual"' + (filter.first.type == 'LaterThanOrEqual' ? ' selected="selected"' : '') + '>' + (lang.LaterThanOrEqual || lang.GreaterThanOrEqual) + '</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="first-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.first.val + '">' +
-                    '</div>' +
-                    (filter.isMulti ?
-                     '<div class="popup-group popup-group-operator">' +
-                        '<select class="mvc-grid-operator">' +
-                            '<option value="">' + operator.Select + '</option>' +
-                            '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + operator.And + '</option>' +
-                            '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + operator.Or + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="second-filter popup-group">' +
-                        '<select class="mvc-grid-type">' +
-                            '<option value="Equals"' + (filter.second.type == 'Equals' ? ' selected="selected"' : '') + '>' + lang.Equals + '</option>' +
-                            '<option value="NotEquals"' + (filter.second.type == 'NotEquals' ? ' selected="selected"' : '') + '>' + lang.NotEquals + '</option>' +
-                            '<option value="LessThan"' + (filter.second.type == 'LessThan' ? ' selected="selected"' : '') + '>' + lang.LessThan + '</option>' +
-                            '<option value="GreaterThan"' + (filter.second.type == 'GreaterThan' ? ' selected="selected"' : '') + '>' + lang.GreaterThan + '</option>' +
-                            '<option value="LessThanOrEqual"' + (filter.second.type == 'LessThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.LessThanOrEqual + '</option>' +
-                            '<option value="GreaterThanOrEqual"' + (filter.second.type == 'GreaterThanOrEqual' ? ' selected="selected"' : '') + '>' + lang.GreaterThanOrEqual + '</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="second-filter popup-group">' +
-                        '<input class="mvc-grid-input" type="text" value="' + filter.second.val + '">' +
-                    '</div>' :
-                     '') +
-                    '<div class="popup-button-group">' +
-                        '<button class="btn btn-success mvc-grid-apply" type="button">' + filterLang.Apply + '</button>' +
-                        '<button class="btn btn-danger mvc-grid-cancel" type="button">' + filterLang.Remove + '</button>' +
-                    '</div>' +
-                '</div>');
-        },
+        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Date);
+    };
 
-        init: function (grid, column, popup) {
-            this.bindValue(grid, column, popup);
-            this.bindApply(grid, column, popup);
-            this.bindCancel(grid, column, popup);
-        },
-        bindValue: function (grid, column, popup) {
-            var inputs = popup.find('.mvc-grid-input');
-            if ($.fn.datepicker) { inputs.datepicker(); }
-
-            inputs.on('change.mvcgrid keyup.mvcgrid', function (e) {
-                if (e.which == 13) {
-                    popup.find('.mvc-grid-apply').click();
-                }
-            });
-        },
-        bindApply: function (grid, column, popup) {
-            var apply = popup.find('.mvc-grid-apply');
-            apply.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-                column.filter.operator = popup.find('.mvc-grid-operator').val();
-                column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
-                column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
-                column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
-                column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
-
-                grid.applyFilter(column);
-                grid.reload();
-            });
-        },
-        bindCancel: function (grid, column, popup) {
-            var cancel = popup.find('.mvc-grid-cancel');
-            cancel.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-
-                if (column.filter.first.type || column.filter.second.type) {
-                    grid.cancelFilter(column);
-                    grid.reload();
-                }
-            });
+    MvcGridDateFilter.prototype.bindValue = function (grid, column, popup) {
+        if ($.fn.datepicker) {
+            popup.find('.mvc-grid-input').datepicker();
         }
+
+        base.prototype.bindValue.call(this, grid, column, popup);
     };
 
     return MvcGridDateFilter;
-})();
+})(MvcGridFilter);
 
-var MvcGridBooleanFilter = (function () {
+var MvcGridBooleanFilter = (function (base) {
+    MvcGridExtends(MvcGridBooleanFilter, base);
+
     function MvcGridBooleanFilter() {
+        return base.apply(this);
     }
 
-    MvcGridBooleanFilter.prototype = {
-        render: function (grid, popup, filter) {
-            var filterLang = $.fn.mvcgrid.lang.Filter;
-            var operator = $.fn.mvcgrid.lang.Operator;
-            var lang = $.fn.mvcgrid.lang.Boolean;
+    MvcGridBooleanFilter.prototype.renderFilter = function (filter) {
+        var lang = $.fn.mvcgrid.lang.Boolean;
 
-            popup.html(
-                '<div class="popup-arrow"></div>' +
-                '<div class="popup-content">' +
-                    '<div class="first-filter popup-group">' +
-                        '<ul class="mvc-grid-boolean-filter">' +
-                            '<li ' + (filter.first.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.Yes + '</li>' +
-                            '<li ' + (filter.first.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.No + '</li>' +
-                        '</ul>' +
-                    '</div>' +
-                    (filter.isMulti ?
-                     '<div class="popup-group popup-group-operator">' +
-                        '<select class="mvc-grid-operator">' +
-                            '<option value="">' + operator.Select + '</option>' +
-                            '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + operator.And + '</option>' +
-                            '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + operator.Or + '</option>' +
-                        '</select>' +
-                     '</div>' +
-                     '<div class="second-filter popup-group">' +
-                        '<ul class="mvc-grid-boolean-filter">' +
-                            '<li ' + (filter.second.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.Yes + '</li>' +
-                            '<li ' + (filter.second.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.No + '</li>' +
-                        '</ul>' +
-                    '</div>' :
-                     '') +
-                    '<div class="popup-button-group">' +
-                        '<button class="btn btn-success mvc-grid-apply" type="button">' + filterLang.Apply + '</button>' +
-                        '<button class="btn btn-danger mvc-grid-cancel" type="button">' + filterLang.Remove + '</button>' +
-                    '</div>' +
-                '</div>');
-        },
+        return '<div class="popup-group">' +
+                   '<ul class="mvc-grid-boolean-filter">' +
+                       '<li ' + (filter.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.Yes + '</li>' +
+                       '<li ' + (filter.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.No + '</li>' +
+                   '</ul>' +
+               '</div>';
+    };
 
-        init: function (grid, column, popup) {
-            this.bindValue(grid, column, popup);
-            this.bindApply(grid, column, popup);
-            this.bindCancel(grid, column, popup);
-        },
-        bindValue: function (grid, column, popup) {
-            var inputs = popup.find('.mvc-grid-boolean-filter li');
-            inputs.on('click.mvcgrid', function () {
-                $(this).addClass('active').siblings().removeClass('active');
-            });
-        },
-        bindApply: function (grid, column, popup) {
-            var apply = popup.find('.mvc-grid-apply');
-            apply.on('click.mvcgrid', function () {
-                popup.removeClass('open');
-                column.filter.first.type = 'Equals';
-                column.filter.second.type = 'Equals';
-                column.filter.operator = popup.find('.mvc-grid-operator').val();
-                column.filter.first.val = popup.find('.first-filter li.active').data('value');
-                column.filter.second.val = popup.find('.second-filter li.active').data('value');
+    MvcGridBooleanFilter.prototype.bindValue = function (grid, column, popup) {
+        popup.find('li').on('click.mvcgrid', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+    };
+    MvcGridBooleanFilter.prototype.apply = function (grid, column, popup) {
+        popup.removeClass('open');
 
-                grid.applyFilter(column);
-                grid.reload();
-            });
-        },
-        bindCancel: function (grid, column, popup) {
-            var cancel = popup.find('.mvc-grid-cancel');
-            cancel.on('click.mvcgrid', function () {
-                popup.removeClass('open');
+        column.filter.first.type = 'Equals';
+        column.filter.second.type = 'Equals';
+        column.filter.operator = popup.find('.mvc-grid-operator').val();
+        column.filter.first.val = popup.find('.first-filter li.active').data('value');
+        column.filter.second.val = popup.find('.second-filter li.active').data('value');
 
-                if (column.filter.first.type || column.filter.second.type) {
-                    grid.cancelFilter(column);
-                    grid.reload();
-                }
-            });
-        }
+        grid.applyFilter(column);
+        grid.reload();
     };
 
     return MvcGridBooleanFilter;
-})();
+})(MvcGridFilter);
 
 $.fn.mvcgrid = function (options) {
     var args = arguments;
@@ -882,6 +721,7 @@ $.fn.mvcgrid.lang = {
         Or: 'or'
     }
 };
+
 $(function () {
     $('body').append('<div class="mvc-grid-popup"></div>');
 });
