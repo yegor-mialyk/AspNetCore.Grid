@@ -228,15 +228,17 @@
         padding: 0;
     }
 
+    .mvc-grid-pager li + li a {
+        margin-left: 5px;
+    }
+
     .mvc-grid-pager a {
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
         box-sizing: content-box;
         display: inline-block;
         padding: 0.5em 0.75em;
-        position: relative;
         text-align: center;
-        margin-left: -1px;
         cursor: pointer;
         min-width: 1em;
         color: #337AB7;
@@ -252,13 +254,14 @@
         background-color: #0275D8;
         border-color: #0275D8;
         color: #FFFFFF;
-        z-index: 2;
     }
 
     .mvc-grid-pager .disabled a {
         background-color: #ECEEEF;
+        text-decoration: none;
         cursor: not-allowed;
         color: #777777;
+        outline: none;
     }
 
 .mvc-grid-page-sizes {

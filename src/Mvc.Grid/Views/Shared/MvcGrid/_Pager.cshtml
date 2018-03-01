@@ -18,8 +18,8 @@
             }
             else
             {
-                <li class="disabled"><a href="#">&laquo;</a></li>
-                <li class="disabled"><a href="#">&lsaquo;</a></li>
+                <li class="disabled"><a tabindex="-1">&laquo;</a></li>
+                <li class="disabled"><a tabindex="-1">&lsaquo;</a></li>
             }
             @for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
             {
@@ -39,8 +39,8 @@
             }
             else
             {
-                <li class="disabled"><a href="#">&rsaquo;</a></li>
-                <li class="disabled"><a href="#">&raquo;</a></li>
+                <li class="disabled"><a tabindex="-1">&rsaquo;</a></li>
+                <li class="disabled"><a tabindex="-1">&raquo;</a></li>
             }
         </ul>
         @if (Model.ShowPageSizes)
