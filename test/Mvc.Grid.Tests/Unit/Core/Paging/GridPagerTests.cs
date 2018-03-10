@@ -164,13 +164,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Rows=0")]
         [InlineData("", "Rows=-1")]
-        [InlineData(null, "Rows=0")]
+        [InlineData("", "Rows=-10")]
         [InlineData(null, "Rows=-1")]
-        [InlineData("Grid", "Grid-Rows=0")]
+        [InlineData(null, "Rows=-10")]
         [InlineData("Grid", "Grid-Rows=-1")]
-        public void RowsPerPage_OnLessOrEqualToZeroQueryPageReturnsOne(String name, String query)
+        [InlineData("Grid", "Grid-Rows=-10")]
+        public void RowsPerPage_OnLessThanZeroQueryPageReturnsZero(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.ShowPageSizes = true;
@@ -179,22 +179,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             pager.RowsPerPage = 5;
 
             Int32 actual = pager.RowsPerPage;
-            Int32 expected = 1;
+            Int32 expected = 0;
 
             Assert.Equal(expected, actual);
         }
 
         [Theory]
-        [InlineData(0)]
         [InlineData(-1)]
-        public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rows)
+        [InlineData(-10)]
+        public void RowsPerPage_OnLessThanZeroCurrentPageReturnsZero(Int32 rows)
         {
             pager.ShowPageSizes = true;
             pager.RowsPerPage = rows;
             pager.PageSizes.Clear();
 
             Int32 actual = pager.RowsPerPage;
-            Int32 expected = 1;
+            Int32 expected = 0;
 
             Assert.Equal(expected, actual);
         }
@@ -378,6 +378,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Int32 actual = pager.TotalRows;
             Int32 expected = 100;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Process_ReturnsAllItems()
+        {
+            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel(), new GridModel() }.AsQueryable();
+            pager.RowsPerPage = 0;
+            pager.CurrentPage = 2;
+
+            IEnumerable actual = pager.Process(items);
+            IEnumerable expected = items.ToList();
 
             Assert.Equal(expected, actual);
         }
