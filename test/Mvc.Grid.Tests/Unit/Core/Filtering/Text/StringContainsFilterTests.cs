@@ -9,6 +9,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
     {
         #region Apply(Expression expression)
 
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void Apply_NullOrEmptyValue_ReturnsNull(String value)
+        {
+            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+
+            Assert.Null(new StringContainsFilter { Value = value }.Apply(expression));
+        }
+
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {

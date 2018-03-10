@@ -8,14 +8,16 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
-            MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
-            MethodInfo containsMethod = typeof(String).GetMethod("Contains");
+            if (String.IsNullOrEmpty(Value))
+                return null;
+
             Expression value = Expression.Constant(Value.ToUpper());
+            MethodInfo containsMethod = typeof(String).GetMethod("Contains");
+            MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
 
-            Expression notNull = Expression.NotEqual(expression, Expression.Constant(null));
             Expression toUpper = Expression.Call(expression, toUpperMethod);
-
             Expression contains = Expression.Call(toUpper, containsMethod, value);
+            Expression notNull = Expression.NotEqual(expression, Expression.Constant(null));
 
             return Expression.AndAlso(notNull, contains);
         }
