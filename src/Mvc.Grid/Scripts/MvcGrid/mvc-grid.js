@@ -209,10 +209,10 @@ var MvcGrid = (function () {
                     type: grid.requestType,
                     url: grid.sourceUrl + '?' + grid.query
                 }).done(function (result) {
-                    grid.element.hide();
-                    grid.element.after(result);
+                    var newGridHtml = $(result);
+                    grid.element.replaceWith(newGridHtml);
 
-                    var newGrid = grid.element.next('.mvc-grid').mvcgrid({
+                    var newGrid = newGridHtml.mvcgrid({
                         reloadStarted: grid.reloadStarted,
                         reloadFailed: grid.reloadFailed,
                         reloadEnded: grid.reloadEnded,
@@ -224,7 +224,6 @@ var MvcGrid = (function () {
                         data: grid.data,
                         isLoaded: true
                     }).data('mvc-grid');
-                    grid.element.remove();
 
                     newGrid.element.trigger('reloadEnded', [newGrid]);
 
@@ -424,7 +423,7 @@ var MvcGridFilter = (function () {
                 '<div class="popup-arrow"></div>' +
                 '<div class="popup-content">' +
                     '<div class="first-filter">' +
-                        this.renderFilter(filter.first) + 
+                        this.renderFilter(filter.first) +
                     '</div>' +
                     (filter.isMulti ?
                     this.renderOperator(filter, $.fn.mvcgrid.lang.Operator) +
