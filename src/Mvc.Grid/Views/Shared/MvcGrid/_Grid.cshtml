@@ -2,8 +2,8 @@
 
 @model IGrid
 
-<div@(Html.Raw(Model.Name != null ? " id=\"" + Model.Name + "\"" : "")) class="mvc-grid" data-source-url="@Model.SourceUrl">
-    <table class="table @Model.CssClasses"@Model.Attributes>
+<div id="@Model.Name" class="mvc-grid" data-source-url="@Model.SourceUrl">
+    <!table class="table @Model.CssClasses"@Model.Attributes>
         <thead>
             <tr>
                 @foreach (IGridColumn column in Model.Columns)
@@ -46,12 +46,12 @@
             {
                 foreach (IGridRow<Object> row in Model.Rows)
                 {
-                    <tr class="@row.CssClasses"@row.Attributes>
+                    <!tr class="@row.CssClasses"@row.Attributes>
                         @foreach (IGridColumn column in Model.Columns)
                         {
                             <td class="@column.CssClasses">@column.ValueFor(row)</td>
                         }
-                    </tr>
+                    </!tr>
                 }
             }
             else if (Model.EmptyText != null)
@@ -69,7 +69,7 @@
                 @Html.Partial(Model.FooterPartialViewName, Model)
             </tfoot>
         }
-    </table>
+    </!table>
     @if (Model.Pager != null)
     {
         @Html.Partial(Model.Pager.PartialViewName, Model.Pager)
