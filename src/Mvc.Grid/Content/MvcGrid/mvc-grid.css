@@ -13,45 +13,49 @@
     src: url('../MvcGrid/Fonts/GridGlyphs.woff') format('woff');
 }
 
-.mvc-grid table {
-    border-collapse: collapse;
-    max-width: 100%;
-    width: 100%;
-}
-
-.mvc-grid th {
-    background-clip: padding-box;
-    position: relative;
-    padding: 8px;
-}
-
-.mvc-grid td {
-    border-top: 1px solid #DDDDDD;
-    padding: 8px;
-}
-
-.mvc-grid .filterable {
-    padding-right: 30px;
+.mvc-grid {
     position: relative;
 }
 
-.mvc-grid .sortable,
-.mvc-grid .mvc-grid-filter {
-    cursor: pointer;
-}
+    .mvc-grid table {
+        border-collapse: collapse;
+        max-width: 100%;
+        width: 100%;
+    }
 
-.mvc-grid .asc::after,
-.mvc-grid .desc::after {
-    padding-left: 3px;
-}
+    .mvc-grid th {
+        background-clip: padding-box;
+        position: relative;
+        padding: 8px;
+    }
 
-.mvc-grid .asc::after {
-    content: '\2193';
-}
+    .mvc-grid td {
+        border-top: 1px solid #DDDDDD;
+        padding: 8px;
+    }
 
-.mvc-grid .desc::after {
-    content: '\2191';
-}
+    .mvc-grid .filterable {
+        padding-right: 30px;
+        position: relative;
+    }
+
+    .mvc-grid .sortable,
+    .mvc-grid .mvc-grid-filter {
+        cursor: pointer;
+    }
+
+    .mvc-grid .asc::after,
+    .mvc-grid .desc::after {
+        padding-left: 3px;
+    }
+
+    .mvc-grid .asc::after {
+        content: '\2193';
+    }
+
+    .mvc-grid .desc::after {
+        content: '\2191';
+    }
 
 .mvc-grid-filter {
     font-family: 'GridGlyphs';
@@ -273,3 +277,51 @@
         height: 2.5em;
         width: 48px;
     }
+
+.mvc-grid-loader {
+    background-color: rgba(0, 0, 0, 0.3);
+    justify-content: center;
+    transition: opacity 1s;
+    align-items: center;
+    position: absolute;
+    display: flex;
+    z-index: 100;
+    height: 100%;
+    cursor: wait;
+    width: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+}
+
+.mvc-grid-loading {
+    opacity: 1;
+}
+
+    .mvc-grid-loading > div > div {
+        animation: loader-points 1.4s infinite ease-in-out both;
+        background-color: #F5F5F5;
+        display: inline-block;
+        border-radius: 100%;
+        margin: 0 10px;
+        height: 18px;
+        width: 18px;
+    }
+
+    .mvc-grid-loading .p-1 {
+        animation-delay: -0.32s;
+    }
+
+    .mvc-grid-loading .p-2 {
+        animation-delay: -0.16s;
+    }
+
+@keyframes loader-points {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1.0);
+    }
+}

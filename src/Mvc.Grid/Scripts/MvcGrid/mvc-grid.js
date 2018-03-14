@@ -17,11 +17,13 @@ var MvcGrid = (function () {
         this.rowClicked = options.rowClicked;
         this.methods = { reload: this.reload };
         this.reloadEnded = options.reloadEnded;
+        this.loadingDelay = options.loadingDelay;
         this.reloadFailed = options.reloadFailed;
         this.reloadStarted = options.reloadStarted;
         this.requestType = options.requestType || 'get';
         this.prefix = this.name == '' ? '' : this.name + '-';
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
+        this.showLoading = options.showLoading == null || options.showLoading;
         this.filters = $.extend({
             'Text': new MvcGridTextFilter(),
             'Date': new MvcGridDateFilter(),
@@ -203,6 +205,8 @@ var MvcGrid = (function () {
             }
 
             if (grid.sourceUrl) {
+                grid.startLoading();
+
                 $.ajax({
                     cache: false,
                     data: grid.data,
@@ -215,7 +219,9 @@ var MvcGrid = (function () {
                     var newGrid = newGridHtml.mvcgrid({
                         reloadStarted: grid.reloadStarted,
                         reloadFailed: grid.reloadFailed,
+                        loadingDelay: grid.loadingDelay,
                         reloadEnded: grid.reloadEnded,
+                        showLoading: grid.showLoading,
                         requestType: grid.requestType,
                         rowClicked: grid.rowClicked,
                         sourceUrl: grid.sourceUrl,
@@ -300,6 +306,25 @@ var MvcGrid = (function () {
             arrow.css('left', arrowLeft + 'px');
             popup.css('left', popupLeft + 'px');
             popup.css('top', popupTop + 'px');
+        },
+        startLoading: function() {
+            if (!this.showLoading || this.element.children('.mvc-grid-loader').length) {
+                return;
+            }
+
+            var loader = $('<div class="mvc-grid-loader">' +
+                '<div>' +
+                    '<div class="p-1"></div>' +
+                    '<div class="p-2"></div>' +
+                    '<div class="p-3"></div>' +
+                '</div>' +
+            '</div>');
+
+            setTimeout(function() {
+                loader.addClass('mvc-grid-loading');
+            }, this.loadingDelay == null ? 300 : this.loadingDelay);
+
+            this.element.append(loader);
         },
 
         cancelFilter: function (column) {
