@@ -28,14 +28,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region IFilterableColumn.Filter
+        #region IGridColumn.Filter
 
         [Fact]
         public void IFilterableColumnFilter_ReturnsFilter()
         {
-            IFilterableColumn filterableColumn = column;
+            IGridColumn gridColumn = column;
 
-            Object actual = filterableColumn.Filter;
+            Object actual = gridColumn.Filter;
             Object expected = column.Filter;
 
             Assert.Same(expected, actual);

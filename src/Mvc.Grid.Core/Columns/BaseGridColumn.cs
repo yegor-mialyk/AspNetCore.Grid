@@ -21,7 +21,7 @@ namespace NonFactors.Mvc.Grid
         public String FilterName { get; set; }
         public Boolean? IsFilterable { get; set; }
         public Boolean? IsMultiFilterable { get; set; }
-        IGridColumnFilter IFilterableColumn.Filter => Filter;
+        IGridColumnFilter IGridColumn.Filter => Filter;
         public virtual IGridColumnFilter<T> Filter { get; set; }
 
         public IGrid<T> Grid { get; set; }
