@@ -186,6 +186,10 @@
         padding: 0.4em;
     }
 
+    .mvc-grid-popup .mvc-grid-input.invalid {
+        outline-color: #DC3545;
+    }
+
     .mvc-grid-popup .mvc-grid-apply,
     .mvc-grid-popup .mvc-grid-cancel {
         border: 1px solid #FFFFFF;
