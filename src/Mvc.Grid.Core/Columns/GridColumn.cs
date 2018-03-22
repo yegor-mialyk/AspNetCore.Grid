@@ -67,17 +67,15 @@ namespace NonFactors.Mvc.Grid
             IsEncoded = true;
             Expression = expression;
             Title = GetTitle(expression);
-            FilterName = GetFilterName();
             ProcessorType = GridProcessorType.Pre;
             ExpressionValue = expression.Compile();
-            IsSortable = IsFilterable = IsMember(expression);
             Name = ExpressionHelper.GetExpressionText(expression);
+            IsSortable = expression.Body is MemberExpression ? (Boolean?)null : false;
         }
 
         public override IQueryable<T> Process(IQueryable<T> items)
         {
-            if (IsFilterable == true && Filter != null)
-                items = Filter.Process(items);
+            items = Filter.Apply(items);
 
             if (IsSortable != true || SortOrder == null)
                 return items;
@@ -106,14 +104,6 @@ namespace NonFactors.Mvc.Grid
             return new HtmlString(value.ToString());
         }
 
-        private Boolean? IsMember(Expression<Func<T, TValue>> expression)
-        {
-            if (expression.Body is MemberExpression)
-                return null;
-
-            return false;
-        }
-
         private IHtmlContent GetTitle(Expression<Func<T, TValue>> expression)
         {
             MemberExpression body = expression.Body as MemberExpression;
@@ -133,36 +123,6 @@ namespace NonFactors.Mvc.Grid
             catch (NullReferenceException)
             {
                 return null;
-            }
-        }
-        private String GetFilterName()
-        {
-            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-            if (type.GetTypeInfo().IsEnum)
-                return null;
-
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                    return "Number";
-                case TypeCode.String:
-                    return "Text";
-                case TypeCode.DateTime:
-                    return "Date";
-                case TypeCode.Boolean:
-                    return "Boolean";
-                default:
-                    return null;
             }
         }
     }

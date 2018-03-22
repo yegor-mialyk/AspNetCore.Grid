@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Html;
 using NSubstitute;
 using System;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnExtensionsTests
     {
-        private BaseGridColumn<GridModel, String> column;
+        private IGridColumn<GridModel> column;
 
         public GridColumnExtensionsTests()
         {
-            column = Substitute.ForPartsOf<BaseGridColumn<GridModel, String>>();
+            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            column = Substitute.For<IGridColumn<GridModel>>();
+            column.Expression.Returns(expression);
+
+            column.Filter = new GridColumnFilter<GridModel>(column);
         }
 
         #region RenderedAs<T>(this IGridColumn<T> column, Func<T, Object> value)
@@ -41,7 +46,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void MultiFilterable_SetsIsMultiFilterable()
         {
-            Assert.True(column.MultiFilterable(true).IsMultiFilterable);
+            Assert.True(column.MultiFilterable(true).Filter.IsMulti);
         }
 
         [Theory]
@@ -53,9 +58,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(false, false, false)]
         public void MultiFilterable_EnablesFiltering(Boolean isMulti, Boolean? isFilterable, Boolean? filterable)
         {
-            column.IsFilterable = isFilterable;
+            column.Filter.IsEnabled = isFilterable;
 
-            Boolean? actual = column.MultiFilterable(isMulti).IsFilterable;
+            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsEnabled;
             Boolean? expected = filterable;
 
             Assert.Equal(expected, actual);
@@ -75,9 +80,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Filterable<T>(this IGridColumn<T> column, Boolean isFilterable)
 
         [Fact]
-        public void Filterable_SetsIsFilterable()
+        public void Filterable_EnablesFilter()
         {
-            Assert.True(column.Filterable(true).IsFilterable);
+            Assert.True(column.Filterable(true).Filter.IsEnabled);
         }
 
         [Fact]
@@ -96,7 +101,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void FilteredAs_SetsFilterName()
         {
-            String actual = column.FilteredAs("Numeric").FilterName;
+            String actual = column.FilteredAs("Numeric").Filter.Name;
             String expected = "Numeric";
 
             Assert.Equal(expected, actual);

@@ -12,7 +12,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnFilterTests()
         {
-            filter = new GridColumnFilter<GridModel>();
+            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            GridColumn<GridModel, String> column = new GridColumn<GridModel, String>(grid, model => model.Name);
+
+            filter = new GridColumnFilter<GridModel>(column);
+            filter.IsEnabled = true;
 
             items = new[]
             {
@@ -23,83 +27,104 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
         }
 
-        #region Process(IQueryable<T> items)
+        #region GridColumnFilter(IGridColumn<T> column)
 
         [Fact]
-        public void Process_NoFilters_ReturnsSameItems()
+        public void GridColumnFilter_SetsColumn()
+        {
+            IGridColumn<GridModel> expected = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel> actual = new GridColumnFilter<GridModel>(expected).Column;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void GridColumnFilter_NotMemberExpression_IsNotEnabled()
+        {
+            IGridColumn<GridModel> column = new GridColumn<GridModel, String>(null, model => model.ToString());
+
+            Assert.False(new GridColumnFilter<GridModel>(column).IsEnabled);
+        }
+
+        [Fact]
+        public void GridColumnFilter_MemberExpression_IsEnabledNull()
+        {
+            IGridColumn<GridModel> column = new GridColumn<GridModel, String>(null, model => model.Name);
+
+            Assert.Null(new GridColumnFilter<GridModel>(column).IsEnabled);
+        }
+
+        #endregion
+
+        #region Apply(IQueryable<T> items)
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(false)]
+        public void Apply_NotEnabled_ReturnsSameItems(Boolean? isEnabled)
+        {
+            filter.IsMulti = true;
+            filter.IsEnabled = isEnabled;
+            filter.First = new StringContainsFilter { Value = "A" };
+
+            IQueryable actual = filter.Apply(items);
+            IQueryable expected = items;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_NoFilters_ReturnsSameItems()
         {
             filter.First = null;
             filter.Second = null;
+            filter.IsMulti = true;
+            filter.IsEnabled = true;
 
-            IQueryable actual = filter.Process(items);
+            IQueryable actual = filter.Apply(items);
             IQueryable expected = items;
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void Process_NullAppliedFilter_ReturnsSameItems()
+        public void Apply_NullAppliedFilter_ReturnsSameItems()
         {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.Second = Substitute.For<IGridFilter>();
+            filter.IsMulti = true;
+            filter.Operator = "Or";
             filter.First = Substitute.For<IGridFilter>();
-
-            IQueryable actual = filter.Process(items);
-            IQueryable expected = items;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Prcoess_OnNullSecondFilterAndNullFirstFiltersExpressionReturnsSameItems()
-        {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.First = Substitute.For<IGridFilter>();
-            filter.Second = null;
-
-            IQueryable actual = filter.Process(items);
-            IQueryable expected = items;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Prcoess_OnNullFirstFilterAndNullSecondFiltersExpressionReturnsSameItems()
-        {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
             filter.Second = Substitute.For<IGridFilter>();
-            filter.First = null;
 
-            IQueryable actual = filter.Process(items);
+            IQueryable actual = filter.Apply(items);
             IQueryable expected = items;
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void Process_UsingAndOperator()
+        public void Apply_UsingAndOperator()
         {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.Second = new StringContainsFilter { Value = "A" };
-            filter.First = new StringContainsFilter { Value = "AA" };
+            filter.IsMulti = true;
             filter.Operator = "And";
+            filter.First = new StringContainsFilter { Value = "A" };
+            filter.Second = new StringContainsFilter { Value = "AA" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("AA") && item.Name.Contains("A"));
-            IQueryable actual = filter.Process(items);
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A") && item.Name.Contains("AA"));
+            IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Process_UsingOrOperator()
+        public void Apply_UsingOrOperator()
         {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.Second = new StringContainsFilter { Value = "A" };
-            filter.First = new StringContainsFilter { Value = "BB" };
+            filter.IsMulti = true;
             filter.Operator = "Or";
+            filter.First = new StringContainsFilter { Value = "A" };
+            filter.Second = new StringContainsFilter { Value = "BB" };
 
             IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("A") || item.Name.Contains("BB")));
-            IQueryable actual = filter.Process(items);
+            IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
         }
@@ -108,46 +133,75 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         [InlineData("or")]
         [InlineData("and")]
-        public void Process_OnInvalidOperatorUsesOnlyFirstFilter(String op)
+        public void Apply_InvalidOperator_FirstFilter(String op)
         {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.Second = new StringContainsFilter { Value = "A" };
-            filter.First = new StringContainsFilter { Value = "BB" };
             filter.Operator = op;
-
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("BB"));
-            IQueryable actual = filter.Process(items);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("or")]
-        [InlineData("and")]
-        public void Process_OnInvalidOperatorAndFirstFilterNullUsesSecondFilter(String op)
-        {
-            filter.Column = new GridColumn<GridModel, String>(null, model => model.Name);
-            filter.Second = new StringContainsFilter { Value = "A" };
-            filter.Operator = op;
-            filter.First = null;
+            filter.IsMulti = true;
+            filter.First = new StringContainsFilter { Value = "A" };
+            filter.Second = new StringContainsFilter { Value = "BB" };
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
-            IQueryable actual = filter.Process(items);
+            IQueryable actual = filter.Apply(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("or")]
+        [InlineData("and")]
+        public void Apply_InvalidOperator_SecondFilter(String op)
+        {
+            filter.Operator = op;
+            filter.IsMulti = true;
+            filter.First = Substitute.For<IGridFilter>();
+            filter.Second = new StringContainsFilter { Value = "A" };
+
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
+            IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Process_FiltersNullableExpressions()
+        public void Apply_FirstFilter()
         {
-            filter.Column = new GridColumn<GridModel, Int32?>(null, model => model.NSum);
-            filter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
-            filter.First = new Int32Filter { Type = "Equals", Value = "10" };
+            filter.IsMulti = false;
             filter.Operator = "Or";
+            filter.First = new StringContainsFilter { Value = "A" };
+            filter.Second = new StringContainsFilter { Value = "BB" };
+
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
+            IQueryable actual = filter.Apply(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_SecondFilter()
+        {
+            filter.IsMulti = false;
+            filter.Operator = "Or";
+            filter.First = Substitute.For<IGridFilter>();
+            filter.Second = new StringContainsFilter { Value = "BB" };
+
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("BB"));
+            IQueryable actual = filter.Apply(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_FiltersByExpressions()
+        {
+            filter.IsMulti = true;
+            filter.Operator = "Or";
+            filter.First = new Int32Filter { Type = "Equals", Value = "10" };
+            filter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
+            filter.Column = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
-            IQueryable actual = filter.Process(items);
+            IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
         }

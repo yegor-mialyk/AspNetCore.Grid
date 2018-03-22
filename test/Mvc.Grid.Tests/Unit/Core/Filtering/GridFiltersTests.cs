@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -14,7 +15,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column = new GridColumn<GridModel, String>(new Grid<GridModel>(new GridModel[0]), model => model.Name);
             column.Grid.Query = new QueryCollection();
-            column.IsMultiFilterable = true;
             filters = new GridFilters();
         }
 
@@ -123,19 +123,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #endregion
 
         #region GetFilter<T>(IGridColumn<T> column)
-
-        [Theory]
-        [InlineData("", "Name-Contains=a&Name-Equals=b&Name-Op=Or")]
-        [InlineData(null, "Name-Contains=a&Name-Equals=b&Name-Op=Or")]
-        [InlineData("Grid", "Grid-Name-Contains=a&Grid-Name-Equals=b&Grid-Name-Op=Or")]
-        public void GetFilter_NotMultiFilterable_SetsSecondFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.IsMultiFilterable = false;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(filters.GetFilter(column).Second);
-        }
 
         [Theory]
         [InlineData("", "Name-Equals")]
@@ -290,15 +277,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(value, actual.Value);
         }
 
-        [Fact]
-        public void GetFilter_OnNotMultiFilterableColumnSetsOperatorToNull()
-        {
-            column.Grid.Query = HttpUtility.ParseQueryString("Name-Contains=a&Name-Equals=b&Name-Op=Or");
-            column.IsMultiFilterable = false;
-
-            Assert.Null(filters.GetFilter(column).Operator);
-        }
-
         [Theory]
         [InlineData("", "Name-Op", "")]
         [InlineData("", "Name-Op=", "")]
@@ -345,6 +323,186 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Type actual = filters.GetFilter(column).GetType();
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForEnum()
+        {
+            AssertFilterNameFor(model => model.EnumField, null);
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForSByte()
+        {
+            AssertFilterNameFor(model => model.SByteField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForByte()
+        {
+            AssertFilterNameFor(model => model.ByteField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForInt16()
+        {
+            AssertFilterNameFor(model => model.Int16Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForUInt16()
+        {
+            AssertFilterNameFor(model => model.UInt16Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForInt32()
+        {
+            AssertFilterNameFor(model => model.Int32Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForUInt32()
+        {
+            AssertFilterNameFor(model => model.UInt32Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForInt64()
+        {
+            AssertFilterNameFor(model => model.Int64Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForUInt64()
+        {
+            AssertFilterNameFor(model => model.UInt64Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForSingle()
+        {
+            AssertFilterNameFor(model => model.SingleField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForDouble()
+        {
+            AssertFilterNameFor(model => model.DoubleField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForDecimal()
+        {
+            AssertFilterNameFor(model => model.DecimalField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForString()
+        {
+            AssertFilterNameFor(model => model.StringField, "Text");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForBoolean()
+        {
+            AssertFilterNameFor(model => model.BooleanField, "Boolean");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForDateTime()
+        {
+            AssertFilterNameFor(model => model.DateTimeField, "Date");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableEnum()
+        {
+            AssertFilterNameFor(model => model.NullableEnumField, null);
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableSByte()
+        {
+            AssertFilterNameFor(model => model.NullableSByteField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableByte()
+        {
+            AssertFilterNameFor(model => model.NullableByteField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableInt16()
+        {
+            AssertFilterNameFor(model => model.NullableInt16Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableUInt16()
+        {
+            AssertFilterNameFor(model => model.NullableUInt16Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableInt32()
+        {
+            AssertFilterNameFor(model => model.NullableInt32Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableUInt32()
+        {
+            AssertFilterNameFor(model => model.NullableUInt32Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableInt64()
+        {
+            AssertFilterNameFor(model => model.NullableInt64Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableUInt64()
+        {
+            AssertFilterNameFor(model => model.NullableUInt64Field, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableSingle()
+        {
+            AssertFilterNameFor(model => model.NullableSingleField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableDouble()
+        {
+            AssertFilterNameFor(model => model.NullableDoubleField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableDecimal()
+        {
+            AssertFilterNameFor(model => model.NullableDecimalField, "Number");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableBoolean()
+        {
+            AssertFilterNameFor(model => model.NullableBooleanField, "Boolean");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForNullableDateTime()
+        {
+            AssertFilterNameFor(model => model.NullableDateTimeField, "Date");
+        }
+
+        [Fact]
+        public void GetFilter_SetsFilterNameForOtherTypes()
+        {
+            AssertFilterNameFor(model => model, null);
         }
 
         #endregion
@@ -448,6 +606,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Unregister_CanBeCalledOnNotExistingFilter()
         {
             filters.Unregister(typeof(Object), "Test");
+        }
+
+        #endregion
+
+        #region Test helpers
+
+        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String name)
+        {
+            Grid<AllTypesModel> grid = new Grid<AllTypesModel>(new AllTypesModel[0]) { Query = new QueryCollection() };
+
+            String actual = filters.GetFilter(new GridColumn<AllTypesModel, TValue>(grid, property)).Name;
+            String expected = name;
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion

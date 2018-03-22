@@ -14,22 +14,22 @@ namespace NonFactors.Mvc.Grid
 
         public static IGridColumn<T> MultiFilterable<T>(this IGridColumn<T> column, Boolean isMultiple)
         {
-            if (isMultiple && column.IsFilterable == null)
-                column.IsFilterable = true;
+            if (isMultiple && column.Filter.IsEnabled == null)
+                column.Filter.IsEnabled = true;
 
-            column.IsMultiFilterable = isMultiple;
+            column.Filter.IsMulti = isMultiple;
 
             return column;
         }
         public static IGridColumn<T> Filterable<T>(this IGridColumn<T> column, Boolean isFilterable)
         {
-            column.IsFilterable = isFilterable;
+            column.Filter.IsEnabled = isFilterable;
 
             return column;
         }
         public static IGridColumn<T> FilteredAs<T>(this IGridColumn<T> column, String filterName)
         {
-            column.FilterName = filterName;
+            column.Filter.Name = filterName;
 
             return column;
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
     public class HtmlGridExtensionsTests
     {
         private IHtmlHelper html;
+        private IGridFilters filters;
         private IGrid<GridModel> grid;
         private HtmlGrid<GridModel> htmlGrid;
 
         public HtmlGridExtensionsTests()
         {
             html = Substitute.For<IHtmlHelper>();
-            html.ViewContext.Returns(new ViewContext());
-            html.ViewContext.HttpContext = new DefaultHttpContext();
+            filters = Substitute.For<IGridFilters>();
             grid = new Grid<GridModel>(new GridModel[8]);
 
+            html.ViewContext.Returns(new ViewContext());
+            html.ViewContext.HttpContext = Substitute.For<HttpContext>();
+            html.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
+
             grid.Columns.Add(model => model.Name);
             grid.Columns.Add(model => model.Sum);
         }
@@ -106,12 +112,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void MultiFilterable_SetsIsMultiFilterable(Boolean? multi, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsMultiFilterable = multi;
+                column.Filter.IsMulti = multi;
 
             htmlGrid.MultiFilterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(filterable, actual.IsMultiFilterable);
+                Assert.Equal(filterable, actual.Filter.IsMulti);
         }
 
         [Theory]
@@ -121,12 +127,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void MultiFilterable_EnablesFiltering(Boolean? isFilterable, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsFilterable = isFilterable;
+                column.Filter.IsEnabled = isFilterable;
 
             htmlGrid.MultiFilterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(filterable, actual.IsFilterable);
+                Assert.Equal(filterable, actual.Filter.IsEnabled);
         }
 
         [Fact]
@@ -149,12 +155,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Filterable_SetsIsFilterable(Boolean? isFilterable, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsFilterable = isFilterable;
+                column.Filter.IsEnabled = isFilterable;
 
             htmlGrid.Filterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(filterable, actual.IsFilterable);
+                Assert.Equal(filterable, actual.Filter.IsEnabled);
         }
 
         [Fact]

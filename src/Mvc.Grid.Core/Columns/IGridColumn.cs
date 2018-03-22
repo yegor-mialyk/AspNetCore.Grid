@@ -17,10 +17,7 @@ namespace NonFactors.Mvc.Grid
         GridSortOrder? FirstSortOrder { get; set; }
         GridSortOrder? InitialSortOrder { get; set; }
 
-        String FilterName { get; set; }
         IGridColumnFilter Filter { get; }
-        Boolean? IsFilterable { get; set; }
-        Boolean? IsMultiFilterable { get; set; }
 
         IHtmlContent ValueFor(IGridRow<Object> row);
     }
@@ -31,7 +28,7 @@ namespace NonFactors.Mvc.Grid
 
         LambdaExpression Expression { get; }
         Func<T, Object> RenderValue { get; set; }
-        
+
         new IGridColumnFilter<T> Filter { get; set; }
     }
 }

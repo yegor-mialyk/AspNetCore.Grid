@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -121,11 +122,11 @@ namespace NonFactors.Mvc.Grid
                     key != prefix + column.Name + "-Op")
                 .ToArray();
 
-            GridColumnFilter<T> filter = new GridColumnFilter<T>();
+            GridColumnFilter<T> filter = new GridColumnFilter<T>(column);
             filter.Second = GetSecondFilter(prefix, column, keys);
             filter.First = GetFirstFilter(prefix, column, keys);
             filter.Operator = GetOperator(prefix, column);
-            filter.Column = column;
+            filter.Name = GetFilterName(column);
 
             return filter;
         }
@@ -166,7 +167,7 @@ namespace NonFactors.Mvc.Grid
         }
         private IGridFilter GetSecondFilter<T>(String prefix, IGridColumn<T> column, String[] keys)
         {
-            if (column.IsMultiFilterable != true || keys.Length == 0)
+            if (keys.Length == 0)
                 return null;
 
             if (keys.Length == 1)
@@ -197,11 +198,39 @@ namespace NonFactors.Mvc.Grid
         }
         private String GetOperator<T>(String prefix, IGridColumn<T> column)
         {
-            StringValues values = column.Grid.Query[prefix + column.Name + "-Op"];
-            if (column.IsMultiFilterable != true)
+            return column.Grid.Query[prefix + column.Name + "-Op"].FirstOrDefault();
+        }
+
+
+        private String GetFilterName<T>(IGridColumn<T> column)
+        {
+            Type type = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
+            if (type.GetTypeInfo().IsEnum)
                 return null;
 
-            return values.FirstOrDefault();
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.SByte:
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.UInt16:
+                case TypeCode.Int32:
+                case TypeCode.UInt32:
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    return "Number";
+                case TypeCode.String:
+                    return "Text";
+                case TypeCode.DateTime:
+                    return "Date";
+                case TypeCode.Boolean:
+                    return "Boolean";
+                default:
+                    return null;
+            }
         }
     }
 }

@@ -6,14 +6,28 @@ namespace NonFactors.Mvc.Grid
 {
     public class GridColumnFilter<T> : IGridColumnFilter<T>
     {
+        public String Name { get; set; }
+        public Boolean? IsMulti { get; set; }
+        public Boolean? IsEnabled { get; set; }
+
         public String Operator { get; set; }
         public IGridFilter First { get; set; }
         public IGridFilter Second { get; set; }
+
         public IGridColumn<T> Column { get; set; }
         public GridProcessorType ProcessorType { get; set; }
 
-        public IQueryable<T> Process(IQueryable<T> items)
+        public GridColumnFilter(IGridColumn<T> column)
         {
+            Column = column;
+            IsEnabled = column.Expression.Body is MemberExpression ? (Boolean?)null : false;
+        }
+
+        public IQueryable<T> Apply(IQueryable<T> items)
+        {
+            if (IsEnabled != true)
+                return items;
+
             Expression expression = CreateFilterExpression();
 
             return expression == null ? items : items.Where(ToLambda(expression));
@@ -24,7 +38,7 @@ namespace NonFactors.Mvc.Grid
             Expression right = Second?.Apply(Column.Expression.Body);
             Expression left = First?.Apply(Column.Expression.Body);
 
-            if (left != null && right != null)
+            if (IsMulti == true && left != null && right != null)
             {
                 switch (Operator)
                 {

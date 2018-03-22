@@ -18,9 +18,6 @@ namespace NonFactors.Mvc.Grid
         public GridSortOrder? InitialSortOrder { get; set; }
         public virtual GridSortOrder? SortOrder { get; set; }
 
-        public String FilterName { get; set; }
-        public Boolean? IsFilterable { get; set; }
-        public Boolean? IsMultiFilterable { get; set; }
         IGridColumnFilter IGridColumn.Filter => Filter;
         public virtual IGridColumnFilter<T> Filter { get; set; }
 

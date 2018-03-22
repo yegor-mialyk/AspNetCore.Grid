@@ -27,11 +27,11 @@ namespace NonFactors.Mvc.Grid
         {
             foreach (IGridColumn<T> column in html.Grid.Columns)
             {
-                if (column.IsFilterable == null)
-                    column.IsFilterable = true;
+                if (column.Filter.IsEnabled == null)
+                    column.Filter.IsEnabled = true;
 
-                if (column.IsMultiFilterable == null)
-                    column.IsMultiFilterable = true;
+                if (column.Filter.IsMulti == null)
+                    column.Filter.IsMulti = true;
             }
 
             return html;
@@ -39,8 +39,8 @@ namespace NonFactors.Mvc.Grid
         public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html)
         {
             foreach (IGridColumn<T> column in html.Grid.Columns)
-                if (column.IsFilterable == null)
-                    column.IsFilterable = true;
+                if (column.Filter.IsEnabled == null)
+                    column.Filter.IsEnabled = true;
 
             return html;
         }
