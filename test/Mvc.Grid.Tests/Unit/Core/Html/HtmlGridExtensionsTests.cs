@@ -334,6 +334,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
+
+        [Fact]
+        public void WithFilterMode_SetsFilterMode()
+        {
+            GridFilterMode actual = htmlGrid.WithFilterMode(GridFilterMode.FilterRow).Grid.FilterMode;
+            GridFilterMode expected = GridFilterMode.FilterRow;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void WithFilterMode_ReturnsHtmlGrid()
+        {
+            IHtmlGrid<GridModel> actual = htmlGrid.WithFilterMode(GridFilterMode.HeaderRow);
+            IHtmlGrid<GridModel> expected = htmlGrid;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region WithFooter<T>(this IHtmlGrid<T> html, String partialViewName)
 
         [Fact]

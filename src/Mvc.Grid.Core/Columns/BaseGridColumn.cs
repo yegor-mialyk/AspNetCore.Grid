@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid
         public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
         public Func<T, TValue> ExpressionValue { get; set; }
-        LambdaExpression IGridColumn<T>.Expression => Expression;
+        LambdaExpression IGridColumn.Expression => Expression;
         public Expression<Func<T, TValue>> Expression { get; set; }
 
         public abstract IQueryable<T> Process(IQueryable<T> items);

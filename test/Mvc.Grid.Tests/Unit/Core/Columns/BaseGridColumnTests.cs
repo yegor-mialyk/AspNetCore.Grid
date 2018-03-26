@@ -13,7 +13,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column = Substitute.ForPartsOf<BaseGridColumn<GridModel, String>>();
         }
 
-        #region IGridColumn<T>.Expression
+        #region IGridColumn.Expression
 
         [Fact]
         public void IGridColumnExpression_ReturnsExpression()

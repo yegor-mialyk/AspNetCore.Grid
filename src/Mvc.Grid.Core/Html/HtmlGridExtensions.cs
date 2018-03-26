@@ -90,6 +90,13 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
+        public static IHtmlGrid<T> WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
+        {
+            html.Grid.FilterMode = mode;
+
+            return html;
+        }
+
         public static IHtmlGrid<T> WithFooter<T>(this IHtmlGrid<T> html, String partialViewName)
         {
             html.Grid.FooterPartialViewName = partialViewName;

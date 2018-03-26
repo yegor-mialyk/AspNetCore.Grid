@@ -15,6 +15,7 @@
 
 .mvc-grid {
     position: relative;
+    line-height: 20px;
 }
 
     .mvc-grid table {
@@ -25,6 +26,7 @@
 
     .mvc-grid th {
         background-clip: padding-box;
+        background-color: #F7F7F7;
         position: relative;
         padding: 8px;
     }
@@ -35,8 +37,7 @@
     }
 
     .mvc-grid .filterable {
-        padding-right: 30px;
-        position: relative;
+        padding-right: 44px;
     }
 
     .mvc-grid .sortable,
@@ -44,67 +45,131 @@
         cursor: pointer;
     }
 
-    .mvc-grid .asc::after,
-    .mvc-grid .desc::after {
-        padding-left: 3px;
-    }
-
     .mvc-grid .asc::after {
+        padding-left: 3px;
         content: '\2193';
     }
 
     .mvc-grid .desc::after {
+        padding-left: 3px;
         content: '\2191';
     }
 
 .mvc-grid-filter {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: background-color 0.5s;
     font-family: 'GridGlyphs';
-    padding-right: 8px;
-    text-align: center;
+    text-decoration: none;
+    align-items: center;
     position: absolute;
+    color: inherit;
+    display: flex;
+    border: none;
     height: 100%;
-    width: 30px;
+    width: 36px;
     right: 0;
     top: 0;
 }
 
-    .mvc-grid-filter:focus {
+    .mvc-grid-filter:focus,
+    .mvc-grid-filter:hover {
+        background-color: rgba(0, 0, 0, 0.06);
         text-decoration: none;
-        outline: none;
+        color: inherit;
     }
 
     .mvc-grid-filter::before {
-        transform: translate(0, -50%);
-        display: inline-block;
-        position: relative;
+        text-align: center;
         content: '\0041';
-        top: 50%;
+        display: block;
+        flex: 1;
     }
 
     .mvc-grid-filter.applied::before {
         content: '\0042';
     }
 
+.mvc-grid-row-filters .filterable {
+    padding: 4px;
+}
+
+.mvc-grid-row-filters .first-filter,
+.mvc-grid-row-filters .second-filter {
+    display: flex;
+}
+
+.mvc-grid-row-filters .mvc-grid-input {
+    border: 0.5px solid #AAAAAA;
+    margin-right: 5px;
+    padding: 2px 4px;
+    font: inherit;
+    flex: 1;
+}
+
+.mvc-grid-row-filters .mvc-grid-input.invalid {
+    outline-color: #DC3545;
+}
+
+.mvc-grid-row-filters .mvc-grid-input::placeholder {
+    color: #BBBBBB;
+}
+
+.mvc-grid-row-filters .mvc-grid-input:-ms-input-placeholder {
+    color: #BBBBBB;
+}
+
+.mvc-grid-row-filters .mvc-grid-filter {
+    border: 0.5px solid #AAAAAA;
+    position: static;
+    flex: 0 0 28px;
+    height: 28px;
+}
+
+.mvc-grid-row-filters [readonly] {
+    background-color: #e4e4e4;
+}
+
+.mvc-grid-row-filters.mvc-grid-headers .filterable {
+    padding: 0;
+}
+
+.mvc-grid-row-filters.mvc-grid-headers .mvc-grid-input {
+    background-color: #F7F7F7;
+    padding: 8px 44px 8px 8px;
+    border: none;
+    margin: 0;
+}
+
+.mvc-grid-row-filters.mvc-grid-headers .mvc-grid-filter {
+    position: absolute;
+    border: none;
+    height: 100%;
+}
+
 .mvc-grid-popup {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     background-clip: padding-box;
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
+    transition: opacity 0.5s;
     position: absolute;
     border-radius: 4px;
-    z-index: 1100;
     display: none;
+    z-index: 1100;
     width: 180px;
+    opacity: 0;
 }
 
     .mvc-grid-popup.open {
         display: block;
+        opacity: 1;
     }
 
     .mvc-grid-popup .popup-arrow {
         border-right: 7px solid transparent;
         border-left: 7px solid transparent;
         border-bottom: 8px solid #FFFFFF;
+        box-sizing: border-box;
         position: absolute;
         height: 9px;
         top: -8px;
@@ -134,7 +199,7 @@
     }
 
     .mvc-grid-popup .filter-actions {
-        padding: 0.4em 0.4em 0 0.4em;
+        padding-top: 0.4em;
         text-align: center;
     }
 

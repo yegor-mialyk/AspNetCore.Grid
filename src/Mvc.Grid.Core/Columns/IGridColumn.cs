@@ -11,6 +11,7 @@ namespace NonFactors.Mvc.Grid
         String CssClasses { get; set; }
         Boolean IsEncoded { get; set; }
         IHtmlContent Title { get; set; }
+        LambdaExpression Expression { get; }
 
         Boolean? IsSortable { get; set; }
         GridSortOrder? SortOrder { get; set; }
@@ -26,7 +27,6 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; }
 
-        LambdaExpression Expression { get; }
         Func<T, Object> RenderValue { get; set; }
 
         new IGridColumnFilter<T> Filter { get; set; }

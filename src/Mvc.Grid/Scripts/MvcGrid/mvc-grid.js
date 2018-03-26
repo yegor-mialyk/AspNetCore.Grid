@@ -22,6 +22,7 @@ var MvcGrid = (function () {
         this.reloadStarted = options.reloadStarted;
         this.requestType = options.requestType || 'get';
         this.prefix = this.name == '' ? '' : this.name + '-';
+        this.filterMode = grid.data('filter-mode') || 'ExcelRow';
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
         this.showLoading = options.showLoading == null || options.showLoading;
         this.filters = $.extend({
@@ -49,9 +50,12 @@ var MvcGrid = (function () {
             return;
         }
 
-        var headers = grid.find('th');
+        var headers = grid.find('.mvc-grid-headers th');
+        var rowFilters = grid.find('.mvc-grid-row-filters th');
+
         for (var i = 0; i < headers.length; i++) {
-            var column = this.createColumn($(headers[i]));
+            var column = this.createColumn($(headers[i]), rowFilters[i]);
+
             this.bindFilter(column);
             this.bindSort(column);
             this.cleanup(column);
@@ -76,9 +80,10 @@ var MvcGrid = (function () {
     }
 
     MvcGrid.prototype = {
-        createColumn: function (header) {
+        createColumn: function (header, rowFilter) {
             var column = {};
             column.header = header;
+            column.rowFilter = rowFilter;
             column.name = header.data('name') || '';
 
             if (header.data('filter') == 'True') {
@@ -88,16 +93,18 @@ var MvcGrid = (function () {
                     name: header.data('filter-name') || '',
                     first: {
                         type: header.data('filter-first-type') || '',
-                        val: header.data('filter-first-val') || ''
+                        val: header.data('filter-first-val') || '',
+                        isInline: this.filterMode != 'ExcelRow'
                     },
                     second: {
                         type: header.data('filter-second-type') || '',
-                        val: header.data('filter-second-val') || ''
+                        val: header.data('filter-second-val') || '',
+                        isInline: this.filterMode != 'ExcelRow'
                     }
                 };
             }
 
-            if (header.data('sort') == 'True') {
+            if (header.data('sort') == 'True' && this.filterMode != 'HeaderRow') {
                 column.sort = {
                     firstOrder: header.data('sort-first') || '',
                     order: header.data('sort-order') || ''
@@ -129,12 +136,42 @@ var MvcGrid = (function () {
         },
 
         bindFilter: function (column) {
-            if (column.filter) {
+            if (column.filter && this.filters[column.filter.name]) {
                 var grid = this;
+                var filter = this.filters[column.filter.name];
+                var popup = $('body').children('.mvc-grid-popup');
 
-                column.header.find('.mvc-grid-filter').on('click.mvcgrid', function () {
-                    grid.renderFilter(column);
+                $(column.rowFilter || column.header[0]).find('.mvc-grid-filter').on('click.mvcgrid', function (e) {
+                    e.preventDefault();
+
+                    grid.renderFilter(column, filter);
                 });
+
+                $(column.rowFilter).find('.mvc-grid-input').on('keyup.mvcgrid', function (e) {
+                    if (filter.isValid(this.value)) {
+                        $(this).removeClass('invalid');
+
+                        if (e.which == 13) {
+                            filter.apply(grid, column, popup);
+                        }
+                    } else {
+                        $(this).addClass('invalid');
+                    }
+                });
+
+                var filterRowType = $(column.rowFilter).find('.mvc-grid-type');
+                if (!filterRowType.val()) {
+                    filterRowType.val(filter.types[0]);
+                }
+
+                var input = $(column.rowFilter).find('.mvc-grid-input');
+                if (input.length && !filter.isValid(input.val())) {
+                    input.addClass('invalid');
+                }
+
+                if (filter.initRowFilter) {
+                    filter.initRowFilter(grid, column, popup);
+                }
             }
         },
         bindSort: function (column) {
@@ -236,8 +273,7 @@ var MvcGrid = (function () {
                     if (newGrid.reloadEnded) {
                         newGrid.reloadEnded();
                     }
-                })
-                .fail(function (result) {
+                }).fail(function (result) {
                     grid.element.trigger('reloadFailed', [grid, result]);
 
                     if (grid.reloadFailed) {
@@ -248,66 +284,59 @@ var MvcGrid = (function () {
                 window.location.href = '?' + grid.query;
             }
         },
-        renderFilter: function (column) {
+        renderFilter: function (column, filter) {
             var grid = this;
-            var filter = grid.filters[column.filter.name];
             var popup = $('body').children('.mvc-grid-popup');
 
             $(window).off('resize.mvcgrid');
             $(window).off('click.mvcgrid');
 
-            if (filter) {
-                filter.render(grid, popup, column.filter);
-                filter.init(grid, column, popup);
+            filter.render(grid, popup, column.filter);
+            filter.init(grid, column, popup);
 
-                grid.setFilterPosition(column, popup);
-                popup.addClass('open');
+            grid.setFilterPosition(column, popup);
+            popup.addClass('open');
 
-                $(window).on('click.mvcgrid', function (e) {
-                    var target = $(e.target || e.srcElement);
-                    if (!target.hasClass('mvc-grid-filter') && target.parents('.mvc-grid-popup').length == 0 &&
-                        !target.is('[class*="ui-datepicker"]') && target.parents('[class*="ui-datepicker"]').length == 0) {
-                        $(window).off('click.mvcgrid');
-                        popup.removeClass('open');
-                    }
-                });
+            $(window).on('click.mvcgrid', function (e) {
+                var target = $(e.target || e.srcElement);
+                if (!target.hasClass('mvc-grid-filter') && target.parents('.mvc-grid-popup').length == 0 &&
+                    !target.is('[class*="ui-datepicker"]') && target.parents('[class*="ui-datepicker"]').length == 0) {
+                    $(window).off('click.mvcgrid');
+                    popup.removeClass('open');
+                }
+            });
 
-                $(window).on('resize.mvcgrid', function () {
-                    if (popup.hasClass('open')) {
-                        popup.removeClass('open');
+            $(window).on('resize.mvcgrid', function () {
+                if (popup.hasClass('open')) {
+                    popup.removeClass('open');
 
-                        grid.setFilterPosition(column, popup);
+                    grid.setFilterPosition(column, popup);
 
-                        popup.addClass('open');
-                    }
-                });
-            } else {
-                popup.removeClass('open');
-            }
+                    popup.addClass('open');
+                }
+            });
         },
         setFilterPosition: function (column, popup) {
-            var filter = column.header.find('.mvc-grid-filter');
+            var filter = $(column.rowFilter || column.header[0]).find('.mvc-grid-filter');
             var documentWidth = $(document).width();
             var arrow = popup.find('.popup-arrow');
-            var filterLeft = filter.offset().left;
-            var filterTop = filter.offset().top;
-            var filterHeight = filter.height();
             var popupWidth = popup.width();
+            
+            var popupTop = filter.offset().top + filter.height() / 2 + 14;
+            var popupLeft = filter.offset().left - 8;
+            var arrowLeft = filter.width() / 2;
 
-            var popupTop = filterTop + filterHeight / 2 + 14;
-            var popupLeft = filterLeft - 8;
-            var arrowLeft = 12;
-
-            if (filterLeft + popupWidth + 5 > documentWidth) {
-                popupLeft = documentWidth - popupWidth - 5;
-                arrowLeft = filterLeft - popupLeft + 4;
+            if (popupLeft + popupWidth + 13 > documentWidth) {
+                var overflow = popupLeft - (documentWidth - popupWidth - 5);
+                popupLeft -= overflow;
+                arrowLeft += overflow;
             }
 
             arrow.css('left', arrowLeft + 'px');
             popup.css('left', popupLeft + 'px');
             popup.css('top', popupTop + 'px');
         },
-        startLoading: function() {
+        startLoading: function () {
             if (!this.showLoading || this.element.children('.mvc-grid-loader').length) {
                 return;
             }
@@ -320,7 +349,7 @@ var MvcGrid = (function () {
                 '</div>' +
             '</div>');
 
-            setTimeout(function() {
+            setTimeout(function () {
                 loader.addClass('mvc-grid-loading');
             }, this.loadingDelay == null ? 300 : this.loadingDelay);
 
@@ -417,6 +446,7 @@ var MvcGrid = (function () {
             header.removeAttr('data-sort-first');
         },
         clean: function () {
+            this.element.removeAttr('data-filter-mode');
             this.element.removeAttr('data-source-url');
 
             if (this.pager) {
@@ -440,6 +470,7 @@ function MvcGridExtends(subclass, base) {
 
 var MvcGridFilter = (function () {
     function MvcGridFilter() {
+        this.types = [];
     }
 
     MvcGridFilter.prototype = {
@@ -459,8 +490,8 @@ var MvcGridFilter = (function () {
                     this.renderActions($.fn.mvcgrid.lang.Filter) +
                 '</div>');
         },
-        renderFilter: function (filter, types, lang) {
-            var options = types.reduce(function (all, type) {
+        renderFilter: function (filter, lang) {
+            var options = this.types.reduce(function (all, type) {
                 return all + '<option value="' + type + '"' + (filter.type == type ? ' selected="selected"' : '') + '>' + lang[type] + '</option>';
             }, '');
 
@@ -469,9 +500,12 @@ var MvcGridFilter = (function () {
                             options +
                         '</select>' +
                    '</div>' +
+                   (!filter.isInline ?
                    '<div class="popup-group">' +
                        '<input class="mvc-grid-input" value="' + filter.val + '" />' +
-                   '</div>';
+                   '</div>'
+                   :
+                   '');
         },
         renderOperator: function (filter, lang) {
             return '<div class="operator-filter">' +
@@ -492,9 +526,18 @@ var MvcGridFilter = (function () {
         },
 
         init: function (grid, column, popup) {
+            this.bindType(grid, column, popup);
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
+        },
+        initRowFilter: function (grid, column, popup) {
+        },
+
+        bindType: function (grid, column, popup) {
+            popup.find('.mvc-grid-type').on('change.mvcgrid', function () {
+                $(column.rowFilter).find('.mvc-grid-type').val(this.value);
+            });
         },
         bindValue: function (grid, column, popup) {
             var filter = this;
@@ -539,11 +582,13 @@ var MvcGridFilter = (function () {
         apply: function (grid, column, popup) {
             popup.removeClass('open');
 
-            column.filter.operator = popup.find('.mvc-grid-operator').val();
-            column.filter.first.type = popup.find('.first-filter .mvc-grid-type').val();
-            column.filter.first.val = popup.find('.first-filter .mvc-grid-input').val();
-            column.filter.second.type = popup.find('.second-filter .mvc-grid-type').val();
-            column.filter.second.val = popup.find('.second-filter .mvc-grid-input').val();
+            var container = $(column.rowFilter || popup);
+
+            column.filter.operator = container.find('.mvc-grid-operator').val();
+            column.filter.first.type = container.find('.first-filter .mvc-grid-type').val() || this.types[0];
+            column.filter.first.val = container.find('.first-filter .mvc-grid-input').val();
+            column.filter.second.type = container.find('.second-filter .mvc-grid-type').val();
+            column.filter.second.val = container.find('.second-filter .mvc-grid-input').val();
 
             grid.applyFilter(column);
             grid.reload();
@@ -565,13 +610,13 @@ var MvcGridTextFilter = (function (base) {
     MvcGridExtends(MvcGridTextFilter, base);
 
     function MvcGridTextFilter() {
-        return base.apply(this);
+        base.apply(this);
+
+        this.types = ['Contains', 'Equals', 'NotEquals', 'StartsWith', 'EndsWith'];
     }
 
     MvcGridTextFilter.prototype.renderFilter = function (filter) {
-        var types = ['Contains', 'Equals', 'NotEquals', 'StartsWith', 'EndsWith'];
-
-        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Text);
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Text);
     };
 
     return MvcGridTextFilter;
@@ -581,13 +626,13 @@ var MvcGridNumberFilter = (function (base) {
     MvcGridExtends(MvcGridNumberFilter, base);
 
     function MvcGridNumberFilter() {
-        return base.apply(this);
+        base.apply(this);
+
+        this.types = ['Equals', 'NotEquals', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual'];
     }
 
     MvcGridNumberFilter.prototype.renderFilter = function (filter) {
-        var types = ['Equals', 'NotEquals', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual'];
-
-        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Number);
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Number);
     };
 
     MvcGridNumberFilter.prototype.isValid = function (value) {
@@ -601,13 +646,27 @@ var MvcGridDateFilter = (function (base) {
     MvcGridExtends(MvcGridDateFilter, base);
 
     function MvcGridDateFilter() {
-        return base.apply(this);
+        base.apply(this);
+
+        this.types = ['Equals', 'NotEquals', 'EarlierThan', 'EarlierThanOrEqual', 'LaterThan', 'LaterThanOrEqual'];
     }
 
     MvcGridDateFilter.prototype.renderFilter = function (filter) {
-        var types = ['Equals', 'NotEquals', 'EarlierThan', 'EarlierThanOrEqual', 'LaterThan', 'LaterThanOrEqual'];
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Date);
+    };
 
-        return base.prototype.renderFilter.call(this, filter, types, $.fn.mvcgrid.lang.Date);
+    MvcGridDateFilter.prototype.initRowFilter = function (grid, column, popup) {
+        var filter = this;
+
+        if ($.fn.datepicker) {
+            $(column.rowFilter).find('.mvc-grid-input').datepicker({
+                onSelect: function (value, data) {
+                    if (value != data.lastVal) {
+                        filter.apply(grid, column, popup);
+                    }
+                }
+            });
+        }
     };
 
     MvcGridDateFilter.prototype.bindValue = function (grid, column, popup) {
@@ -637,6 +696,10 @@ var MvcGridBooleanFilter = (function (base) {
                        '<li ' + (filter.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.No + '</li>' +
                    '</ul>' +
                '</div>';
+    };
+
+    MvcGridBooleanFilter.prototype.initRowFilter = function (grid, column, popup) {
+        $(column.rowFilter).find('.mvc-grid-input').attr('readonly', 'readonly');
     };
 
     MvcGridBooleanFilter.prototype.bindValue = function (grid, column, popup) {

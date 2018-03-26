@@ -12,6 +12,7 @@ namespace NonFactors.Mvc.Grid
         String EmptyText { get; set; }
         String SourceUrl { get; set; }
         String CssClasses { get; set; }
+        GridFilterMode FilterMode { get;set; }
         String FooterPartialViewName { get; set; }
         GridHtmlAttributes Attributes { get; set; }
 
