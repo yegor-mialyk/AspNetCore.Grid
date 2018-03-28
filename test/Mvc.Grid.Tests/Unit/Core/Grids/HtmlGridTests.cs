@@ -13,18 +13,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class HtmlGridTests
     {
-        private IHtmlHelper html;
-        private IGrid<GridModel> grid;
         private HtmlGrid<GridModel> htmlGrid;
 
         public HtmlGridTests()
         {
-            html = Substitute.For<IHtmlHelper>();
+            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
+            IHtmlHelper html = Substitute.For<IHtmlHelper>();
+
             html.ViewContext.Returns(new ViewContext());
             html.ViewContext.HttpContext = new DefaultHttpContext();
-            grid = new Grid<GridModel>(new GridModel[8]);
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
+
             grid.Columns.Add(model => model.Name);
             grid.Columns.Add(model => model.Sum);
         }
@@ -34,9 +34,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
-            IQueryCollection query = grid.Query = new QueryCollection();
+            IQueryCollection query = htmlGrid.Grid.Query = new QueryCollection();
 
-            Object actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
+            Object actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query;
             Object expected = query;
 
             Assert.Same(expected, actual);
@@ -45,10 +45,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsGridQuery()
         {
-            grid.Query = null;
+            htmlGrid.Grid.Query = null;
 
-            IQueryCollection expected = html.ViewContext.HttpContext.Request.Query;
-            IQueryCollection actual = new HtmlGrid<GridModel>(html, grid).Grid.Query;
+            IQueryCollection expected = htmlGrid.Html.ViewContext.HttpContext.Request.Query;
+            IQueryCollection actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query;
 
             Assert.Same(expected, actual);
         }
@@ -56,9 +56,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeViewContext()
         {
-            ViewContext viewContext = grid.ViewContext = new ViewContext();
+            ViewContext viewContext = htmlGrid.Grid.ViewContext = new ViewContext();
 
-            Object actual = new HtmlGrid<GridModel>(html, grid).Grid.ViewContext;
+            Object actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.ViewContext;
             Object expected = viewContext;
 
             Assert.Same(expected, actual);
@@ -67,10 +67,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsViewContext()
         {
-            grid.ViewContext = null;
+            htmlGrid.Grid.ViewContext = null;
 
-            ViewContext actual = new HtmlGrid<GridModel>(html, grid).Grid.ViewContext;
-            ViewContext expected = html.ViewContext;
+            ViewContext actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.ViewContext;
+            ViewContext expected = htmlGrid.Html.ViewContext;
 
             Assert.Same(expected, actual);
         }
@@ -78,7 +78,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsPartialViewName()
         {
-            String actual = new HtmlGrid<GridModel>(null, grid).PartialViewName;
+            String actual = new HtmlGrid<GridModel>(null, htmlGrid.Grid).PartialViewName;
             String expected = "MvcGrid/_Grid";
 
             Assert.Equal(expected, actual);
@@ -87,8 +87,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsHtml()
         {
-            IHtmlHelper actual = new HtmlGrid<GridModel>(html, grid).Html;
-            IHtmlHelper expected = html;
+            IHtmlHelper actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Html;
+            IHtmlHelper expected = htmlGrid.Html;
 
             Assert.Same(expected, actual);
         }
@@ -96,8 +96,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsGrid()
         {
-            IGrid<GridModel> actual = new HtmlGrid<GridModel>(null, grid).Grid;
-            IGrid<GridModel> expected = grid;
+            IGrid<GridModel> actual = new HtmlGrid<GridModel>(null, htmlGrid.Grid).Grid;
+            IGrid<GridModel> expected = htmlGrid.Grid;
 
             Assert.Same(expected, actual);
         }
@@ -110,7 +110,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void WriteTo_WritesPartialView()
         {
             Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
-            html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
+            htmlGrid.Html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
             StringWriter writer = new StringWriter();
 
             htmlGrid.WriteTo(writer, HtmlEncoder.Default);

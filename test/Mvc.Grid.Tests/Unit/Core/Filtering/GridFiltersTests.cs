@@ -317,15 +317,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilter_ReturnsGridColumnFilter()
-        {
-            Type expected = typeof(GridColumnFilter<GridModel, String>);
-            Type actual = filters.GetFilter(column).GetType();
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void GetFilter_SetsFilterNameForEnum()
         {
             AssertFilterNameFor(model => model.EnumField, null);

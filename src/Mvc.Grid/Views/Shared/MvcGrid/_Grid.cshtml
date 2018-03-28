@@ -54,7 +54,7 @@
                 <tr class="mvc-grid-row-filters">
                     @foreach (IGridColumn column in Model.Columns)
                     {
-                        @if (column.Filter.IsEnabled == true)
+                        if (column.Filter.IsEnabled == true)
                         {
                             <th class="filterable @column.CssClasses">
                                 @{ String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : ""; }

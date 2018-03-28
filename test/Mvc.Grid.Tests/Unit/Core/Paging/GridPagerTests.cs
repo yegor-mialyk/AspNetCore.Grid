@@ -9,14 +9,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridPagerTests
     {
-        private IGrid<GridModel> grid;
         private GridPager<GridModel> pager;
 
         public GridPagerTests()
         {
-            grid = new Grid<GridModel>(new GridModel[0]);
-            pager = new GridPager<GridModel>(grid);
-            grid.Query = new QueryCollection();
+            pager = new GridPager<GridModel>(new Grid<GridModel>(new GridModel[0]) { Query = new QueryCollection() });
         }
 
         #region TotalPages
@@ -123,8 +120,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid", "Grid-Page=2")]
         public void CurrentPage_SetsCurrentPageFromQuery(String name, String query)
         {
-            grid.Query = HttpUtility.ParseQueryString(query);
-            grid.Name = name;
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
+            pager.Grid.Name = name;
 
             pager.TotalRows = 4 * pager.RowsPerPage;
 
@@ -212,9 +209,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void RowsPerPage_AllowsOnlyFromPageSizes(String name, String query, Int32 rows)
         {
             pager.PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20" };
-            grid.Query = HttpUtility.ParseQueryString(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.ShowPageSizes = true;
-            grid.Name = name;
+            pager.Grid.Name = name;
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = rows;
@@ -228,10 +225,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("Grid", "Grid-Rows=123")]
         public void RowsPerPage_SetsRowsPerPageFromQuery(String name, String query)
         {
-            grid.Query = HttpUtility.ParseQueryString(query);
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.ShowPageSizes = true;
             pager.PageSizes.Clear();
-            grid.Name = name;
+            pager.Grid.Name = name;
 
             Int32 actual = pager.RowsPerPage;
             Int32 expected = 123;
@@ -242,7 +239,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RowsPerPage_DoesNotUseQuery()
         {
-            grid.Query = HttpUtility.ParseQueryString("Rows=2");
+            pager.Grid.Query = HttpUtility.ParseQueryString("Rows=2");
             pager.ShowPageSizes = false;
             pager.RowsPerPage = 1;
 
@@ -307,8 +304,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsGrid()
         {
-            IGrid actual = new GridPager<GridModel>(grid).Grid;
-            IGrid expected = grid;
+            IGrid actual = new GridPager<GridModel>(pager.Grid).Grid;
+            IGrid expected = pager.Grid;
 
             Assert.Same(expected, actual);
         }
@@ -316,7 +313,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsCurrentPage()
         {
-            Int32 actual = new GridPager<GridModel>(grid).CurrentPage;
+            Int32 actual = new GridPager<GridModel>(pager.Grid).CurrentPage;
             Int32 expected = 1;
 
             Assert.Equal(expected, actual);
@@ -325,7 +322,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsRowsPerPage()
         {
-            Int32 actual = new GridPager<GridModel>(grid).RowsPerPage;
+            Int32 actual = new GridPager<GridModel>(pager.Grid).RowsPerPage;
             Int32 expected = 20;
 
             Assert.Equal(expected, actual);
@@ -334,7 +331,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsPagesToDisplay()
         {
-            Int32 actual = new GridPager<GridModel>(grid).PagesToDisplay;
+            Int32 actual = new GridPager<GridModel>(pager.Grid).PagesToDisplay;
             Int32 expected = 5;
 
             Assert.Equal(expected, actual);
@@ -343,7 +340,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsDefaultPartialViewName()
         {
-            String actual = new GridPager<GridModel>(grid).PartialViewName;
+            String actual = new GridPager<GridModel>(pager.Grid).PartialViewName;
             String expected = "MvcGrid/_Pager";
 
             Assert.Equal(expected, actual);
@@ -352,7 +349,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsProcessorTypeAsPostProcessor()
         {
-            GridProcessorType actual = new GridPager<GridModel>(grid).ProcessorType;
+            GridProcessorType actual = new GridPager<GridModel>(pager.Grid).ProcessorType;
             GridProcessorType expected = GridProcessorType.Post;
 
             Assert.Equal(expected, actual);
@@ -362,7 +359,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GridPager_SetsDefaultPageSizes()
         {
             Dictionary<Int32, String> expected = new Dictionary<Int32, String> { [10] = "10", [20] = "20", [50] = "50", [100] = "100" };
-            Dictionary<Int32, String> actual = new GridPager<GridModel>(grid).PageSizes;
+            Dictionary<Int32, String> actual = new GridPager<GridModel>(pager.Grid).PageSizes;
 
             Assert.Equal(expected, actual);
         }

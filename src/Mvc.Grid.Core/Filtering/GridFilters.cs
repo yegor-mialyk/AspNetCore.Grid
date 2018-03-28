@@ -149,59 +149,6 @@ namespace NonFactors.Mvc.Grid
                 Table[forType].Remove(filterType);
         }
 
-        private IGridFilter GetFilter<T, TValue>(IGridColumn<T, TValue> column, String type, String value)
-        {
-            Type valueType = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
-            if (!Table.ContainsKey(valueType))
-                return null;
-
-            IDictionary<String, Type> typedFilters = Table[valueType];
-            if (!typedFilters.ContainsKey(type))
-                return null;
-
-            IGridFilter filter = (IGridFilter)Activator.CreateInstance(typedFilters[type]);
-            filter.Value = value;
-            filter.Type = type;
-
-            return filter;
-        }
-        private IGridFilter GetSecondFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
-        {
-            if (keys.Length == 0)
-                return null;
-
-            if (keys.Length == 1)
-            {
-                StringValues values = column.Grid.Query[keys[0]];
-                if (values.Count < 2)
-                    return null;
-
-                String keyType = keys[0].Substring((prefix + column.Name + "-").Length);
-
-                return GetFilter(column, keyType, values[1]);
-            }
-
-            String type = keys[1].Substring((prefix + column.Name + "-").Length);
-            String value = column.Grid.Query[keys[1]][0];
-
-            return GetFilter(column, type, value);
-        }
-        private IGridFilter GetFirstFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
-        {
-            if (keys.Length == 0)
-                return null;
-
-            String type = keys[0].Substring((prefix + column.Name + "-").Length);
-            String value = column.Grid.Query[keys[0]][0];
-
-            return GetFilter(column, type, value);
-        }
-        private String GetOperator<T, TValue>(String prefix, IGridColumn<T, TValue> column)
-        {
-            return column.Grid.Query[prefix + column.Name + "-Op"].FirstOrDefault();
-        }
-
-
         private String GetFilterName<T, TValue>(IGridColumn<T, TValue> column)
         {
             Type type = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
@@ -231,6 +178,57 @@ namespace NonFactors.Mvc.Grid
                 default:
                     return null;
             }
+        }
+        private String GetOperator<T, TValue>(String prefix, IGridColumn<T, TValue> column)
+        {
+            return column.Grid.Query[prefix + column.Name + "-Op"].FirstOrDefault();
+        }
+        private IGridFilter GetFilter<T, TValue>(IGridColumn<T, TValue> column, String type, String value)
+        {
+            Type valueType = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
+            if (!Table.ContainsKey(valueType))
+                return null;
+
+            IDictionary<String, Type> typedFilters = Table[valueType];
+            if (!typedFilters.ContainsKey(type))
+                return null;
+
+            IGridFilter filter = (IGridFilter)Activator.CreateInstance(typedFilters[type]);
+            filter.Value = value;
+            filter.Type = type;
+
+            return filter;
+        }
+        private IGridFilter GetFirstFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
+        {
+            if (keys.Length == 0)
+                return null;
+
+            String type = keys[0].Substring((prefix + column.Name + "-").Length);
+            String value = column.Grid.Query[keys[0]][0];
+
+            return GetFilter(column, type, value);
+        }
+        private IGridFilter GetSecondFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
+        {
+            if (keys.Length == 0)
+                return null;
+
+            if (keys.Length == 1)
+            {
+                StringValues values = column.Grid.Query[keys[0]];
+                if (values.Count < 2)
+                    return null;
+
+                String keyType = keys[0].Substring((prefix + column.Name + "-").Length);
+
+                return GetFilter(column, keyType, values[1]);
+            }
+
+            String type = keys[1].Substring((prefix + column.Name + "-").Length);
+            String value = column.Grid.Query[keys[1]][0];
+
+            return GetFilter(column, type, value);
         }
     }
 }

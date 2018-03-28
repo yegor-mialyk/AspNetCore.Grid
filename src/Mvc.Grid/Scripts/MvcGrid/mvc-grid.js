@@ -321,7 +321,7 @@ var MvcGrid = (function () {
             var documentWidth = $(document).width();
             var arrow = popup.find('.popup-arrow');
             var popupWidth = popup.width();
-            
+
             var popupTop = filter.offset().top + filter.height() / 2 + 14;
             var popupLeft = filter.offset().left - 8;
             var arrowLeft = filter.width() / 2;

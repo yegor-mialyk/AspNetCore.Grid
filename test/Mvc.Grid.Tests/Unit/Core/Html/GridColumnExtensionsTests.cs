@@ -43,10 +43,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
 
-        [Fact]
-        public void MultiFilterable_SetsIsMultiFilterable()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MultiFilterable_SetsIsMulti(Boolean isMulti)
         {
-            Assert.True(column.MultiFilterable(true).Filter.IsMulti);
+            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsMulti;
+            Boolean? expected = isMulti;
+
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -56,12 +61,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(false, null, null)]
         [InlineData(false, true, true)]
         [InlineData(false, false, false)]
-        public void MultiFilterable_EnablesFiltering(Boolean isMulti, Boolean? isFilterable, Boolean? filterable)
+        public void MultiFilterable_SetsIsEnabled(Boolean isMulti, Boolean? filterEnabled, Boolean? isEnabled)
         {
-            column.Filter.IsEnabled = isFilterable;
+            column.Filter.IsEnabled = filterEnabled;
 
             Boolean? actual = column.MultiFilterable(isMulti).Filter.IsEnabled;
-            Boolean? expected = filterable;
+            Boolean? expected = isEnabled;
 
             Assert.Equal(expected, actual);
         }
@@ -79,10 +84,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
 
-        [Fact]
-        public void Filterable_EnablesFilter()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Filterable_SetsIsEnabled(Boolean isEnabled)
         {
-            Assert.True(column.Filterable(true).Filter.IsEnabled);
+            Boolean? actual = column.Filterable(isEnabled).Filter.IsEnabled;
+            Boolean? expected = isEnabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -164,10 +174,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Sortable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isSortable)
 
-        [Fact]
-        public void Sortable_SetsIsSortable()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Sortable_SetsIsEnabled(Boolean isEnabled)
         {
-            Assert.True(column.Sortable(true).Sort.IsEnabled);
+            Boolean? actual = column.Sortable(isEnabled).Sort.IsEnabled;
+            Boolean? expected = isEnabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

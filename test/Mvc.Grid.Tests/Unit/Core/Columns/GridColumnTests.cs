@@ -17,14 +17,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
     public class GridColumnTests
     {
         private IGridFilters filters;
-        private IGrid<GridModel> grid;
         private GridColumn<GridModel, Object> column;
 
         public GridColumnTests()
         {
             filters = Substitute.For<IGridFilters>();
-            grid = new Grid<GridModel>(new GridModel[0]);
-
+            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
 
             grid.Query = new QueryCollection();
@@ -38,7 +36,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_NoFilters_Throws()
         {
-            grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(null as IGridFilters);
+            column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(null as IGridFilters);
 
             InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => column.Filter);
             Assert.Equal($"No service for type '{typeof(IGridFilters).FullName}' has been registered.", exception.Message);
@@ -94,8 +92,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsGrid()
         {
-            IGrid actual = new GridColumn<GridModel, Object>(grid, model => model.Name).Grid;
-            IGrid expected = grid;
+            IGrid actual = new GridColumn<GridModel, Object>(column.Grid, model => model.Name).Grid;
+            IGrid expected = column.Grid;
 
             Assert.Same(expected, actual);
         }
@@ -103,14 +101,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsIsEncoded()
         {
-            Assert.True(new GridColumn<GridModel, Object>(grid, model => model.Name).IsEncoded);
+            Assert.True(new GridColumn<GridModel, Object>(column.Grid, model => model.Name).IsEncoded);
         }
 
         [Fact]
         public void GridColumn_SetsExpression()
         {
             Expression<Func<GridModel, String>> expected = (model) => model.Name;
-            Expression<Func<GridModel, String>> actual = new GridColumn<GridModel, String>(grid, expected).Expression;
+            Expression<Func<GridModel, String>> actual = new GridColumn<GridModel, String>(column.Grid, expected).Expression;
 
             Assert.Same(expected, actual);
         }
@@ -118,20 +116,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_NotMemberExpression_SetsEmptyTitle()
         {
-            Assert.Empty(new GridColumn<GridModel, Object>(grid, model => model.ToString()).Title.ToString());
+            Assert.Empty(new GridColumn<GridModel, Object>(column.Grid, model => model.ToString()).Title.ToString());
         }
 
         [Fact]
         public void GridColumn_NoDisplayAttribute_SetsEmptyTitle()
         {
-            Assert.Empty(new GridColumn<GridModel, Object>(grid, model => model.Name).Title.ToString());
+            Assert.Empty(new GridColumn<GridModel, Object>(column.Grid, model => model.Name).Title.ToString());
         }
 
         [Fact]
         public void GridColumn_DisplayAttribute_SetsTitleFromDisplayName()
         {
             DisplayAttribute display = typeof(GridModel).GetProperty("Text").GetCustomAttribute<DisplayAttribute>();
-            column = new GridColumn<GridModel, Object>(grid, model => model.Text);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Text);
 
             String actual = column.Title.ToString();
             String expected = display.GetName();
@@ -143,7 +141,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GridColumn_DisplayAttribute_SetsTitleFromDisplayShortName()
         {
             DisplayAttribute display = typeof(GridModel).GetProperty("ShortText").GetCustomAttribute<DisplayAttribute>();
-            column = new GridColumn<GridModel, Object>(grid, model => model.ShortText);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.ShortText);
 
             String expected = display.GetShortName();
             String actual = column.Title.ToString();
@@ -165,7 +163,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsProcessorTypeAsPreProcessor()
         {
-            GridProcessorType actual = new GridColumn<GridModel, Object>(grid, model => model.Name).ProcessorType;
+            GridProcessorType actual = new GridColumn<GridModel, Object>(column.Grid, model => model.Name).ProcessorType;
             GridProcessorType expected = GridProcessorType.Pre;
 
             Assert.Equal(expected, actual);
@@ -174,12 +172,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsDefaultSort()
         {
-            GridColumn<GridModel, String> column = new GridColumn<GridModel, String>(grid, model => model.Name);
+            GridColumn<GridModel, String> testColumn = new GridColumn<GridModel, String>(column.Grid, model => model.Name);
 
-            IGridColumnSort<GridModel, String> expected = new GridColumnSort<GridModel, String>(column);
-            IGridColumnSort<GridModel, String> actual = column.Sort;
+            IGridColumnSort<GridModel, String> actual = testColumn.Sort;
 
-            Assert.Same(column, actual.Column);
+            Assert.Same(testColumn, actual.Column);
             Assert.Null(actual.InitialOrder);
             Assert.Null(actual.FirstOrder);
             Assert.Null(actual.IsEnabled);
@@ -191,7 +188,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
-            String actual = new GridColumn<GridModel, String>(grid, expression).Name;
+            String actual = new GridColumn<GridModel, String>(column.Grid, expression).Name;
             String expected = ExpressionHelper.GetExpressionText(expression);
 
             Assert.Equal(expected, actual);
@@ -291,7 +288,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void ValueFor_ExpressionValue_Html(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
-            column = new GridColumn<GridModel, Object>(grid, model => model.Content);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Content);
             column.IsEncoded = isEncoded;
             column.Format = format;
 

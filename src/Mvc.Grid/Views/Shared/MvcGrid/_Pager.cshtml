@@ -43,7 +43,7 @@
                 <li class="disabled"><a tabindex="-1">&raquo;</a></li>
             }
         </ul>
-        @if (Model.ShowPageSizes)
+        if (Model.ShowPageSizes)
         {
             <div class="mvc-grid-page-sizes">
                 @if (Model.PageSizes.Count > 0)

@@ -15,7 +15,6 @@ namespace NonFactors.Mvc.Grid
         public IGridFilter Second { get; set; }
 
         public IGridColumn<T, TValue> Column { get; set; }
-        public GridProcessorType ProcessorType { get; set; }
 
         public GridColumnFilter(IGridColumn<T, TValue> column)
         {
