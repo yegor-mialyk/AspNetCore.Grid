@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridColumns<T> : List<IGridColumn<T>>, IGridColumnsOf<T> where T : class
+    public class GridColumns<T> : List<IGridColumn>, IGridColumnsOf<T> where T : class
     {
         public IGrid<T> Grid { get; set; }
 
@@ -13,26 +13,26 @@ namespace NonFactors.Mvc.Grid
             Grid = grid;
         }
 
-        public virtual IGridColumn<T> Add()
+        public virtual IGridColumn<T, Object> Add()
         {
             return Add<Object>(model => null);
         }
-        public virtual IGridColumn<T> Add<TValue>(Expression<Func<T, TValue>> expression)
+        public virtual IGridColumn<T, TValue> Add<TValue>(Expression<Func<T, TValue>> expression)
         {
-            IGridColumn<T> column = new GridColumn<T, TValue>(Grid, expression);
+            IGridColumn<T, TValue> column = new GridColumn<T, TValue>(Grid, expression);
             Grid.Processors.Add(column);
             Add(column);
 
             return column;
         }
 
-        public virtual IGridColumn<T> Insert(Int32 index)
+        public virtual IGridColumn<T, Object> Insert(Int32 index)
         {
             return Insert<Object>(index, model => null);
         }
-        public virtual IGridColumn<T> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
+        public virtual IGridColumn<T, TValue> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
         {
-            IGridColumn<T> column = new GridColumn<T, TValue>(Grid, expression);
+            IGridColumn<T, TValue> column = new GridColumn<T, TValue>(Grid, expression);
             Grid.Processors.Add(column);
             Insert(index, column);
 

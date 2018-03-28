@@ -50,12 +50,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Null(actual.Expression.Compile().Invoke(null));
             Assert.Equal(expected.CssClasses, actual.CssClasses);
-            Assert.Equal(expected.IsSortable, actual.IsSortable);
-            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
             Assert.Equal(expected.Name, actual.Name);
@@ -77,12 +77,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.Expression, actual.Expression);
             Assert.Equal(expected.CssClasses, actual.CssClasses);
-            Assert.Equal(expected.IsSortable, actual.IsSortable);
-            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
             Assert.Equal(expected.Name, actual.Name);
@@ -124,12 +124,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Null(actual.Expression.Compile().Invoke(null));
             Assert.Equal(expected.CssClasses, actual.CssClasses);
-            Assert.Equal(expected.IsSortable, actual.IsSortable);
-            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
             Assert.Equal(expected.Name, actual.Name);
@@ -152,12 +152,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.Expression, actual.Expression);
             Assert.Equal(expected.CssClasses, actual.CssClasses);
-            Assert.Equal(expected.IsSortable, actual.IsSortable);
-            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
             Assert.Equal(expected.Name, actual.Name);

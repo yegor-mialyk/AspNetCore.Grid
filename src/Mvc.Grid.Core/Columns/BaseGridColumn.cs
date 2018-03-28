@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public abstract class BaseGridColumn<T, TValue> : IGridColumn<T>
+    public abstract class BaseGridColumn<T, TValue> : IGridColumn<T, TValue>
     {
         public String Name { get; set; }
         public String Format { get; set; }
@@ -13,19 +13,16 @@ namespace NonFactors.Mvc.Grid
         public Boolean IsEncoded { get; set; }
         public IHtmlContent Title { get; set; }
 
-        public Boolean? IsSortable { get; set; }
-        public GridSortOrder? FirstSortOrder { get; set; }
-        public GridSortOrder? InitialSortOrder { get; set; }
-        public virtual GridSortOrder? SortOrder { get; set; }
+        IGridColumnSort IGridColumn.Sort => Sort;
+        public virtual IGridColumnSort<T, TValue> Sort { get; set; }
 
         IGridColumnFilter IGridColumn.Filter => Filter;
-        public virtual IGridColumnFilter<T> Filter { get; set; }
+        public virtual IGridColumnFilter<T, TValue> Filter { get; set; }
 
         public IGrid<T> Grid { get; set; }
         public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
         public Func<T, TValue> ExpressionValue { get; set; }
-        LambdaExpression IGridColumn.Expression => Expression;
         public Expression<Func<T, TValue>> Expression { get; set; }
 
         public abstract IQueryable<T> Process(IQueryable<T> items);

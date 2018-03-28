@@ -5,14 +5,14 @@ namespace NonFactors.Mvc.Grid
 {
     public static class GridColumnExtensions
     {
-        public static IGridColumn<T> RenderedAs<T>(this IGridColumn<T> column, Func<T, Object> value)
+        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
         {
             column.RenderValue = value;
 
             return column;
         }
 
-        public static IGridColumn<T> MultiFilterable<T>(this IGridColumn<T> column, Boolean isMultiple)
+        public static IGridColumn<T, TValue> MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
         {
             if (isMultiple && column.Filter.IsEnabled == null)
                 column.Filter.IsEnabled = true;
@@ -21,63 +21,63 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-        public static IGridColumn<T> Filterable<T>(this IGridColumn<T> column, Boolean isFilterable)
+        public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
         {
             column.Filter.IsEnabled = isFilterable;
 
             return column;
         }
-        public static IGridColumn<T> FilteredAs<T>(this IGridColumn<T> column, String filterName)
+        public static IGridColumn<T, TValue> FilteredAs<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
         {
             column.Filter.Name = filterName;
 
             return column;
         }
 
-        public static IGridColumn<T> InitialSort<T>(this IGridColumn<T> column, GridSortOrder order)
+        public static IGridColumn<T, TValue> InitialSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
         {
-            column.InitialSortOrder = order;
+            column.Sort.InitialOrder = order;
 
             return column;
         }
-        public static IGridColumn<T> FirstSort<T>(this IGridColumn<T> column, GridSortOrder order)
+        public static IGridColumn<T, TValue> FirstSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
         {
-            column.FirstSortOrder = order;
+            column.Sort.FirstOrder = order;
 
             return column;
         }
-        public static IGridColumn<T> Sortable<T>(this IGridColumn<T> column, Boolean isSortable)
+        public static IGridColumn<T, TValue> Sortable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isSortable)
         {
-            column.IsSortable = isSortable;
+            column.Sort.IsEnabled = isSortable;
 
             return column;
         }
 
-        public static IGridColumn<T> Encoded<T>(this IGridColumn<T> column, Boolean isEncoded)
+        public static IGridColumn<T, TValue> Encoded<T, TValue>(this IGridColumn<T, TValue> column, Boolean isEncoded)
         {
             column.IsEncoded = isEncoded;
 
             return column;
         }
-        public static IGridColumn<T> Formatted<T>(this IGridColumn<T> column, String format)
+        public static IGridColumn<T, TValue> Formatted<T, TValue>(this IGridColumn<T, TValue> column, String format)
         {
             column.Format = format;
 
             return column;
         }
-        public static IGridColumn<T> Css<T>(this IGridColumn<T> column, String cssClasses)
+        public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String cssClasses)
         {
             column.CssClasses = cssClasses;
 
             return column;
         }
-        public static IGridColumn<T> Titled<T>(this IGridColumn<T> column, Object value)
+        public static IGridColumn<T, TValue> Titled<T, TValue>(this IGridColumn<T, TValue> column, Object value)
         {
             column.Title = value as IHtmlContent ?? new HtmlString(value?.ToString());
 
             return column;
         }
-        public static IGridColumn<T> Named<T>(this IGridColumn<T> column, String name)
+        public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
         {
             column.Name = name;
 

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>3.0.0</Version>
     <Company>NonFactors</Company>
+    <GenerateFullPaths>true</GenerateFullPaths>
     <Copyright>Copyright © NonFactors</Copyright>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

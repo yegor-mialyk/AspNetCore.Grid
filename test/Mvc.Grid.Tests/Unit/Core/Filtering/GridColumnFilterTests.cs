@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnFilterTests
     {
-        private GridColumnFilter<GridModel> filter;
+        private GridColumnFilter<GridModel, String> filter;
         private IQueryable<GridModel> items;
 
         public GridColumnFilterTests()
@@ -15,7 +15,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
             GridColumn<GridModel, String> column = new GridColumn<GridModel, String>(grid, model => model.Name);
 
-            filter = new GridColumnFilter<GridModel>(column);
+            filter = new GridColumnFilter<GridModel, String>(column);
             filter.IsEnabled = true;
 
             items = new[]
@@ -27,13 +27,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
         }
 
-        #region GridColumnFilter(IGridColumn<T> column)
+        #region GridColumnFilter(IGridColumn<T, TValue> column)
 
         [Fact]
         public void GridColumnFilter_SetsColumn()
         {
-            IGridColumn<GridModel> expected = new GridColumn<GridModel, String>(null, model => model.Name);
-            IGridColumn<GridModel> actual = new GridColumnFilter<GridModel>(expected).Column;
+            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> actual = new GridColumnFilter<GridModel, String>(expected).Column;
 
             Assert.Same(expected, actual);
         }
@@ -41,17 +41,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel> column = new GridColumn<GridModel, String>(null, model => model.ToString());
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.ToString());
 
-            Assert.False(new GridColumnFilter<GridModel>(column).IsEnabled);
+            Assert.False(new GridColumnFilter<GridModel, String>(column).IsEnabled);
         }
 
         [Fact]
         public void GridColumnFilter_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel> column = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.Name);
 
-            Assert.Null(new GridColumnFilter<GridModel>(column).IsEnabled);
+            Assert.Null(new GridColumnFilter<GridModel, String>(column).IsEnabled);
         }
 
         #endregion
@@ -194,14 +194,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersByExpressions()
         {
-            filter.IsMulti = true;
-            filter.Operator = "Or";
-            filter.First = new Int32Filter { Type = "Equals", Value = "10" };
-            filter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
-            filter.Column = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
+            GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
+            GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn);
+            testFilter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
+            testFilter.First = new Int32Filter { Type = "Equals", Value = "10" };
+            testFilter.IsEnabled = true;
+            testFilter.Operator = "Or";
+            testFilter.IsMulti = true;
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
-            IQueryable actual = filter.Apply(items);
+            IQueryable actual = testFilter.Apply(items);
 
             Assert.Equal(expected, actual);
         }

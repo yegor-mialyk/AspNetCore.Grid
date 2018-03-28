@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>3.0.0</Version>
     <TargetFramework>net46</TargetFramework>
+    <GenerateFullPaths>true</GenerateFullPaths>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>

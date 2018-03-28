@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridColumnFilter<T> : IGridColumnFilter<T>
+    public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     {
         public String Name { get; set; }
         public Boolean? IsMulti { get; set; }
@@ -14,10 +14,10 @@ namespace NonFactors.Mvc.Grid
         public IGridFilter First { get; set; }
         public IGridFilter Second { get; set; }
 
-        public IGridColumn<T> Column { get; set; }
+        public IGridColumn<T, TValue> Column { get; set; }
         public GridProcessorType ProcessorType { get; set; }
 
-        public GridColumnFilter(IGridColumn<T> column)
+        public GridColumnFilter(IGridColumn<T, TValue> column)
         {
             Column = column;
             IsEnabled = column.Expression.Body is MemberExpression ? (Boolean?)null : false;

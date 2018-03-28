@@ -13,9 +13,9 @@ namespace NonFactors.Mvc.Grid
         IGridFilter First { get; set; }
         IGridFilter Second { get; set; }
     }
-    public interface IGridColumnFilter<T> : IGridColumnFilter
+    public interface IGridColumnFilter<T, TValue> : IGridColumnFilter
     {
-        IGridColumn<T> Column { get; set; }
+        IGridColumn<T, TValue> Column { get; set; }
 
         IQueryable<T> Apply(IQueryable<T> items);
     }

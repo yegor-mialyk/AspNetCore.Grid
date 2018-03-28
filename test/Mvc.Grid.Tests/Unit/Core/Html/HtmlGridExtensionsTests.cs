@@ -183,12 +183,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Sortable_SetsIsSortableToTrue(Boolean? isColumnSortable, Boolean? sortable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsSortable = isColumnSortable;
+                column.Sort.IsEnabled = isColumnSortable;
 
             htmlGrid.Sortable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(sortable, actual.IsSortable);
+                Assert.Equal(sortable, actual.Sort.IsEnabled);
         }
 
         [Fact]

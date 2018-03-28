@@ -110,7 +110,7 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(String), "StartsWith", typeof(StringStartsWithFilter));
         }
 
-        public IGridColumnFilter<T> GetFilter<T>(IGridColumn<T> column)
+        public IGridColumnFilter<T, TValue> GetFilter<T, TValue>(IGridColumn<T, TValue> column)
         {
             String prefix = String.IsNullOrEmpty(column.Grid.Name) ? "" : column.Grid.Name + "-";
             String[] keys = column
@@ -122,7 +122,7 @@ namespace NonFactors.Mvc.Grid
                     key != prefix + column.Name + "-Op")
                 .ToArray();
 
-            GridColumnFilter<T> filter = new GridColumnFilter<T>(column);
+            GridColumnFilter<T, TValue> filter = new GridColumnFilter<T, TValue>(column);
             filter.Second = GetSecondFilter(prefix, column, keys);
             filter.First = GetFirstFilter(prefix, column, keys);
             filter.Operator = GetOperator(prefix, column);
@@ -149,7 +149,7 @@ namespace NonFactors.Mvc.Grid
                 Table[forType].Remove(filterType);
         }
 
-        private IGridFilter GetFilter<T>(IGridColumn<T> column, String type, String value)
+        private IGridFilter GetFilter<T, TValue>(IGridColumn<T, TValue> column, String type, String value)
         {
             Type valueType = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
             if (!Table.ContainsKey(valueType))
@@ -165,7 +165,7 @@ namespace NonFactors.Mvc.Grid
 
             return filter;
         }
-        private IGridFilter GetSecondFilter<T>(String prefix, IGridColumn<T> column, String[] keys)
+        private IGridFilter GetSecondFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
         {
             if (keys.Length == 0)
                 return null;
@@ -186,7 +186,7 @@ namespace NonFactors.Mvc.Grid
 
             return GetFilter(column, type, value);
         }
-        private IGridFilter GetFirstFilter<T>(String prefix, IGridColumn<T> column, String[] keys)
+        private IGridFilter GetFirstFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
         {
             if (keys.Length == 0)
                 return null;
@@ -196,13 +196,13 @@ namespace NonFactors.Mvc.Grid
 
             return GetFilter(column, type, value);
         }
-        private String GetOperator<T>(String prefix, IGridColumn<T> column)
+        private String GetOperator<T, TValue>(String prefix, IGridColumn<T, TValue> column)
         {
             return column.Grid.Query[prefix + column.Name + "-Op"].FirstOrDefault();
         }
 
 
-        private String GetFilterName<T>(IGridColumn<T> column)
+        private String GetFilterName<T, TValue>(IGridColumn<T, TValue> column)
         {
             Type type = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
             if (type.GetTypeInfo().IsEnum)

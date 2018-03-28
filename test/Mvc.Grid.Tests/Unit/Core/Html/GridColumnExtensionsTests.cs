@@ -8,18 +8,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnExtensionsTests
     {
-        private IGridColumn<GridModel> column;
+        private IGridColumn<GridModel, String> column;
 
         public GridColumnExtensionsTests()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            column = Substitute.For<IGridColumn<GridModel>>();
+            column = Substitute.For<IGridColumn<GridModel, String>>();
             column.Expression.Returns(expression);
 
-            column.Filter = new GridColumnFilter<GridModel>(column);
+            column.Filter = new GridColumnFilter<GridModel, String>(column);
         }
 
-        #region RenderedAs<T>(this IGridColumn<T> column, Func<T, Object> value)
+        #region RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
 
         [Fact]
         public void RenderedAs_SetsRenderValue()
@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region MultiFilterable<T>(this IGridColumn<T> column, Boolean isMultiple)
+        #region MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
 
         [Fact]
         public void MultiFilterable_SetsIsMultiFilterable()
@@ -77,7 +77,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Filterable<T>(this IGridColumn<T> column, Boolean isFilterable)
+        #region Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
 
         [Fact]
         public void Filterable_EnablesFilter()
@@ -96,7 +96,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region FilteredAs<T>(this IGridColumn<T> column, String filterName)
+        #region FilteredAs<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
 
         [Fact]
         public void FilteredAs_SetsFilterName()
@@ -118,12 +118,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region InitialSort<T>(this IGridColumn<T> column, GridSortOrder order)
+        #region InitialSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
 
         [Fact]
         public void InitialSort_SetsInitialSortOrder()
         {
-            GridSortOrder? actual = column.InitialSort(GridSortOrder.Desc).InitialSortOrder;
+            GridSortOrder? actual = column.InitialSort(GridSortOrder.Desc).Sort.InitialOrder;
             GridSortOrder? expected = GridSortOrder.Desc;
 
             Assert.Equal(expected, actual);
@@ -140,12 +140,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region FirstSort<T>(this IGridColumn<T> column, GridSortOrder order)
+        #region FirstSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
 
         [Fact]
         public void FirstSort_SetsFirstOrder()
         {
-            GridSortOrder? actual = column.FirstSort(GridSortOrder.Desc).FirstSortOrder;
+            GridSortOrder? actual = column.FirstSort(GridSortOrder.Desc).Sort.FirstOrder;
             GridSortOrder? expected = GridSortOrder.Desc;
 
             Assert.Equal(expected, actual);
@@ -162,12 +162,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Sortable<T>(this IGridColumn<T> column, Boolean isSortable)
+        #region Sortable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isSortable)
 
         [Fact]
         public void Sortable_SetsIsSortable()
         {
-            Assert.True(column.Sortable(true).IsSortable);
+            Assert.True(column.Sortable(true).Sort.IsEnabled);
         }
 
         [Fact]
@@ -181,7 +181,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Encoded<T>(this IGridColumn<T> column, Boolean isEncoded)
+        #region Encoded<T, TValue>(this IGridColumn<T, TValue> column, Boolean isEncoded)
 
         [Fact]
         public void Encoded_SetsIsEncoded()
@@ -200,7 +200,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Formatted<T>(this IGridColumn<T> column, String format)
+        #region Formatted<T, TValue>(this IGridColumn<T, TValue> column, String format)
 
         [Fact]
         public void Formatted_SetsFormat()
@@ -222,7 +222,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Css<T>(this IGridColumn<T> column, String cssClasses)
+        #region Css<T, TValue>(this IGridColumn<T, TValue> column, String cssClasses)
 
         [Fact]
         public void Css_SetsCssClasses()
@@ -244,7 +244,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Titled<T>(this IGridColumn<T> column, Object value)
+        #region Titled<T, TValue>(this IGridColumn<T, TValue> column, Object value)
 
         [Fact]
         public void Titled_SetsHtmlContentTitle()
@@ -290,7 +290,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region Named<T>(this IGridColumn<T> column, String name)
+        #region Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
 
         [Fact]
         public void Named_SetsName()

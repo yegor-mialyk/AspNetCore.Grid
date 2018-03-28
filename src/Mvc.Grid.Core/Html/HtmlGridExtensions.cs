@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid
 
         public static IHtmlGrid<T> MultiFilterable<T>(this IHtmlGrid<T> html)
         {
-            foreach (IGridColumn<T> column in html.Grid.Columns)
+            foreach (IGridColumn column in html.Grid.Columns)
             {
                 if (column.Filter.IsEnabled == null)
                     column.Filter.IsEnabled = true;
@@ -38,7 +38,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html)
         {
-            foreach (IGridColumn<T> column in html.Grid.Columns)
+            foreach (IGridColumn column in html.Grid.Columns)
                 if (column.Filter.IsEnabled == null)
                     column.Filter.IsEnabled = true;
 
@@ -46,9 +46,9 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Sortable<T>(this IHtmlGrid<T> html)
         {
-            foreach (IGridColumn<T> column in html.Grid.Columns)
-                if (column.IsSortable == null)
-                    column.IsSortable = true;
+            foreach (IGridColumn column in html.Grid.Columns)
+                if (column.Sort.IsEnabled == null)
+                    column.Sort.IsEnabled = true;
 
             return html;
         }

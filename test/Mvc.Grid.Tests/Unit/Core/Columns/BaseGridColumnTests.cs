@@ -13,15 +13,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column = Substitute.ForPartsOf<BaseGridColumn<GridModel, String>>();
         }
 
-        #region IGridColumn.Expression
+        #region IGridColumn.Sort
 
         [Fact]
-        public void IGridColumnExpression_ReturnsExpression()
+        public void IGridColumn_ReturnsSort()
         {
-            IGridColumn<GridModel> gridColumn = column;
+            IGridColumn gridColumn = column;
 
-            Object actual = gridColumn.Expression;
-            Object expected = column.Expression;
+            Object actual = gridColumn.Filter;
+            Object expected = column.Filter;
 
             Assert.Same(expected, actual);
         }
@@ -31,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region IGridColumn.Filter
 
         [Fact]
-        public void IFilterableColumnFilter_ReturnsFilter()
+        public void IGridColumn_ReturnsFilter()
         {
             IGridColumn gridColumn = column;
 

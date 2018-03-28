@@ -8,14 +8,14 @@ namespace NonFactors.Mvc.Grid
     {
     }
 
-    public interface IGridColumnsOf<T> : IGridColumns<IGridColumn<T>>
+    public interface IGridColumnsOf<T> : IGridColumns<IGridColumn>
     {
         IGrid<T> Grid { get; set; }
 
-        IGridColumn<T> Add();
-        IGridColumn<T> Add<TValue>(Expression<Func<T, TValue>> expression);
+        IGridColumn<T, Object> Add();
+        IGridColumn<T, TValue> Add<TValue>(Expression<Func<T, TValue>> expression);
 
-        IGridColumn<T> Insert(Int32 index);
-        IGridColumn<T> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression);
+        IGridColumn<T, Object> Insert(Int32 index);
+        IGridColumn<T, TValue> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression);
     }
 }
