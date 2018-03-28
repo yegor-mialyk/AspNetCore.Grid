@@ -28,11 +28,11 @@
         background-clip: padding-box;
         background-color: #F7F7F7;
         position: relative;
-        padding: 8px;
     }
 
+    .mvc-grid th,
     .mvc-grid td {
-        border-top: 1px solid #DDDDDD;
+        border: 1px solid #DEE2E6;
         padding: 8px;
     }
 
@@ -297,13 +297,14 @@
     }
 
     .mvc-grid-pager li + li a {
-        margin-left: 5px;
+        margin-left: 3px;
     }
 
     .mvc-grid-pager a {
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
         box-sizing: content-box;
+        text-decoration: none;
         display: inline-block;
         padding: 0.5em 0.75em;
         text-align: center;
@@ -314,7 +315,7 @@
 
         .mvc-grid-pager a:focus,
         .mvc-grid-pager a:hover {
-            background-color: #ECEEEF;
+            background-color: #F7F7F7;
             color: #014C8C;
         }
 
@@ -325,7 +326,7 @@
     }
 
     .mvc-grid-pager .disabled a {
-        background-color: #ECEEEF;
+        background-color: #EFEFEF;
         text-decoration: none;
         cursor: not-allowed;
         color: #777777;
