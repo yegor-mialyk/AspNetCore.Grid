@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,71 +15,38 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnTests
     {
-        private IGridFilters filters;
         private GridColumn<GridModel, Object> column;
 
         public GridColumnTests()
         {
-            filters = Substitute.For<IGridFilters>();
             IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
-
-            grid.Query = new QueryCollection();
-            grid.ViewContext = new ViewContext();
-            grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
         }
 
-        #region Filter
+        #region IGridColumn.Sort
 
         [Fact]
-        public void Filter_NoFilters_Throws()
+        public void IGridColumn_ReturnsSort()
         {
-            column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(null as IGridFilters);
+            IGridColumn gridColumn = column;
 
-            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => column.Filter);
-            Assert.Equal($"No service for type '{typeof(IGridFilters).FullName}' has been registered.", exception.Message);
-        }
-
-        [Fact]
-        public void Filter_ReturnsFromGridFilters()
-        {
-            GridColumnFilter<GridModel, Object> filter = new GridColumnFilter<GridModel, Object>(column);
-            filters.GetFilter(column).Returns(filter);
-
-            Object actual = column.Filter;
-            Object expected = filter;
+            Object actual = gridColumn.Filter;
+            Object expected = column.Filter;
 
             Assert.Same(expected, actual);
         }
 
-        [Fact]
-        public void Filter_Get_Caches()
-        {
-            GridColumnFilter<GridModel, Object> filter = new GridColumnFilter<GridModel, Object>(column);
-            filters.GetFilter(column).Returns(filter);
+        #endregion
 
-            IGridColumnFilter<GridModel, Object> cachedFilter = column.Filter;
-            filter = new GridColumnFilter<GridModel, Object>(column);
-
-            filters.GetFilter(column).Returns(filter);
-
-            Object expected = cachedFilter;
-            Object actual = column.Filter;
-
-            Assert.Same(expected, actual);
-        }
+        #region IGridColumn.Filter
 
         [Fact]
-        public void Filter_Set_Caches()
+        public void IGridColumn_ReturnsFilter()
         {
-            GridColumnFilter<GridModel, Object> filter = new GridColumnFilter<GridModel, Object>(column);
+            IGridColumn gridColumn = column;
 
-            column.Filter = new GridColumnFilter<GridModel, Object>(column);
-            column.Filter = filter;
-
-            IGridColumnFilter<GridModel, Object> actual = column.Filter;
-            IGridColumnFilter<GridModel, Object> expected = filter;
+            Object actual = gridColumn.Filter;
+            Object expected = column.Filter;
 
             Assert.Same(expected, actual);
         }
@@ -192,6 +158,31 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             String expected = ExpressionHelper.GetExpressionText(expression);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GridColumn_SetsFilterFromServices()
+        {
+            IGridFilters filters = Substitute.For<IGridFilters>();
+            column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
+            column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+            filters.GetFilter(Arg.Any<GridColumn<GridModel, String>>()).Returns(Substitute.For<IGridColumnFilter<GridModel, String>>());
+
+            IGridColumnFilter expected = filters.GetFilter(new GridColumn<GridModel, String>(column.Grid, model => model.Name));
+            IGridColumnFilter actual = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void GridColumn_SetsDefaultFilter()
+        {
+            column.Grid.ViewContext = null;
+
+            IGridColumnFilter actual = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
+            IGridColumnFilter expected = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
+
+            Assert.NotSame(expected, actual);
         }
 
         #endregion

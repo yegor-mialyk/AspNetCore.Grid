@@ -10,24 +10,25 @@ using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridColumn<T, TValue> : BaseGridColumn<T, TValue> where T : class
+    public class GridColumn<T, TValue> : IGridColumn<T, TValue> where T : class
     {
-        private Boolean FilterIsSet { get; set; }
-        public override IGridColumnFilter<T, TValue> Filter
-        {
-            get
-            {
-                if (!FilterIsSet)
-                    Filter = Grid.ViewContext.HttpContext.RequestServices.GetRequiredService<IGridFilters>().GetFilter(this);
+        public String Name { get; set; }
+        public String Format { get; set; }
+        public String CssClasses { get; set; }
+        public Boolean IsEncoded { get; set; }
+        public IHtmlContent Title { get; set; }
 
-                return base.Filter;
-            }
-            set
-            {
-                base.Filter = value;
-                FilterIsSet = true;
-            }
-        }
+        public IGrid<T> Grid { get; set; }
+        public Func<T, Object> RenderValue { get; set; }
+        public GridProcessorType ProcessorType { get; set; }
+        public Func<T, TValue> ExpressionValue { get; set; }
+        public Expression<Func<T, TValue>> Expression { get; set; }
+
+        IGridColumnSort IGridColumn.Sort => Sort;
+        public virtual IGridColumnSort<T, TValue> Sort { get; set; }
+
+        IGridColumnFilter IGridColumn.Filter => Filter;
+        public virtual IGridColumnFilter<T, TValue> Filter { get; set; }
 
         public GridColumn(IGrid<T> grid, Expression<Func<T, TValue>> expression)
         {
@@ -39,13 +40,14 @@ namespace NonFactors.Mvc.Grid
             ExpressionValue = expression.Compile();
             Sort = new GridColumnSort<T, TValue>(this);
             Name = ExpressionHelper.GetExpressionText(expression);
+            Filter = (Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters()).GetFilter(this);
         }
 
-        public override IQueryable<T> Process(IQueryable<T> items)
+        public virtual IQueryable<T> Process(IQueryable<T> items)
         {
             return Sort.Apply(Filter.Apply(items));
         }
-        public override IHtmlContent ValueFor(IGridRow<Object> row)
+        public virtual IHtmlContent ValueFor(IGridRow<Object> row)
         {
             Object value = GetValueFor(row);
 

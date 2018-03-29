@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -108,7 +109,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnSort_SetsColumn()
         {
-            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.Name);
             IGridColumn<GridModel, String> actual = new GridColumnSort<GridModel, String>(expected).Column;
 
             Assert.Same(expected, actual);
@@ -117,7 +118,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnSort_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.ToString());
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.ToString());
 
             Assert.False(new GridColumnSort<GridModel, String>(column).IsEnabled);
         }
@@ -125,7 +126,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnSort_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.Name);
 
             Assert.Null(new GridColumnSort<GridModel, String>(column).IsEnabled);
         }

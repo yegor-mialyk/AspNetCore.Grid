@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
@@ -17,12 +12,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridColumnsTests()
         {
             columns = new GridColumns<GridModel>(new Grid<GridModel>(new GridModel[0]));
-            IGridFilters filters = Substitute.For<IGridFilters>();
-
-            columns.Grid.Query = new QueryCollection();
-            columns.Grid.ViewContext = new ViewContext();
-            columns.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            columns.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
         }
 
         #region GridColumns(IGrid<T> grid)

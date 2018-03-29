@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -68,6 +70,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryable<GridModel> actual = new Grid<GridModel>(expected).Source;
 
             Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Grid_SetsEmptyQuery()
+        {
+            IQueryCollection actual = new Grid<GridModel>(new GridModel[0]).Query;
+            IQueryCollection expected = new QueryCollection();
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

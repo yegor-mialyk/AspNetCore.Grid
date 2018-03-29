@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace NonFactors.Mvc.Grid
         {
             Processors = new List<IGridProcessor<T>>();
             Source = source.AsQueryable();
+            Query = new QueryCollection();
 
             Columns = new GridColumns<T>(this);
             Rows = new GridRows<T>(this);

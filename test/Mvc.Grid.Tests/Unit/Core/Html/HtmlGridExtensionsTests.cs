@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -16,15 +14,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public HtmlGridExtensionsTests()
         {
             IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
-            IGridFilters filters = Substitute.For<IGridFilters>();
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
 
-            html.ViewContext.Returns(new ViewContext());
-            html.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            html.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
-
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
-
             grid.Columns.Add(model => model.Name);
             grid.Columns.Add(model => model.Sum);
         }

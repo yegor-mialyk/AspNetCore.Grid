@@ -32,7 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsColumn()
         {
-            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(filter.Column.Grid, model => model.Name);
             IGridColumn<GridModel, String> actual = new GridColumnFilter<GridModel, String>(expected).Column;
 
             Assert.Same(expected, actual);
@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.ToString());
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(filter.Column.Grid, model => model.ToString());
 
             Assert.False(new GridColumnFilter<GridModel, String>(column).IsEnabled);
         }
@@ -49,7 +49,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(null, model => model.Name);
+            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(filter.Column.Grid, model => model.Name);
 
             Assert.Null(new GridColumnFilter<GridModel, String>(column).IsEnabled);
         }
