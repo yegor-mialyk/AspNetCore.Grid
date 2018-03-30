@@ -72,18 +72,35 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region AjaxGrid(this HtmlHelper, String dataSource)
+        #region AjaxGrid(this HtmlHelper, String dataSource, Object htmlAttributes = null)
 
         [Fact]
         public void AjaxGrid_RendersPartial()
         {
             Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
-            html.PartialAsync("MvcGrid/_AjaxGrid", "DataSource", null).Returns(view);
+            html.PartialAsync("MvcGrid/_AjaxGrid", Arg.Is<GridHtmlAttributes>(attributes =>
+                attributes.Count == 2 && attributes["data-source-url"].ToString() == "DataSource" && attributes["class"].ToString() == "mvc-grid"), null).Returns(view);
 
-            String actual = html.AjaxGrid("DataSource").ToString();
-            String expected = "Test";
+            IHtmlContent actual = html.AjaxGrid("DataSource");
+            IHtmlContent expected = view.Result;
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void AjaxGrid_RendersPartialWithHtmlAttributes()
+        {
+            Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
+            html.PartialAsync("MvcGrid/_AjaxGrid", Arg.Is<GridHtmlAttributes>(attributes =>
+                attributes.Count == 3 &&
+                (Int32)attributes["data-id"] == 1 &&
+                (String)attributes["data-source-url"] == "DataSource" &&
+                (String)attributes["class"] == "classy mvc-grid"), null).Returns(view);
+
+            IHtmlContent actual = html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 });
+            IHtmlContent expected = view.Result;
+
+            Assert.Same(expected, actual);
         }
 
         #endregion

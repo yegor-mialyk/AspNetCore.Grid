@@ -23,10 +23,11 @@ namespace NonFactors.Mvc.Grid
             {
                 writer.Write(" ");
                 writer.Write(attribute.Key);
-
                 writer.Write("=\"");
 
-                writer.Write(encoder.Encode(attribute.Value?.ToString()));
+                if (attribute.Value != null)
+                    writer.Write(encoder.Encode(attribute.Value.ToString()));
+
                 writer.Write("\"");
             }
         }

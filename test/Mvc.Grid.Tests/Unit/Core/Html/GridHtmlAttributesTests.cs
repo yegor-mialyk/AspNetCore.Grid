@@ -28,9 +28,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GridHtmlAttributes_ChangesUnderscoresToDashes()
         {
             TextWriter writer = new StringWriter();
-            new GridHtmlAttributes(new { data_temp = 100, src = "test.png" }).WriteTo(writer, HtmlEncoder.Default);
+            new GridHtmlAttributes(new
+            {
+                id= "",
+                src = "test.png",
+                data_temp = 10000,
+                data_null = (String)null,
+            }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = " data-temp=\"100\" src=\"test.png\"";
+            String expected = " id=\"\" src=\"test.png\" data-temp=\"10000\" data-null=\"\"";
             String actual = writer.ToString();
 
             Assert.Equal(expected, actual);
