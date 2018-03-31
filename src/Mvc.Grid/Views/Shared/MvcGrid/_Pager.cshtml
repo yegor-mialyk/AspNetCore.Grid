@@ -13,8 +13,8 @@
         <ul>
             @if (currentPage > 1)
             {
-                <li data-page="1"><a href="#">&laquo;</a></li>
-                <li data-page="@(currentPage - 1)"><a href="#">&lsaquo;</a></li>
+                <li><a href="#" data-page="1">&laquo;</a></li>
+                <li><a href="#" data-page="@(currentPage - 1)">&lsaquo;</a></li>
             }
             else
             {
@@ -25,17 +25,17 @@
             {
                 if (page == currentPage)
                 {
-                    <li class="active" data-page="@(page)"><a href="#">@(page)</a></li>
+                    <li class="active"><a href="#" data-page="@(page)">@(page)</a></li>
                 }
                 else
                 {
-                    <li data-page="@(page)"><a href="#">@(page)</a></li>
+                    <li><a href="#" data-page="@(page)">@(page)</a></li>
                 }
             }
             @if (currentPage < totalPages)
             {
-                <li data-page="@(currentPage + 1)"><a href="#">&rsaquo;</a></li>
-                <li data-page="@totalPages"><a href="#">&raquo;</a></li>
+                <li><a href="#" data-page="@(currentPage + 1)">&rsaquo;</a></li>
+                <li><a href="#" data-page="@totalPages">&raquo;</a></li>
             }
             else
             {
