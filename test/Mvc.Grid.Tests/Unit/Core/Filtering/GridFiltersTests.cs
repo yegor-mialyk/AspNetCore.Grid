@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -112,393 +111,32 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(String), "starts-with", typeof(StringStartsWithFilter))]
         public void GridFilters_RegistersDefaultFilters(Type type, String name, Type filter)
         {
-            Type actual = new GridFilters().Table[type][name];
-            Type expected = filter;
-
-            Assert.Equal(expected, actual);
+            Assert.IsType(filter, new GridFilters().GetFilter(type, name));
         }
 
         #endregion
 
-        #region GetFilter<T, TValue>(IGridColumn<T, TValue> column)
+        #region IGridFilter GetFilter(Type forType, String filterType)
 
-        [Theory]
-        [InlineData("", "name-equals=a&name=equals")]
-        [InlineData("", "name-equals=a&name-=equals")]
-        [InlineData("", "name-equals=a&name-op=equals")]
-        [InlineData(null, "name-equals=a&name=equals")]
-        [InlineData(null, "name-equals=a&name-=equals")]
-        [InlineData(null, "name-equals=a&name-op=equals")]
-        [InlineData("grid", "grid-name-equals=a&grid-name=equals")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-=equals")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-op=equals")]
-        public void GetFilter_NotFoundFilter_SetsSecondFilterToNull(String name, String query)
+        [Fact]
+        public void GetFilter_NotFoundForType_ReturnsNull()
         {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(filters.GetFilter(column).Second);
-        }
-
-        [Theory]
-        [InlineData("", "name-contains=a&name-equals=b&name-op=and")]
-        [InlineData(null, "name-contains=a&name-equals=b&name-op=and")]
-        [InlineData("grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=and")]
-        public void GetFilter_NotFoundValueType_SetsSecondFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-            GridColumn<GridModel, Object> testColumn = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
-
-            Assert.Null(filters.GetFilter(testColumn).Second);
-        }
-
-        [Theory]
-        [InlineData("", "name-equals=a&name-eq=b&name-op=and")]
-        [InlineData(null, "name-equals=a&name-eq=b&name-op=and")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-eq=b&grid-name-op=and")]
-        public void GetFilter_NotFoundFilterType_SetsSecondFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(filters.GetFilter(column).Second);
-        }
-
-        [Theory]
-        [InlineData("", "name-eq=a&name-equals=b", "b")]
-        [InlineData("", "name-equals=a&name-equals=b", "b")]
-        [InlineData("", "name-contains=a&name-equals=", "")]
-        [InlineData("", "name-equals=a&name-equals=", "")]
-        [InlineData("", "name-contains=a&name-equals=ba", "ba")]
-        [InlineData("", "name-contains=a&name-equals=b&name-op=or", "b")]
-        [InlineData("", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
-        [InlineData(null, "name-eq=a&name-equals=b", "b")]
-        [InlineData(null, "name-equals=a&name-equals=b", "b")]
-        [InlineData(null, "name-contains=a&name-equals=", "")]
-        [InlineData(null, "name-equals=a&name-equals=", "")]
-        [InlineData(null, "name-contains=a&name-equals=ba", "ba")]
-        [InlineData(null, "name-contains=a&name-equals=b&name-op=or", "b")]
-        [InlineData(null, "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
-        [InlineData("grid", "grid-name-eq=a&grid-name-equals=b", "b")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "b")]
-        [InlineData("grid", "grid-name-contains=a&grid-name-equals=", "")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-equals=", "")]
-        [InlineData("grid", "grid-name-contains=a&grid-name-equals=ba", "ba")]
-        [InlineData("grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=or", "b")]
-        [InlineData("grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
-        public void GetFilter_SetsSecondFilter(String name, String query, String value)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            IGridFilter actual = filters.GetFilter(column).Second;
-
-            Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
-            Assert.Equal("equals", actual.Type);
-            Assert.Equal(value, actual.Value);
-        }
-
-        [Theory]
-        [InlineData("", "name=equals")]
-        [InlineData("", "name-=equals")]
-        [InlineData("", "name-op=equals")]
-        [InlineData(null, "name=equals")]
-        [InlineData(null, "name-=equals")]
-        [InlineData(null, "name-op=equals")]
-        [InlineData("grid", "grid-name=equals")]
-        [InlineData("grid", "grid-name-=equals")]
-        [InlineData("grid", "grid-name-op=equals")]
-        public void GetFilter_NotFoundFilter_SetsFirstFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(filters.GetFilter(column).First);
-        }
-
-        [Theory]
-        [InlineData("", "name-contains=a&name-equals=b&name-op=and")]
-        [InlineData(null, "name-contains=a&name-equals=b&name-op=and")]
-        [InlineData("grid", "name-contains=a&name-equals=b&name-op=and")]
-        public void GetFilter_NotFoundValueType_SetsFirstFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-            GridColumn<GridModel, Object> testColumn = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
-
-            Assert.Null(filters.GetFilter(testColumn).First);
-        }
-
-        [Theory]
-        [InlineData("", "name-eq=a&name-eq=b&name-op=and")]
-        [InlineData("", "name-eq=a&name-contains=b&name-op=and")]
-        [InlineData(null, "name-eq=a&name-eq=b&name-op=and")]
-        [InlineData(null, "name-eq=a&name-contains=b&name-op=and")]
-        [InlineData("grid", "grid-name-eq=a&grid-name-eq=b&grid-name-op=and")]
-        [InlineData("grid", "grid-name-eq=a&grid-name-contains=b&grid-name-op=and")]
-        public void GetFilter_NotFoundFilterType_SetsFirstFilterToNull(String name, String query)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(filters.GetFilter(column).First);
-        }
-
-        [Theory]
-        [InlineData("", "name-equals=a&name-eq=b", "a")]
-        [InlineData("", "name-equals=&name-equals=b", "")]
-        [InlineData("", "name-equals=&name-contains=b", "")]
-        [InlineData("", "name-equals=a&name-contains=b", "a")]
-        [InlineData("", "name-equals=a&name-equals=b", "a")]
-        [InlineData("", "name-equals=a&name-contains=b&name-op=or", "a")]
-        [InlineData("", "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
-        [InlineData(null, "name-equals=a&name-eq=b", "a")]
-        [InlineData(null, "name-equals=&name-equals=b", "")]
-        [InlineData(null, "name-equals=&name-contains=b", "")]
-        [InlineData(null, "name-equals=a&name-contains=b", "a")]
-        [InlineData(null, "name-equals=a&name-equals=b", "a")]
-        [InlineData(null, "name-equals=a&name-contains=b&name-op=or", "a")]
-        [InlineData(null, "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-eq=b", "a")]
-        [InlineData("grid", "grid-name-equals=&grid-name-equals=b", "")]
-        [InlineData("grid", "grid-name-equals=&grid-name-contains=b", "")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-contains=b", "a")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a")]
-        [InlineData("grid", "grid-name-equals=a&grid-name-contains=b&grid-name-op=or", "a")]
-        [InlineData("grid", "GRID-NAME-EQUALS=A&GRID-NAME-CONTAINS=B&GRID-NAME-OP=OR", "A")]
-        public void GetFilter_SetsFirstFilter(String name, String query, String value)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            IGridFilter actual = filters.GetFilter(column).First;
-
-            Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
-            Assert.Equal("equals", actual.Type);
-            Assert.Equal(value, actual.Value);
-        }
-
-        [Theory]
-        [InlineData("", "name-op", "")]
-        [InlineData("", "name-op=", "")]
-        [InlineData("", "name-op=or", "or")]
-        [InlineData("", "name-op=and", "and")]
-        [InlineData("", "name-op-and=and", null)]
-        [InlineData("", "name-op=and&name-op=or", "and")]
-        [InlineData("", "NAME-OP=AND&NAME-OP=OR", "and")]
-        [InlineData(null, "name-op", "")]
-        [InlineData(null, "name-op=", "")]
-        [InlineData(null, "name-op=or", "or")]
-        [InlineData(null, "name-op=and", "and")]
-        [InlineData(null, "name-op-and=and", null)]
-        [InlineData(null, "name-op=and&name-op=or", "and")]
-        [InlineData(null, "NAME-OP=AND&NAME-OP=OR", "and")]
-        [InlineData("grid", "grid-name-op", "")]
-        [InlineData("grid", "grid-name-op=", "")]
-        [InlineData("grid", "grid-name-op=or", "or")]
-        [InlineData("grid", "grid-name-op=and", "and")]
-        [InlineData("grid", "grid-name-op-and=and", null)]
-        [InlineData("grid", "grid-name-op=and&grid-name-op=or", "and")]
-        [InlineData("grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
-        public void GetFilter_SetsOperatorFromQuery(String name, String query, String op)
-        {
-            column.Grid.Name = name;
-            column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            String actual = filters.GetFilter(column).Operator;
-            String expected = op;
-
-            Assert.Equal(expected, actual);
+            Assert.Null(filters.GetFilter(typeof(Object), "equals"));
         }
 
         [Fact]
-        public void GetFilter_SetsColumn()
+        public void GetFilter_NotFoundFilterType_ReturnsNull()
         {
-            IGridColumn actual = filters.GetFilter(column).Column;
-            IGridColumn expected = column;
-
-            Assert.Same(expected, actual);
+            Assert.Null(filters.GetFilter(typeof(String), "less-than"));
         }
 
         [Fact]
-        public void GetFilter_SetsFilterNameForEnum()
+        public void GetFilter_ForType()
         {
-            AssertFilterNameFor(model => model.EnumField, null);
-        }
+            IGridFilter actual = filters.GetFilter(typeof(String), "CONTAINS");
 
-        [Fact]
-        public void GetFilter_SetsFilterNameForSByte()
-        {
-            AssertFilterNameFor(model => model.SByteField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForByte()
-        {
-            AssertFilterNameFor(model => model.ByteField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForInt16()
-        {
-            AssertFilterNameFor(model => model.Int16Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForUInt16()
-        {
-            AssertFilterNameFor(model => model.UInt16Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForInt32()
-        {
-            AssertFilterNameFor(model => model.Int32Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForUInt32()
-        {
-            AssertFilterNameFor(model => model.UInt32Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForInt64()
-        {
-            AssertFilterNameFor(model => model.Int64Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForUInt64()
-        {
-            AssertFilterNameFor(model => model.UInt64Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForSingle()
-        {
-            AssertFilterNameFor(model => model.SingleField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForDouble()
-        {
-            AssertFilterNameFor(model => model.DoubleField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForDecimal()
-        {
-            AssertFilterNameFor(model => model.DecimalField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForString()
-        {
-            AssertFilterNameFor(model => model.StringField, "text");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForBoolean()
-        {
-            AssertFilterNameFor(model => model.BooleanField, "boolean");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForDateTime()
-        {
-            AssertFilterNameFor(model => model.DateTimeField, "date");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableEnum()
-        {
-            AssertFilterNameFor(model => model.NullableEnumField, null);
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableSByte()
-        {
-            AssertFilterNameFor(model => model.NullableSByteField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableByte()
-        {
-            AssertFilterNameFor(model => model.NullableByteField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableInt16()
-        {
-            AssertFilterNameFor(model => model.NullableInt16Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableUInt16()
-        {
-            AssertFilterNameFor(model => model.NullableUInt16Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableInt32()
-        {
-            AssertFilterNameFor(model => model.NullableInt32Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableUInt32()
-        {
-            AssertFilterNameFor(model => model.NullableUInt32Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableInt64()
-        {
-            AssertFilterNameFor(model => model.NullableInt64Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableUInt64()
-        {
-            AssertFilterNameFor(model => model.NullableUInt64Field, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableSingle()
-        {
-            AssertFilterNameFor(model => model.NullableSingleField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableDouble()
-        {
-            AssertFilterNameFor(model => model.NullableDoubleField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableDecimal()
-        {
-            AssertFilterNameFor(model => model.NullableDecimalField, "number");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableBoolean()
-        {
-            AssertFilterNameFor(model => model.NullableBooleanField, "boolean");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForNullableDateTime()
-        {
-            AssertFilterNameFor(model => model.NullableDateTimeField, "date");
-        }
-
-        [Fact]
-        public void GetFilter_SetsFilterNameForOtherTypes()
-        {
-            AssertFilterNameFor(model => model, null);
+            Assert.IsType<StringContainsFilter>(actual);
+            Assert.Equal("contains", actual.Type);
         }
 
         #endregion
@@ -508,71 +146,53 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Register_FilterForExistingType()
         {
-            filters.Register(typeof(Int32), "test", typeof(Object));
-            filters.Register(typeof(Int32), "test-filter", typeof(String));
+            filters.Register(typeof(Int32), "TEST", typeof(Object));
+            filters.Register(typeof(Int32), "TEST-FILTER", typeof(StringEqualsFilter));
 
-            Type actual = filters.Table[typeof(Int32)]["TEST-FILTER"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<StringEqualsFilter>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_NullableFilterTypeForExistingType()
         {
-            filters.Register(typeof(Int32), "test", typeof(Object));
-            filters.Register(typeof(Int32?), "test-filter", typeof(String));
+            filters.Register(typeof(Int32), "TEST", typeof(Object));
+            filters.Register(typeof(Int32?), "TEST-FILTER", typeof(StringEqualsFilter));
 
-            Type actual = filters.Table[typeof(Int32)]["TEST-FILTER"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<StringEqualsFilter>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_Overrides_NullableFilter()
         {
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
-            filters.Register(typeof(Int32?), "TEST-filter", typeof(String));
+            filters.Register(typeof(Int32?), "TEST-filter", typeof(Int32Filter));
 
-            Type actual = filters.Table[typeof(Int32)]["TEST-FILTER"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_Overrides_Filter()
         {
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
-            filters.Register(typeof(Int32), "TEST-filter", typeof(String));
+            filters.Register(typeof(Int32), "TEST-filter", typeof(Int32Filter));
 
-            Type actual = filters.Table[typeof(Int32)]["TEST-FILTER"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_NullableTypeAsNotNullable()
         {
-            filters.Register(typeof(Int32?), "test", typeof(String));
+            filters.Register(typeof(Int32?), "TEST", typeof(Int32Filter));
 
-            Type actual = filters.Table[typeof(Int32)]["TEST"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test"));
         }
 
         [Fact]
         public void Register_FilterForNewType()
         {
-            filters.Register(typeof(Object), "test", typeof(String));
+            filters.Register(typeof(Object), "test", typeof(Int32Filter));
 
-            Type actual = filters.Table[typeof(Object)]["TEST"];
-            Type expected = typeof(String);
-
-            Assert.Equal(expected, actual);
+            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Object), "test"));
         }
 
         #endregion
@@ -582,31 +202,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Unregister_ExistingFilter()
         {
-            filters.Register(typeof(Object), "test", typeof(String));
+            filters.Register(typeof(Object), "test", typeof(StringEqualsFilter));
 
             filters.Unregister(typeof(Object), "TEST");
 
-            Assert.Empty(filters.Table[typeof(Object)]);
+            Assert.Null(filters.GetFilter(typeof(Object), "test"));
         }
 
         [Fact]
         public void Unregister_CanBeCalledOnNotExistingFilter()
         {
+            filters.Register(typeof(Object), "test", typeof(StringEqualsFilter));
+
             filters.Unregister(typeof(Object), "test");
-        }
+            filters.Unregister(typeof(Object), "test");
 
-        #endregion
-
-        #region Test helpers
-
-        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String name)
-        {
-            Grid<AllTypesModel> grid = new Grid<AllTypesModel>(new AllTypesModel[0]);
-
-            String actual = filters.GetFilter(new GridColumn<AllTypesModel, TValue>(grid, property)).Name;
-            String expected = name;
-
-            Assert.Equal(expected, actual);
+            Assert.Null(filters.GetFilter(typeof(Object), "test"));
         }
 
         #endregion

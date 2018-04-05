@@ -1,14 +1,11 @@
-﻿using Microsoft.Extensions.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
     public class GridFilters : IGridFilters
     {
-        public IDictionary<Type, IDictionary<String, Type>> Table
+        private IDictionary<Type, IDictionary<String, Type>> Table
         {
             get;
         }
@@ -110,24 +107,16 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(String), "starts-with", typeof(StringStartsWithFilter));
         }
 
-        public IGridColumnFilter<T, TValue> GetFilter<T, TValue>(IGridColumn<T, TValue> column)
+        public IGridFilter GetFilter(Type forType, String filterType)
         {
-            String prefix = String.IsNullOrEmpty(column.Grid.Name) ? "" : column.Grid.Name + "-";
-            String columnName = (prefix + column.Name + "-").ToLower();
-            String[] keys = column
-                .Grid
-                .Query
-                .Keys
-                .Where(key =>
-                    key.StartsWith(columnName, StringComparison.OrdinalIgnoreCase) &&
-                    !key.Equals(columnName + "op", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
+            if (!Table.ContainsKey(forType))
+                return null;
 
-            GridColumnFilter<T, TValue> filter = new GridColumnFilter<T, TValue>(column);
-            filter.Second = GetSecondFilter(prefix, column, keys);
-            filter.First = GetFirstFilter(prefix, column, keys);
-            filter.Operator = GetOperator(prefix, column);
-            filter.Name = GetFilterName(column);
+            if (!Table[forType].TryGetValue(filterType, out Type type))
+                return null;
+
+            IGridFilter filter = (IGridFilter)Activator.CreateInstance(type);
+            filter.Type = filterType.ToLower();
 
             return filter;
         }
@@ -148,88 +137,6 @@ namespace NonFactors.Mvc.Grid
         {
             if (Table.ContainsKey(forType))
                 Table[forType].Remove(filterType);
-        }
-
-        private String GetFilterName<T, TValue>(IGridColumn<T, TValue> column)
-        {
-            Type type = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
-            if (type.GetTypeInfo().IsEnum)
-                return null;
-
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                    return "number";
-                case TypeCode.String:
-                    return "text";
-                case TypeCode.DateTime:
-                    return "date";
-                case TypeCode.Boolean:
-                    return "boolean";
-                default:
-                    return null;
-            }
-        }
-        private String GetOperator<T, TValue>(String prefix, IGridColumn<T, TValue> column)
-        {
-            return column.Grid.Query[prefix + column.Name + "-op"].FirstOrDefault()?.ToLower();
-        }
-        private IGridFilter GetFilter<T, TValue>(IGridColumn<T, TValue> column, String type, String value)
-        {
-            Type valueType = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
-            if (!Table.ContainsKey(valueType))
-                return null;
-
-            IDictionary<String, Type> typedFilters = Table[valueType];
-            if (!typedFilters.ContainsKey(type))
-                return null;
-
-            IGridFilter filter = (IGridFilter)Activator.CreateInstance(typedFilters[type]);
-            filter.Type = type.ToLower();
-            filter.Value = value;
-
-            return filter;
-        }
-        private IGridFilter GetFirstFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
-        {
-            if (keys.Length == 0)
-                return null;
-
-            String filterType = keys[0].Substring((prefix + column.Name + "-").Length);
-            String value = column.Grid.Query[keys[0]][0];
-
-            return GetFilter(column, filterType, value);
-        }
-        private IGridFilter GetSecondFilter<T, TValue>(String prefix, IGridColumn<T, TValue> column, String[] keys)
-        {
-            if (keys.Length == 0)
-                return null;
-
-            if (keys.Length == 1)
-            {
-                StringValues values = column.Grid.Query[keys[0]];
-                if (values.Count < 2)
-                    return null;
-
-                String filterType = keys[0].Substring((prefix + column.Name + "-").Length);
-
-                return GetFilter(column, filterType, values[1]);
-            }
-
-            String type = keys[1].Substring((prefix + column.Name + "-").Length);
-            String value = column.Grid.Query[keys[1]][0];
-
-            return GetFilter(column, type, value);
         }
     }
 }

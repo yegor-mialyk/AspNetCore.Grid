@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid
             ProcessorType = GridProcessorType.Pre;
             ExpressionValue = expression.Compile();
             Sort = new GridColumnSort<T, TValue>(this);
-            Filter = (Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters()).GetFilter(this);
+            Filter = new GridColumnFilter<T, TValue>(this);
         }
 
         public virtual IQueryable<T> Process(IQueryable<T> items)

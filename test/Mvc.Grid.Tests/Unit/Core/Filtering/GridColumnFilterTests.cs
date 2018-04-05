@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -31,6 +32,261 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
         }
 
+        #region Operator
+
+        [Fact]
+        public void Operator_Set_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
+
+            filter.Operator = null;
+
+            Assert.Null(filter.Operator);
+        }
+
+        [Theory]
+        [InlineData("", "", null)]
+        [InlineData("", "op", null)]
+        [InlineData("", "name-op", "")]
+        [InlineData("", "name-op=", "")]
+        [InlineData("", "name-op=or", "or")]
+        [InlineData("", "name-op=and", "and")]
+        [InlineData("", "name-op-and=and", null)]
+        [InlineData("", "name-op=and&name-op=or", "and")]
+        [InlineData("", "NAME-OP=AND&NAME-OP=OR", "and")]
+        [InlineData(null, "", null)]
+        [InlineData(null, "op", null)]
+        [InlineData(null, "name-op", "")]
+        [InlineData(null, "name-op=", "")]
+        [InlineData(null, "name-op=or", "or")]
+        [InlineData(null, "name-op=and", "and")]
+        [InlineData(null, "name-op-and=and", null)]
+        [InlineData(null, "name-op=and&name-op=or", "and")]
+        [InlineData(null, "NAME-OP=AND&NAME-OP=OR", "and")]
+        [InlineData("grid", "", null)]
+        [InlineData("grid", "name-op", null)]
+        [InlineData("grid", "grid-name-op", "")]
+        [InlineData("grid", "grid-name-op=", "")]
+        [InlineData("grid", "grid-name-op=or", "or")]
+        [InlineData("grid", "grid-name-op=and", "and")]
+        [InlineData("grid", "grid-name-op-and=and", null)]
+        [InlineData("grid", "grid-name-op=and&grid-name-op=or", "and")]
+        [InlineData("grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
+        public void Operator_Get_FromQuery(String name, String query, String op)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            String actual = filter.Operator;
+            String expected = op;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Operator_Get_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=or");
+
+            String op = filter.Operator;
+
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
+
+            String actual = filter.Operator;
+            String expected = op;
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region First
+
+        [Fact]
+        public void First_Set_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a");
+
+            filter.First = null;
+
+            Assert.Null(filter.First);
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("", "name=a")]
+        [InlineData("", "name-=a")]
+        [InlineData("", "name-eq=a")]
+        [InlineData(null, "")]
+        [InlineData(null, "name=a")]
+        [InlineData(null, "name-=a")]
+        [InlineData(null, "name-eq=a")]
+        [InlineData("grid", "")]
+        [InlineData("grid", "grid-")]
+        [InlineData("grid", "grid-name=a")]
+        [InlineData("grid", "grid-name-=a")]
+        [InlineData("grid", "grid-name-eq=a")]
+        public void First_Get_NotFoundReturnNull(String name, String query)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            Assert.Null(filter.First);
+        }
+
+        [Theory]
+        [InlineData("", "name-equals=a&name-eq=b", "a")]
+        [InlineData("", "name-equals=&name-equals=b", "")]
+        [InlineData("", "name-equals=&name-contains=b", "")]
+        [InlineData("", "name-equals=a&name-contains=b", "a")]
+        [InlineData("", "name-equals=a&name-equals=b", "a")]
+        [InlineData("", "name-equals=a&name-contains=b&name-op=or", "a")]
+        [InlineData("", "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
+        [InlineData(null, "name-equals=a&name-eq=b", "a")]
+        [InlineData(null, "name-equals=&name-equals=b", "")]
+        [InlineData(null, "name-equals=&name-contains=b", "")]
+        [InlineData(null, "name-equals=a&name-contains=b", "a")]
+        [InlineData(null, "name-equals=a&name-equals=b", "a")]
+        [InlineData(null, "name-equals=a&name-contains=b&name-op=or", "a")]
+        [InlineData(null, "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-eq=b", "a")]
+        [InlineData("grid", "grid-name-equals=&grid-name-equals=b", "")]
+        [InlineData("grid", "grid-name-equals=&grid-name-contains=b", "")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-contains=b", "a")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-contains=b&grid-name-op=or", "a")]
+        [InlineData("grid", "GRID-NAME-EQUALS=A&GRID-NAME-CONTAINS=B&GRID-NAME-OP=OR", "A")]
+        public void First_Get_FromQuery(String name, String query, String value)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            IGridFilter actual = filter.First;
+
+            Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
+            Assert.Equal("equals", actual.Type);
+            Assert.Equal(value, actual.Value);
+        }
+
+        [Fact]
+        public void First_Get_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a");
+
+            IGridFilter first = filter.First;
+
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=b");
+
+            IGridFilter actual = filter.First;
+
+            Assert.Equal(typeof(StringContainsFilter), actual.GetType());
+            Assert.Equal("contains", actual.Type);
+            Assert.Equal("a", actual.Value);
+        }
+
+        #endregion
+
+        #region Second
+
+        [Fact]
+        public void Second_Set_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
+
+            filter.Second = null;
+
+            Assert.Null(filter.Second);
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("", "name=a")]
+        [InlineData("", "name-=a")]
+        [InlineData("", "name-eq=a")]
+        [InlineData("", "name-equals=a")]
+        [InlineData("", "name-equals=a&")]
+        [InlineData("", "name-equals=a&name=b")]
+        [InlineData("", "name-equals=a&name-=b")]
+        [InlineData("", "name-equals=a&name-eq=b")]
+        [InlineData(null, "")]
+        [InlineData(null, "name=a")]
+        [InlineData(null, "name-=a")]
+        [InlineData(null, "name-eq=a")]
+        [InlineData(null, "name-equals=a")]
+        [InlineData(null, "name-equals=a&")]
+        [InlineData(null, "name-equals=a&name=b")]
+        [InlineData(null, "name-equals=a&name-=b")]
+        [InlineData(null, "name-equals=a&name-eq=b")]
+        [InlineData("grid", "")]
+        [InlineData("grid", "grid-")]
+        [InlineData("grid", "grid-name=a")]
+        [InlineData("grid", "grid-name-=a")]
+        [InlineData("grid", "grid-name-eq=a")]
+        [InlineData("grid", "grid-name-equals=a")]
+        [InlineData("grid", "grid-name-equals=a&")]
+        [InlineData("grid", "grid-name-equals=a&grid-name=b")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-=b")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-eq=b")]
+        public void Second_Get_NotFoundReturnNull(String name, String query)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            Assert.Null(filter.Second);
+        }
+
+        [Theory]
+        [InlineData("", "name-eq=a&name-equals=b", "b")]
+        [InlineData("", "name-equals=a&name-equals=b", "b")]
+        [InlineData("", "name-contains=a&name-equals=", "")]
+        [InlineData("", "name-equals=a&name-equals=", "")]
+        [InlineData("", "name-contains=a&name-equals=ba", "ba")]
+        [InlineData("", "name-contains=a&name-equals=b&name-op=or", "b")]
+        [InlineData("", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
+        [InlineData(null, "name-eq=a&name-equals=b", "b")]
+        [InlineData(null, "name-equals=a&name-equals=b", "b")]
+        [InlineData(null, "name-contains=a&name-equals=", "")]
+        [InlineData(null, "name-equals=a&name-equals=", "")]
+        [InlineData(null, "name-contains=a&name-equals=ba", "ba")]
+        [InlineData(null, "name-contains=a&name-equals=b&name-op=or", "b")]
+        [InlineData(null, "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
+        [InlineData("grid", "grid-name-eq=a&grid-name-equals=b", "b")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "b")]
+        [InlineData("grid", "grid-name-contains=a&grid-name-equals=", "")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-equals=", "")]
+        [InlineData("grid", "grid-name-contains=a&grid-name-equals=ba", "ba")]
+        [InlineData("grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=or", "b")]
+        [InlineData("grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
+        public void Second_Get_FromQuery(String name, String query, String value)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            IGridFilter actual = filter.Second;
+
+            Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
+            Assert.Equal("equals", actual.Type);
+            Assert.Equal(value, actual.Value);
+        }
+
+        [Fact]
+        public void Second_Get_Caches()
+        {
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
+
+            IGridFilter second = filter.Second;
+
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-starts-with=d&name-ends-with=e");
+
+            IGridFilter actual = filter.Second;
+
+            Assert.Equal(typeof(StringEqualsFilter), actual.GetType());
+            Assert.Equal("equals", actual.Type);
+            Assert.Equal("b", actual.Value);
+        }
+
+        #endregion
+
         #region GridColumnFilter(IGridColumn<T, TValue> column)
 
         [Fact]
@@ -40,6 +296,186 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridColumn<GridModel, String> actual = new GridColumnFilter<GridModel, String>(expected).Column;
 
             Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForEnum()
+        {
+            AssertFilterNameFor(model => model.EnumField, null);
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForSByte()
+        {
+            AssertFilterNameFor(model => model.SByteField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForByte()
+        {
+            AssertFilterNameFor(model => model.ByteField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForInt16()
+        {
+            AssertFilterNameFor(model => model.Int16Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForUInt16()
+        {
+            AssertFilterNameFor(model => model.UInt16Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForInt32()
+        {
+            AssertFilterNameFor(model => model.Int32Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForUInt32()
+        {
+            AssertFilterNameFor(model => model.UInt32Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForInt64()
+        {
+            AssertFilterNameFor(model => model.Int64Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForUInt64()
+        {
+            AssertFilterNameFor(model => model.UInt64Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForSingle()
+        {
+            AssertFilterNameFor(model => model.SingleField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForDouble()
+        {
+            AssertFilterNameFor(model => model.DoubleField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForDecimal()
+        {
+            AssertFilterNameFor(model => model.DecimalField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForString()
+        {
+            AssertFilterNameFor(model => model.StringField, "text");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForBoolean()
+        {
+            AssertFilterNameFor(model => model.BooleanField, "boolean");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForDateTime()
+        {
+            AssertFilterNameFor(model => model.DateTimeField, "date");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableEnum()
+        {
+            AssertFilterNameFor(model => model.NullableEnumField, null);
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableSByte()
+        {
+            AssertFilterNameFor(model => model.NullableSByteField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableByte()
+        {
+            AssertFilterNameFor(model => model.NullableByteField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableInt16()
+        {
+            AssertFilterNameFor(model => model.NullableInt16Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableUInt16()
+        {
+            AssertFilterNameFor(model => model.NullableUInt16Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableInt32()
+        {
+            AssertFilterNameFor(model => model.NullableInt32Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableUInt32()
+        {
+            AssertFilterNameFor(model => model.NullableUInt32Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableInt64()
+        {
+            AssertFilterNameFor(model => model.NullableInt64Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableUInt64()
+        {
+            AssertFilterNameFor(model => model.NullableUInt64Field, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableSingle()
+        {
+            AssertFilterNameFor(model => model.NullableSingleField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableDouble()
+        {
+            AssertFilterNameFor(model => model.NullableDoubleField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableDecimal()
+        {
+            AssertFilterNameFor(model => model.NullableDecimalField, "number");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableBoolean()
+        {
+            AssertFilterNameFor(model => model.NullableBooleanField, "boolean");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForNullableDateTime()
+        {
+            AssertFilterNameFor(model => model.NullableDateTimeField, "date");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForOtherTypes()
+        {
+            AssertFilterNameFor(model => model, null);
         }
 
         [Fact]
@@ -214,6 +650,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
             IQueryable actual = testFilter.Apply(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region Test helpers
+
+        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String name)
+        {
+            Grid<AllTypesModel> grid = new Grid<AllTypesModel>(new AllTypesModel[0]);
+
+            String actual = new GridColumnFilter<AllTypesModel, TValue>(new GridColumn<AllTypesModel, TValue>(grid, property)).Name;
+            String expected = name;
 
             Assert.Equal(expected, actual);
         }

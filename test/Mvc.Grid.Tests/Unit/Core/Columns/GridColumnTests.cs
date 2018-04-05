@@ -161,28 +161,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridColumn_SetsFilterFromServices()
-        {
-            IGridFilters filters = Substitute.For<IGridFilters>();
-            column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
-            column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
-            filters.GetFilter(Arg.Any<GridColumn<GridModel, String>>()).Returns(Substitute.For<IGridColumnFilter<GridModel, String>>());
-
-            IGridColumnFilter expected = filters.GetFilter(new GridColumn<GridModel, String>(column.Grid, model => model.Name));
-            IGridColumnFilter actual = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
         public void GridColumn_SetsDefaultFilter()
         {
-            column.Grid.ViewContext = null;
+            GridColumn<GridModel, String> testColumn = new GridColumn<GridModel, String>(column.Grid, model => model.Name);
 
-            IGridColumnFilter actual = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
-            IGridColumnFilter expected = new GridColumn<GridModel, String>(column.Grid, model => model.Name).Filter;
+            IGridColumnFilter<GridModel, String> actual = testColumn.Filter;
 
-            Assert.NotSame(expected, actual);
+            Assert.Equal(testColumn, actual.Column);
+            Assert.Equal("text", actual.Name);
+            Assert.Null(actual.IsEnabled);
+            Assert.Null(actual.Operator);
+            Assert.Null(actual.IsMulti);
+            Assert.Null(actual.Second);
+            Assert.Null(actual.First);
         }
 
         #endregion
