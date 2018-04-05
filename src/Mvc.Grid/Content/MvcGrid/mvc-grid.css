@@ -154,9 +154,9 @@
     transition: opacity 0.5s;
     position: absolute;
     border-radius: 4px;
+    min-width: 180px;
     display: none;
     z-index: 1100;
-    width: 180px;
     opacity: 0;
 }
 
