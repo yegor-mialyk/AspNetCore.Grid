@@ -152,10 +152,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsNameFromExpression()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, Boolean?>> expression = (model) => model.NIsChecked;
 
-            String actual = new GridColumn<GridModel, String>(column.Grid, expression).Name;
-            String expected = ExpressionHelper.GetExpressionText(expression);
+            String actual = new GridColumn<GridModel, Boolean?>(column.Grid, expression).Name;
+            String expected = "n-is-checked";
 
             Assert.Equal(expected, actual);
         }

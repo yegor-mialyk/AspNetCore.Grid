@@ -17,11 +17,14 @@ namespace NonFactors.Mvc.Grid
                     return OrderValue;
 
                 String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                if (Column.Grid.Query[prefix + "Sort"] == Column.Name)
+                if (String.Equals(Column.Grid.Query[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    String orderValue = Column.Grid.Query[prefix + "Order"];
-                    if (Enum.TryParse(orderValue, out GridSortOrder order))
-                        OrderValue = order;
+                    String order = Column.Grid.Query[prefix + "order"];
+
+                    if ("asc".Equals(order, StringComparison.OrdinalIgnoreCase))
+                        OrderValue = GridSortOrder.Asc;
+                    if ("desc".Equals(order, StringComparison.OrdinalIgnoreCase))
+                        OrderValue = GridSortOrder.Desc;
                 }
                 else if (Column.Grid.Query[prefix + "Sort"] == StringValues.Empty)
                 {

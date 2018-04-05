@@ -26,10 +26,10 @@ var MvcGrid = (function () {
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
         this.showLoading = options.showLoading == null || options.showLoading;
         this.filters = $.extend({
-            'Text': new MvcGridTextFilter(),
-            'Date': new MvcGridDateFilter(),
-            'Number': new MvcGridNumberFilter(),
-            'Boolean': new MvcGridBooleanFilter()
+            'text': new MvcGridTextFilter(),
+            'date': new MvcGridDateFilter(),
+            'number': new MvcGridNumberFilter(),
+            'boolean': new MvcGridBooleanFilter()
         }, options.filters);
 
         if (this.sourceUrl) {
@@ -355,8 +355,8 @@ var MvcGrid = (function () {
         },
 
         cancelFilter: function (column) {
-            this.queryRemove(this.prefix + 'Page');
-            this.queryRemove(this.prefix + 'Rows');
+            this.queryRemove(this.prefix + 'page');
+            this.queryRemove(this.prefix + 'rows');
             this.queryRemoveStartingWith(this.prefix + column.name + '-');
         },
         applyFilter: function (column) {
@@ -364,33 +364,33 @@ var MvcGrid = (function () {
 
             this.queryAdd(this.prefix + column.name + '-' + column.filter.first.type, column.filter.first.val);
             if (column.filter.isMulti) {
-                this.queryAdd(this.prefix + column.name + '-Op', column.filter.operator);
+                this.queryAdd(this.prefix + column.name + '-op', column.filter.operator);
                 this.queryAdd(this.prefix + column.name + '-' + column.filter.second.type, column.filter.second.val);
             }
 
             if (this.pager && this.pager.showPageSizes) {
-                this.queryAdd(this.prefix + 'Rows', this.pager.rowsPerPage.val());
+                this.queryAdd(this.prefix + 'rows', this.pager.rowsPerPage.val());
             }
         },
         applySort: function (column) {
-            this.queryRemove(this.prefix + 'Sort');
-            this.queryRemove(this.prefix + 'Order');
-            this.queryAdd(this.prefix + 'Sort', column.name);
-            var order = column.sort.order == 'Asc' ? 'Desc' : 'Asc';
+            this.queryRemove(this.prefix + 'sort');
+            this.queryRemove(this.prefix + 'order');
+            this.queryAdd(this.prefix + 'sort', column.name);
+            var order = column.sort.order == 'asc' ? 'desc' : 'asc';
             if (!column.sort.order && column.sort.firstOrder) {
                 order = column.sort.firstOrder;
             }
 
-            this.queryAdd(this.prefix + 'Order', order);
+            this.queryAdd(this.prefix + 'order', order);
         },
         applyPage: function (page) {
-            this.queryRemove(this.prefix + 'Page');
-            this.queryRemove(this.prefix + 'Rows');
+            this.queryRemove(this.prefix + 'page');
+            this.queryRemove(this.prefix + 'rows');
 
-            this.queryAdd(this.prefix + 'Page', page);
+            this.queryAdd(this.prefix + 'page', page);
 
             if (this.pager.showPageSizes) {
-                this.queryAdd(this.prefix + 'Rows', this.pager.rowsPerPage.val());
+                this.queryAdd(this.prefix + 'rows', this.pager.rowsPerPage.val());
             }
         },
 
@@ -480,12 +480,12 @@ var MvcGridFilter = (function () {
                         this.renderFilter(filter.first) +
                     '</div>' +
                     (filter.isMulti ?
-                    this.renderOperator(filter, $.fn.mvcgrid.lang.Operator) +
+                    this.renderOperator(filter, $.fn.mvcgrid.lang.operator) +
                     '<div class="second-filter">' +
                         this.renderFilter(filter.second) +
                     '</div>'
                     : '') +
-                    this.renderActions($.fn.mvcgrid.lang.Filter) +
+                    this.renderActions($.fn.mvcgrid.lang.filter) +
                 '</div>');
         },
         renderFilter: function (filter, lang) {
@@ -509,17 +509,17 @@ var MvcGridFilter = (function () {
             return '<div class="operator-filter">' +
                        '<div class="popup-group">' +
                            '<select class="mvc-grid-operator">' +
-                               '<option value="">' + lang.Select + '</option>' +
-                               '<option value="And"' + (filter.operator == 'And' ? ' selected="selected"' : '') + '>' + lang.And + '</option>' +
-                               '<option value="Or"' + (filter.operator == 'Or' ? ' selected="selected"' : '') + '>' + lang.Or + '</option>' +
+                               '<option value="">' + lang.select + '</option>' +
+                               '<option value="and"' + (filter.operator == 'and' ? ' selected="selected"' : '') + '>' + lang.and + '</option>' +
+                               '<option value="or"' + (filter.operator == 'or' ? ' selected="selected"' : '') + '>' + lang.or + '</option>' +
                            '</select>' +
                        '</div>' +
                    '</div>';
         },
         renderActions: function (lang) {
             return '<div class="filter-actions">' +
-                       '<button class="mvc-grid-apply" type="button">' + lang.Apply + '</button>' +
-                       '<button class="mvc-grid-cancel" type="button">' + lang.Remove + '</button>' +
+                       '<button class="mvc-grid-apply" type="button">' + lang.apply + '</button>' +
+                       '<button class="mvc-grid-cancel" type="button">' + lang.remove + '</button>' +
                    '</div>';
         },
 
@@ -610,11 +610,11 @@ var MvcGridTextFilter = (function (base) {
     function MvcGridTextFilter() {
         base.apply(this);
 
-        this.types = ['Contains', 'Equals', 'NotEquals', 'StartsWith', 'EndsWith'];
+        this.types = ['contains', 'equals', 'not-equals', 'starts-with', 'ends-with'];
     }
 
     MvcGridTextFilter.prototype.renderFilter = function (filter) {
-        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Text);
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.text);
     };
 
     return MvcGridTextFilter;
@@ -626,11 +626,11 @@ var MvcGridNumberFilter = (function (base) {
     function MvcGridNumberFilter() {
         base.apply(this);
 
-        this.types = ['Equals', 'NotEquals', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual'];
+        this.types = ['equals', 'not-equals', 'less-than', 'greater-than', 'less-than-or-equal', 'greater-than-or-equal'];
     }
 
     MvcGridNumberFilter.prototype.renderFilter = function (filter) {
-        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Number);
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.number);
     };
 
     MvcGridNumberFilter.prototype.isValid = function (value) {
@@ -646,11 +646,11 @@ var MvcGridDateFilter = (function (base) {
     function MvcGridDateFilter() {
         base.apply(this);
 
-        this.types = ['Equals', 'NotEquals', 'EarlierThan', 'EarlierThanOrEqual', 'LaterThan', 'LaterThanOrEqual'];
+        this.types = ['equals', 'not-equals', 'earlier-than', 'later-than', 'earlier-than-or-equal', 'later-than-or-equal'];
     }
 
     MvcGridDateFilter.prototype.renderFilter = function (filter) {
-        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.Date);
+        return base.prototype.renderFilter.call(this, filter, $.fn.mvcgrid.lang.date);
     };
 
     MvcGridDateFilter.prototype.initRowFilter = function (grid, column, popup) {
@@ -682,16 +682,18 @@ var MvcGridBooleanFilter = (function (base) {
     MvcGridExtends(MvcGridBooleanFilter, base);
 
     function MvcGridBooleanFilter() {
-        return base.apply(this);
+        base.apply(this);
+
+        this.types = ['true', 'false']
     }
 
     MvcGridBooleanFilter.prototype.renderFilter = function (filter) {
-        var lang = $.fn.mvcgrid.lang.Boolean;
+        var lang = $.fn.mvcgrid.lang.boolean;
 
         return '<div class="popup-group">' +
                    '<ul class="mvc-grid-boolean-filter">' +
-                       '<li ' + (filter.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.Yes + '</li>' +
-                       '<li ' + (filter.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.No + '</li>' +
+                       '<li ' + (filter.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.true + '</li>' +
+                       '<li ' + (filter.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.false + '</li>' +
                    '</ul>' +
                '</div>';
     };
@@ -708,8 +710,8 @@ var MvcGridBooleanFilter = (function (base) {
     MvcGridBooleanFilter.prototype.apply = function (grid, column, popup) {
         popup.removeClass('open');
 
-        column.filter.first.type = 'Equals';
-        column.filter.second.type = 'Equals';
+        column.filter.first.type = 'equals';
+        column.filter.second.type = 'equals';
         column.filter.operator = popup.find('.mvc-grid-operator').val();
         column.filter.first.val = popup.find('.first-filter li.active').data('value');
         column.filter.second.val = popup.find('.second-filter li.active').data('value');
@@ -769,41 +771,41 @@ $.fn.mvcgrid = function (options) {
 };
 
 $.fn.mvcgrid.lang = {
-    Text: {
-        Contains: 'Contains',
-        Equals: 'Equals',
-        NotEquals: 'Not equals',
-        StartsWith: 'Starts with',
-        EndsWith: 'Ends with'
+    text: {
+        'contains': 'Contains',
+        'equals': 'Equals',
+        'not-equals': 'Not equals',
+        'starts-with': 'Starts with',
+        'ends-with': 'Ends with'
     },
-    Number: {
-        Equals: 'Equals',
-        NotEquals: 'Not equals',
-        LessThan: 'Less than',
-        GreaterThan: 'Greater than',
-        LessThanOrEqual: 'Less than or equal',
-        GreaterThanOrEqual: 'Greater than or equal'
+    number: {
+        'equals': 'Equals',
+        'not-equals': 'Not equals',
+        'less-than': 'Less than',
+        'greater-than': 'Greater than',
+        'less-than-or-equal': 'Less than or equal',
+        'greater-than-or-equal': 'Greater than or equal'
     },
-    Date: {
-        Equals: 'Equals',
-        NotEquals: 'Not equals',
-        EarlierThan: 'Earlier than',
-        LaterThan: 'Later than',
-        EarlierThanOrEqual: 'Earlier than or equal',
-        LaterThanOrEqual: 'Later than or equal'
+    date: {
+        'equals': 'Equals',
+        'not-equals': 'Not equals',
+        'earlier-than': 'Earlier than',
+        'later-than': 'Later than',
+        'earlier-than-or-equal': 'Earlier than or equal',
+        'later-than-or-equal': 'Later than or equal'
     },
-    Boolean: {
-        Yes: 'Yes',
-        No: 'No'
+    boolean: {
+        'true': 'Yes',
+        'false': 'No'
     },
-    Filter: {
-        Apply: '&#10004;',
-        Remove: '&#10008;'
+    filter: {
+        'apply': '&#10004;',
+        'remove': '&#10008;'
     },
-    Operator: {
-        Select: '',
-        And: 'and',
-        Or: 'or'
+    operator: {
+        'select': '',
+        'and': 'and',
+        'or': 'or'
     }
 };
 

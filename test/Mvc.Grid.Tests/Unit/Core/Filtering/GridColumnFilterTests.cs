@@ -20,10 +20,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             items = new[]
             {
-                new GridModel { Name = "AA", NSum = 10, Sum = 40 },
-                new GridModel { Name = "BB", NSum = 20, Sum = 30 },
+                new GridModel { Name = "aa", NSum = 10, Sum = 40 },
+                new GridModel { Name = "Aa", NSum = 15, Sum = 35 },
+                new GridModel { Name = "AA", NSum = 20, Sum = 35 },
+                new GridModel { Name = "bb", NSum = 20, Sum = 30 },
+                new GridModel { Name = "Bb", NSum = 25, Sum = 25 },
+                new GridModel { Name = "BB", NSum = 30, Sum = 15 },
                 new GridModel { Name = null, NSum = 30, Sum = 20 },
-                new GridModel { Name = "CC", NSum = null, Sum = 10 }
+                new GridModel { Name = "Cc", NSum = null, Sum = 10 }
             }.AsQueryable();
         }
 
@@ -91,7 +95,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullAppliedFilter_ReturnsSameItems()
         {
             filter.IsMulti = true;
-            filter.Operator = "Or";
+            filter.Operator = "or";
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = Substitute.For<IGridFilter>();
 
@@ -101,29 +105,35 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        [Fact]
-        public void Apply_UsingAndOperator()
+        [Theory]
+        [InlineData("or")]
+        [InlineData("Or")]
+        [InlineData("OR")]
+        public void Apply_UsingAndOperator(String op)
         {
+            filter.Operator = op;
             filter.IsMulti = true;
-            filter.Operator = "And";
-            filter.First = new StringContainsFilter { Value = "A" };
-            filter.Second = new StringContainsFilter { Value = "AA" };
+            filter.First = new StringContainsFilter { Value = "a" };
+            filter.Second = new StringContainsFilter { Value = "aA" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A") && item.Name.Contains("AA"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A") && item.Name.ToUpper().Contains("AA"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_UsingOrOperator()
+        [Theory]
+        [InlineData("or")]
+        [InlineData("Or")]
+        [InlineData("OR")]
+        public void Apply_UsingOrOperator(String op)
         {
+            filter.Operator = op;
             filter.IsMulti = true;
-            filter.Operator = "Or";
-            filter.First = new StringContainsFilter { Value = "A" };
-            filter.Second = new StringContainsFilter { Value = "BB" };
+            filter.First = new StringContainsFilter { Value = "a" };
+            filter.Second = new StringContainsFilter { Value = "bB" };
 
-            IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("A") || item.Name.Contains("BB")));
+            IQueryable expected = items.Where(item => item.Name != null && (item.Name.ToUpper().Contains("A") || item.Name.ToUpper().Contains("BB")));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -131,16 +141,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData(null)]
-        [InlineData("or")]
-        [InlineData("and")]
+        [InlineData("xor")]
+        [InlineData("andy")]
         public void Apply_InvalidOperator_FirstFilter(String op)
         {
             filter.Operator = op;
             filter.IsMulti = true;
-            filter.First = new StringContainsFilter { Value = "A" };
+            filter.First = new StringContainsFilter { Value = "a" };
             filter.Second = new StringContainsFilter { Value = "BB" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -148,16 +158,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData(null)]
-        [InlineData("or")]
-        [InlineData("and")]
+        [InlineData("xor")]
+        [InlineData("andy")]
         public void Apply_InvalidOperator_SecondFilter(String op)
         {
             filter.Operator = op;
             filter.IsMulti = true;
             filter.First = Substitute.For<IGridFilter>();
-            filter.Second = new StringContainsFilter { Value = "A" };
+            filter.Second = new StringContainsFilter { Value = "a" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -167,11 +177,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FirstFilter()
         {
             filter.IsMulti = false;
-            filter.Operator = "Or";
-            filter.First = new StringContainsFilter { Value = "A" };
-            filter.Second = new StringContainsFilter { Value = "BB" };
+            filter.Operator = "or";
+            filter.First = new StringContainsFilter { Value = "a" };
+            filter.Second = new StringContainsFilter { Value = "bb" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("A"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -181,11 +191,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_SecondFilter()
         {
             filter.IsMulti = false;
-            filter.Operator = "Or";
+            filter.Operator = "or";
             filter.First = Substitute.For<IGridFilter>();
-            filter.Second = new StringContainsFilter { Value = "BB" };
+            filter.Second = new StringContainsFilter { Value = "bB" };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("BB"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("BB"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -196,10 +206,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
             GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn);
-            testFilter.Second = new Int32Filter { Type = "GreaterThan", Value = "25" };
-            testFilter.First = new Int32Filter { Type = "Equals", Value = "10" };
+            testFilter.Second = new Int32Filter { Type = "greater-than", Value = "25" };
+            testFilter.First = new Int32Filter { Type = "equals", Value = "10" };
             testFilter.IsEnabled = true;
-            testFilter.Operator = "Or";
+            testFilter.Operator = "or";
             testFilter.IsMulti = true;
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);

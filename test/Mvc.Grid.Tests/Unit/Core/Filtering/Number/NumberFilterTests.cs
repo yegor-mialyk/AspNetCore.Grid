@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableEqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "Equals";
+            filter.Type = "equals";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum == 1);
@@ -54,7 +54,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_EqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "Equals";
+            filter.Type = "equals";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum == 1);
@@ -66,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableNotEqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "NotEquals";
+            filter.Type = "not-equals";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum != 1);
@@ -78,7 +78,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NotEqualsFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "NotEquals";
+            filter.Type = "not-equals";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum != 1);
@@ -90,7 +90,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableLessThanFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "LessThan";
+            filter.Type = "less-than";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum < 1);
@@ -102,7 +102,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_LessThanFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "LessThan";
+            filter.Type = "less-than";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum < 1);
@@ -114,7 +114,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableGreaterThanFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "GreaterThan";
+            filter.Type = "greater-than";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum > 1);
@@ -126,7 +126,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_GreaterThanFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "GreaterThan";
+            filter.Type = "greater-than";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum > 1);
@@ -138,7 +138,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableLessThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "LessThanOrEqual";
+            filter.Type = "less-than-or-equal";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum <= 1);
@@ -150,7 +150,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_LessThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "LessThanOrEqual";
+            filter.Type = "less-than-or-equal";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum <= 1);
@@ -162,7 +162,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableGreaterThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "GreaterThanOrEqual";
+            filter.Type = "greater-than-or-equal";
 
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
             IEnumerable expected = items.Where(model => model.NSum >= 1);
@@ -174,7 +174,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_GreaterThanOrEqualFilter()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "GreaterThanOrEqual";
+            filter.Type = "greater-than-or-equal";
 
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
             IEnumerable expected = items.Where(model => model.Sum >= 1);
@@ -186,7 +186,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_OnNotSupportedFilterTypeReturnsNull()
         {
             filter.GetNumericValue().Returns(1);
-            filter.Type = "Test";
+            filter.Type = "test";
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }

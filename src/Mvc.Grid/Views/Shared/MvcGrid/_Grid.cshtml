@@ -22,7 +22,7 @@
                         data-filter-second-type="@column.Filter.Second?.Type"
                         data-filter-second-val="@column.Filter.Second?.Value"
                         data-sort="@column.Sort.IsEnabled"
-                        data-sort-order="@column.Sort.Order"
+                        data-sort-order="@column.Sort.Order.ToString().ToLower()"
                         data-sort-first="@column.Sort.FirstOrder">
                         @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.FilterRow)
                         {
@@ -38,13 +38,13 @@
                             }
                             else
                             {
-                                <span class="mvc-grid-header-title @column.Sort.Order?.ToString().ToLower()">@column.Title</span>
+                                <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
                                 <a href="#" class="mvc-grid-filter @filterApplied"></a>
                             }
                         }
                         else
                         {
-                            <span class="mvc-grid-header-title @column.Sort.Order?.ToString().ToLower()">@column.Title</span>
+                            <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
                         }
                     </th>
                 }

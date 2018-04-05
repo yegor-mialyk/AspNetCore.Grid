@@ -39,13 +39,10 @@ namespace NonFactors.Mvc.Grid
 
             if (IsMulti == true && left != null && right != null)
             {
-                switch (Operator)
-                {
-                    case "And":
-                        return Expression.AndAlso(left, right);
-                    case "Or":
-                        return Expression.OrElse(left, right);
-                }
+                if ("and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
+                    return Expression.AndAlso(left, right);
+                else if ("or".Equals(Operator, StringComparison.OrdinalIgnoreCase))
+                    return Expression.OrElse(left, right);
             }
 
             return left ?? right;

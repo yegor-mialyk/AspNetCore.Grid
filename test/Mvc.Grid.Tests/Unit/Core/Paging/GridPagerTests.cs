@@ -43,14 +43,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("", "grid-page=")]
+        [InlineData("", "grid-page=2a")]
         [InlineData(null, "")]
-        [InlineData("Grid", "")]
-        [InlineData("", "Grid-Page=")]
-        [InlineData("", "Grid-Page=2a")]
-        [InlineData(null, "Grid-Page=")]
-        [InlineData(null, "Grid-Page=2a")]
-        [InlineData("Grid", "Grid-Page=")]
-        [InlineData("Grid", "Grid-Page=2a")]
+        [InlineData(null, "grid-page=")]
+        [InlineData(null, "grid-page=2a")]
+        [InlineData("grid", "")]
+        [InlineData("grid", "grid-page=")]
+        [InlineData("grid", "grid-page=2a")]
         public void CurrentPage_OnInvalidQueryPageUsesCurrentPage(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -65,9 +65,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Page=5")]
-        [InlineData(null, "Page=5")]
-        [InlineData("Grid", "Grid-Page=5")]
+        [InlineData("", "page=5")]
+        [InlineData(null, "page=5")]
+        [InlineData("grid", "grid-page=5")]
         public void CurrentPage_OnGreaterThanTotalPagesReturnsTotalPages(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -82,12 +82,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Page=0")]
-        [InlineData("", "Page=-1")]
-        [InlineData(null, "Page=0")]
-        [InlineData(null, "Page=-1")]
-        [InlineData("Grid", "Grid-Page=0")]
-        [InlineData("Grid", "Grid-Page=-1")]
+        [InlineData("", "page=0")]
+        [InlineData("", "page=-1")]
+        [InlineData(null, "page=0")]
+        [InlineData(null, "page=-1")]
+        [InlineData("grid", "grid-page=0")]
+        [InlineData("grid", "grid-page=-1")]
         public void CurrentPage_OnLessOrEqualToZeroQueryPageReturnsOne(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -114,13 +114,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Page=2")]
-        [InlineData(null, "Page=2")]
-        [InlineData("Grid", "Grid-Page=2")]
+        [InlineData("", "page=2")]
+        [InlineData("", "PAGE=2")]
+        [InlineData(null, "page=2")]
+        [InlineData(null, "PAGE=2")]
+        [InlineData("grid", "grid-page=2")]
+        [InlineData("grid", "GRID-PAGE=2")]
         public void CurrentPage_SetsCurrentPageFromQuery(String name, String query)
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString(query);
             pager.Grid.Name = name;
+            pager.Grid.Query = HttpUtility.ParseQueryString(query);
 
             pager.TotalRows = 4 * pager.RowsPerPage;
 
@@ -137,13 +140,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("", "")]
         [InlineData(null, "")]
-        [InlineData("Grid", "")]
-        [InlineData("", "Rows=")]
-        [InlineData("", "Rows=2a")]
-        [InlineData(null, "Rows=")]
-        [InlineData(null, "Rows=2a")]
-        [InlineData("Grid", "Grid-Rows=")]
-        [InlineData("Grid", "Grid-Rows=2a")]
+        [InlineData("grid", "")]
+        [InlineData("", "rows=")]
+        [InlineData("", "rows=2a")]
+        [InlineData(null, "rows=")]
+        [InlineData(null, "rows=2a")]
+        [InlineData("grid", "grid-rows=")]
+        [InlineData("grid", "grid-rows=2a")]
         public void RowsPerPage_OnInvalidQueryRowsUsesRowsPerPage(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -160,12 +163,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Rows=-1")]
-        [InlineData("", "Rows=-10")]
-        [InlineData(null, "Rows=-1")]
-        [InlineData(null, "Rows=-10")]
-        [InlineData("Grid", "Grid-Rows=-1")]
-        [InlineData("Grid", "Grid-Rows=-10")]
+        [InlineData("", "rows=-1")]
+        [InlineData("", "rows=-10")]
+        [InlineData(null, "rows=-1")]
+        [InlineData(null, "rows=-10")]
+        [InlineData("grid", "grid-rows=-1")]
+        [InlineData("grid", "grid-rows=-10")]
         public void RowsPerPage_OnLessThanZeroQueryPageReturnsZero(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -196,15 +199,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Rows=10", 10)]
-        [InlineData("", "Rows=20", 20)]
-        [InlineData("", "Rows=60", 10)]
-        [InlineData(null, "Rows=10", 10)]
-        [InlineData(null, "Rows=20", 20)]
-        [InlineData(null, "Rows=60", 10)]
-        [InlineData("Grid", "Grid-Rows=10", 10)]
-        [InlineData("Grid", "Grid-Rows=20", 20)]
-        [InlineData("Grid", "Grid-Rows=60", 10)]
+        [InlineData("", "rows=10", 10)]
+        [InlineData("", "rows=20", 20)]
+        [InlineData("", "rows=60", 10)]
+        [InlineData(null, "rows=10", 10)]
+        [InlineData(null, "rows=20", 20)]
+        [InlineData(null, "rows=60", 10)]
+        [InlineData("grid", "grid-rows=10", 10)]
+        [InlineData("grid", "grid-rows=20", 20)]
+        [InlineData("grid", "grid-rows=60", 10)]
         public void RowsPerPage_AllowsOnlyFromPageSizes(String name, String query, Int32 rows)
         {
             pager.PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20" };
@@ -219,9 +222,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Rows=123")]
-        [InlineData(null, "Rows=123")]
-        [InlineData("Grid", "Grid-Rows=123")]
+        [InlineData("", "rows=123")]
+        [InlineData("", "ROWS=123")]
+        [InlineData(null, "rows=123")]
+        [InlineData(null, "ROWS=123")]
+        [InlineData("grid", "grid-rows=123")]
+        [InlineData("grid", "GRID-ROWS=123")]
         public void RowsPerPage_SetsRowsPerPageFromQuery(String name, String query)
         {
             pager.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -238,7 +244,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RowsPerPage_DoesNotUseQuery()
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString("Rows=2");
+            pager.Grid.Query = HttpUtility.ParseQueryString("rows=2");
             pager.ShowPageSizes = false;
             pager.RowsPerPage = 1;
 
@@ -285,7 +291,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(6, 5, 1)]
         public void FirstDisplayPage_ReturnsFirstDisplayPage(Int32 display, Int32 page, Int32 first)
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString("Page=" + page);
+            pager.Grid.Query = HttpUtility.ParseQueryString("page=" + page);
             pager.PagesToDisplay = display;
             pager.RowsPerPage = 1;
             pager.TotalRows = 5;

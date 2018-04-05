@@ -13,17 +13,17 @@ namespace NonFactors.Mvc.Grid
 
             switch (Type)
             {
-                case "Equals":
+                case "equals":
                     return Expression.Equal(expression, Expression.Constant(value, expression.Type));
-                case "NotEquals":
+                case "not-equals":
                     return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
-                case "LessThan":
+                case "less-than":
                     return Expression.LessThan(expression, Expression.Constant(value, expression.Type));
-                case "GreaterThan":
+                case "greater-than":
                     return Expression.GreaterThan(expression, Expression.Constant(value, expression.Type));
-                case "LessThanOrEqual":
+                case "less-than-or-equal":
                     return Expression.LessThanOrEqual(expression, Expression.Constant(value, expression.Type));
-                case "GreaterThanOrEqual":
+                case "greater-than-or-equal":
                     return Expression.GreaterThanOrEqual(expression, Expression.Constant(value, expression.Type));
                 default:
                     return null;

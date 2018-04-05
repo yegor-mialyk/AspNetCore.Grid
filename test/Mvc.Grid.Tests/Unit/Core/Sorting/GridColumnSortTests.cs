@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -21,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Order_Set_Caches()
         {
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString("Sort=Name&Order=Asc");
+            sort.Column.Grid.Query = HttpUtility.ParseQueryString("sort=name&order=asc");
 
             sort.Order = null;
 
@@ -29,18 +28,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Sort=Name&Order=", "Name", GridSortOrder.Desc, null)]
-        [InlineData("", "Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData("", "Sort=Name&Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
-        [InlineData("", "Sort=Name&Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData(null, "Sort=Name&Order=", "Name", GridSortOrder.Desc, null)]
-        [InlineData(null, "Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData(null, "Sort=Name&Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
-        [InlineData(null, "Sort=Name&Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=", "Name", GridSortOrder.Desc, null)]
-        [InlineData("Grid", "Grid-Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("", "sort=name&order=", "name", GridSortOrder.Desc, null)]
+        [InlineData("", "order=desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("", "sort=name&order=asc", "name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData("", "sort=name&order=desc", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("", "SORT=NAME&ORDER=DESC", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData(null, "sort=name&order=", "name", GridSortOrder.Desc, null)]
+        [InlineData(null, "order=desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData(null, "sort=name&order=asc", "name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData(null, "sort=name&order=desc", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData(null, "SORT=NAME&ORDER=DESC", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("grid", "grid-sort=name&grid-order=", "name", GridSortOrder.Desc, null)]
+        [InlineData("grid", "grid-order=desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("grid", "grid-sort=name&grid-order=asc", "name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData("grid", "grid-sort=name&grid-order=desc", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("grid", "GRID-SORT=NAME&GRID-ORDER=DESC", "name", GridSortOrder.Asc, GridSortOrder.Desc)]
         public void Order_ReturnsFromQuery(String gridName, String query, String name, GridSortOrder? initialOrder, GridSortOrder? order)
         {
             sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -55,15 +57,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "Sort=Name&Order=", "Sort=Name&Order=Desc")]
-        [InlineData("", "Sort=Name&Order=Asc", "Sort=Name&Order=Desc")]
-        [InlineData("", "Sort=Name&Order=Desc", "Sort=Name&Order=Asc")]
-        [InlineData(null, "Sort=Name&Order=", "Sort=Name&Order=Desc")]
-        [InlineData(null, "Sort=Name&Order=Asc", "Sort=Name&Order=Desc")]
-        [InlineData(null, "Sort=Name&Order=Desc", "Sort=Name&Order=Asc")]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=", "Grid-Sort=Name&Grid-Order=Desc")]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Asc", "Grid-Sort=Name&Grid-Order=Desc")]
-        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc")]
+        [InlineData("", "sort=name&order=", "sort=name&order=desc")]
+        [InlineData("", "sort=name&order=asc", "sort=name&order=desc")]
+        [InlineData("", "sort=name&order=desc", "sort=name&order=asc")]
+        [InlineData(null, "sort=name&order=", "sort=name&order=desc")]
+        [InlineData(null, "sort=name&order=asc", "sort=name&order=desc")]
+        [InlineData(null, "sort=name&order=desc", "sort=name&order=asc")]
+        [InlineData("grid", "grid-sort=name&grid-order=", "grid-sort=name&grid-order=desc")]
+        [InlineData("grid", "grid-sort=name&grid-order=asc", "grid-sort=name&grid-order=desc")]
+        [InlineData("grid", "grid-sort=name&grid-order=desc", "grid-sort=name&grid-order=asc")]
         public void Order_Get_Caches(String gridName, String initialQuery, String changedQuery)
         {
             sort.Column.Grid.Query = HttpUtility.ParseQueryString(initialQuery);
@@ -80,15 +82,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("", "-Order=Desc", "", GridSortOrder.Asc)]
-        [InlineData("", "e-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
-        [InlineData("", "R-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
-        [InlineData(null, "-Order=Desc", "", GridSortOrder.Asc)]
-        [InlineData(null, "e-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
-        [InlineData(null, "R-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
-        [InlineData("Grid", "Grid-Order=Desc", "", GridSortOrder.Asc)]
-        [InlineData("Grid", "Gride-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
-        [InlineData("Grid", "RGrid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
+        [InlineData("", "order=", "", GridSortOrder.Asc)]
+        [InlineData("", "-order=desc", "", GridSortOrder.Asc)]
+        [InlineData("", "e-sort=name&grid-order=asc", "name", GridSortOrder.Asc)]
+        [InlineData("", "r-sort=name&grid-order=desc", "name", GridSortOrder.Desc)]
+        [InlineData(null, "order=", "", GridSortOrder.Asc)]
+        [InlineData(null, "-order=desc", "", GridSortOrder.Asc)]
+        [InlineData(null, "e-sort=name&grid-order=asc", "name", GridSortOrder.Asc)]
+        [InlineData(null, "r-sort=name&grid-order=desc", "name", GridSortOrder.Desc)]
+        [InlineData("grid", "grid-order=", "", GridSortOrder.Asc)]
+        [InlineData("grid", "grid-order=desc", "", GridSortOrder.Asc)]
+        [InlineData("grid", "gride-sort=name&grid-order=asc", "name", GridSortOrder.Asc)]
+        [InlineData("grid", "rgrid-sort=name&grid-order=desc", "name", GridSortOrder.Desc)]
         public void Order_NotFound_ReturnsInitialSortOrder(String gridName, String query, String name, GridSortOrder? initialOrder)
         {
             sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -96,10 +101,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             sort.InitialOrder = initialOrder;
             sort.Column.Name = name;
 
-            GridSortOrder? actual = sort.Order;
             GridSortOrder? expected = initialOrder;
+            GridSortOrder? actual = sort.Order;
 
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("", "sort=test&order=test")]
+        [InlineData(null, "sort=test&order=test")]
+        [InlineData("grid", "grid-sort=test&grid-order=test")]
+        public void Order_OtherColumn_ReturnsNull(String gridName, String query)
+        {
+            sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+            sort.InitialOrder = GridSortOrder.Asc;
+            sort.Column.Grid.Name = gridName;
+            sort.Column.Name = "this";
+
+            Assert.Null(sort.Order);
         }
 
         #endregion
@@ -164,7 +183,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_ReturnsItemsSortedInAscendingOrder()
         {
-            IQueryable<GridModel> items = new[] { new GridModel { Name = "B" }, new GridModel { Name = "A" } }.AsQueryable();
+            IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
             sort.Order = GridSortOrder.Asc;
             sort.IsEnabled = true;
 
@@ -177,7 +196,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_ReturnsItemsSortedInDescendingOrder()
         {
-            IQueryable<GridModel> items = new[] { new GridModel { Name = "B" }, new GridModel { Name = "A" } }.AsQueryable();
+            IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
             sort.Order = GridSortOrder.Desc;
             sort.IsEnabled = true;
 
