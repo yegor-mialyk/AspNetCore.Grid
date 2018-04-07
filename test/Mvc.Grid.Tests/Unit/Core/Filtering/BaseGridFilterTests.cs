@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class BaseGridFilterTests
+    public abstract class BaseGridFilterTests
     {
         protected IQueryable<T> Filter<T, P>(IQueryable<T> items, Expression expression, Expression<Func<T, P>> property)
         {

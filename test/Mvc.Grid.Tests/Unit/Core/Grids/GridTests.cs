@@ -11,12 +11,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region IGrid.Columns
 
         [Fact]
-        public void IGridColumns_ReturnsColumns()
+        public void IGrid_ReturnsColumns()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            IGridColumns<IGridColumn> actual = (grid as IGrid).Columns;
-            IGridColumns<IGridColumn> expected = grid.Columns;
+            Object actual = (grid as IGrid).Columns;
+            Object expected = grid.Columns;
 
             Assert.Same(expected, actual);
         }
@@ -26,12 +26,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region IGrid.Rows
 
         [Fact]
-        public void IGridRows_ReturnsRows()
+        public void IGrid_ReturnsRows()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            IGridRows<Object> actual = (grid as IGrid).Rows;
-            IGridRows<Object> expected = grid.Rows;
+            Object actual = (grid as IGrid).Rows;
+            Object expected = grid.Rows;
 
             Assert.Same(expected, actual);
         }
@@ -41,12 +41,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region IGrid.Pager
 
         [Fact]
-        public void IGridPager_ReturnsPager()
+        public void IGrid_ReturnsPager()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            IGridPager actual = ((IGrid)grid).Pager;
-            IGridPager expected = grid.Pager;
+            Object actual = ((IGrid)grid).Pager;
+            Object expected = grid.Pager;
 
             Assert.Same(expected, actual);
         }
@@ -58,9 +58,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsProcessors()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
-
-            Assert.Empty(grid.Processors);
+            Assert.Empty(new Grid<GridModel>(new GridModel[0]).Processors);
         }
 
         [Fact]

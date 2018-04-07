@@ -5,8 +5,8 @@ namespace NonFactors.Mvc.Grid
 {
     public interface IGridFilter
     {
-        String Type { get; set; }
         String Value { get; set; }
+        String Method { get; set; }
 
         Expression Apply(Expression expression);
     }

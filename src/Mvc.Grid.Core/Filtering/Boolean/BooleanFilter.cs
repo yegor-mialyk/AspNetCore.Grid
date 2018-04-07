@@ -7,18 +7,11 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
-            Object value = GetBooleanValue();
+            if ("false".Equals(Value, StringComparison.OrdinalIgnoreCase))
+                return Expression.Equal(expression, Expression.Constant(false, expression.Type));
 
-            return value == null ? null : Expression.Equal(expression, Expression.Constant(value, expression.Type));
-        }
-
-        private Object GetBooleanValue()
-        {
-            if (String.Equals(Value, "true", StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            if (String.Equals(Value, "false", StringComparison.OrdinalIgnoreCase))
-                return false;
+            if ("true".Equals(Value, StringComparison.OrdinalIgnoreCase))
+                return Expression.Equal(expression, Expression.Constant(true, expression.Type));
 
             return null;
         }

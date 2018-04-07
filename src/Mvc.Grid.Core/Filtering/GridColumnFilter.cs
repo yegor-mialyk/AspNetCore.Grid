@@ -17,13 +17,11 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (OperatorIsSet)
-                    return OperatorValue;
-
-                String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                OperatorValue = Column.Grid.Query[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
-
-                OperatorIsSet = true;
+                if (!OperatorIsSet)
+                {
+                    String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
+                    Operator = Column.Grid.Query[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
+                }
 
                 return OperatorValue;
             }
@@ -40,12 +38,8 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (FirstIsSet)
-                    return FirstValue;
-
-                FirstValue = GetFirstFilter();
-
-                FirstIsSet = true;
+                if (!FirstIsSet)
+                    First = GetFirstFilter();
 
                 return FirstValue;
             }
@@ -62,12 +56,8 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (SecondIsSet)
-                    return SecondValue;
-
-                SecondValue = GetSecondFilter();
-
-                SecondIsSet = true;
+                if (!SecondIsSet)
+                    Second = GetSecondFilter();
 
                 return SecondValue;
             }
@@ -108,10 +98,10 @@ namespace NonFactors.Mvc.Grid
             if (keys.Length == 0)
                 return null;
 
-            String filterType = keys[0].Substring(columnName.Length);
+            String method = keys[0].Substring(columnName.Length);
             String value = Column.Grid.Query[keys[0]][0];
 
-            return GetFilter(filterType, value);
+            return GetFilter(method, value);
         }
         private IGridFilter GetSecondFilter()
         {
@@ -128,15 +118,13 @@ namespace NonFactors.Mvc.Grid
                 if (values.Count < 2)
                     return null;
 
-                String filterType = keys[0].Substring(columnName.Length);
-
-                return GetFilter(filterType, values[1]);
+                return GetFilter(keys[0].Substring(columnName.Length), values[1]);
             }
 
-            String type = keys[1].Substring(columnName.Length);
+            String method = keys[1].Substring(columnName.Length);
             String value = Column.Grid.Query[keys[1]][0];
 
-            return GetFilter(type, value);
+            return GetFilter(method, value);
         }
         private String[] GetFilterKeys(String columnName)
         {
@@ -151,7 +139,7 @@ namespace NonFactors.Mvc.Grid
         }
         private String GetName(IGridColumn<T, TValue> column)
         {
-            Type type = Nullable.GetUnderlyingType(column.Expression.ReturnType) ?? column.Expression.ReturnType;
+            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
             if (type.GetTypeInfo().IsEnum)
                 return null;
 
@@ -179,11 +167,11 @@ namespace NonFactors.Mvc.Grid
                     return null;
             }
         }
-        private IGridFilter GetFilter(String filterType, String value)
+        private IGridFilter GetFilter(String method, String value)
         {
-            Type valueType = Nullable.GetUnderlyingType(Column.Expression.ReturnType) ?? Column.Expression.ReturnType;
+            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
 
-            IGridFilter filter = (Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters()).GetFilter(valueType, filterType);
+            IGridFilter filter = (Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters()).GetFilter(type, method);
 
             if (filter != null)
                 filter.Value = value;
@@ -193,8 +181,8 @@ namespace NonFactors.Mvc.Grid
 
         private Expression CreateFilterExpression()
         {
-            Expression right = Second?.Apply(Column.Expression.Body);
             Expression left = First?.Apply(Column.Expression.Body);
+            Expression right = Second?.Apply(Column.Expression.Body);
 
             if (IsMulti == true && left != null && right != null)
             {

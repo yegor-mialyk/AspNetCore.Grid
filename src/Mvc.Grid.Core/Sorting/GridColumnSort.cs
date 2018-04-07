@@ -9,29 +9,33 @@ namespace NonFactors.Mvc.Grid
     {
         public Boolean? IsEnabled { get; set; }
 
-        public GridSortOrder? Order
+        public virtual GridSortOrder? Order
         {
             get
             {
-                if (OrderIsSet)
-                    return OrderValue;
-
-                String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                if (String.Equals(Column.Grid.Query[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
+                if (!OrderIsSet)
                 {
-                    String order = Column.Grid.Query[prefix + "order"];
+                    String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
+                    if (String.Equals(Column.Grid.Query[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        String order = Column.Grid.Query[prefix + "order"];
 
-                    if ("asc".Equals(order, StringComparison.OrdinalIgnoreCase))
-                        OrderValue = GridSortOrder.Asc;
-                    if ("desc".Equals(order, StringComparison.OrdinalIgnoreCase))
-                        OrderValue = GridSortOrder.Desc;
+                        if ("asc".Equals(order, StringComparison.OrdinalIgnoreCase))
+                            Order = GridSortOrder.Asc;
+                        else if ("desc".Equals(order, StringComparison.OrdinalIgnoreCase))
+                            Order = GridSortOrder.Desc;
+                        else
+                            Order = null;
+                    }
+                    else if (Column.Grid.Query[prefix + "sort"] == StringValues.Empty)
+                    {
+                        Order = InitialOrder;
+                    }
+                    else
+                    {
+                        Order = null;
+                    }
                 }
-                else if (Column.Grid.Query[prefix + "Sort"] == StringValues.Empty)
-                {
-                    OrderValue = InitialOrder;
-                }
-
-                OrderIsSet = true;
 
                 return OrderValue;
             }

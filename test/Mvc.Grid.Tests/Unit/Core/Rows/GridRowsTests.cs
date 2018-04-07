@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region GetEnumerator()
 
         [Fact]
-        public void GetEnumerator_OnNullCurrentRowsProcessesRows()
+        public void GetEnumerator_ProcessesRows()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             IGridProcessor<GridModel> postProcessor = Substitute.For<IGridProcessor<GridModel>>();
@@ -45,10 +45,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.Processors.Add(preProcessor);
             grid.Processors.Add(manProcessor);
 
-            GridRows<GridModel> rows = new GridRows<GridModel>(grid);
-            IEnumerable<IGridRow<GridModel>> currentRows = rows.CurrentRows;
-
-            IEnumerable<Object> actual = rows.ToList().Select(row => row.Model);
+            IEnumerable<Object> actual = new GridRows<GridModel>(grid).ToList().Select(row => row.Model);
             IEnumerable<Object> expected = postProcessedItems;
 
             postProcessor.Received().Process(preProcessedItems);
@@ -56,7 +53,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             preProcessor.Received().Process(items);
 
             Assert.Equal(expected, actual);
-            Assert.Null(currentRows);
         }
 
         [Fact]
@@ -87,7 +83,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetEnumerator_ReturnsCurrentRows()
+        public void GetEnumerator_CachesRows()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();

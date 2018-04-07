@@ -92,13 +92,13 @@ var MvcGrid = (function () {
                     operator: header.data('filter-operator') || '',
                     name: header.data('filter-name') || '',
                     first: {
-                        type: header.data('filter-first-type') || '',
-                        val: header.data('filter-first-val') || '',
+                        method: header.data('filter-first-method') || '',
+                        value: header.data('filter-first-value') || '',
                         isInline: this.filterMode != 'ExcelRow'
                     },
                     second: {
-                        type: header.data('filter-second-type') || '',
-                        val: header.data('filter-second-val') || '',
+                        method: header.data('filter-second-method') || '',
+                        value: header.data('filter-second-value') || '',
                         isInline: this.filterMode != 'ExcelRow'
                     }
                 };
@@ -147,7 +147,7 @@ var MvcGrid = (function () {
                     grid.renderFilter(column, filter);
                 });
 
-                $(column.rowFilter).find('.mvc-grid-input').on('keyup.mvcgrid', function (e) {
+                $(column.rowFilter).find('.mvc-grid-value').on('keyup.mvcgrid', function (e) {
                     if (filter.isValid(this.value)) {
                         $(this).removeClass('invalid');
 
@@ -159,12 +159,12 @@ var MvcGrid = (function () {
                     }
                 });
 
-                var filterRowType = $(column.rowFilter).find('.mvc-grid-type');
-                if (!filterRowType.val()) {
-                    filterRowType.val(filter.types[0]);
+                var method = $(column.rowFilter).find('.mvc-grid-method');
+                if (method.val() == '') {
+                    method.val(filter.methods[0]);
                 }
 
-                var input = $(column.rowFilter).find('.mvc-grid-input');
+                var input = $(column.rowFilter).find('.mvc-grid-value');
                 if (input.length && !filter.isValid(input.val())) {
                     input.addClass('invalid');
                 }
@@ -362,10 +362,10 @@ var MvcGrid = (function () {
         applyFilter: function (column) {
             this.cancelFilter(column);
 
-            this.queryAdd(this.prefix + column.name + '-' + column.filter.first.type, column.filter.first.val);
+            this.queryAdd(this.prefix + column.name + '-' + column.filter.first.method, column.filter.first.value);
             if (column.filter.isMulti) {
                 this.queryAdd(this.prefix + column.name + '-op', column.filter.operator);
-                this.queryAdd(this.prefix + column.name + '-' + column.filter.second.type, column.filter.second.val);
+                this.queryAdd(this.prefix + column.name + '-' + column.filter.second.method, column.filter.second.value);
             }
 
             if (this.pager && this.pager.showPageSizes) {
@@ -434,10 +434,10 @@ var MvcGrid = (function () {
             header.removeAttr('data-filter-name');
             header.removeAttr('data-filter-multi');
             header.removeAttr('data-filter-operator');
-            header.removeAttr('data-filter-first-val');
-            header.removeAttr('data-filter-first-type');
-            header.removeAttr('data-filter-second-val');
-            header.removeAttr('data-filter-second-type');
+            header.removeAttr('data-filter-first-value');
+            header.removeAttr('data-filter-first-method');
+            header.removeAttr('data-filter-second-value');
+            header.removeAttr('data-filter-second-method');
 
             header.removeAttr('data-sort');
             header.removeAttr('data-sort-order');
@@ -468,7 +468,7 @@ function MvcGridExtends(subclass, base) {
 
 var MvcGridFilter = (function () {
     function MvcGridFilter() {
-        this.types = [];
+        this.methods = [];
     }
 
     MvcGridFilter.prototype = {
@@ -489,18 +489,18 @@ var MvcGridFilter = (function () {
                 '</div>');
         },
         renderFilter: function (filter, lang) {
-            var options = this.types.reduce(function (all, type) {
-                return all + '<option value="' + type + '"' + (filter.type == type ? ' selected="selected"' : '') + '>' + lang[type] + '</option>';
+            var methods = this.methods.reduce(function (all, method) {
+                return all + '<option value="' + method + '"' + (filter.method == method ? ' selected="selected"' : '') + '>' + lang[method] + '</option>';
             }, '');
 
             return '<div class="popup-group">' +
-                       '<select class="mvc-grid-type">' +
-                            options +
+                       '<select class="mvc-grid-method">' +
+                            methods +
                         '</select>' +
                    '</div>' +
                    (!filter.isInline ?
                    '<div class="popup-group">' +
-                       '<input class="mvc-grid-input" value="' + filter.val + '" />' +
+                       '<input class="mvc-grid-value" value="' + filter.value + '" />' +
                    '</div>'
                    :
                    '');
@@ -524,7 +524,7 @@ var MvcGridFilter = (function () {
         },
 
         init: function (grid, column, popup) {
-            this.bindType(grid, column, popup);
+            this.bindMethod(grid, column, popup);
             this.bindValue(grid, column, popup);
             this.bindApply(grid, column, popup);
             this.bindCancel(grid, column, popup);
@@ -532,15 +532,15 @@ var MvcGridFilter = (function () {
         initRowFilter: function (grid, column, popup) {
         },
 
-        bindType: function (grid, column, popup) {
-            popup.find('.mvc-grid-type').on('change.mvcgrid', function () {
-                $(column.rowFilter).find('.mvc-grid-type').val(this.value);
+        bindMethod: function (grid, column, popup) {
+            popup.find('.mvc-grid-method').on('change.mvcgrid', function () {
+                $(column.rowFilter).find('.mvc-grid-method').val(this.value);
             });
         },
         bindValue: function (grid, column, popup) {
             var filter = this;
 
-            var inputs = popup.find('.mvc-grid-input');
+            var inputs = popup.find('.mvc-grid-value');
             inputs.on('keyup.mvcgrid', function (e) {
                 if (filter.isValid(this.value)) {
                     $(this).removeClass('invalid');
@@ -583,10 +583,10 @@ var MvcGridFilter = (function () {
             var container = $(column.rowFilter || popup);
 
             column.filter.operator = container.find('.mvc-grid-operator').val();
-            column.filter.first.type = container.find('.first-filter .mvc-grid-type').val() || this.types[0];
-            column.filter.first.val = container.find('.first-filter .mvc-grid-input').val();
-            column.filter.second.type = container.find('.second-filter .mvc-grid-type').val();
-            column.filter.second.val = container.find('.second-filter .mvc-grid-input').val();
+            column.filter.first.method = container.find('.first-filter .mvc-grid-method').val() || this.methods[0];
+            column.filter.first.value = container.find('.first-filter .mvc-grid-value').val();
+            column.filter.second.method = container.find('.second-filter .mvc-grid-method').val();
+            column.filter.second.value = container.find('.second-filter .mvc-grid-value').val();
 
             grid.applyFilter(column);
             grid.reload();
@@ -594,7 +594,7 @@ var MvcGridFilter = (function () {
         cancel: function (grid, column, popup) {
             popup.removeClass('open');
 
-            if (column.filter.first.type || column.filter.second.type) {
+            if (column.filter.first.method || column.filter.second.method) {
                 grid.cancelFilter(column);
                 grid.reload();
             }
@@ -610,7 +610,7 @@ var MvcGridTextFilter = (function (base) {
     function MvcGridTextFilter() {
         base.apply(this);
 
-        this.types = ['contains', 'equals', 'not-equals', 'starts-with', 'ends-with'];
+        this.methods = ['contains', 'equals', 'not-equals', 'starts-with', 'ends-with'];
     }
 
     MvcGridTextFilter.prototype.renderFilter = function (filter) {
@@ -626,7 +626,7 @@ var MvcGridNumberFilter = (function (base) {
     function MvcGridNumberFilter() {
         base.apply(this);
 
-        this.types = ['equals', 'not-equals', 'less-than', 'greater-than', 'less-than-or-equal', 'greater-than-or-equal'];
+        this.methods = ['equals', 'not-equals', 'less-than', 'greater-than', 'less-than-or-equal', 'greater-than-or-equal'];
     }
 
     MvcGridNumberFilter.prototype.renderFilter = function (filter) {
@@ -646,7 +646,7 @@ var MvcGridDateFilter = (function (base) {
     function MvcGridDateFilter() {
         base.apply(this);
 
-        this.types = ['equals', 'not-equals', 'earlier-than', 'later-than', 'earlier-than-or-equal', 'later-than-or-equal'];
+        this.methods = ['equals', 'not-equals', 'earlier-than', 'later-than', 'earlier-than-or-equal', 'later-than-or-equal'];
     }
 
     MvcGridDateFilter.prototype.renderFilter = function (filter) {
@@ -657,7 +657,7 @@ var MvcGridDateFilter = (function (base) {
         var filter = this;
 
         if ($.fn.datepicker) {
-            $(column.rowFilter).find('.mvc-grid-input').datepicker({
+            $(column.rowFilter).find('.mvc-grid-value').datepicker({
                 onSelect: function (value, data) {
                     if (value != data.lastVal) {
                         filter.apply(grid, column, popup);
@@ -669,7 +669,7 @@ var MvcGridDateFilter = (function (base) {
 
     MvcGridDateFilter.prototype.bindValue = function (grid, column, popup) {
         if ($.fn.datepicker) {
-            popup.find('.mvc-grid-input').datepicker();
+            popup.find('.mvc-grid-value').datepicker();
         }
 
         base.prototype.bindValue.call(this, grid, column, popup);
@@ -684,7 +684,7 @@ var MvcGridBooleanFilter = (function (base) {
     function MvcGridBooleanFilter() {
         base.apply(this);
 
-        this.types = ['true', 'false']
+        this.methods = ['true', 'false']
     }
 
     MvcGridBooleanFilter.prototype.renderFilter = function (filter) {
@@ -692,14 +692,14 @@ var MvcGridBooleanFilter = (function (base) {
 
         return '<div class="popup-group">' +
                    '<ul class="mvc-grid-boolean-filter">' +
-                       '<li ' + (filter.val == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.true + '</li>' +
-                       '<li ' + (filter.val == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.false + '</li>' +
+                       '<li ' + (filter.value == 'True' ? 'class="active" ' : '') + 'data-value="True">' + lang.true + '</li>' +
+                       '<li ' + (filter.value == 'False' ? 'class="active" ' : '') + 'data-value="False">' + lang.false + '</li>' +
                    '</ul>' +
                '</div>';
     };
 
     MvcGridBooleanFilter.prototype.initRowFilter = function (grid, column, popup) {
-        $(column.rowFilter).find('.mvc-grid-input').attr('readonly', 'readonly');
+        $(column.rowFilter).find('.mvc-grid-value').attr('readonly', 'readonly');
     };
 
     MvcGridBooleanFilter.prototype.bindValue = function (grid, column, popup) {
@@ -710,11 +710,11 @@ var MvcGridBooleanFilter = (function (base) {
     MvcGridBooleanFilter.prototype.apply = function (grid, column, popup) {
         popup.removeClass('open');
 
-        column.filter.first.type = 'equals';
-        column.filter.second.type = 'equals';
+        column.filter.first.method = 'equals';
+        column.filter.second.method = 'equals';
         column.filter.operator = popup.find('.mvc-grid-operator').val();
-        column.filter.first.val = popup.find('.first-filter li.active').data('value');
-        column.filter.second.val = popup.find('.second-filter li.active').data('value');
+        column.filter.first.value = popup.find('.first-filter li.active').data('value');
+        column.filter.second.value = popup.find('.second-filter li.active').data('value');
 
         grid.applyFilter(column);
         grid.reload();

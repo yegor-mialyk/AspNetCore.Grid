@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,13 +12,14 @@ namespace NonFactors.Mvc.Grid
 {
     public class GridColumn<T, TValue> : IGridColumn<T, TValue> where T : class
     {
+        public IGrid<T> Grid { get; set; }
+
         public String Name { get; set; }
         public String Format { get; set; }
         public String CssClasses { get; set; }
         public Boolean IsEncoded { get; set; }
         public IHtmlContent Title { get; set; }
 
-        public IGrid<T> Grid { get; set; }
         public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
         public Func<T, TValue> ExpressionValue { get; set; }
@@ -74,7 +74,7 @@ namespace NonFactors.Mvc.Grid
 
             return new HtmlString(display?.GetShortName());
         }
-        private static String GetName(Expression<Func<T, TValue>> expression)
+        private String GetName(Expression<Func<T, TValue>> expression)
         {
             return String.Join("-", Regex.Split(ExpressionHelper.GetExpressionText(expression), "(?<!^)(?=[A-Z])")).ToLower();
         }

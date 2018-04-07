@@ -8,8 +8,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class BooleanFilterTests : BaseGridFilterTests
     {
-        private IQueryable<GridModel> items;
         private BooleanFilter filter;
+        private IQueryable<GridModel> items;
+        private Expression<Func<GridModel, Boolean>> booleanExpression;
+        private Expression<Func<GridModel, Boolean?>> nBooleanExpression;
 
         public BooleanFilterTests()
         {
@@ -21,6 +23,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
 
             filter = new BooleanFilter();
+            booleanExpression = (model) => model.IsChecked;
+            nBooleanExpression = (model) => model.NIsChecked;
         }
 
         #region Apply(Expression expression)
@@ -28,44 +32,37 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_NotBooleanValue_ReturnsNull()
         {
-            Expression<Func<GridModel, Boolean>> expression = (model) => model.IsChecked;
             filter.Value = "Test";
 
-            Assert.Null(filter.Apply(expression.Body));
+            Assert.Null(filter.Apply(booleanExpression.Body));
         }
 
         [Theory]
         [InlineData("true", true)]
-        [InlineData("True", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
-        [InlineData("False", false)]
         [InlineData("FALSE", false)]
         public void Apply_NullableEqualsFilter(String value, Boolean isChecked)
         {
-            Expression<Func<GridModel, Boolean?>> expression = (model) => model.NIsChecked;
             filter.Value = value;
 
-            IEnumerable actual = Filter(items, filter.Apply(expression.Body), expression);
             IEnumerable expected = items.Where(model => model.NIsChecked == isChecked);
+            IEnumerable actual = Filter(items, filter.Apply(nBooleanExpression.Body), nBooleanExpression);
 
             Assert.Equal(expected, actual);
         }
 
         [Theory]
         [InlineData("true", true)]
-        [InlineData("True", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
-        [InlineData("False", false)]
         [InlineData("FALSE", false)]
         public void Apply_EqualsFilter(String value, Boolean isChecked)
         {
-            Expression<Func<GridModel, Boolean?>> expression = (model) => model.IsChecked;
             filter.Value = value;
 
-            IEnumerable actual = Filter(items, filter.Apply(expression.Body), expression);
             IEnumerable expected = items.Where(model => model.IsChecked == isChecked);
+            IEnumerable actual = Filter(items, filter.Apply(booleanExpression.Body), booleanExpression);
 
             Assert.Equal(expected, actual);
         }

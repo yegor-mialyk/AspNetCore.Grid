@@ -20,8 +20,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IQueryable<GridModel> items = new[]
             {
-                new GridModel { Name = null },
                 new GridModel { Name = "" },
+                new GridModel { Name = null },
                 new GridModel { Name = "test" },
                 new GridModel { Name = "Test" },
                 new GridModel { Name = "Test2" }
@@ -45,8 +45,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = null },
                 new GridModel { Name = "Tes" },
                 new GridModel { Name = "test" },
-                new GridModel { Name = "Test" },
-                new GridModel { Name = "Test2" }
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TEST2" }
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper() == "TEST");

@@ -24,15 +24,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
             StringEndsWithFilter filter = new StringEndsWithFilter();
-            filter.Value = "Test";
+            filter.Value = "est";
 
             IQueryable<GridModel> items = new[]
             {
                 new GridModel { Name = null },
                 new GridModel { Name = "Tes" },
                 new GridModel { Name = "test" },
-                new GridModel { Name = "Test" },
-                new GridModel { Name = "TEST2" }
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TESTE" }
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().EndsWith("TEST"));

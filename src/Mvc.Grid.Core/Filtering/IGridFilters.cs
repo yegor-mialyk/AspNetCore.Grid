@@ -4,9 +4,9 @@ namespace NonFactors.Mvc.Grid
 {
     public interface IGridFilters
     {
-        IGridFilter GetFilter(Type forType, String filterType);
+        IGridFilter GetFilter(Type type, String method);
 
-        void Register(Type forType, String filterType, Type filter);
-        void Unregister(Type forType, String filterType);
+        void Register(Type type, String method, Type filter);
+        void Unregister(Type type, String method);
     }
 }

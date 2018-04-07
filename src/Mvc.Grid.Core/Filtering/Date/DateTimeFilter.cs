@@ -10,7 +10,7 @@ namespace NonFactors.Mvc.Grid
             if (!DateTime.TryParse(Value, out DateTime value))
                 return null;
 
-            switch (Type)
+            switch (Method)
             {
                 case "equals":
                     return Expression.Equal(expression, Expression.Constant(value, expression.Type));

@@ -7,10 +7,12 @@ namespace NonFactors.Mvc.Grid
 {
     public class GridRows<T> : IGridRowsOf<T>
     {
-        public IEnumerable<IGridRow<T>> CurrentRows { get; set; }
-        public Func<T, Object> Attributes { get; set; }
-        public Func<T, String> CssClasses { get; set; }
         public IGrid<T> Grid { get; set; }
+
+        public Func<T, String> CssClasses { get; set; }
+        public Func<T, Object> Attributes { get; set; }
+
+        private IEnumerable<IGridRow<T>> Cache { get; set; }
 
         public GridRows(IGrid<T> grid)
         {
@@ -19,7 +21,7 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IEnumerator<IGridRow<T>> GetEnumerator()
         {
-            if (CurrentRows == null)
+            if (Cache == null)
             {
                 IQueryable<T> items = Grid.Source;
                 foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Pre))
@@ -28,7 +30,7 @@ namespace NonFactors.Mvc.Grid
                 foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Post))
                     items = processor.Process(items);
 
-                CurrentRows = items
+                Cache = items
                     .ToList()
                     .Select(model => new GridRow<T>(model)
                     {
@@ -37,7 +39,7 @@ namespace NonFactors.Mvc.Grid
                     });
             }
 
-            return CurrentRows.GetEnumerator();
+            return Cache.GetEnumerator();
         }
         IEnumerator IEnumerable.GetEnumerator()
         {

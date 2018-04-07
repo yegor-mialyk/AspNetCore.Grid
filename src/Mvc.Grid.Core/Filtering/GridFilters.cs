@@ -5,91 +5,91 @@ namespace NonFactors.Mvc.Grid
 {
     public class GridFilters : IGridFilters
     {
-        private IDictionary<Type, IDictionary<String, Type>> Table
+        private Dictionary<Type, IDictionary<String, Type>> Filters
         {
             get;
         }
 
         public GridFilters()
         {
-            Table = new Dictionary<Type, IDictionary<String, Type>>();
+            Filters = new Dictionary<Type, IDictionary<String, Type>>();
 
-            Register(typeof(SByte), "equals", typeof(SByteFilter));
-            Register(typeof(SByte), "not-equals", typeof(SByteFilter));
-            Register(typeof(SByte), "less-than", typeof(SByteFilter));
-            Register(typeof(SByte), "greater-than", typeof(SByteFilter));
-            Register(typeof(SByte), "less-than-or-equal", typeof(SByteFilter));
-            Register(typeof(SByte), "greater-than-or-equal", typeof(SByteFilter));
+            Register(typeof(SByte), "equals", typeof(NumberFilter<SByte>));
+            Register(typeof(SByte), "not-equals", typeof(NumberFilter<SByte>));
+            Register(typeof(SByte), "less-than", typeof(NumberFilter<SByte>));
+            Register(typeof(SByte), "greater-than", typeof(NumberFilter<SByte>));
+            Register(typeof(SByte), "less-than-or-equal", typeof(NumberFilter<SByte>));
+            Register(typeof(SByte), "greater-than-or-equal", typeof(NumberFilter<SByte>));
 
-            Register(typeof(Byte), "equals", typeof(ByteFilter));
-            Register(typeof(Byte), "not-equals", typeof(ByteFilter));
-            Register(typeof(Byte), "less-than", typeof(ByteFilter));
-            Register(typeof(Byte), "greater-than", typeof(ByteFilter));
-            Register(typeof(Byte), "less-than-or-equal", typeof(ByteFilter));
-            Register(typeof(Byte), "greater-than-or-equal", typeof(ByteFilter));
+            Register(typeof(Byte), "equals", typeof(NumberFilter<Byte>));
+            Register(typeof(Byte), "not-equals", typeof(NumberFilter<Byte>));
+            Register(typeof(Byte), "less-than", typeof(NumberFilter<Byte>));
+            Register(typeof(Byte), "greater-than", typeof(NumberFilter<Byte>));
+            Register(typeof(Byte), "less-than-or-equal", typeof(NumberFilter<Byte>));
+            Register(typeof(Byte), "greater-than-or-equal", typeof(NumberFilter<Byte>));
 
-            Register(typeof(Int16), "equals", typeof(Int16Filter));
-            Register(typeof(Int16), "not-equals", typeof(Int16Filter));
-            Register(typeof(Int16), "less-than", typeof(Int16Filter));
-            Register(typeof(Int16), "greater-than", typeof(Int16Filter));
-            Register(typeof(Int16), "less-than-or-equal", typeof(Int16Filter));
-            Register(typeof(Int16), "greater-than-or-equal", typeof(Int16Filter));
+            Register(typeof(Int16), "equals", typeof(NumberFilter<Int16>));
+            Register(typeof(Int16), "not-equals", typeof(NumberFilter<Int16>));
+            Register(typeof(Int16), "less-than", typeof(NumberFilter<Int16>));
+            Register(typeof(Int16), "greater-than", typeof(NumberFilter<Int16>));
+            Register(typeof(Int16), "less-than-or-equal", typeof(NumberFilter<Int16>));
+            Register(typeof(Int16), "greater-than-or-equal", typeof(NumberFilter<Int16>));
 
-            Register(typeof(UInt16), "equals", typeof(UInt16Filter));
-            Register(typeof(UInt16), "not-equals", typeof(UInt16Filter));
-            Register(typeof(UInt16), "less-than", typeof(UInt16Filter));
-            Register(typeof(UInt16), "greater-than", typeof(UInt16Filter));
-            Register(typeof(UInt16), "less-than-or-equal", typeof(UInt16Filter));
-            Register(typeof(UInt16), "greater-than-or-equal", typeof(UInt16Filter));
+            Register(typeof(UInt16), "equals", typeof(NumberFilter<UInt16>));
+            Register(typeof(UInt16), "not-equals", typeof(NumberFilter<UInt16>));
+            Register(typeof(UInt16), "less-than", typeof(NumberFilter<UInt16>));
+            Register(typeof(UInt16), "greater-than", typeof(NumberFilter<UInt16>));
+            Register(typeof(UInt16), "less-than-or-equal", typeof(NumberFilter<UInt16>));
+            Register(typeof(UInt16), "greater-than-or-equal", typeof(NumberFilter<UInt16>));
 
-            Register(typeof(Int32), "equals", typeof(Int32Filter));
-            Register(typeof(Int32), "not-equals", typeof(Int32Filter));
-            Register(typeof(Int32), "less-than", typeof(Int32Filter));
-            Register(typeof(Int32), "greater-than", typeof(Int32Filter));
-            Register(typeof(Int32), "less-than-or-equal", typeof(Int32Filter));
-            Register(typeof(Int32), "greater-than-or-equal", typeof(Int32Filter));
+            Register(typeof(Int32), "equals", typeof(NumberFilter<Int32>));
+            Register(typeof(Int32), "not-equals", typeof(NumberFilter<Int32>));
+            Register(typeof(Int32), "less-than", typeof(NumberFilter<Int32>));
+            Register(typeof(Int32), "greater-than", typeof(NumberFilter<Int32>));
+            Register(typeof(Int32), "less-than-or-equal", typeof(NumberFilter<Int32>));
+            Register(typeof(Int32), "greater-than-or-equal", typeof(NumberFilter<Int32>));
 
-            Register(typeof(UInt32), "equals", typeof(UInt32Filter));
-            Register(typeof(UInt32), "not-equals", typeof(UInt32Filter));
-            Register(typeof(UInt32), "less-than", typeof(UInt32Filter));
-            Register(typeof(UInt32), "greater-than", typeof(UInt32Filter));
-            Register(typeof(UInt32), "less-than-or-equal", typeof(UInt32Filter));
-            Register(typeof(UInt32), "greater-than-or-equal", typeof(UInt32Filter));
+            Register(typeof(UInt32), "equals", typeof(NumberFilter<UInt32>));
+            Register(typeof(UInt32), "not-equals", typeof(NumberFilter<UInt32>));
+            Register(typeof(UInt32), "less-than", typeof(NumberFilter<UInt32>));
+            Register(typeof(UInt32), "greater-than", typeof(NumberFilter<UInt32>));
+            Register(typeof(UInt32), "less-than-or-equal", typeof(NumberFilter<UInt32>));
+            Register(typeof(UInt32), "greater-than-or-equal", typeof(NumberFilter<UInt32>));
 
-            Register(typeof(Int64), "equals", typeof(Int64Filter));
-            Register(typeof(Int64), "not-equals", typeof(Int64Filter));
-            Register(typeof(Int64), "less-than", typeof(Int64Filter));
-            Register(typeof(Int64), "greater-than", typeof(Int64Filter));
-            Register(typeof(Int64), "less-than-or-equal", typeof(Int64Filter));
-            Register(typeof(Int64), "greater-than-or-equal", typeof(Int64Filter));
+            Register(typeof(Int64), "equals", typeof(NumberFilter<Int64>));
+            Register(typeof(Int64), "not-equals", typeof(NumberFilter<Int64>));
+            Register(typeof(Int64), "less-than", typeof(NumberFilter<Int64>));
+            Register(typeof(Int64), "greater-than", typeof(NumberFilter<Int64>));
+            Register(typeof(Int64), "less-than-or-equal", typeof(NumberFilter<Int64>));
+            Register(typeof(Int64), "greater-than-or-equal", typeof(NumberFilter<Int64>));
 
-            Register(typeof(UInt64), "equals", typeof(UInt64Filter));
-            Register(typeof(UInt64), "not-equals", typeof(UInt64Filter));
-            Register(typeof(UInt64), "less-than", typeof(UInt64Filter));
-            Register(typeof(UInt64), "greater-than", typeof(UInt64Filter));
-            Register(typeof(UInt64), "less-than-or-equal", typeof(UInt64Filter));
-            Register(typeof(UInt64), "greater-than-or-equal", typeof(UInt64Filter));
+            Register(typeof(UInt64), "equals", typeof(NumberFilter<UInt64>));
+            Register(typeof(UInt64), "not-equals", typeof(NumberFilter<UInt64>));
+            Register(typeof(UInt64), "less-than", typeof(NumberFilter<UInt64>));
+            Register(typeof(UInt64), "greater-than", typeof(NumberFilter<UInt64>));
+            Register(typeof(UInt64), "less-than-or-equal", typeof(NumberFilter<UInt64>));
+            Register(typeof(UInt64), "greater-than-or-equal", typeof(NumberFilter<UInt64>));
 
-            Register(typeof(Single), "equals", typeof(SingleFilter));
-            Register(typeof(Single), "not-equals", typeof(SingleFilter));
-            Register(typeof(Single), "less-than", typeof(SingleFilter));
-            Register(typeof(Single), "greater-than", typeof(SingleFilter));
-            Register(typeof(Single), "less-than-or-equal", typeof(SingleFilter));
-            Register(typeof(Single), "greater-than-or-equal", typeof(SingleFilter));
+            Register(typeof(Single), "equals", typeof(NumberFilter<Single>));
+            Register(typeof(Single), "not-equals", typeof(NumberFilter<Single>));
+            Register(typeof(Single), "less-than", typeof(NumberFilter<Single>));
+            Register(typeof(Single), "greater-than", typeof(NumberFilter<Single>));
+            Register(typeof(Single), "less-than-or-equal", typeof(NumberFilter<Single>));
+            Register(typeof(Single), "greater-than-or-equal", typeof(NumberFilter<Single>));
 
-            Register(typeof(Double), "equals", typeof(DoubleFilter));
-            Register(typeof(Double), "not-equals", typeof(DoubleFilter));
-            Register(typeof(Double), "less-than", typeof(DoubleFilter));
-            Register(typeof(Double), "greater-than", typeof(DoubleFilter));
-            Register(typeof(Double), "less-than-or-equal", typeof(DoubleFilter));
-            Register(typeof(Double), "greater-than-or-equal", typeof(DoubleFilter));
+            Register(typeof(Double), "equals", typeof(NumberFilter<Double>));
+            Register(typeof(Double), "not-equals", typeof(NumberFilter<Double>));
+            Register(typeof(Double), "less-than", typeof(NumberFilter<Double>));
+            Register(typeof(Double), "greater-than", typeof(NumberFilter<Double>));
+            Register(typeof(Double), "less-than-or-equal", typeof(NumberFilter<Double>));
+            Register(typeof(Double), "greater-than-or-equal", typeof(NumberFilter<Double>));
 
-            Register(typeof(Decimal), "equals", typeof(DecimalFilter));
-            Register(typeof(Decimal), "not-equals", typeof(DecimalFilter));
-            Register(typeof(Decimal), "less-than", typeof(DecimalFilter));
-            Register(typeof(Decimal), "greater-than", typeof(DecimalFilter));
-            Register(typeof(Decimal), "less-than-or-equal", typeof(DecimalFilter));
-            Register(typeof(Decimal), "greater-than-or-equal", typeof(DecimalFilter));
+            Register(typeof(Decimal), "equals", typeof(NumberFilter<Decimal>));
+            Register(typeof(Decimal), "not-equals", typeof(NumberFilter<Decimal>));
+            Register(typeof(Decimal), "less-than", typeof(NumberFilter<Decimal>));
+            Register(typeof(Decimal), "greater-than", typeof(NumberFilter<Decimal>));
+            Register(typeof(Decimal), "less-than-or-equal", typeof(NumberFilter<Decimal>));
+            Register(typeof(Decimal), "greater-than-or-equal", typeof(NumberFilter<Decimal>));
 
             Register(typeof(DateTime), "equals", typeof(DateTimeFilter));
             Register(typeof(DateTime), "not-equals", typeof(DateTimeFilter));
@@ -107,36 +107,33 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(String), "starts-with", typeof(StringStartsWithFilter));
         }
 
-        public IGridFilter GetFilter(Type forType, String filterType)
+        public IGridFilter GetFilter(Type type, String method)
         {
-            if (!Table.ContainsKey(forType))
+            if (!Filters.ContainsKey(type))
                 return null;
 
-            if (!Table[forType].TryGetValue(filterType, out Type type))
+            if (!Filters[type].TryGetValue(method, out Type filterType))
                 return null;
 
-            IGridFilter filter = (IGridFilter)Activator.CreateInstance(type);
-            filter.Type = filterType.ToLower();
+            IGridFilter filter = (IGridFilter)Activator.CreateInstance(filterType);
+            filter.Method = method.ToLower();
 
             return filter;
         }
 
-        public void Register(Type forType, String filterType, Type filter)
+        public void Register(Type type, String method, Type filter)
         {
-            IDictionary<String, Type> filters = new Dictionary<String, Type>(StringComparer.OrdinalIgnoreCase);
-            Type underlyingType = Nullable.GetUnderlyingType(forType) ?? forType;
+            type = Nullable.GetUnderlyingType(type) ?? type;
 
-            if (Table.ContainsKey(underlyingType))
-                filters = Table[underlyingType];
-            else
-                Table[underlyingType] = filters;
+            if (!Filters.ContainsKey(type))
+                Filters[type] = new Dictionary<String, Type>(StringComparer.OrdinalIgnoreCase);
 
-            filters[filterType] = filter;
+            Filters[type][method] = filter;
         }
-        public void Unregister(Type forType, String filterType)
+        public void Unregister(Type type, String method)
         {
-            if (Table.ContainsKey(forType))
-                Table[forType].Remove(filterType);
+            if (Filters.ContainsKey(type))
+                Filters[type].Remove(method);
         }
     }
 }

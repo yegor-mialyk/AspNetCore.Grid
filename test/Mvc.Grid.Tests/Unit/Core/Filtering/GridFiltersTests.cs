@@ -18,82 +18,82 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region GridFilters()
 
         [Theory]
-        [InlineData(typeof(SByte), "equals", typeof(SByteFilter))]
-        [InlineData(typeof(SByte), "not-equals", typeof(SByteFilter))]
-        [InlineData(typeof(SByte), "less-than", typeof(SByteFilter))]
-        [InlineData(typeof(SByte), "greater-than", typeof(SByteFilter))]
-        [InlineData(typeof(SByte), "less-than-or-equal", typeof(SByteFilter))]
-        [InlineData(typeof(SByte), "greater-than-or-equal", typeof(SByteFilter))]
+        [InlineData(typeof(SByte), "equals", typeof(NumberFilter<SByte>))]
+        [InlineData(typeof(SByte), "not-equals", typeof(NumberFilter<SByte>))]
+        [InlineData(typeof(SByte), "less-than", typeof(NumberFilter<SByte>))]
+        [InlineData(typeof(SByte), "greater-than", typeof(NumberFilter<SByte>))]
+        [InlineData(typeof(SByte), "less-than-or-equal", typeof(NumberFilter<SByte>))]
+        [InlineData(typeof(SByte), "greater-than-or-equal", typeof(NumberFilter<SByte>))]
 
-        [InlineData(typeof(Byte), "equals", typeof(ByteFilter))]
-        [InlineData(typeof(Byte), "not-equals", typeof(ByteFilter))]
-        [InlineData(typeof(Byte), "less-than", typeof(ByteFilter))]
-        [InlineData(typeof(Byte), "greater-than", typeof(ByteFilter))]
-        [InlineData(typeof(Byte), "less-than-or-equal", typeof(ByteFilter))]
-        [InlineData(typeof(Byte), "greater-than-or-equal", typeof(ByteFilter))]
+        [InlineData(typeof(Byte), "equals", typeof(NumberFilter<Byte>))]
+        [InlineData(typeof(Byte), "not-equals", typeof(NumberFilter<Byte>))]
+        [InlineData(typeof(Byte), "less-than", typeof(NumberFilter<Byte>))]
+        [InlineData(typeof(Byte), "greater-than", typeof(NumberFilter<Byte>))]
+        [InlineData(typeof(Byte), "less-than-or-equal", typeof(NumberFilter<Byte>))]
+        [InlineData(typeof(Byte), "greater-than-or-equal", typeof(NumberFilter<Byte>))]
 
-        [InlineData(typeof(Int16), "equals", typeof(Int16Filter))]
-        [InlineData(typeof(Int16), "not-equals", typeof(Int16Filter))]
-        [InlineData(typeof(Int16), "less-than", typeof(Int16Filter))]
-        [InlineData(typeof(Int16), "greater-than", typeof(Int16Filter))]
-        [InlineData(typeof(Int16), "less-than-or-equal", typeof(Int16Filter))]
-        [InlineData(typeof(Int16), "greater-than-or-equal", typeof(Int16Filter))]
+        [InlineData(typeof(Int16), "equals", typeof(NumberFilter<Int16>))]
+        [InlineData(typeof(Int16), "not-equals", typeof(NumberFilter<Int16>))]
+        [InlineData(typeof(Int16), "less-than", typeof(NumberFilter<Int16>))]
+        [InlineData(typeof(Int16), "greater-than", typeof(NumberFilter<Int16>))]
+        [InlineData(typeof(Int16), "less-than-or-equal", typeof(NumberFilter<Int16>))]
+        [InlineData(typeof(Int16), "greater-than-or-equal", typeof(NumberFilter<Int16>))]
 
-        [InlineData(typeof(UInt16), "equals", typeof(UInt16Filter))]
-        [InlineData(typeof(UInt16), "not-equals", typeof(UInt16Filter))]
-        [InlineData(typeof(UInt16), "less-than", typeof(UInt16Filter))]
-        [InlineData(typeof(UInt16), "greater-than", typeof(UInt16Filter))]
-        [InlineData(typeof(UInt16), "less-than-or-equal", typeof(UInt16Filter))]
-        [InlineData(typeof(UInt16), "greater-than-or-equal", typeof(UInt16Filter))]
+        [InlineData(typeof(UInt16), "equals", typeof(NumberFilter<UInt16>))]
+        [InlineData(typeof(UInt16), "not-equals", typeof(NumberFilter<UInt16>))]
+        [InlineData(typeof(UInt16), "less-than", typeof(NumberFilter<UInt16>))]
+        [InlineData(typeof(UInt16), "greater-than", typeof(NumberFilter<UInt16>))]
+        [InlineData(typeof(UInt16), "less-than-or-equal", typeof(NumberFilter<UInt16>))]
+        [InlineData(typeof(UInt16), "greater-than-or-equal", typeof(NumberFilter<UInt16>))]
 
-        [InlineData(typeof(Int32), "equals", typeof(Int32Filter))]
-        [InlineData(typeof(Int32), "not-equals", typeof(Int32Filter))]
-        [InlineData(typeof(Int32), "less-than", typeof(Int32Filter))]
-        [InlineData(typeof(Int32), "greater-than", typeof(Int32Filter))]
-        [InlineData(typeof(Int32), "less-than-or-equal", typeof(Int32Filter))]
-        [InlineData(typeof(Int32), "greater-than-or-equal", typeof(Int32Filter))]
+        [InlineData(typeof(Int32), "equals", typeof(NumberFilter<Int32>))]
+        [InlineData(typeof(Int32), "not-equals", typeof(NumberFilter<Int32>))]
+        [InlineData(typeof(Int32), "less-than", typeof(NumberFilter<Int32>))]
+        [InlineData(typeof(Int32), "greater-than", typeof(NumberFilter<Int32>))]
+        [InlineData(typeof(Int32), "less-than-or-equal", typeof(NumberFilter<Int32>))]
+        [InlineData(typeof(Int32), "greater-than-or-equal", typeof(NumberFilter<Int32>))]
 
-        [InlineData(typeof(UInt32), "equals", typeof(UInt32Filter))]
-        [InlineData(typeof(UInt32), "not-equals", typeof(UInt32Filter))]
-        [InlineData(typeof(UInt32), "less-than", typeof(UInt32Filter))]
-        [InlineData(typeof(UInt32), "greater-than", typeof(UInt32Filter))]
-        [InlineData(typeof(UInt32), "less-than-or-equal", typeof(UInt32Filter))]
-        [InlineData(typeof(UInt32), "greater-than-or-equal", typeof(UInt32Filter))]
+        [InlineData(typeof(UInt32), "equals", typeof(NumberFilter<UInt32>))]
+        [InlineData(typeof(UInt32), "not-equals", typeof(NumberFilter<UInt32>))]
+        [InlineData(typeof(UInt32), "less-than", typeof(NumberFilter<UInt32>))]
+        [InlineData(typeof(UInt32), "greater-than", typeof(NumberFilter<UInt32>))]
+        [InlineData(typeof(UInt32), "less-than-or-equal", typeof(NumberFilter<UInt32>))]
+        [InlineData(typeof(UInt32), "greater-than-or-equal", typeof(NumberFilter<UInt32>))]
 
-        [InlineData(typeof(Int64), "equals", typeof(Int64Filter))]
-        [InlineData(typeof(Int64), "not-equals", typeof(Int64Filter))]
-        [InlineData(typeof(Int64), "less-than", typeof(Int64Filter))]
-        [InlineData(typeof(Int64), "greater-than", typeof(Int64Filter))]
-        [InlineData(typeof(Int64), "less-than-or-equal", typeof(Int64Filter))]
-        [InlineData(typeof(Int64), "greater-than-or-equal", typeof(Int64Filter))]
+        [InlineData(typeof(Int64), "equals", typeof(NumberFilter<Int64>))]
+        [InlineData(typeof(Int64), "not-equals", typeof(NumberFilter<Int64>))]
+        [InlineData(typeof(Int64), "less-than", typeof(NumberFilter<Int64>))]
+        [InlineData(typeof(Int64), "greater-than", typeof(NumberFilter<Int64>))]
+        [InlineData(typeof(Int64), "less-than-or-equal", typeof(NumberFilter<Int64>))]
+        [InlineData(typeof(Int64), "greater-than-or-equal", typeof(NumberFilter<Int64>))]
 
-        [InlineData(typeof(UInt64), "equals", typeof(UInt64Filter))]
-        [InlineData(typeof(UInt64), "not-equals", typeof(UInt64Filter))]
-        [InlineData(typeof(UInt64), "less-than", typeof(UInt64Filter))]
-        [InlineData(typeof(UInt64), "greater-than", typeof(UInt64Filter))]
-        [InlineData(typeof(UInt64), "less-than-or-equal", typeof(UInt64Filter))]
-        [InlineData(typeof(UInt64), "greater-than-or-equal", typeof(UInt64Filter))]
+        [InlineData(typeof(UInt64), "equals", typeof(NumberFilter<UInt64>))]
+        [InlineData(typeof(UInt64), "not-equals", typeof(NumberFilter<UInt64>))]
+        [InlineData(typeof(UInt64), "less-than", typeof(NumberFilter<UInt64>))]
+        [InlineData(typeof(UInt64), "greater-than", typeof(NumberFilter<UInt64>))]
+        [InlineData(typeof(UInt64), "less-than-or-equal", typeof(NumberFilter<UInt64>))]
+        [InlineData(typeof(UInt64), "greater-than-or-equal", typeof(NumberFilter<UInt64>))]
 
-        [InlineData(typeof(Single), "equals", typeof(SingleFilter))]
-        [InlineData(typeof(Single), "not-equals", typeof(SingleFilter))]
-        [InlineData(typeof(Single), "less-than", typeof(SingleFilter))]
-        [InlineData(typeof(Single), "greater-than", typeof(SingleFilter))]
-        [InlineData(typeof(Single), "less-than-or-equal", typeof(SingleFilter))]
-        [InlineData(typeof(Single), "greater-than-or-equal", typeof(SingleFilter))]
+        [InlineData(typeof(Single), "equals", typeof(NumberFilter<Single>))]
+        [InlineData(typeof(Single), "not-equals", typeof(NumberFilter<Single>))]
+        [InlineData(typeof(Single), "less-than", typeof(NumberFilter<Single>))]
+        [InlineData(typeof(Single), "greater-than", typeof(NumberFilter<Single>))]
+        [InlineData(typeof(Single), "less-than-or-equal", typeof(NumberFilter<Single>))]
+        [InlineData(typeof(Single), "greater-than-or-equal", typeof(NumberFilter<Single>))]
 
-        [InlineData(typeof(Double), "equals", typeof(DoubleFilter))]
-        [InlineData(typeof(Double), "not-equals", typeof(DoubleFilter))]
-        [InlineData(typeof(Double), "less-than", typeof(DoubleFilter))]
-        [InlineData(typeof(Double), "greater-than", typeof(DoubleFilter))]
-        [InlineData(typeof(Double), "less-than-or-equal", typeof(DoubleFilter))]
-        [InlineData(typeof(Double), "greater-than-or-equal", typeof(DoubleFilter))]
+        [InlineData(typeof(Double), "equals", typeof(NumberFilter<Double>))]
+        [InlineData(typeof(Double), "not-equals", typeof(NumberFilter<Double>))]
+        [InlineData(typeof(Double), "less-than", typeof(NumberFilter<Double>))]
+        [InlineData(typeof(Double), "greater-than", typeof(NumberFilter<Double>))]
+        [InlineData(typeof(Double), "less-than-or-equal", typeof(NumberFilter<Double>))]
+        [InlineData(typeof(Double), "greater-than-or-equal", typeof(NumberFilter<Double>))]
 
-        [InlineData(typeof(Decimal), "equals", typeof(DecimalFilter))]
-        [InlineData(typeof(Decimal), "not-equals", typeof(DecimalFilter))]
-        [InlineData(typeof(Decimal), "less-than", typeof(DecimalFilter))]
-        [InlineData(typeof(Decimal), "greater-than", typeof(DecimalFilter))]
-        [InlineData(typeof(Decimal), "less-than-or-equal", typeof(DecimalFilter))]
-        [InlineData(typeof(Decimal), "greater-than-or-equal", typeof(DecimalFilter))]
+        [InlineData(typeof(Decimal), "equals", typeof(NumberFilter<Decimal>))]
+        [InlineData(typeof(Decimal), "not-equals", typeof(NumberFilter<Decimal>))]
+        [InlineData(typeof(Decimal), "less-than", typeof(NumberFilter<Decimal>))]
+        [InlineData(typeof(Decimal), "greater-than", typeof(NumberFilter<Decimal>))]
+        [InlineData(typeof(Decimal), "less-than-or-equal", typeof(NumberFilter<Decimal>))]
+        [InlineData(typeof(Decimal), "greater-than-or-equal", typeof(NumberFilter<Decimal>))]
 
         [InlineData(typeof(DateTime), "equals", typeof(DateTimeFilter))]
         [InlineData(typeof(DateTime), "not-equals", typeof(DateTimeFilter))]
@@ -109,14 +109,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(String), "contains", typeof(StringContainsFilter))]
         [InlineData(typeof(String), "ends-with", typeof(StringEndsWithFilter))]
         [InlineData(typeof(String), "starts-with", typeof(StringStartsWithFilter))]
-        public void GridFilters_RegistersDefaultFilters(Type type, String name, Type filter)
+        public void GridFilters_RegistersDefaultFilters(Type type, String method, Type filter)
         {
-            Assert.IsType(filter, new GridFilters().GetFilter(type, name));
+            Assert.IsType(filter, new GridFilters().GetFilter(type, method));
         }
 
         #endregion
 
-        #region IGridFilter GetFilter(Type forType, String filterType)
+        #region GetFilter(Type type, String method)
 
         [Fact]
         public void GetFilter_NotFoundForType_ReturnsNull()
@@ -136,12 +136,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridFilter actual = filters.GetFilter(typeof(String), "CONTAINS");
 
             Assert.IsType<StringContainsFilter>(actual);
-            Assert.Equal("contains", actual.Type);
+            Assert.Equal("contains", actual.Method);
         }
 
         #endregion
 
-        #region Register(Type forType, String filterType, Type filter)
+        #region Register(Type type, String method, Type filter)
 
         [Fact]
         public void Register_FilterForExistingType()
@@ -165,39 +165,39 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_Overrides_NullableFilter()
         {
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
-            filters.Register(typeof(Int32?), "TEST-filter", typeof(Int32Filter));
+            filters.Register(typeof(Int32?), "TEST-filter", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test-filter"));
+            Assert.IsType<NumberFilter<Int32>>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_Overrides_Filter()
         {
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
-            filters.Register(typeof(Int32), "TEST-filter", typeof(Int32Filter));
+            filters.Register(typeof(Int32), "TEST-filter", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test-filter"));
+            Assert.IsType<NumberFilter<Int32>>(filters.GetFilter(typeof(Int32), "test-filter"));
         }
 
         [Fact]
         public void Register_NullableTypeAsNotNullable()
         {
-            filters.Register(typeof(Int32?), "TEST", typeof(Int32Filter));
+            filters.Register(typeof(Int32?), "TEST", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Int32), "test"));
+            Assert.IsType<NumberFilter<Int32>>(filters.GetFilter(typeof(Int32), "test"));
         }
 
         [Fact]
         public void Register_FilterForNewType()
         {
-            filters.Register(typeof(Object), "test", typeof(Int32Filter));
+            filters.Register(typeof(Object), "test", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<Int32Filter>(filters.GetFilter(typeof(Object), "test"));
+            Assert.IsType<NumberFilter<Int32>>(filters.GetFilter(typeof(Object), "test"));
         }
 
         #endregion
 
-        #region Unregister(Type forType, String filterType)
+        #region Unregister(Type type, String method)
 
         [Fact]
         public void Unregister_ExistingFilter()

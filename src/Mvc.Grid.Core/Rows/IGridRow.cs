@@ -4,8 +4,8 @@ namespace NonFactors.Mvc.Grid
 {
     public interface IGridRow<out T>
     {
-        GridHtmlAttributes Attributes { get; set; }
-        String CssClasses { get; set; }
         T Model { get; }
+        String CssClasses { get; set; }
+        GridHtmlAttributes Attributes { get; set; }
     }
 }

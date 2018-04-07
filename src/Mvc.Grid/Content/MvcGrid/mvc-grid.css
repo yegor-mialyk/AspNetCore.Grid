@@ -98,7 +98,7 @@
     display: flex;
 }
 
-.mvc-grid-row-filters .mvc-grid-input {
+.mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #AAAAAA;
     margin-right: 5px;
     padding: 2px 4px;
@@ -106,17 +106,17 @@
     flex: 1;
 }
 
-.mvc-grid-row-filters .mvc-grid-input.invalid {
-    outline-color: #DC3545;
-}
+    .mvc-grid-row-filters .mvc-grid-value.invalid {
+        outline-color: #DC3545;
+    }
 
-.mvc-grid-row-filters .mvc-grid-input::placeholder {
-    color: #BBBBBB;
-}
+    .mvc-grid-row-filters .mvc-grid-value::placeholder {
+        color: #BBBBBB;
+    }
 
-.mvc-grid-row-filters .mvc-grid-input:-ms-input-placeholder {
-    color: #BBBBBB;
-}
+    .mvc-grid-row-filters .mvc-grid-value:-ms-input-placeholder {
+        color: #BBBBBB;
+    }
 
 .mvc-grid-row-filters .mvc-grid-filter {
     border: 0.5px solid #AAAAAA;
@@ -133,7 +133,7 @@
     padding: 0;
 }
 
-.mvc-grid-row-filters.mvc-grid-headers .mvc-grid-input {
+.mvc-grid-row-filters.mvc-grid-headers .mvc-grid-value {
     background-color: #F7F7F7;
     padding: 8px 44px 8px 8px;
     border: none;
@@ -232,8 +232,8 @@
                 background-color: #DDDDDD;
             }
 
-    .mvc-grid-popup .mvc-grid-type,
-    .mvc-grid-popup .mvc-grid-input,
+    .mvc-grid-popup .mvc-grid-value,
+    .mvc-grid-popup .mvc-grid-method,
     .mvc-grid-popup .mvc-grid-operator {
         border: 1px solid #CCCCCC;
         box-sizing: border-box;
@@ -247,13 +247,13 @@
         width: auto;
     }
 
-    .mvc-grid-popup .mvc-grid-input {
+    .mvc-grid-popup .mvc-grid-value {
         padding: 0.4em;
     }
 
-    .mvc-grid-popup .mvc-grid-input.invalid {
-        outline-color: #DC3545;
-    }
+        .mvc-grid-popup .mvc-grid-value.invalid {
+            outline-color: #DC3545;
+        }
 
     .mvc-grid-popup .mvc-grid-apply,
     .mvc-grid-popup .mvc-grid-cancel {

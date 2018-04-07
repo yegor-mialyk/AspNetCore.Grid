@@ -36,8 +36,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Build_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Build(columns => { });
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Build(columns => { });
 
             Assert.Same(expected, actual);
         }
@@ -53,8 +53,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             htmlGrid.Grid.Processors.Clear();
             htmlGrid.ProcessWith(processor);
 
-            IGridProcessor<GridModel> actual = htmlGrid.Grid.Processors.Single();
-            IGridProcessor<GridModel> expected = processor;
+            Object actual = htmlGrid.Grid.Processors.Single();
+            Object expected = processor;
 
             Assert.Same(expected, actual);
         }
@@ -62,8 +62,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void ProcessWith_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.ProcessWith(null);
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.ProcessWith(null);
 
             Assert.Same(expected, actual);
         }
@@ -84,8 +84,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void WithSourceUrl_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.WithSourceUrl(null);
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.WithSourceUrl(null);
 
             Assert.Same(expected, actual);
         }
@@ -127,8 +127,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void MultiFilterable_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.MultiFilterable();
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.MultiFilterable();
 
             Assert.Same(expected, actual);
         }
@@ -155,8 +155,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filterable_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Filterable();
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Filterable();
 
             Assert.Same(expected, actual);
         }
@@ -183,8 +183,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Sortable_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Sortable();
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Sortable();
 
             Assert.Same(expected, actual);
         }
@@ -205,8 +205,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RowAttributed_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.RowAttributed(null);
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.RowAttributed(null);
 
             Assert.Same(expected, actual);
         }
@@ -227,8 +227,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RowCss_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.RowCss(null);
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.RowCss(null);
 
             Assert.Same(expected, actual);
         }
@@ -249,8 +249,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Attributed_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Attributed(new { width = 1 });
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Attributed(new { width = 1 });
 
             Assert.Same(expected, actual);
         }
@@ -271,8 +271,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Css_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Css("table");
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Css("table");
 
             Assert.Same(expected, actual);
         }
@@ -293,8 +293,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Empty_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Empty("Text");
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Empty("Text");
 
             Assert.Same(expected, actual);
         }
@@ -315,8 +315,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Named_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Named("Name");
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Named("Name");
 
             Assert.Same(expected, actual);
         }
@@ -337,8 +337,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void WithFilterMode_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.WithFilterMode(GridFilterMode.HeaderRow);
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.WithFilterMode(GridFilterMode.HeaderRow);
 
             Assert.Same(expected, actual);
         }
@@ -359,8 +359,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void WithFooter_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.WithFooter("Partial");
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.WithFooter("Partial");
 
             Assert.Same(expected, actual);
         }
@@ -434,24 +434,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Pageable_Builder_DoesNotReadGridProcessor()
-        {
-            htmlGrid.Grid.Processors.Clear();
-
-            htmlGrid.Pageable(pager => { });
-            htmlGrid.Pageable(pager => { });
-
-            Object actual = htmlGrid.Grid.Processors.Single();
-            Object expected = htmlGrid.Grid.Pager;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
         public void Pageable_Builder_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Pageable(gridPager => { });
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Pageable(gridPager => { });
 
             Assert.Same(expected, actual);
         }
@@ -468,8 +454,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             htmlGrid.Pageable();
 
-            IGridPager actual = htmlGrid.Grid.Pager;
-            IGridPager expected = pager;
+            Object expected = pager;
+            Object actual = htmlGrid.Grid.Pager;
 
             Assert.Same(expected, actual);
         }
@@ -525,8 +511,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_ReturnsHtmlGrid()
         {
-            IHtmlGrid<GridModel> actual = htmlGrid.Pageable();
-            IHtmlGrid<GridModel> expected = htmlGrid;
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Pageable();
 
             Assert.Same(expected, actual);
         }

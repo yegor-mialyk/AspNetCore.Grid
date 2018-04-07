@@ -16,11 +16,11 @@
                         data-filter="@column.Filter.IsEnabled"
                         data-filter-name="@column.Filter.Name"
                         data-filter-multi="@column.Filter.IsMulti"
-                        data-filter-first-type="@column.Filter.First?.Type"
-                        data-filter-first-val="@column.Filter.First?.Value"
+                        data-filter-first-method="@column.Filter.First?.Method"
+                        data-filter-first-value="@column.Filter.First?.Value"
                         data-filter-operator="@column.Filter.Operator"
-                        data-filter-second-type="@column.Filter.Second?.Type"
-                        data-filter-second-val="@column.Filter.Second?.Value"
+                        data-filter-second-method="@column.Filter.Second?.Method"
+                        data-filter-second-value="@column.Filter.Second?.Value"
                         data-sort="@column.Sort.IsEnabled"
                         data-sort-order="@column.Sort.Order.ToString().ToLower()"
                         data-sort-first="@column.Sort.FirstOrder">
@@ -31,8 +31,8 @@
                             if (Model.FilterMode == GridFilterMode.HeaderRow)
                             {
                                 <div class="first-filter">
-                                    <input class="mvc-grid-type" type="hidden" value="@column.Filter.First?.Type" />
-                                    <input class="mvc-grid-input" value="@column.Filter.First?.Value" placeholder="@column.Title" />
+                                    <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
+                                    <input class="mvc-grid-value" value="@column.Filter.First?.Value" placeholder="@column.Title" />
                                     <a href="#" class="mvc-grid-filter @filterApplied"></a>
                                 </div>
                             }
@@ -60,8 +60,8 @@
                                 @{ String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : ""; }
 
                                 <div class="first-filter">
-                                    <input class="mvc-grid-type" type="hidden" value="@column.Filter.First?.Type" />
-                                    <input class="mvc-grid-input" value="@column.Filter.First?.Value" />
+                                    <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
+                                    <input class="mvc-grid-value" value="@column.Filter.First?.Value" />
                                     <a href="#" class="mvc-grid-filter @filterApplied"></a>
                                 </div>
                             </th>

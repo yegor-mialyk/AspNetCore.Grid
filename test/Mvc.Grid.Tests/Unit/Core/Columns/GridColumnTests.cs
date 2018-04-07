@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -58,8 +54,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsGrid()
         {
-            IGrid actual = new GridColumn<GridModel, Object>(column.Grid, model => model.Name).Grid;
-            IGrid expected = column.Grid;
+            Object actual = new GridColumn<GridModel, Int32>(column.Grid, model => 0).Grid;
+            Object expected = column.Grid;
 
             Assert.Same(expected, actual);
         }
@@ -67,14 +63,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsIsEncoded()
         {
-            Assert.True(new GridColumn<GridModel, Object>(column.Grid, model => model.Name).IsEncoded);
+            Assert.True(new GridColumn<GridModel, Int32>(column.Grid, model => 1).IsEncoded);
         }
 
         [Fact]
         public void GridColumn_SetsExpression()
         {
-            Expression<Func<GridModel, String>> expected = (model) => model.Name;
-            Expression<Func<GridModel, String>> actual = new GridColumn<GridModel, String>(column.Grid, expected).Expression;
+            Object actual = new GridColumn<GridModel, Object>(column.Grid, column.Expression).Expression;
+            Object expected = column.Expression;
 
             Assert.Same(expected, actual);
         }
@@ -82,7 +78,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_NotMemberExpression_SetsEmptyTitle()
         {
-            Assert.Empty(new GridColumn<GridModel, Object>(column.Grid, model => model.ToString()).Title.ToString());
+            Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, model => 1).Title.ToString());
         }
 
         [Fact]
@@ -116,20 +112,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridColumn_SetsExpressionValueAsCompiledExpression()
+        public void GridColumn_SetsExpressionValue()
         {
-            GridModel model = new GridModel { Name = "TestName" };
+            GridModel model = new GridModel { Name = "Testing name" };
 
-            String actual = column.ExpressionValue(model) as String;
-            String expected = "TestName";
+            Object actual = column.ExpressionValue(model);
+            Object expected = "Testing name";
 
-            Assert.Equal(expected, actual);
+            Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void GridColumn_SetsProcessorTypeAsPreProcessor()
+        public void GridColumn_SetsPreProcessorType()
         {
-            GridProcessorType actual = new GridColumn<GridModel, Object>(column.Grid, model => model.Name).ProcessorType;
+            GridProcessorType actual = new GridColumn<GridModel, Object>(column.Grid, model => 0).ProcessorType;
             GridProcessorType expected = GridProcessorType.Pre;
 
             Assert.Equal(expected, actual);
@@ -138,11 +134,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsDefaultSort()
         {
-            GridColumn<GridModel, String> testColumn = new GridColumn<GridModel, String>(column.Grid, model => model.Name);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
-            IGridColumnSort<GridModel, String> actual = testColumn.Sort;
+            IGridColumnSort<GridModel, Object> actual = column.Sort;
 
-            Assert.Same(testColumn, actual.Column);
+            Assert.Same(column, actual.Column);
             Assert.Null(actual.InitialOrder);
             Assert.Null(actual.FirstOrder);
             Assert.Null(actual.IsEnabled);
@@ -163,17 +159,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsDefaultFilter()
         {
-            GridColumn<GridModel, String> testColumn = new GridColumn<GridModel, String>(column.Grid, model => model.Name);
+            column = new GridColumn<GridModel, Object>(column.Grid, model => model.Name);
 
-            IGridColumnFilter<GridModel, String> actual = testColumn.Filter;
+            IGridColumnFilter<GridModel, Object> actual = column.Filter;
 
-            Assert.Equal(testColumn, actual.Column);
-            Assert.Equal("text", actual.Name);
+            Assert.Equal(column, actual.Column);
             Assert.Null(actual.IsEnabled);
             Assert.Null(actual.Operator);
             Assert.Null(actual.IsMulti);
             Assert.Null(actual.Second);
             Assert.Null(actual.First);
+            Assert.Null(actual.Name);
         }
 
         #endregion
@@ -186,15 +182,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Filter = Substitute.For<IGridColumnFilter<GridModel, Object>>();
             column.Sort = Substitute.For<IGridColumnSort<GridModel, Object>>();
 
-            IQueryable<GridModel> filteredItems = new GridModel[2].AsQueryable();
-            IQueryable<GridModel> sortedItems = new GridModel[2].AsQueryable();
+            IQueryable<GridModel> filtered = new GridModel[2].AsQueryable();
+            IQueryable<GridModel> sorted = new GridModel[2].AsQueryable();
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();
 
-            column.Sort.Apply(filteredItems).Returns(sortedItems);
-            column.Filter.Apply(items).Returns(filteredItems);
+            column.Filter.Apply(items).Returns(filtered);
+            column.Sort.Apply(filtered).Returns(sorted);
 
-            IQueryable<GridModel> actual = column.Process(items);
-            IQueryable<GridModel> expected = sortedItems;
+            Object actual = column.Process(items);
+            Object expected = sorted;
 
             Assert.Same(expected, actual);
         }

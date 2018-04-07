@@ -33,8 +33,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void RenderedAs_ReturnsColumn()
         {
-            IGridColumn actual = column.RenderedAs(model => model.Name);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.RenderedAs(model => model.Name);
 
             Assert.Same(expected, actual);
         }
@@ -48,8 +48,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(false)]
         public void MultiFilterable_SetsIsMulti(Boolean isMulti)
         {
-            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsMulti;
             Boolean? expected = isMulti;
+            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsMulti;
 
             Assert.Equal(expected, actual);
         }
@@ -74,8 +74,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void MultiFilterable_ReturnsColumn()
         {
-            IGridColumn actual = column.MultiFilterable(true);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.MultiFilterable(true);
 
             Assert.Same(expected, actual);
         }
@@ -98,8 +98,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filterable_ReturnsColumn()
         {
-            IGridColumn actual = column.Filterable(true);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Filterable(true);
 
             Assert.Same(expected, actual);
         }
@@ -120,8 +120,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void FilteredAs_ReturnsColumn()
         {
-            IGridColumn actual = column.FilteredAs("Numeric");
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.FilteredAs("Numeric");
 
             Assert.Same(expected, actual);
         }
@@ -142,8 +142,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void InitialSort_ReturnsColumn()
         {
-            IGridColumn actual = column.InitialSort(GridSortOrder.Desc);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.InitialSort(GridSortOrder.Desc);
 
             Assert.Same(expected, actual);
         }
@@ -164,8 +164,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void FirstSort_ReturnsColumn()
         {
-            IGridColumn actual = column.FirstSort(GridSortOrder.Desc);
-            IGridColumn expected = column;
+            Object actual = column.FirstSort(GridSortOrder.Desc);
+            Object expected = column;
 
             Assert.Same(expected, actual);
         }
@@ -188,8 +188,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Sortable_ReturnsColumn()
         {
-            IGridColumn actual = column.Sortable(true);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Sortable(true);
 
             Assert.Same(expected, actual);
         }
@@ -207,8 +207,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Encoded_ReturnsColumn()
         {
-            IGridColumn actual = column.Encoded(true);
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Encoded(true);
 
             Assert.Same(expected, actual);
         }
@@ -229,8 +229,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Formatted_ReturnsColumn()
         {
-            IGridColumn actual = column.Formatted("Format");
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Formatted("Format");
 
             Assert.Same(expected, actual);
         }
@@ -251,8 +251,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Css_ReturnsColumn()
         {
-            IGridColumn actual = column.Css("column-class");
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Css("column-class");
 
             Assert.Same(expected, actual);
         }
@@ -297,8 +297,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Titled_ReturnsColumn()
         {
-            IGridColumn actual = column.Titled("Title");
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Titled("Title");
 
             Assert.Same(expected, actual);
         }
@@ -319,8 +319,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Named_ReturnsColumn()
         {
-            IGridColumn actual = column.Named("Name");
-            IGridColumn expected = column;
+            Object expected = column;
+            Object actual = column.Named("Name");
 
             Assert.Same(expected, actual);
         }

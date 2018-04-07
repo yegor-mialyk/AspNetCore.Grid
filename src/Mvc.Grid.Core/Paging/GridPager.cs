@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +26,7 @@ namespace NonFactors.Mvc.Grid
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 CurrentPageValue = Int32.TryParse(Grid.Query[prefix + "page"], out Int32 page) ? page : CurrentPageValue;
-                CurrentPageValue = CurrentPageValue > TotalPages ? TotalPages : CurrentPageValue;
+                CurrentPageValue = TotalPages < CurrentPageValue ? TotalPages : CurrentPageValue;
                 CurrentPageValue = CurrentPageValue <= 0 ? 1 : CurrentPageValue;
 
                 return CurrentPageValue;
@@ -67,11 +66,11 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                Int32 middlePage = (PagesToDisplay / 2) + (PagesToDisplay % 2);
+                Int32 middlePage = PagesToDisplay / 2 + PagesToDisplay % 2;
                 if (CurrentPage < middlePage)
                     return 1;
 
-                if (CurrentPage - middlePage + PagesToDisplay > TotalPages)
+                if (TotalPages < CurrentPage + PagesToDisplay - middlePage)
                     return Math.Max(TotalPages - PagesToDisplay + 1, 1);
 
                 return CurrentPage - middlePage + 1;

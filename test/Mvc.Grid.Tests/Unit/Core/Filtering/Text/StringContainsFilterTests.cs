@@ -31,9 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = null },
                 new GridModel { Name = "Tes" },
                 new GridModel { Name = "test" },
-                new GridModel { Name = "TEst" },
-                new GridModel { Name = "Tst22" },
-                new GridModel { Name = "TTEst2" }
+                new GridModel { Name = "TEST" }
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("EST"));

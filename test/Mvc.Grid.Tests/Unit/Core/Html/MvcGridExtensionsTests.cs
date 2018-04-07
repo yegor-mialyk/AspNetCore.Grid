@@ -24,8 +24,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_CreatesHtmlGridWithHtml()
         {
-            IHtmlHelper actual = html.Grid(new GridModel[0]).Html;
-            IHtmlHelper expected = html;
+            Object expected = html;
+            Object actual = html.Grid(new GridModel[0]).Html;
 
             Assert.Same(expected, actual);
         }
@@ -46,8 +46,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_PartialViewName_CreatesHtmlGridWithHtml()
         {
-            IHtmlHelper actual = html.Grid("_Partial", new GridModel[0]).Html;
-            IHtmlHelper expected = html;
+            Object expected = html;
+            Object actual = html.Grid("_Partial", new GridModel[0]).Html;
 
             Assert.Same(expected, actual);
         }
@@ -67,7 +67,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             String actual = html.Grid("_Partial", new GridModel[0]).PartialViewName;
             String expected = "_Partial";
 
-            Assert.Same(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -97,8 +97,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 (String)attributes["data-source-url"] == "DataSource" &&
                 (String)attributes["class"] == "classy mvc-grid"), null).Returns(view);
 
-            IHtmlContent actual = html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 });
-            IHtmlContent expected = view.Result;
+            Object actual = html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 });
+            Object expected = view.Result;
 
             Assert.Same(expected, actual);
         }

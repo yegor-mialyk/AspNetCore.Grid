@@ -309,8 +309,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridPager_SetsGrid()
         {
-            IGrid actual = new GridPager<GridModel>(pager.Grid).Grid;
-            IGrid expected = pager.Grid;
+            Object actual = new GridPager<GridModel>(pager.Grid).Grid;
+            Object expected = pager.Grid;
 
             Assert.Same(expected, actual);
         }
