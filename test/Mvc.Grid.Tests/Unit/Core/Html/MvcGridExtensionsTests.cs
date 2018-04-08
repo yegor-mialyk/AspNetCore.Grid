@@ -122,7 +122,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region AddMvcGrid(this IServiceCollection services, Action<IGridFilters> configure)
+        #region AddMvcGrid(this IServiceCollection services, Action<GridFilters> configure)
 
         [Fact]
         public void AddMvcGrid_ConfiguredFiltersInstance()
@@ -140,14 +140,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void AddMvcGrid_ConfiguresFiltersInstance()
         {
-            Action<IGridFilters> configure = Substitute.For<Action<IGridFilters>>();
+            Action<GridFilters> configure = Substitute.For<Action<GridFilters>>();
             IServiceCollection services = new ServiceCollection();
 
             services.AddMvcGrid(configure);
 
             ServiceDescriptor actual = services.Single();
 
-            configure.Received()(actual.ImplementationInstance as IGridFilters);
+            configure.Received()(actual.ImplementationInstance as GridFilters);
         }
 
         #endregion

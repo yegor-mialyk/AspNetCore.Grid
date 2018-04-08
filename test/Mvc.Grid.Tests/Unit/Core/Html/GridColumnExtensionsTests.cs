@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -35,6 +37,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Object expected = column;
             Object actual = column.RenderedAs(model => model.Name);
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
+        #region WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
+
+        [Fact]
+        public void WithFilterOptions_SetsOptions()
+        {
+            IEnumerable<SelectListItem> expected = new SelectListItem[0];
+            IEnumerable<SelectListItem> actual = column.WithFilterOptions(expected).Filter.Options;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void WithFilterOptions_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.WithFilterOptions(new SelectListItem[0]);
 
             Assert.Same(expected, actual);
         }

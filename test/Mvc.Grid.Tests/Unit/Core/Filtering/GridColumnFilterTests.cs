@@ -1,5 +1,9 @@
-﻿using NSubstitute;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
@@ -31,6 +35,53 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "Cc", NSum = null, Sum = 10 }
             }.AsQueryable();
         }
+
+        #region Options
+
+        [Fact]
+        public void Options_Set_Caches()
+        {
+            Object expected = filter.Options = new List<SelectListItem>();
+            Object actual = filter.Options;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Options_Get_FromFilters()
+        {
+            filter.Column.Grid.ViewContext = new ViewContext();
+            IGridFilters filters = Substitute.For<IGridFilters>();
+            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+            filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+
+            Object expected = filters.GetFilterOptions(filter.Column);
+            Object actual = filter.Options;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Options_Get_Caches()
+        {
+            filter.Column.Grid.ViewContext = new ViewContext();
+            IGridFilters filters = Substitute.For<IGridFilters>();
+            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+            filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+
+            Object options = filter.Options;
+
+            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+
+            Object actual = filter.Options;
+            Object expected = options;
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
 
         #region Operator
 

@@ -1,4 +1,5 @@
-﻿@using NonFactors.Mvc.Grid;
+﻿@using Microsoft.AspNetCore.Mvc.Rendering;
+@using NonFactors.Mvc.Grid;
 
 @model IGrid
 
@@ -31,8 +32,21 @@
                             if (Model.FilterMode == GridFilterMode.HeaderRow)
                             {
                                 <div class="first-filter">
+                                    @{
+                                        String value = column.Filter.First?.Value;
+                                        foreach (SelectListItem option in column.Filter.Options)
+                                        {
+                                            if (column.Filter.First?.Value == option.Value)
+                                            {
+                                                value = option.Text;
+
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
-                                    <input class="mvc-grid-value" value="@column.Filter.First?.Value" placeholder="@column.Title" />
+                                    <input class="mvc-grid-value" value="@value" placeholder="@column.Title" />
                                     <a href="#" class="mvc-grid-filter @filterApplied"></a>
                                 </div>
                             }
@@ -41,6 +55,13 @@
                                 <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
                                 <a href="#" class="mvc-grid-filter @filterApplied"></a>
                             }
+
+                            <select class="mvc-grid-options">
+                                @foreach (var option in column.Filter.Options)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            </select>
                         }
                         else
                         {
@@ -61,7 +82,28 @@
 
                                 <div class="first-filter">
                                     <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
-                                    <input class="mvc-grid-value" value="@column.Filter.First?.Value" />
+
+                                    @if (column.Filter.Options.Any())
+                                    {
+                                        <select class="mvc-grid-value">
+                                            @foreach (SelectListItem option in column.Filter.Options)
+                                            {
+                                                if (column.Filter.First?.Value == option.Value)
+                                                {
+                                                    <option value="@option.Value" selected>@option.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@option.Value">@option.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <input class="mvc-grid-value" value="@column.Filter.First?.Value" />
+                                    }
+
                                     <a href="#" class="mvc-grid-filter @filterApplied"></a>
                                 </div>
                             </th>

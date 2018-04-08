@@ -55,6 +55,11 @@
         content: '\2191';
     }
 
+.mvc-grid-hidden,
+.mvc-grid-options {
+    display: none;
+}
+
 .mvc-grid-filter {
     background-color: rgba(0, 0, 0, 0.03);
     transition: background-color 0.5s;
@@ -208,29 +213,6 @@
             margin: 0 0.4em;
             font-size: 1em;
         }
-
-    .mvc-grid-popup .mvc-grid-boolean-filter {
-        text-align: center;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-        .mvc-grid-popup .mvc-grid-boolean-filter li {
-            cursor: pointer;
-            display: block;
-            padding: 0.2em;
-            width: 100%;
-        }
-
-            .mvc-grid-popup .mvc-grid-boolean-filter li:hover {
-                background-color: #EEEEEE;
-                text-decoration: none;
-            }
-
-            .mvc-grid-popup .mvc-grid-boolean-filter li.active {
-                background-color: #DDDDDD;
-            }
 
     .mvc-grid-popup .mvc-grid-value,
     .mvc-grid-popup .mvc-grid-method,

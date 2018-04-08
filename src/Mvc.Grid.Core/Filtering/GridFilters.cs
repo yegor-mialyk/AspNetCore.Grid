@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 
 namespace NonFactors.Mvc.Grid
 {
     public class GridFilters : IGridFilters
     {
+        public Func<String> BooleanTrueOptionText { get; set; }
+        public Func<String> BooleanFalseOptionText { get; set; }
+        public Func<String> BooleanEmptyOptionText { get; set; }
+
         private Dictionary<Type, IDictionary<String, Type>> Filters
         {
             get;
@@ -12,6 +17,9 @@ namespace NonFactors.Mvc.Grid
 
         public GridFilters()
         {
+            BooleanEmptyOptionText = () => "";
+            BooleanTrueOptionText = () => "Yes";
+            BooleanFalseOptionText = () => "No";
             Filters = new Dictionary<Type, IDictionary<String, Type>>();
 
             Register(typeof(SByte), "equals", typeof(NumberFilter<SByte>));
@@ -107,8 +115,10 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(String), "starts-with", typeof(StringStartsWithFilter));
         }
 
-        public IGridFilter GetFilter(Type type, String method)
+        public virtual IGridFilter GetFilter(Type type, String method)
         {
+            type = Nullable.GetUnderlyingType(type) ?? type;
+
             if (!Filters.ContainsKey(type))
                 return null;
 
@@ -119,6 +129,20 @@ namespace NonFactors.Mvc.Grid
             filter.Method = method.ToLower();
 
             return filter;
+        }
+        public virtual IEnumerable<SelectListItem> GetFilterOptions<T, TValue>(IGridColumn<T, TValue> column)
+        {
+            List<SelectListItem> options = new List<SelectListItem>();
+            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+
+            if (type == typeof(Boolean))
+            {
+                options.Add(new SelectListItem { Value = "", Text = BooleanEmptyOptionText?.Invoke() });
+                options.Add(new SelectListItem { Value = "true", Text = BooleanTrueOptionText?.Invoke() });
+                options.Add(new SelectListItem { Value = "false", Text = BooleanFalseOptionText?.Invoke() });
+            }
+
+            return options;
         }
 
         public void Register(Type type, String method, Type filter)

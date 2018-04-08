@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -12,6 +14,12 @@ namespace NonFactors.Mvc.Grid
             return column;
         }
 
+        public static IGridColumn<T, TValue> WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
+        {
+            column.Filter.Options = options;
+
+            return column;
+        }
         public static IGridColumn<T, TValue> MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
         {
             if (isMultiple && column.Filter.IsEnabled == null)

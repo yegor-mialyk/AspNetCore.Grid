@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -8,6 +10,7 @@ namespace NonFactors.Mvc.Grid
         String Name { get; set; }
         Boolean? IsMulti { get; set; }
         Boolean? IsEnabled { get; set; }
+        IEnumerable<SelectListItem> Options { get; set; }
 
         String Operator { get; set; }
         IGridFilter First { get; set; }

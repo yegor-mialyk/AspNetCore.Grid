@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,6 +14,24 @@ namespace NonFactors.Mvc.Grid
         public String Name { get; set; }
         public Boolean? IsMulti { get; set; }
         public Boolean? IsEnabled { get; set; }
+
+        private Boolean OptionsIsSet { get; set; }
+        public virtual IEnumerable<SelectListItem> Options
+        {
+            get
+            {
+                if (!OptionsIsSet)
+                    Options = GetFilters().GetFilterOptions(Column);
+
+                return OptionsValue;
+            }
+            set
+            {
+                OptionsValue = value;
+                OptionsIsSet = true;
+            }
+        }
+        private IEnumerable<SelectListItem> OptionsValue { get; set; }
 
         public virtual String Operator
         {
@@ -89,6 +109,10 @@ namespace NonFactors.Mvc.Grid
             return expression == null ? items : items.Where(ToLambda(expression));
         }
 
+        private IGridFilters GetFilters()
+        {
+            return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
+        }
         private IGridFilter GetFirstFilter()
         {
             String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
@@ -169,9 +193,7 @@ namespace NonFactors.Mvc.Grid
         }
         private IGridFilter GetFilter(String method, String value)
         {
-            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-
-            IGridFilter filter = (Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters()).GetFilter(type, method);
+            IGridFilter filter = GetFilters().GetFilter(typeof(TValue), method);
 
             if (filter != null)
                 filter.Value = value;

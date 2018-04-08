@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -16,6 +18,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         #region GridFilters()
+
+        [Fact]
+        public void GridFilters_SetEmptyBooleanText()
+        {
+            Assert.Empty(new GridFilters().BooleanEmptyOptionText());
+        }
+
+        [Fact]
+        public void GridFilters_SetFalseBooleanText()
+        {
+            Assert.Equal("No", new GridFilters().BooleanFalseOptionText());
+        }
+
+        [Fact]
+        public void GridFilters_SetTrueBooleanText()
+        {
+            Assert.Equal("Yes", new GridFilters().BooleanTrueOptionText());
+        }
 
         [Theory]
         [InlineData(typeof(SByte), "equals", typeof(NumberFilter<SByte>))]
@@ -131,12 +151,59 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GetFilter_ForNUllableType()
+        {
+            IGridFilter actual = filters.GetFilter(typeof(Int32?), "EQUALS");
+
+            Assert.IsType<NumberFilter<Int32>>(actual);
+            Assert.Equal("equals", actual.Method);
+        }
+
+        [Fact]
         public void GetFilter_ForType()
         {
             IGridFilter actual = filters.GetFilter(typeof(String), "CONTAINS");
 
             Assert.IsType<StringContainsFilter>(actual);
             Assert.Equal("contains", actual.Method);
+        }
+
+        #endregion
+
+        #region GetFilterOptions<T, TValue>(IGridColumn<T, TValue> column)
+
+        [Fact]
+        public void GetFilterOptions_ForBoolean()
+        {
+            SelectListItem[] actual = filters.GetFilterOptions<GridModel, Boolean>(null).ToArray();
+
+            Assert.Equal(3, actual.Length);
+            Assert.Equal("", actual[0].Value);
+            Assert.Equal("true", actual[1].Value);
+            Assert.Equal("false", actual[2].Value);
+            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
+            Assert.Equal(filters.BooleanTrueOptionText(), actual[1].Text);
+            Assert.Equal(filters.BooleanFalseOptionText(), actual[2].Text);
+        }
+
+        [Fact]
+        public void GetFilterOptions_ForNullableBoolean()
+        {
+            SelectListItem[] actual = filters.GetFilterOptions<GridModel, Boolean?>(null).ToArray();
+
+            Assert.Equal(3, actual.Length);
+            Assert.Equal("", actual[0].Value);
+            Assert.Equal("true", actual[1].Value);
+            Assert.Equal("false", actual[2].Value);
+            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
+            Assert.Equal(filters.BooleanTrueOptionText(), actual[1].Text);
+            Assert.Equal(filters.BooleanFalseOptionText(), actual[2].Text);
+        }
+
+        [Fact]
+        public void GetFilterOptions_ForOtherTypes()
+        {
+            Assert.Empty(filters.GetFilterOptions<GridModel, String>(null));
         }
 
         #endregion
