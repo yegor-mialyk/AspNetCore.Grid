@@ -38,7 +38,7 @@ var MvcGrid = (function () {
                 this.query = this.sourceUrl.substring(splitIndex + 1);
                 this.sourceUrl = this.sourceUrl.substring(0, splitIndex);
             } else {
-                this.query = options.query || '';
+                this.query = options.query == null ? '' : options.query;
             }
         } else {
             this.query = window.location.search.replace('?', '');
@@ -84,24 +84,24 @@ var MvcGrid = (function () {
             var column = {};
             column.header = header;
             column.rowFilter = rowFilter;
-            column.name = header.data('name') || '';
+            column.name = header.data('name');
 
             if (header.data('filter') == 'True') {
                 var options = header.find('.mvc-grid-options').remove();
 
                 column.filter = {
                     isMulti: header.data('filter-multi') == 'True',
-                    operator: header.data('filter-operator') || '',
+                    operator: header.data('filter-operator'),
                     hasOptions: options.children().length > 0,
-                    name: header.data('filter-name') || '',
+                    name: header.data('filter-name'),
                     first: {
-                        method: header.data('filter-first-method') || '',
-                        value: header.data('filter-first-value') || '',
+                        method: header.data('filter-first-method'),
+                        value: header.data('filter-first-value'),
                         options: options
                     },
                     second: {
-                        method: header.data('filter-second-method') || '',
-                        value: header.data('filter-second-value') || '',
+                        method: header.data('filter-second-method'),
+                        value: header.data('filter-second-value'),
                         options : options
                     }
                 };
@@ -109,8 +109,8 @@ var MvcGrid = (function () {
 
             if (header.data('sort') == 'True' && this.filterMode != 'HeaderRow') {
                 column.sort = {
-                    firstOrder: header.data('sort-first') || '',
-                    order: header.data('sort-order') || ''
+                    firstOrder: header.data('sort-first'),
+                    order: header.data('sort-order')
                 }
             }
 
