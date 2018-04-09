@@ -26,8 +26,9 @@ var MvcGrid = (function () {
         this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
         this.showLoading = options.showLoading == null || options.showLoading;
         this.filters = $.extend({
-            'text': new MvcGridTextFilter(),
+            'enum': new MvcGridEnumFilter(),
             'date': new MvcGridDateFilter(),
+            'text': new MvcGridTextFilter(),
             'number': new MvcGridNumberFilter(),
             'boolean': new MvcGridBooleanFilter()
         }, options.filters);
@@ -703,6 +704,22 @@ var MvcGridDateFilter = (function (base) {
     return MvcGridDateFilter;
 })(MvcGridFilter);
 
+var MvcGridEnumFilter = (function (base) {
+    MvcGridExtends(MvcGridEnumFilter, base);
+
+    function MvcGridEnumFilter() {
+        base.apply(this);
+
+        this.methods = ['equals', 'not-equals']
+    }
+
+    MvcGridEnumFilter.prototype.renderFilter = function (grid, filter) {
+        return base.prototype.renderFilter.call(this, grid, filter, $.fn.mvcgrid.lang.enum);
+    };
+
+    return MvcGridEnumFilter;
+})(MvcGridFilter);
+
 var MvcGridBooleanFilter = (function (base) {
     MvcGridExtends(MvcGridBooleanFilter, base);
 
@@ -799,6 +816,10 @@ $.fn.mvcgrid.lang = {
         'later-than': 'Later than',
         'earlier-than-or-equal': 'Earlier than or equal',
         'later-than-or-equal': 'Later than or equal'
+    },
+    enum: {
+        'equals': 'Equals',
+        'not-equals': 'Not equals'
     },
     filter: {
         'apply': '&#10004;',

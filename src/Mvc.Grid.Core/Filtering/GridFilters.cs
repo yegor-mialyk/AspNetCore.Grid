@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -113,6 +115,9 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(String), "contains", typeof(StringContainsFilter));
             Register(typeof(String), "ends-with", typeof(StringEndsWithFilter));
             Register(typeof(String), "starts-with", typeof(StringStartsWithFilter));
+
+            Register(typeof(Enum), "equals", typeof(EnumFilter));
+            Register(typeof(Enum), "not-equals", typeof(EnumFilter));
         }
 
         public virtual IGridFilter GetFilter(Type type, String method)
@@ -120,7 +125,12 @@ namespace NonFactors.Mvc.Grid
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (!Filters.ContainsKey(type))
-                return null;
+            {
+                if (type.GetTypeInfo().IsEnum && Filters.ContainsKey(typeof(Enum)))
+                    type = typeof(Enum);
+                else
+                    return null;
+            }
 
             if (!Filters[type].TryGetValue(method, out Type filterType))
                 return null;
@@ -140,6 +150,20 @@ namespace NonFactors.Mvc.Grid
                 options.Add(new SelectListItem { Value = "", Text = BooleanEmptyOptionText?.Invoke() });
                 options.Add(new SelectListItem { Value = "true", Text = BooleanTrueOptionText?.Invoke() });
                 options.Add(new SelectListItem { Value = "false", Text = BooleanFalseOptionText?.Invoke() });
+            }
+            else if (type.GetTypeInfo().IsEnum)
+            {
+                options.Add(new SelectListItem());
+
+                IEnumerable<SelectListItem> items = column.Grid
+                    .ViewContext?
+                    .HttpContext
+                    .RequestServices
+                    .GetRequiredService<IHtmlHelper>()
+                    .GetEnumSelectList(type);
+
+                if (items != null)
+                    options.AddRange(items);
             }
 
             return options;

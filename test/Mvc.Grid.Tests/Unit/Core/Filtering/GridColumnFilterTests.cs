@@ -352,7 +352,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForEnum()
         {
-            AssertFilterNameFor(model => model.EnumField, null);
+            AssertFilterNameFor(model => model.EnumField, "enum");
         }
 
         [Fact]
@@ -442,7 +442,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForNullableEnum()
         {
-            AssertFilterNameFor(model => model.NullableEnumField, null);
+            AssertFilterNameFor(model => model.NullableEnumField, "enum");
         }
 
         [Fact]

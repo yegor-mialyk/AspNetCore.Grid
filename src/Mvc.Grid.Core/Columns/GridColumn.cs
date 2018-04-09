@@ -78,12 +78,24 @@ namespace NonFactors.Mvc.Grid
         {
             return String.Join("-", Regex.Split(ExpressionHelper.GetExpressionText(expression), "(?<!^)(?=[A-Z])")).ToLower();
         }
+        private String GetEnumValue(Type type, String value)
+        {
+            return type
+                .GetMember(value)
+                .FirstOrDefault()?
+                .GetCustomAttribute<DisplayAttribute>()?
+                .GetName() ?? value;
+        }
         private Object GetValueFor(IGridRow<Object> row)
         {
             try
             {
                 if (RenderValue != null)
                     return RenderValue(row.Model as T);
+
+                Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+                if (type.GetTypeInfo().IsEnum)
+                    return GetEnumValue(type, ExpressionValue(row.Model as T).ToString());
 
                 return ExpressionValue(row.Model as T);
             }

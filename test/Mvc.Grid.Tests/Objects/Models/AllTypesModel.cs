@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
@@ -41,7 +42,10 @@ namespace NonFactors.Mvc.Grid.Tests
 
     public enum TestEnum
     {
+        [Display(Name = "1st")]
         First,
+
+        [Display(Name = "2nd")]
         Second
     }
 }

@@ -165,7 +165,7 @@ namespace NonFactors.Mvc.Grid
         {
             Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
             if (type.GetTypeInfo().IsEnum)
-                return null;
+                return "enum";
 
             switch (Type.GetTypeCode(type))
             {

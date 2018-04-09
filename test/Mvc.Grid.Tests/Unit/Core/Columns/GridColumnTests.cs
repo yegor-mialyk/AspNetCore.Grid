@@ -297,6 +297,46 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void ValueFor_BadValue_EnumExpressionValue()
+        {
+            GridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => model.Enum);
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = (TestEnum)2 });
+
+            String actual = enumColumn.ValueFor(row).ToString();
+            String expected = "2";
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(TestEnum.First, "1st")]
+        [InlineData(TestEnum.Second, "2nd")]
+        public void ValueFor_NullableEnumExpressionValue(TestEnum value, String expressionValue)
+        {
+            GridColumn<GridModel, TestEnum?> enumColumn = new GridColumn<GridModel, TestEnum?>(column.Grid, model => model.Enum);
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = value });
+
+            String actual = enumColumn.ValueFor(row).ToString();
+            String expected = expressionValue;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(TestEnum.First, "1st")]
+        [InlineData(TestEnum.Second, "2nd")]
+        public void ValueFor_EnumExpressionValue(TestEnum value, String expressionValue)
+        {
+            GridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => model.Enum);
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = value });
+
+            String actual = enumColumn.ValueFor(row).ToString();
+            String expected = expressionValue;
+
+            Assert.Equal(expected, actual);
+        }
+
         [Theory]
         [InlineData(null, "For {0}", true, "")]
         [InlineData(null, "For {0}", false, "")]
