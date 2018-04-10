@@ -220,6 +220,54 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region AppendCss<T, TValue>(this IGridColumn<T, TValue> column, String cssClasses)
+
+        [Theory]
+        [InlineData("", "", "")]
+        [InlineData("", " ", "")]
+        [InlineData("", null, "")]
+        [InlineData("", "test", "test")]
+        [InlineData("", " test", "test")]
+        [InlineData("", "test ", "test")]
+        [InlineData("", " test ", "test")]
+
+        [InlineData(" ", "", "")]
+        [InlineData(" ", " ", "")]
+        [InlineData(" ", null, "")]
+        [InlineData(" ", "test", "test")]
+        [InlineData(" ", " test", "test")]
+        [InlineData(" ", "test ", "test")]
+        [InlineData(" ", " test ", "test")]
+
+        [InlineData("first", "", "first")]
+        [InlineData("first", null, "first")]
+        [InlineData("first", "test", "first test")]
+        [InlineData("first", " test", "first test")]
+        [InlineData("first", "test ", "first test")]
+        [InlineData("first", " test ", "first test")]
+        [InlineData("first ", " test ", "first  test")]
+        [InlineData(" first ", " test ", "first  test")]
+        public void AppendsCss_Classes(String current, String toAppend, String cssClasses)
+        {
+            column.CssClasses = current;
+
+            String expected = cssClasses;
+            String actual = column.AppendCss(toAppend).CssClasses;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void AppendsCss_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.AppendCss("column-class");
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region Encoded<T, TValue>(this IGridColumn<T, TValue> column, Boolean isEncoded)
 
         [Fact]
@@ -266,7 +314,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Css_SetsCssClasses()
         {
-            String actual = column.Css("column-class").CssClasses;
+            String actual = column.Css(" column-class ").CssClasses;
             String expected = "column-class";
 
             Assert.Equal(expected, actual);
@@ -276,7 +324,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Css_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.Css("column-class");
+            Object actual = column.Css(null);
 
             Assert.Same(expected, actual);
         }

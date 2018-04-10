@@ -257,12 +257,60 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
+
+        [Theory]
+        [InlineData("", "", "")]
+        [InlineData("", " ", "")]
+        [InlineData("", null, "")]
+        [InlineData("", "test", "test")]
+        [InlineData("", " test", "test")]
+        [InlineData("", "test ", "test")]
+        [InlineData("", " test ", "test")]
+
+        [InlineData(" ", "", "")]
+        [InlineData(" ", " ", "")]
+        [InlineData(" ", null, "")]
+        [InlineData(" ", "test", "test")]
+        [InlineData(" ", " test", "test")]
+        [InlineData(" ", "test ", "test")]
+        [InlineData(" ", " test ", "test")]
+
+        [InlineData("first", "", "first")]
+        [InlineData("first", null, "first")]
+        [InlineData("first", "test", "first test")]
+        [InlineData("first", " test", "first test")]
+        [InlineData("first", "test ", "first test")]
+        [InlineData("first", " test ", "first test")]
+        [InlineData("first ", " test ", "first  test")]
+        [InlineData(" first ", " test ", "first  test")]
+        public void AppendsCss_Classes(String current, String toAppend, String cssClasses)
+        {
+            htmlGrid.Grid.CssClasses = current;
+
+            String expected = cssClasses;
+            String actual = htmlGrid.AppendCss(toAppend).Grid.CssClasses;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void AppendsCss_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.AppendCss("column-class");
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region Css<T>(this IHtmlGrid<T> html, String cssClasses)
 
         [Fact]
         public void Css_SetsCssClasses()
         {
-            String actual = htmlGrid.Css("table").Grid.CssClasses;
+            String actual = htmlGrid.Css(" table ").Grid.CssClasses;
             String expected = "table";
 
             Assert.Equal(expected, actual);
@@ -272,7 +320,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Css_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.Css("table");
+            Object actual = htmlGrid.Css(null);
 
             Assert.Same(expected, actual);
         }

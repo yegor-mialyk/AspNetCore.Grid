@@ -71,9 +71,15 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
+        public static IHtmlGrid<T> AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
+        {
+            html.Grid.CssClasses = (html.Grid.CssClasses + " " + cssClasses?.Trim()).Trim();
+
+            return html;
+        }
         public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String cssClasses)
         {
-            html.Grid.CssClasses = cssClasses;
+            html.Grid.CssClasses = cssClasses?.Trim();
 
             return html;
         }
