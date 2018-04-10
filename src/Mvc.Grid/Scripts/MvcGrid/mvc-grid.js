@@ -22,9 +22,9 @@ var MvcGrid = (function () {
         this.reloadStarted = options.reloadStarted;
         this.requestType = options.requestType || 'get';
         this.prefix = this.name == '' ? '' : this.name + '-';
-        this.filterMode = grid.data('filter-mode') || 'ExcelRow';
-        this.sourceUrl = options.sourceUrl || grid.data('source-url') || '';
+        this.filterMode = grid.attr('data-filter-mode') || 'ExcelRow';
         this.showLoading = options.showLoading == null || options.showLoading;
+        this.sourceUrl = options.sourceUrl || grid.attr('data-source-url') || '';
         this.filters = $.extend({
             'enum': new MvcGridEnumFilter(),
             'date': new MvcGridDateFilter(),
@@ -67,8 +67,8 @@ var MvcGrid = (function () {
         var pager = grid.find('.mvc-grid-pager');
         if (pager.length > 0) {
             this.pager = {
-                currentPage: pager.find('li.active').data('page') || 0,
-                showPageSizes: pager.data('show-page-sizes') == 'True',
+                currentPage: pager.find('li.active').attr('data-page') || 0,
+                showPageSizes: pager.attr('data-show-page-sizes') == 'True',
                 rowsPerPage: pager.find('.mvc-grid-pager-rows'),
                 pages: pager.find('li:not(.disabled)'),
                 element: pager
@@ -85,33 +85,33 @@ var MvcGrid = (function () {
             var column = {};
             column.header = header;
             column.rowFilter = rowFilter;
-            column.name = header.data('name');
+            column.name = header.attr('data-name');
 
-            if (header.data('filter') == 'True') {
+            if (header.attr('data-filter') == 'True') {
                 var options = header.find('.mvc-grid-options').remove();
 
                 column.filter = {
-                    isMulti: header.data('filter-multi') == 'True',
-                    operator: header.data('filter-operator'),
+                    isMulti: header.attr('data-filter-multi') == 'True',
+                    operator: header.attr('data-filter-operator'),
                     hasOptions: options.children().length > 0,
-                    name: header.data('filter-name'),
+                    name: header.attr('data-filter-name'),
                     first: {
-                        method: header.data('filter-first-method'),
-                        value: header.data('filter-first-value'),
+                        method: header.attr('data-filter-first-method'),
+                        value: header.attr('data-filter-first-value'),
                         options: options
                     },
                     second: {
-                        method: header.data('filter-second-method'),
-                        value: header.data('filter-second-value'),
+                        method: header.attr('data-filter-second-method'),
+                        value: header.attr('data-filter-second-value'),
                         options : options
                     }
                 };
             }
 
-            if (header.data('sort') == 'True' && this.filterMode != 'HeaderRow') {
+            if (header.attr('data-sort') == 'True' && this.filterMode != 'HeaderRow') {
                 column.sort = {
-                    firstOrder: header.data('sort-first'),
-                    order: header.data('sort-order')
+                    firstOrder: header.attr('data-sort-first'),
+                    order: header.attr('data-sort-order')
                 }
             }
 
@@ -201,7 +201,7 @@ var MvcGrid = (function () {
                 grid.pager.pages.on('click.mvcgrid', 'a', function (e) {
                     e.preventDefault();
 
-                    var page = $(this).data('page');
+                    var page = $(this).attr('data-page');
 
                     if (page) {
                         grid.applyPage(page);
