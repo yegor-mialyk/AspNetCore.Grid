@@ -707,11 +707,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Test helpers
 
-        private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String name)
+        private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
         {
-            Grid<AllTypesModel> grid = new Grid<AllTypesModel>(new AllTypesModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            String actual = new GridColumnFilter<AllTypesModel, TValue>(new GridColumn<AllTypesModel, TValue>(grid, property)).Name;
+            String actual = new GridColumnFilter<GridModel, TValue>(new GridColumn<GridModel, TValue>(grid, property)).Name;
             String expected = name;
 
             Assert.Equal(expected, actual);

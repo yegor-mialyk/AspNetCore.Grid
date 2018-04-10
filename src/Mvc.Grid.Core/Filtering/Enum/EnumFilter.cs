@@ -8,22 +8,33 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
+            Object value = null;
             if (String.IsNullOrEmpty(Value))
+            {
+                if (Nullable.GetUnderlyingType(expression.Type) == null)
+                    expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+            }
+            else if ((value = GetTypedValue(expression)) == null)
+            {
                 return null;
+            }
 
+            switch (Method)
+            {
+                case "equals":
+                    return Expression.Equal(expression, Expression.Constant(value, expression.Type));
+                case "not-equals":
+                    return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
+                default:
+                    return null;
+            }
+        }
+
+        private Object GetTypedValue(Expression expression)
+        {
             try
             {
-                Object value = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(Value);
-
-                switch (Method)
-                {
-                    case "equals":
-                        return Expression.Equal(expression, Expression.Constant(value, expression.Type));
-                    case "not-equals":
-                        return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
-                    default:
-                        return null;
-                }
+                return TypeDescriptor.GetConverter(expression.Type).ConvertFrom(Value);
             }
             catch
             {

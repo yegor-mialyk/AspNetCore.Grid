@@ -30,21 +30,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Apply(Expression expression)
 
         [Fact]
-        public void Apply_NotBooleanValue_ReturnsNull()
+        public void Apply_BadValue_ReturnsNull()
         {
             filter.Value = "Test";
+            filter.Method = "equals";
 
             Assert.Null(filter.Apply(booleanExpression.Body));
         }
 
         [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
         [InlineData("FALSE", false)]
-        public void Apply_NullableEqualsFilter(String value, Boolean isChecked)
+        public void Apply_NullableEqualsFilter(String value, Boolean? isChecked)
         {
             filter.Value = value;
+            filter.Method = "equals";
 
             IEnumerable expected = items.Where(model => model.NIsChecked == isChecked);
             IEnumerable actual = Filter(items, filter.Apply(nBooleanExpression.Body), nBooleanExpression);
@@ -53,18 +57,66 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
         [InlineData("FALSE", false)]
-        public void Apply_EqualsFilter(String value, Boolean isChecked)
+        public void Apply_EqualsFilter(String value, Boolean? isChecked)
         {
             filter.Value = value;
+            filter.Method = "equals";
 
             IEnumerable expected = items.Where(model => model.IsChecked == isChecked);
             IEnumerable actual = Filter(items, filter.Apply(booleanExpression.Body), booleanExpression);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("true", true)]
+        [InlineData("TRUE", true)]
+        [InlineData("false", false)]
+        [InlineData("FALSE", false)]
+        public void Apply_NullableNotEqualsFilter(String value, Boolean? isChecked)
+        {
+            filter.Value = value;
+            filter.Method = "not-equals";
+
+            IEnumerable expected = items.Where(model => model.NIsChecked != isChecked);
+            IEnumerable actual = Filter(items, filter.Apply(nBooleanExpression.Body), nBooleanExpression);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("true", true)]
+        [InlineData("TRUE", true)]
+        [InlineData("false", false)]
+        [InlineData("FALSE", false)]
+        public void Apply_NotEqualsFilter(String value, Boolean? isChecked)
+        {
+            filter.Value = value;
+            filter.Method = "not-equals";
+
+            IEnumerable expected = items.Where(model => model.IsChecked != isChecked);
+            IEnumerable actual = Filter(items, filter.Apply(booleanExpression.Body), booleanExpression);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_BadMethod_ReturnsNull()
+        {
+            filter.Value = "false";
+            filter.Method = "test";
+
+            Assert.Null(filter.Apply(booleanExpression.Body));
         }
 
         #endregion

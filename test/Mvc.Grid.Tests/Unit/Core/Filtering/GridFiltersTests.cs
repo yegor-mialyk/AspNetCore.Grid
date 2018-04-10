@@ -126,6 +126,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(DateTime), "later-than-or-equal", typeof(DateTimeFilter))]
 
         [InlineData(typeof(Boolean), "equals", typeof(BooleanFilter))]
+        [InlineData(typeof(Boolean), "not-equals", typeof(BooleanFilter))]
 
         [InlineData(typeof(String), "equals", typeof(StringEqualsFilter))]
         [InlineData(typeof(String), "not-equals", typeof(StringNotEqualsFilter))]

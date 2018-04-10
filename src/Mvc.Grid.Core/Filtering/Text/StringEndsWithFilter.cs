@@ -17,7 +17,7 @@ namespace NonFactors.Mvc.Grid
 
             Expression toUpper = Expression.Call(expression, toUpperMethod);
             Expression endsWith = Expression.Call(toUpper, endsWithMethod, value);
-            Expression notNull = Expression.NotEqual(expression, Expression.Constant(null));
+            Expression notNull = Expression.NotEqual(expression, Expression.Constant(null, expression.Type));
 
             return Expression.AndAlso(notNull, endsWith);
         }

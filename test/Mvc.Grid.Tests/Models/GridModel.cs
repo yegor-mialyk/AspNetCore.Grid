@@ -1,10 +1,28 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Html;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
-    public class AllTypesModel
+    public class GridModel
     {
+        [Display(Name = "Text")]
+        public String Text { get; set; }
+
+        [Display(Name = "Text", ShortName = "Txt")]
+        public String ShortText { get; set; }
+
+        public IHtmlContent Content { get; set; }
+        public Boolean? NIsChecked { get; set; }
+        public Boolean IsChecked { get; set; }
+        public DateTime? NDate { get; set; }
+        public TestEnum? NEnum { get; set; }
+        public DateTime Date { get; set; }
+        public TestEnum Enum { get; set; }
+        public String Name { get; set; }
+        public Int32? NSum { get; set; }
+        public Int32 Sum { get; set; }
+
         public TestEnum EnumField { get; set; }
         public SByte SByteField { get; set; }
         public Byte ByteField { get; set; }
@@ -37,7 +55,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public String StringField { get; set; }
 
-        public AllTypesModel Child { get; set; }
+        public GridModel Child { get; set; }
     }
 
     public enum TestEnum

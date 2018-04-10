@@ -11,7 +11,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         private Expression<Func<GridModel, Int32?>> nSumExpression;
         private Expression<Func<GridModel, Int32>> sumExpression;
         private IQueryable<GridModel> items;
-        private NumberFilter<Int32> filter;
 
         public NumberFilterTests()
         {
@@ -24,296 +23,295 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             nSumExpression = (model) => model.NSum;
             sumExpression = (model) => model.Sum;
-            filter = new NumberFilter<Int32>();
         }
 
         #region Apply(Expression expression)
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("79228162514264337593543950336")]
         [InlineData("-79228162514264337593543950336")]
         public void Apply_BadDecimalValue_ReturnsNull(String value)
         {
-            NumberFilter<Decimal> numberFilter = new NumberFilter<Decimal> { Method = "equals", Value = value };
+            NumberFilter<Decimal> filter = new NumberFilter<Decimal> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("1.8076931348623157E+308")]
         [InlineData("-1.8076931348623157E+308")]
         public void Apply_BadDoubleValue_ReturnsNull(String value)
         {
-            NumberFilter<Double> numberFilter = new NumberFilter<Double> { Method = "equals", Value = value };
+            NumberFilter<Double> filter = new NumberFilter<Double> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("3.50282347E+38")]
         [InlineData("-3.50282347E+38")]
         public void Apply_BadSingleValue_ReturnsNull(String value)
         {
-            NumberFilter<Single> numberFilter = new NumberFilter<Single> { Method = "equals", Value = value };
+            NumberFilter<Single> filter = new NumberFilter<Single> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("9223372036854775808")]
         [InlineData("-9223372036854775809")]
         public void Apply_BadInt64Value_ReturnsNull(String value)
         {
-            NumberFilter<Int64> numberFilter = new NumberFilter<Int64> { Method = "equals", Value = value };
+            NumberFilter<Int64> filter = new NumberFilter<Int64> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("-1")]
         [InlineData("test")]
         [InlineData("18446744073709551616")]
         public void Apply_BadUInt64Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt64> numberFilter = new NumberFilter<UInt64> { Method = "equals", Value = value };
+            NumberFilter<UInt64> filter = new NumberFilter<UInt64> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("2147483648")]
         [InlineData("-2147483649")]
         public void Apply_BadInt32Value_ReturnsNull(String value)
         {
-            NumberFilter<Int32> numberFilter = new NumberFilter<Int32> { Method = "equals", Value = value };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("-1")]
         [InlineData("test")]
         [InlineData("4294967296")]
         public void Apply_BadUInt32Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt32> numberFilter = new NumberFilter<UInt32> { Method = "equals", Value = value };
+            NumberFilter<UInt32> filter = new NumberFilter<UInt32> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("32768")]
         [InlineData("-32769")]
         public void Apply_BadInt16Value_ReturnsNull(String value)
         {
-            NumberFilter<Int16> numberFilter = new NumberFilter<Int16> { Method = "equals", Value = value };
+            NumberFilter<Int16> filter = new NumberFilter<Int16> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("-1")]
         [InlineData("test")]
         [InlineData("65536")]
         public void Apply_BadUInt16Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt16> numberFilter = new NumberFilter<UInt16> { Method = "equals", Value = value };
+            NumberFilter<UInt16> filter = new NumberFilter<UInt16> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("128")]
         [InlineData("-129")]
         [InlineData("test")]
         public void Apply_BadSByteValue_ReturnsNull(String value)
         {
-            NumberFilter<SByte> numberFilter = new NumberFilter<SByte> { Method = "equals", Value = value };
+            NumberFilter<SByte> filter = new NumberFilter<SByte> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("-1")]
         [InlineData("256")]
         [InlineData("test")]
         public void Apply_BadByteValue_ReturnsNull(String value)
         {
-            NumberFilter<Byte> numberFilter = new NumberFilter<Byte>();
-            numberFilter.Method = "equals";
-            numberFilter.Value = value;
+            NumberFilter<Byte> filter = new NumberFilter<Byte> { Method = "equals", Value = value };
 
-            Assert.Null(numberFilter.Apply(sumExpression.Body));
+            Assert.Null(filter.Apply(sumExpression.Body));
         }
 
-        [Fact]
-        public void Apply_NullableEqualsFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableEqualsFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "equals";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum == 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum == number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_EqualsFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_EqualsFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "equals";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum == 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum == number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableNotEqualsFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableNotEqualsFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "not-equals";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum != 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum != number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NotEqualsFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NotEqualsFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "not-equals";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum != 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum != number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableLessThanFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableLessThanFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "less-than";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum < 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum < number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_LessThanFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_LessThanFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "less-than";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum < 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum < number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableGreaterThanFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableGreaterThanFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "greater-than";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum > 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum > number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_GreaterThanFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_GreaterThanFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "greater-than";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum > 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum > number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableLessThanOrEqualFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableLessThanOrEqualFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "less-than-or-equal";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum <= 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum <= number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_LessThanOrEqualFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_LessThanOrEqualFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "less-than-or-equal";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum <= 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum <= number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableGreaterThanOrEqualFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_NullableGreaterThanOrEqualFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "greater-than-or-equal";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Value = value };
 
-            IEnumerable expected = items.Where(model => model.NSum >= 1);
             IEnumerable actual = Filter(items, filter.Apply(nSumExpression.Body), nSumExpression);
+            IEnumerable expected = items.Where(model => model.NSum >= number);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_GreaterThanOrEqualFilter()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void Apply_GreaterThanOrEqualFilter(String value, Int32? number)
         {
-            filter.Value = "1";
-            filter.Method = "greater-than-or-equal";
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Value = value };
 
-            IEnumerable expected = items.Where(model => model.Sum >= 1);
             IEnumerable actual = Filter(items, filter.Apply(sumExpression.Body), sumExpression);
+            IEnumerable expected = items.Where(model => model.Sum >= number);
 
             Assert.Equal(expected, actual);
         }
@@ -321,10 +319,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
-            filter.Value = "1";
-            filter.Method = "test";
-
-            Assert.Null(filter.Apply(sumExpression.Body));
+            Assert.Null(new NumberFilter<Int32> { Method = "test", Value = "1" }.Apply(sumExpression.Body));
         }
 
         #endregion

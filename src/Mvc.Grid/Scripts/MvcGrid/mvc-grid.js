@@ -726,21 +726,11 @@ var MvcGridBooleanFilter = (function (base) {
     function MvcGridBooleanFilter() {
         base.apply(this);
 
-        this.methods = ['equals'];
+        this.methods = ['equals', 'not-equals'];
     }
 
     MvcGridBooleanFilter.prototype.renderFilter = function (grid, filter) {
-        return '<div class="popup-group mvc-grid-hidden">' +
-                    '<select class="mvc-grid-method">' +
-                        '<option value="equals"></option>' +
-                    '</select>' +
-                '</div>' +
-                (grid.filterMode != 'FilterRow' ?
-                '<div class="popup-group">' +
-                    '<select class="mvc-grid-value">' + filter.options.html() + '</select>' +
-                '</div>'
-                :
-                '');
+        return base.prototype.renderFilter.call(this, grid, filter, $.fn.mvcgrid.lang.boolean);
     };
 
     return MvcGridBooleanFilter;
@@ -818,6 +808,10 @@ $.fn.mvcgrid.lang = {
         'later-than-or-equal': 'Later than or equal'
     },
     enum: {
+        'equals': 'Equals',
+        'not-equals': 'Not equals'
+    },
+    boolean: {
         'equals': 'Equals',
         'not-equals': 'Not equals'
     },

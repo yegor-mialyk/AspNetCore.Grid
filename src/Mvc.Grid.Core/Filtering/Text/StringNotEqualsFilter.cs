@@ -10,8 +10,8 @@ namespace NonFactors.Mvc.Grid
         {
             if (String.IsNullOrEmpty(Value))
             {
+                Expression notNull = Expression.NotEqual(expression, Expression.Constant(null, expression.Type));
                 Expression isNotEmpty = Expression.NotEqual(expression, Expression.Constant(""));
-                Expression notNull = Expression.NotEqual(expression, Expression.Constant(null));
 
                 return Expression.AndAlso(notNull, isNotEmpty);
             }
@@ -19,7 +19,7 @@ namespace NonFactors.Mvc.Grid
             MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
             Expression value = Expression.Constant(Value.ToUpper());
 
-            Expression equalsNull = Expression.Equal(expression, Expression.Constant(null));
+            Expression equalsNull = Expression.Equal(expression, Expression.Constant(null, expression.Type));
             Expression toUpper = Expression.Call(expression, toUpperMethod);
             Expression notEquals = Expression.NotEqual(toUpper, value);
 

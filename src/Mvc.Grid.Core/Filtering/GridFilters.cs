@@ -109,6 +109,7 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(DateTime), "later-than-or-equal", typeof(DateTimeFilter));
 
             Register(typeof(Boolean), "equals", typeof(BooleanFilter));
+            Register(typeof(Boolean), "not-equals", typeof(BooleanFilter));
 
             Register(typeof(String), "equals", typeof(StringEqualsFilter));
             Register(typeof(String), "not-equals", typeof(StringNotEqualsFilter));

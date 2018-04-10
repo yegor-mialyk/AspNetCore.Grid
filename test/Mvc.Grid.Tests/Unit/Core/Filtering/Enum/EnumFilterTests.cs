@@ -31,61 +31,70 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Apply(Expression expression)
 
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("test")]
-        public void Apply_BadValue_ReturnsNull(String value)
+        [Fact]
+        public void Apply_BadValue_ReturnsNull()
         {
-            filter.Value = value;
+            filter.Value = "test";
             filter.Method = "equals";
 
             Assert.Null(filter.Apply(enumExpression.Body));
         }
 
-        [Fact]
-        public void Apply_NullableEqualsFilter()
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("1", TestEnum.Second)]
+        public void Apply_NullableEqualsFilter(String value, TestEnum? test)
         {
-            filter.Value = "1";
+            filter.Value = value;
             filter.Method = "equals";
 
-            IEnumerable expected = items.Where(model => model.NEnum == TestEnum.Second);
+            IEnumerable expected = items.Where(model => model.NEnum == test);
             IEnumerable actual = Filter(items, filter.Apply(nEnumExpression.Body), nEnumExpression);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_EqualsFilter()
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("1", TestEnum.Second)]
+        public void Apply_EqualsFilter(String value, TestEnum? test)
         {
-            filter.Value = "1";
+            filter.Value = value;
             filter.Method = "equals";
 
-            IEnumerable expected = items.Where(model => model.Enum == TestEnum.Second);
+            IEnumerable expected = items.Where(model => model.Enum == test);
             IEnumerable actual = Filter(items, filter.Apply(enumExpression.Body), enumExpression);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NullableNotEqualsFilter()
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("1", TestEnum.Second)]
+        public void Apply_NullableNotEqualsFilter(String value, TestEnum? test)
         {
-            filter.Value = "1";
+            filter.Value = value;
             filter.Method = "not-equals";
 
-            IEnumerable expected = items.Where(model => model.NEnum != TestEnum.Second);
+            IEnumerable expected = items.Where(model => model.NEnum != test);
             IEnumerable actual = Filter(items, filter.Apply(nEnumExpression.Body), nEnumExpression);
 
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Apply_NotEqualsFilter()
+        [Theory]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData("1", TestEnum.Second)]
+        public void Apply_NotEqualsFilter(String value, TestEnum? test)
         {
-            filter.Value = "1";
+            filter.Value = value;
             filter.Method = "not-equals";
 
-            IEnumerable expected = items.Where(model => model.Enum != TestEnum.Second);
+            IEnumerable expected = items.Where(model => model.Enum != test);
             IEnumerable actual = Filter(items, filter.Apply(enumExpression.Body), enumExpression);
 
             Assert.Equal(expected, actual);

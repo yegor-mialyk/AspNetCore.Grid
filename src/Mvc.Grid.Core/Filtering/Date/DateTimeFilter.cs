@@ -7,8 +7,16 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
-            if (!DateTime.TryParse(Value, out DateTime value))
+            Object value = null;
+            if (String.IsNullOrEmpty(Value))
+            {
+                if (Nullable.GetUnderlyingType(expression.Type) == null)
+                    expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+            }
+            else if ((value = GetTypedValue()) == null)
+            {
                 return null;
+            }
 
             switch (Method)
             {
@@ -27,6 +35,14 @@ namespace NonFactors.Mvc.Grid
                 default:
                     return null;
             }
+        }
+
+        private Object GetTypedValue()
+        {
+            if (DateTime.TryParse(Value, out DateTime date))
+                return date;
+
+            return null;
         }
     }
 }
