@@ -57,7 +57,7 @@
                             }
 
                             <select class="mvc-grid-options">
-                                @foreach (var option in column.Filter.Options)
+                                @foreach (SelectListItem option in column.Filter.Options)
                                 {
                                     <option value="@option.Value">@option.Text</option>
                                 }

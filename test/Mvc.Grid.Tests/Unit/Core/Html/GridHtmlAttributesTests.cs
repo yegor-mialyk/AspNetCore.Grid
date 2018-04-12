@@ -13,11 +13,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void GridHtmlAttributes_Empty()
         {
             TextWriter writer = new StringWriter();
+
             new GridHtmlAttributes().WriteTo(writer, HtmlEncoder.Default);
 
-            String actual = writer.ToString();
-
-            Assert.Empty(actual);
+            Assert.Empty(writer.ToString());
         }
 
         #endregion
