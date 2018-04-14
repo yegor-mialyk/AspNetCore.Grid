@@ -18,7 +18,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region TotalPages
 
         [Theory]
-        [InlineData(0, 20, 0)]
+        [InlineData(0, 0, 0)]
+        [InlineData(0, 1, 0)]
+        [InlineData(1, 0, 1)]
         [InlineData(1, 20, 1)]
         [InlineData(19, 20, 1)]
         [InlineData(20, 20, 1)]

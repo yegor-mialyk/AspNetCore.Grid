@@ -17,6 +17,12 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
+                if (TotalRows == 0)
+                    return 0;
+
+                if (RowsPerPage == 0)
+                    return 1;
+
                 return (Int32)Math.Ceiling(TotalRows / (Double)RowsPerPage);
             }
         }
