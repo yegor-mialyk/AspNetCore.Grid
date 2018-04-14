@@ -9,6 +9,7 @@ namespace NonFactors.Mvc.Grid
 {
     public class Grid<T> : IGrid<T> where T : class
     {
+        public String Id { get; set; }
         public String Name { get; set; }
         public String EmptyText { get; set; }
         public String SourceUrl { get; set; }

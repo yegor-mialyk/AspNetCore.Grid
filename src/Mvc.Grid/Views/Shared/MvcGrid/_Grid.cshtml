@@ -3,7 +3,7 @@
 
 @model IGrid
 
-<div id="@Model.Name" class="mvc-grid" data-filter-mode="@Model.FilterMode" data-source-url="@Model.SourceUrl">
+<div id="@Model.Id" class="mvc-grid" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-source-url="@Model.SourceUrl">
     <!table class="@Model.CssClasses"@Model.Attributes>
         <thead>
             <tr class="mvc-grid-headers @(Model.FilterMode == GridFilterMode.HeaderRow ? "mvc-grid-row-filters" : "")">

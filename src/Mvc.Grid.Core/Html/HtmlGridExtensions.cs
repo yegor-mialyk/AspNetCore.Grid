@@ -95,6 +95,12 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
+        public static IHtmlGrid<T> Id<T>(this IHtmlGrid<T> html, String id)
+        {
+            html.Grid.Id = id;
+
+            return html;
+        }
 
         public static IHtmlGrid<T> WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
         {

@@ -8,6 +8,7 @@ namespace NonFactors.Mvc.Grid
 {
     public interface IGrid
     {
+        String Id { get; set; }
         String Name { get; set; }
         String EmptyText { get; set; }
         String SourceUrl { get; set; }

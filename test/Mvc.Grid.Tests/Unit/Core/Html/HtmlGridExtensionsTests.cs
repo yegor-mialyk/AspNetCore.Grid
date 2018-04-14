@@ -371,6 +371,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region Id<T>(this IHtmlGrid<T> html, String id)
+
+        [Fact]
+        public void Id_SetsId()
+        {
+            String actual = htmlGrid.Id("Test").Grid.Id;
+            String expected = "Test";
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Id_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Id("Test");
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
 
         [Fact]
