@@ -286,10 +286,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(" first ", " test ", "first  test")]
         public void AppendsCss_Classes(String current, String toAppend, String cssClasses)
         {
-            htmlGrid.Grid.CssClasses = current;
+            htmlGrid.Grid.Attributes["class"] = current;
 
             String expected = cssClasses;
-            String actual = htmlGrid.AppendCss(toAppend).Grid.CssClasses;
+            String actual = htmlGrid.AppendCss(toAppend).Grid.Attributes["class"].ToString();
 
             Assert.Equal(expected, actual);
         }
@@ -310,7 +310,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Css_SetsCssClasses()
         {
-            String actual = htmlGrid.Css(" table ").Grid.CssClasses;
+            String actual = htmlGrid.Css(" table ").Grid.Attributes["class"].ToString();
             String expected = "table";
 
             Assert.Equal(expected, actual);

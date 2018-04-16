@@ -73,13 +73,16 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
         {
-            html.Grid.CssClasses = (html.Grid.CssClasses + " " + cssClasses?.Trim()).Trim();
+            if (html.Grid.Attributes.ContainsKey("class"))
+                html.Grid.Attributes["class"] = (html.Grid.Attributes["class"] + " " + cssClasses?.TrimStart()).Trim();
+            else
+                html.Grid.Attributes["class"] = cssClasses?.Trim();
 
             return html;
         }
         public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String cssClasses)
         {
-            html.Grid.CssClasses = cssClasses?.Trim();
+            html.Grid.Attributes["class"] = cssClasses?.Trim();
 
             return html;
         }

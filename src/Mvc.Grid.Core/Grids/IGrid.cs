@@ -12,7 +12,6 @@ namespace NonFactors.Mvc.Grid
         String Name { get; set; }
         String EmptyText { get; set; }
         String SourceUrl { get; set; }
-        String CssClasses { get; set; }
 
         IQueryCollection Query { get; set; }
         ViewContext ViewContext { get; set; }
