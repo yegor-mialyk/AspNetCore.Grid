@@ -210,7 +210,8 @@ namespace NonFactors.Mvc.Grid
             {
                 if ("and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.AndAlso(left, right);
-                else if ("or".Equals(Operator, StringComparison.OrdinalIgnoreCase))
+
+                if ("or".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.OrElse(left, right);
             }
 

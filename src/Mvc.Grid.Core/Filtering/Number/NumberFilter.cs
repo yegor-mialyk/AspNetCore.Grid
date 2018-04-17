@@ -43,25 +43,25 @@ namespace NonFactors.Mvc.Grid
 
             if (type == typeof(Decimal) && Decimal.TryParse(Value, out Decimal decimalNumber))
                 return decimalNumber;
-            else if (type == typeof(Double) && Double.TryParse(Value, out Double doubleNumber))
+            if (type == typeof(Double) && Double.TryParse(Value, out Double doubleNumber))
                 return doubleNumber;
-            else if (type == typeof(Single) && Single.TryParse(Value, out Single singleNumber))
+            if (type == typeof(Single) && Single.TryParse(Value, out Single singleNumber))
                 return singleNumber;
-            else if (type == typeof(Int64) && Int64.TryParse(Value, out Int64 int64Number))
+            if (type == typeof(Int64) && Int64.TryParse(Value, out Int64 int64Number))
                 return int64Number;
-            else if (type == typeof(UInt64) && UInt64.TryParse(Value, out UInt64 uint64Number))
+            if (type == typeof(UInt64) && UInt64.TryParse(Value, out UInt64 uint64Number))
                 return uint64Number;
-            else if (type == typeof(Int32) && Int32.TryParse(Value, out Int32 int32Number))
+            if (type == typeof(Int32) && Int32.TryParse(Value, out Int32 int32Number))
                 return int32Number;
-            else if (type == typeof(UInt32) && UInt32.TryParse(Value, out UInt32 uint32Number))
+            if (type == typeof(UInt32) && UInt32.TryParse(Value, out UInt32 uint32Number))
                 return uint32Number;
-            else if (type == typeof(Int16) && Int16.TryParse(Value, out Int16 int16Number))
+            if (type == typeof(Int16) && Int16.TryParse(Value, out Int16 int16Number))
                 return int16Number;
-            else if (type == typeof(UInt16) && UInt16.TryParse(Value, out UInt16 uint16Number))
+            if (type == typeof(UInt16) && UInt16.TryParse(Value, out UInt16 uint16Number))
                 return uint16Number;
-            else if (type == typeof(SByte) && SByte.TryParse(Value, out SByte sbyteNumber))
+            if (type == typeof(SByte) && SByte.TryParse(Value, out SByte sbyteNumber))
                 return sbyteNumber;
-            else if (type == typeof(Byte) && Byte.TryParse(Value, out Byte byteNumber))
+            if (type == typeof(Byte) && Byte.TryParse(Value, out Byte byteNumber))
                 return byteNumber;
 
             return null;

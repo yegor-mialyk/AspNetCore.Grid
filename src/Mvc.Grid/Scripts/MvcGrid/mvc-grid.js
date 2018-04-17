@@ -710,7 +710,7 @@ var MvcGridEnumFilter = (function (base) {
     function MvcGridEnumFilter() {
         base.apply(this);
 
-        this.methods = ['equals', 'not-equals']
+        this.methods = ['equals', 'not-equals'];
     }
 
     MvcGridEnumFilter.prototype.renderFilter = function (grid, filter) {

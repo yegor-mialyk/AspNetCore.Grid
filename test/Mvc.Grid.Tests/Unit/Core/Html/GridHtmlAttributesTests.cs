@@ -32,7 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 id= "",
                 src = "test.png",
                 data_temp = 10000,
-                data_null = (String)null,
+                data_null = (String)null
             }).WriteTo(writer, HtmlEncoder.Default);
 
             String expected = " id=\"\" src=\"test.png\" data-temp=\"10000\" data-null=\"\"";

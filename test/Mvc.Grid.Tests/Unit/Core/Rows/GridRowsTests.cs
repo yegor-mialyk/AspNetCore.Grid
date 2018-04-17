@@ -61,8 +61,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             Grid<GridModel> grid = new Grid<GridModel>(items);
 
-            GridRows<GridModel> rows = new GridRows<GridModel>(grid);
-            rows.CssClasses = (model) => "grid-row";
+            GridRows<GridModel> rows = new GridRows<GridModel>(grid) { CssClasses = (model) => "grid-row" };
 
             Assert.True(rows.All(row => row.CssClasses == "grid-row"));
         }
@@ -74,8 +73,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             Grid<GridModel> grid = new Grid<GridModel>(items);
 
-            GridRows<GridModel> rows = new GridRows<GridModel>(grid);
-            rows.Attributes = (model) => new { data_id = "1" };
+            GridRows<GridModel> rows = new GridRows<GridModel>(grid) { Attributes = (model) => new {data_id = "1"} };
 
             Assert.True(rows.All(row =>
                 row.Attributes.Single().Key == attributes.Key &&

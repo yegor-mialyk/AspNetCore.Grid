@@ -14,9 +14,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         public void Apply_FiltersNotEmptyAndNotNullValues(String value)
         {
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Value = value };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringNotEqualsFilter filter = new StringNotEqualsFilter();
-            filter.Value = value;
 
             IQueryable<GridModel> items = new[]
             {
@@ -36,9 +35,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Value = "Test" };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringNotEqualsFilter filter = new StringNotEqualsFilter();
-            filter.Value = "Test";
 
             IQueryable<GridModel> items = new[]
             {

@@ -22,9 +22,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {
+            StringEndsWithFilter filter = new StringEndsWithFilter { Value = "est" };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringEndsWithFilter filter = new StringEndsWithFilter();
-            filter.Value = "est";
 
             IQueryable<GridModel> items = new[]
             {
