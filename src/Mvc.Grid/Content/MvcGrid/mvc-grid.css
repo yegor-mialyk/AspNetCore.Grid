@@ -16,6 +16,7 @@
 .mvc-grid {
     position: relative;
     line-height: 20px;
+    overflow-x: auto;
 }
 
     .mvc-grid table {
