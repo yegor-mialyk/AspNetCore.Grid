@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,12 @@ namespace NonFactors.Mvc.Grid
 
         public static IHtmlContent AjaxGrid(this IHtmlHelper html, String dataSource, Object htmlAttributes = null)
         {
-            GridHtmlAttributes attributes = new GridHtmlAttributes(htmlAttributes);
-            attributes["data-source-url"] = dataSource;
+            TagBuilder grid = new TagBuilder("div");
+            grid.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+            grid.Attributes["data-source-url"] = dataSource;
+            grid.AddCssClass("mvc-grid");
 
-            if (attributes.ContainsKey("class"))
-                attributes["class"] += " mvc-grid";
-            else
-                attributes["class"] = "mvc-grid";
-
-            return html.Partial("MvcGrid/_AjaxGrid", attributes);
+            return grid;
         }
 
         public static IServiceCollection AddMvcGrid(this IServiceCollection services)

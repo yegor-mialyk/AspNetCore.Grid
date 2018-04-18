@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Encodings.Web;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -75,32 +75,29 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region AjaxGrid(this HtmlHelper, String dataSource, Object htmlAttributes = null)
 
         [Fact]
-        public void AjaxGrid_RendersPartial()
+        public void AjaxGrid_Div()
         {
-            Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
-            html.PartialAsync("MvcGrid/_AjaxGrid", Arg.Is<GridHtmlAttributes>(attributes =>
-                attributes.Count == 2 && attributes["data-source-url"].ToString() == "DataSource" && attributes["class"].ToString() == "mvc-grid"), null).Returns(view);
+            StringWriter writer = new StringWriter();
 
-            IHtmlContent actual = html.AjaxGrid("DataSource");
-            IHtmlContent expected = view.Result;
+            html.AjaxGrid("DataSource").WriteTo(writer, HtmlEncoder.Default);
+
+            String expected = "<div class=\"mvc-grid\" data-source-url=\"DataSource\"></div>";
+            String actual = writer.GetStringBuilder().ToString();
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void AjaxGrid_RendersPartialWithHtmlAttributes()
+        public void AjaxGrid_AttributedDiv()
         {
-            Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
-            html.PartialAsync("MvcGrid/_AjaxGrid", Arg.Is<GridHtmlAttributes>(attributes =>
-                attributes.Count == 3 &&
-                (Int32)attributes["data-id"] == 1 &&
-                (String)attributes["data-source-url"] == "DataSource" &&
-                (String)attributes["class"] == "classy mvc-grid"), null).Returns(view);
+            StringWriter writer = new StringWriter();
 
-            Object actual = html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 });
-            Object expected = view.Result;
+            html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 }).WriteTo(writer, HtmlEncoder.Default);
 
-            Assert.Same(expected, actual);
+            String expected = "<div class=\"mvc-grid classy\" data-id=\"1\" data-source-url=\"DataSource\"></div>";
+            String actual = writer.GetStringBuilder().ToString();
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion
