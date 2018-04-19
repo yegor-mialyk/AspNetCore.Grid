@@ -343,9 +343,9 @@ var MvcGrid = (function () {
 
             var loader = $('<div class="mvc-grid-loader">' +
                 '<div>' +
-                    '<div class="p-1"></div>' +
-                    '<div class="p-2"></div>' +
-                    '<div class="p-3"></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
                 '</div>' +
             '</div>');
 

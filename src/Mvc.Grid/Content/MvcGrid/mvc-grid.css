@@ -361,13 +361,13 @@
         width: 18px;
     }
 
-    .mvc-grid-loading .p-1 {
-        animation-delay: -0.32s;
-    }
+        .mvc-grid-loading > div > div:nth-child(1) {
+            animation-delay: -0.32s;
+        }
 
-    .mvc-grid-loading .p-2 {
-        animation-delay: -0.16s;
-    }
+        .mvc-grid-loading > div > div:nth-child(2) {
+            animation-delay: -0.16s;
+        }
 
 @keyframes loader-points {
     0%, 80%, 100% {
