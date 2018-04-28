@@ -827,5 +827,7 @@ $.fn.mvcgrid.lang = {
 };
 
 $(function () {
-    $('body').append('<div class="mvc-grid-popup"></div>');
+    if (!$('body > .mvc-grid-popup').length) {
+        $('body').append('<div class="mvc-grid-popup"></div>');
+    }
 });
