@@ -12,8 +12,8 @@ namespace NonFactors.Mvc.Grid
                 return null;
 
             Expression value = Expression.Constant(Value.ToUpper());
-            MethodInfo containsMethod = typeof(String).GetMethod("Contains");
             MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
+            MethodInfo containsMethod = typeof(String).GetMethod("Contains", new[] { typeof(String) });
 
             Expression toUpper = Expression.Call(expression, toUpperMethod);
             Expression contains = Expression.Call(toUpper, containsMethod, value);
