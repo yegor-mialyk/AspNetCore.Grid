@@ -281,7 +281,7 @@ var MvcGrid = (function () {
                     }
                 });
             } else {
-                window.location.href = '?' + grid.query;
+                window.location.href = window.location.origin + window.location.pathname + '?' + grid.query;
             }
         },
         renderFilter: function (column, filter) {
