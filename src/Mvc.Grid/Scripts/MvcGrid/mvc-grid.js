@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 3.1.0
+ * Mvc.Grid 4.0.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -28,6 +28,7 @@ var MvcGrid = (function () {
         this.filters = $.extend({
             'enum': new MvcGridEnumFilter(),
             'date': new MvcGridDateFilter(),
+            'guid': new MvcGridGuidFilter(),
             'text': new MvcGridTextFilter(),
             'number': new MvcGridNumberFilter(),
             'boolean': new MvcGridBooleanFilter()
@@ -720,6 +721,26 @@ var MvcGridEnumFilter = (function (base) {
     return MvcGridEnumFilter;
 })(MvcGridFilter);
 
+var MvcGridGuidFilter = (function (base) {
+    MvcGridExtends(MvcGridGuidFilter, base);
+
+    function MvcGridGuidFilter() {
+        base.apply(this);
+
+        this.methods = ['equals', 'not-equals'];
+    }
+
+    MvcGridGuidFilter.prototype.renderFilter = function (grid, filter) {
+        return base.prototype.renderFilter.call(this, grid, filter, $.fn.mvcgrid.lang.guid);
+    };
+
+    MvcGridGuidFilter.prototype.isValid = function (value) {
+        return !value || /^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$/i.test(value);
+    };
+
+    return MvcGridGuidFilter;
+})(MvcGridFilter);
+
 var MvcGridBooleanFilter = (function (base) {
     MvcGridExtends(MvcGridBooleanFilter, base);
 
@@ -808,6 +829,10 @@ $.fn.mvcgrid.lang = {
         'later-than-or-equal': 'Later than or equal'
     },
     enum: {
+        'equals': 'Equals',
+        'not-equals': 'Not equals'
+    },
+    guid: {
         'equals': 'Equals',
         'not-equals': 'Not equals'
     },

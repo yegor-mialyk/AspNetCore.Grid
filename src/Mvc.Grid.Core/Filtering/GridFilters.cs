@@ -119,6 +119,9 @@ namespace NonFactors.Mvc.Grid
 
             Register(typeof(Enum), "equals", typeof(EnumFilter));
             Register(typeof(Enum), "not-equals", typeof(EnumFilter));
+
+            Register(typeof(Guid), "equals", typeof(GuidFilter));
+            Register(typeof(Guid), "not-equals", typeof(GuidFilter));
         }
 
         public virtual IGridFilter GetFilter(Type type, String method)

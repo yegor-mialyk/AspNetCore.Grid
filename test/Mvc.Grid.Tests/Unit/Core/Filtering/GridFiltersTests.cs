@@ -136,6 +136,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [InlineData(typeof(Enum), "equals", typeof(EnumFilter))]
         [InlineData(typeof(Enum), "not-equals", typeof(EnumFilter))]
+
+        [InlineData(typeof(Guid), "equals", typeof(GuidFilter))]
+        [InlineData(typeof(Guid), "not-equals", typeof(GuidFilter))]
         public void GridFilters_RegistersDefaultFilters(Type type, String method, Type filter)
         {
             Assert.IsType(filter, new GridFilters().GetFilter(type, method));

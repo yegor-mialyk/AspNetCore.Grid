@@ -21,9 +21,12 @@ namespace NonFactors.Mvc.Grid.Tests
         public TestEnum Enum { get; set; }
         public String Name { get; set; }
         public Int32? NSum { get; set; }
+        public Guid? NGuid { get; set; }
         public Int32 Sum { get; set; }
+        public Guid Guid { get; set; }
 
         public TestEnum EnumField { get; set; }
+        public Guid GuidField { get; set; }
         public SByte SByteField { get; set; }
         public Byte ByteField { get; set; }
         public Int16 Int16Field { get; set; }
@@ -39,6 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public DateTime DateTimeField { get; set; }
 
         public TestEnum? NullableEnumField { get; set; }
+        public Guid? NullableGuidField { get; set; }
         public SByte? NullableSByteField { get; set; }
         public Byte? NullableByteField { get; set; }
         public Int16? NullableInt16Field { get; set; }
