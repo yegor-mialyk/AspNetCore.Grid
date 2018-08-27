@@ -10,7 +10,7 @@
                 @foreach (IGridColumn column in Model.Columns)
                 {
                     String sortableClass = column.Sort.IsEnabled == true && Model.FilterMode != GridFilterMode.HeaderRow ? "sortable" : null;
-                    String filterableClass = column.Filter.IsEnabled == true ? "filterable" : null;
+                    String filterableClass = column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.FilterRow ? "filterable" : null;
 
                     <th class="@filterableClass @sortableClass @column.CssClasses"
                         data-name="@column.Name"
@@ -31,7 +31,7 @@
 
                             if (Model.FilterMode == GridFilterMode.HeaderRow)
                             {
-                                <div class="first-filter">
+                                <div>
                                     @{
                                         String value = column.Filter.First?.Value;
                                         foreach (SelectListItem option in column.Filter.Options)
@@ -45,15 +45,12 @@
                                         }
                                     }
 
-                                    <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
                                     <input class="mvc-grid-value" value="@value" placeholder="@column.Title" />
-                                    <a href="#" class="mvc-grid-filter @filterApplied"></a>
                                 </div>
                             }
                             else
                             {
                                 <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
-                                <a href="#" class="mvc-grid-filter @filterApplied"></a>
                             }
 
                             <select class="mvc-grid-options">
@@ -62,6 +59,8 @@
                                     <option value="@option.Value">@option.Text</option>
                                 }
                             </select>
+
+                            <button class="mvc-grid-filter @filterApplied"></button>
                         }
                         else
                         {
@@ -80,9 +79,7 @@
                             <th class="filterable @column.CssClasses">
                                 @{ String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : ""; }
 
-                                <div class="first-filter">
-                                    <input class="mvc-grid-method" type="hidden" value="@column.Filter.First?.Method" />
-
+                                <div>
                                     @if (column.Filter.Options.Any())
                                     {
                                         <select class="mvc-grid-value">
@@ -104,7 +101,7 @@
                                         <input class="mvc-grid-value" value="@column.Filter.First?.Value" />
                                     }
 
-                                    <a href="#" class="mvc-grid-filter @filterApplied"></a>
+                                    <button class="mvc-grid-filter @filterApplied"></button>
                                 </div>
                             </th>
                         }
