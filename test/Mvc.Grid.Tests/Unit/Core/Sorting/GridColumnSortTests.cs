@@ -12,7 +12,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridColumnSortTests()
         {
             IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
-            sort = new GridColumnSort<GridModel, Object>(new GridColumn<GridModel, Object>(grid, model => model.Name));
+            GridColumn<GridModel, Object> column = new GridColumn<GridModel, Object>(grid, model => model.Name);
+
+            sort = new GridColumnSort<GridModel, Object>(column) { IsEnabled = true };
         }
 
         #region Order
@@ -54,6 +56,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             GridSortOrder? expected = order;
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Order_Get_Disabled()
+        {
+            sort.IsEnabled = false;
+            sort.Column.Grid.Query = HttpUtility.ParseQueryString("sort=name&order=asc");
+
+            Assert.Null(sort.Order);
         }
 
         [Theory]
@@ -158,7 +169,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NoOrder_ReturnsSameItems()
         {
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();
-            sort.IsEnabled = true;
             sort.Order = null;
 
             Object expected = items;
@@ -185,7 +195,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
             sort.Order = GridSortOrder.Asc;
-            sort.IsEnabled = true;
 
             IEnumerable<GridModel> expected = items.OrderBy(model => model.Name);
             IEnumerable<GridModel> actual = sort.Apply(items.AsQueryable());
@@ -198,7 +207,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
             sort.Order = GridSortOrder.Desc;
-            sort.IsEnabled = true;
 
             IEnumerable<GridModel> expected = items.OrderByDescending(model => model.Name);
             IEnumerable<GridModel> actual = sort.Apply(items.AsQueryable());

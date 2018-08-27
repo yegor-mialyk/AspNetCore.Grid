@@ -13,7 +13,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (!OrderIsSet)
+                if (IsEnabled == true && !OrderIsSet)
                 {
                     String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
                     if (String.Equals(Column.Grid.Query[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))

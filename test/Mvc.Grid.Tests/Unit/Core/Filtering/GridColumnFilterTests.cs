@@ -47,6 +47,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Options_Get_Disabled()
+        {
+            filter.IsEnabled = false;
+
+            Assert.Null(filter.Options);
+        }
+
+        [Fact]
         public void Options_Get_FromFilters()
         {
             filter.Column.Grid.ViewContext = new ViewContext();
@@ -90,6 +98,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
             filter.Operator = null;
+
+            Assert.Null(filter.Operator);
+        }
+
+        [Fact]
+        public void Operator_Get_Disabled()
+        {
+            filter.IsEnabled = false;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
             Assert.Null(filter.Operator);
         }
@@ -158,6 +175,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a");
 
             filter.First = null;
+
+            Assert.Null(filter.First);
+        }
+
+        [Fact]
+        public void First_Get_Disabled()
+        {
+            filter.IsEnabled = false;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=a");
 
             Assert.Null(filter.First);
         }
@@ -245,6 +271,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
 
             filter.Second = null;
+
+            Assert.Null(filter.Second);
+        }
+
+        [Fact]
+        public void Second_Get_Disabled()
+        {
+            filter.IsEnabled = false;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=a&name-equals=b");
 
             Assert.Null(filter.Second);
         }
