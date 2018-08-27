@@ -14,9 +14,10 @@
 }
 
 .mvc-grid {
+    line-height: 1.25em;
     position: relative;
-    line-height: 20px;
     overflow-x: auto;
+    font-size: 1rem;
 }
 
 .mvc-grid table {
@@ -34,11 +35,11 @@
 .mvc-grid th,
 .mvc-grid td {
     border: 1px solid #dee2e6;
-    padding: 0.5rem;
+    padding: 0.75em;
 }
 
 .mvc-grid .filterable {
-    padding-right: 2.75rem;
+    padding-right: 3.5em;
 }
 
 .mvc-grid .sortable,
@@ -67,7 +68,7 @@
     font-family: 'GridGlyphs';
     position: absolute;
     font-weight: bold;
-    width: 2.25rem;
+    width: 2.75em;
     border: none;
     height: 100%;
     right: 0;
@@ -89,7 +90,7 @@
 }
 
 .mvc-grid-row-filters .filterable {
-    padding: 4px;
+    padding: 0.25em;
 }
 
 .mvc-grid-row-filters th div {
@@ -98,8 +99,8 @@
 
 .mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #aaaaaa;
-    margin-right: 5px;
-    padding: 2px 4px;
+    margin-right: 0.25em;
+    padding: 0 0.25em;
     font: inherit;
     flex: 1;
 }
@@ -118,9 +119,9 @@
 
 .mvc-grid-row-filters .mvc-grid-filter {
     border: 0.5px solid #aaaaaa;
+    flex: 0 0 2.125em;
     position: static;
-    flex: 0 0 28px;
-    height: 28px;
+    height: 2.125em;
 }
 
 .mvc-grid-row-filters [readonly] {
@@ -132,8 +133,8 @@
 }
 
 .mvc-grid-row-filters.mvc-grid-headers .mvc-grid-value {
+    padding: 0.75em 3.5em 0.75em 0.75em;
     background-color: #f7f7f7;
-    padding: 8px 44px 8px 8px;
     border: none;
     margin: 0;
 }
@@ -152,6 +153,7 @@
     border-radius: 4px;
     position: absolute;
     min-width: 180px;
+    font-size: 1rem;
     z-index: 1100;
 }
 
@@ -189,14 +191,8 @@
 }
 
 .mvc-grid-popup .popup-actions {
-    padding-top: 0.4em;
+    padding: 0.4em 0 0.2em;
     text-align: center;
-}
-
-.mvc-grid-popup .popup-actions button {
-    padding: 0.3em 1.5em;
-    cursor: pointer;
-    margin: 0 0.4em;
 }
 
 .mvc-grid-popup .mvc-grid-value,
@@ -205,7 +201,7 @@
     border: 1px solid #cccccc;
     box-sizing: border-box;
     font-size: 0.9em;
-    padding: 0.4em;
+    padding: 0.25em;
     height: 2.5em;
     width: 100%;
 }
@@ -221,6 +217,9 @@
 .mvc-grid-popup .mvc-grid-apply,
 .mvc-grid-popup .mvc-grid-cancel {
     border: 1px solid #ffffff;
+    padding: 0.25em;
+    cursor: pointer;
+    min-width: 4em;
     color: #ffffff;
     outline: 0;
 }
@@ -228,6 +227,7 @@
 .mvc-grid-popup .mvc-grid-apply {
     background-color: #28a745;
     border-color: #28a745;
+    margin-right: 0.3em;
 }
 
 .mvc-grid-popup .mvc-grid-apply:focus {
@@ -237,6 +237,7 @@
 .mvc-grid-popup .mvc-grid-cancel {
     background-color: #dc3545;
     border-color: #dc3545;
+    margin-left: 0.3em;
 }
 
 .mvc-grid-popup .mvc-grid-cancel:focus {
@@ -249,7 +250,7 @@
 }
 
 .mvc-grid-pager {
-    margin: 10px;
+    margin: 0.5em;
 }
 
 .mvc-grid-pager button {
@@ -288,7 +289,7 @@
 
 .mvc-grid-page-sizes {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 0.5em;
 }
 
 .mvc-grid-page-sizes select {
@@ -300,10 +301,10 @@
 .mvc-grid-page-sizes input {
     border: 1px solid #dddddd;
     box-sizing: content-box;
-    line-height: 2.5em;
+    line-height: 2.25em;
     text-align: center;
     padding: 0 0.25em;
-    width: 3em;
+    width: 2.5em;
 }
 
 .mvc-grid-loader {
@@ -331,9 +332,9 @@
     background-color: #f5f5f5;
     display: inline-block;
     border-radius: 100%;
-    margin: 0 10px;
-    height: 18px;
-    width: 18px;
+    margin: 0 0.75em;
+    height: 1.5em;
+    width: 1.5em;
 }
 
 .mvc-grid-loading > div > div:nth-child(1) {
