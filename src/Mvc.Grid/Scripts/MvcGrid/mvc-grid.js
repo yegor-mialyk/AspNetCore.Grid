@@ -607,7 +607,9 @@ var MvcGridFilter = (function () {
                         filter.apply();
                     });
                 } else if (filter.mode == 'HeaderRow') {
-                    column.rowFilter.querySelector('.mvc-grid-value').readOnly = true;
+                    var value = column.rowFilter.querySelector('.mvc-grid-value');
+                    value.readOnly = true;
+                    value.tabIndex = -1;
                 }
             } else if (filter.mode != 'ExcelRow') {
                 var input = column.rowFilter.querySelector('.mvc-grid-value');
