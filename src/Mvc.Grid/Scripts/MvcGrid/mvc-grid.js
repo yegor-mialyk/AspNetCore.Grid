@@ -590,6 +590,7 @@ var MvcGridFilter = (function () {
         this.isMulti = column.filter.isMulti;
         this.mode = column.grid.filterMode;
         this.popup = column.grid.popup;
+        this.cssClasses = '';
         this.column = column;
         this.methods = [];
     }
@@ -637,6 +638,7 @@ var MvcGridFilter = (function () {
             var filter = this;
             filter.lang = filter.column.grid.lang;
             filter.popup.element.innerHTML = filter.render();
+            filter.popup.element.className = 'mvc-grid-popup ' + filter.cssClasses;
 
             filter.setValues();
 
@@ -856,6 +858,7 @@ var MvcGridGuidFilter = (function (base) {
         base.call(this, column);
 
         this.methods = ['equals', 'not-equals'];
+        this.cssClasses = 'mvc-grid-guid-filter';
     }
 
     MvcGridGuidFilter.prototype.isValid = function (value) {

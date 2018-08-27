@@ -152,9 +152,13 @@
     border: 1px solid #cccccc;
     border-radius: 4px;
     position: absolute;
-    min-width: 180px;
+    min-width: 12em;
     font-size: 1rem;
     z-index: 1100;
+}
+
+.mvc-grid-popup.mvc-grid-guid-filter {
+    min-width: 20em;
 }
 
 .mvc-grid-popup .popup-arrow {
