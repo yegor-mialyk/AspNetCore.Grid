@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -109,6 +110,9 @@ namespace NonFactors.Mvc.Grid
 
             if (RowsPerPage == 0)
                 return items;
+
+            if (!GridQuery.IsOrdered(items))
+                items = items.OrderBy(item => 0);
 
             return items.Skip((CurrentPage - 1) * RowsPerPage).Take(RowsPerPage);
         }
