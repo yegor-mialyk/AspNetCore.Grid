@@ -302,6 +302,7 @@ var MvcGridColumn = (function () {
             }
 
             column.filter = {
+                isApplied: data.filterFirstMethod != '' || data.filterSecondMethod != '',
                 hasOptions: options && options.children.length > 0,
                 isMulti: data.filterMulti == 'True',
                 operator: data.filterOperator,
@@ -332,7 +333,7 @@ var MvcGridColumn = (function () {
 
     MvcGridColumn.prototype = {
         cancelFilter: function () {
-            if (this.filter.first.method || this.filter.second.method) {
+            if (this.filter.isApplied) {
                 var grid = this.grid;
 
                 grid.query.delete(grid.prefix + 'page');
@@ -340,6 +341,9 @@ var MvcGridColumn = (function () {
                 grid.query.deleteStartingWith(grid.prefix + this.name + '-');
 
                 grid.reload();
+            } else {
+                this.filter.first.value = '';
+                this.filter.second.value = '';
             }
         },
         applyFilter: function () {
@@ -488,6 +492,12 @@ var MvcGridPopup = (function () {
     MvcGridPopup.prototype = {
         element: document.createElement('div'),
 
+        render: function (filter) {
+            this.element.className = ('mvc-grid-popup ' + filter.cssClasses).trim();
+            this.element.innerHTML = filter.render();
+
+            this.updateValues(filter.column);
+        },
         updatePosition: function (column) {
             var filter = (column.rowFilter || column.header).querySelector('.mvc-grid-filter');
             var arrow = this.element.querySelector('.popup-arrow');
@@ -507,6 +517,22 @@ var MvcGridPopup = (function () {
             this.element.style.left = left + 'px';
             this.element.style.top = top + 'px';
             arrow.style.left = arrowLeft + 'px';
+        },
+        updateValues: function (column) {
+            var filter = column.filter;
+
+            this.updateValue('.mvc-grid-operator', filter.operator);
+            this.updateValue('.mvc-grid-value[data-filter="first"]', filter.first.value);
+            this.updateValue('.mvc-grid-value[data-filter="second"]', filter.second.value);
+            this.updateValue('.mvc-grid-method[data-filter="first"]', filter.first.method);
+            this.updateValue('.mvc-grid-method[data-filter="second"]', filter.second.method);
+        },
+        updateValue: function (selector, value) {
+            var input = this.element.querySelector(selector);
+
+            if (input) {
+                input.value = value;
+            }
         },
 
         show: function (column) {
@@ -636,11 +662,8 @@ var MvcGridFilter = (function () {
 
         show: function () {
             var filter = this;
-            filter.lang = filter.column.grid.lang;
-            filter.popup.element.innerHTML = filter.render();
-            filter.popup.element.className = 'mvc-grid-popup ' + filter.cssClasses;
 
-            filter.setValues();
+            filter.popup.render(filter);
 
             filter.bindOperator();
             filter.bindMethods();
@@ -651,6 +674,8 @@ var MvcGridFilter = (function () {
         },
 
         render: function () {
+            this.lang = this.column.grid.lang;
+
             return '<div class="popup-arrow"></div>' +
                 '<div class="popup-content">' +
                     '<div class="popup-filter">' +
@@ -699,23 +724,6 @@ var MvcGridFilter = (function () {
                        '<button class="mvc-grid-apply" type="button">' + this.lang.filter.apply + '</button>' +
                        '<button class="mvc-grid-cancel" type="button">' + this.lang.filter.remove + '</button>' +
                    '</div>';
-        },
-
-        setValues: function () {
-            var filter = this.column.filter;
-
-            this.setValue('.mvc-grid-operator', filter.operator);
-            this.setValue('.mvc-grid-value[data-filter="first"]', filter.first.value);
-            this.setValue('.mvc-grid-value[data-filter="second"]', filter.second.value);
-            this.setValue('.mvc-grid-method[data-filter="first"]', filter.first.method);
-            this.setValue('.mvc-grid-method[data-filter="second"]', filter.second.method);
-        },
-        setValue: function (selector, value) {
-            var input = this.popup.element.querySelector(selector);
-
-            if (input) {
-                input.value = value;
-            }
         },
 
         apply: function () {
