@@ -33,8 +33,8 @@ namespace NonFactors.Mvc.Grid
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 CurrentPageValue = Int32.TryParse(Grid.Query[prefix + "page"], out Int32 page) ? page : CurrentPageValue;
-                CurrentPageValue = TotalPages < CurrentPageValue ? TotalPages : CurrentPageValue;
-                CurrentPageValue = CurrentPageValue <= 0 ? 1 : CurrentPageValue;
+                CurrentPageValue = Math.Min(TotalPages, CurrentPageValue);
+                CurrentPageValue = Math.Max(1, CurrentPageValue);
 
                 return CurrentPageValue;
             }

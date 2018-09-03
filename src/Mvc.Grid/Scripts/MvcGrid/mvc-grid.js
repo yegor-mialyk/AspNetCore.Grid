@@ -9,13 +9,13 @@
  */
 var MvcGrid = (function () {
     function MvcGrid(element, options) {
+        var grid = this;
         options = options || {};
-        element = this.findGrid(element);
+        element = grid.findGrid(element);
         if (element.dataset.id) {
-            return this.instances[parseInt(element.dataset.id)].set(options);
+            return grid.instances[parseInt(element.dataset.id)].set(options);
         }
 
-        var grid = this;
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
@@ -347,16 +347,18 @@ var MvcGridColumn = (function () {
             }
         },
         applyFilter: function () {
-            var grid = this.grid;
+            var column = this;
+            var grid = column.grid;
+            var filter = column.filter;
 
             grid.query.delete(grid.prefix + 'page');
             grid.query.delete(grid.prefix + 'rows');
-            grid.query.deleteStartingWith(grid.prefix + this.name + '-');
+            grid.query.deleteStartingWith(grid.prefix + column.name + '-');
 
-            grid.query.append(grid.prefix + this.name + '-' + this.filter.first.method, this.filter.first.value);
-            if (grid.filterMode == 'ExcelRow' && this.filter.isMulti) {
-                grid.query.append(grid.prefix + this.name + '-op', this.filter.operator);
-                grid.query.append(grid.prefix + this.name + '-' + this.filter.second.method, this.filter.second.value);
+            grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.value);
+            if (grid.filterMode == 'ExcelRow' && filter.isMulti) {
+                grid.query.append(grid.prefix + column.name + '-op', filter.operator);
+                grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.value);
             }
 
             if (grid.pager && grid.pager.showPageSizes) {
@@ -371,13 +373,13 @@ var MvcGridColumn = (function () {
 
             grid.query.delete(grid.prefix + 'sort');
             grid.query.delete(grid.prefix + 'order');
-            grid.query.append(grid.prefix + 'sort', this.name);
 
             var order = column.sort.order == 'asc' ? 'desc' : 'asc';
             if (!column.sort.order && column.sort.first) {
                 order = column.sort.first;
             }
 
+            grid.query.append(grid.prefix + 'sort', column.name);
             grid.query.append(grid.prefix + 'order', order);
 
             grid.reload();
