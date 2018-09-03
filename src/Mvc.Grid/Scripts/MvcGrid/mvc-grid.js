@@ -416,7 +416,7 @@ var MvcGridColumn = (function () {
                     });
 
                     input.addEventListener('keyup', function (e) {
-                        if (e.which == 13) {
+                        if (e.which == 13 && column.filter.instance.isValid(this.value)) {
                             column.filter.instance.apply();
                         }
                     });
@@ -797,7 +797,7 @@ var MvcGridFilter = (function () {
                 });
 
                 input.addEventListener('keyup', function (e) {
-                    if (e.which == 13) {
+                    if (e.which == 13 && filter.isValid(this.value)) {
                         filter.apply();
                     }
                 });
