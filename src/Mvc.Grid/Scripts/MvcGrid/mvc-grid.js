@@ -133,7 +133,7 @@ var MvcGrid = (function () {
             }
 
             grid.columns.forEach(function (column) {
-                if (column.filter && (filters.hasOwnProperty(column.filter.name) || !column.filter.instance)) {
+                if (column.filter && grid.filters[column.filter.name]) {
                     column.filter.instance = new grid.filters[column.filter.name](column);
                     column.filter.instance.init();
                 }
@@ -391,6 +391,34 @@ var MvcGridColumn = (function () {
                 filter.addEventListener('click', function () {
                     column.filter.instance.show();
                 });
+
+                if (column.filter.hasOptions) {
+                    if (column.grid.filterMode == 'FilterRow') {
+                        column.rowFilter.querySelector('select').addEventListener('change', function () {
+                            column.filter.first.value = this.value;
+
+                            column.filter.instance.apply();
+                        });
+                    } else if (column.grid.filterMode == 'HeaderRow') {
+                        var value = column.rowFilter.querySelector('.mvc-grid-value');
+                        value.readOnly = true;
+                        value.tabIndex = -1;
+                    }
+                } else if (column.grid.filterMode != 'ExcelRow') {
+                    var input = column.rowFilter.querySelector('.mvc-grid-value');
+
+                    input.addEventListener('input', function () {
+                        column.filter.first.value = this.value;
+
+                        column.filter.instance.validate(this);
+                    });
+
+                    input.addEventListener('keyup', function (e) {
+                        if (e.which == 13) {
+                            column.filter.instance.apply();
+                        }
+                    });
+                }
             }
         },
         bindSort: function () {
@@ -626,38 +654,17 @@ var MvcGridFilter = (function () {
             var filter = this;
             var column = filter.column;
 
-            if (column.filter.hasOptions) {
-                if (filter.mode == 'FilterRow') {
-                    column.rowFilter.querySelector('select').addEventListener('change', function () {
-                        column.filter.first.value = this.value;
-
-                        filter.apply();
-                    });
-                } else if (filter.mode == 'HeaderRow') {
-                    var value = column.rowFilter.querySelector('.mvc-grid-value');
-                    value.readOnly = true;
-                    value.tabIndex = -1;
-                }
-            } else if (filter.mode != 'ExcelRow') {
-                var input = column.rowFilter.querySelector('.mvc-grid-value');
-
-                input.addEventListener('input', function () {
-                    column.filter.first.value = this.value;
-
-                    filter.validate(this);
-                });
-
-                input.addEventListener('keyup', function (e) {
-                    if (e.which == 13) {
-                        filter.apply();
-                    }
-                });
-
-                filter.validate(input);
+            if (!column.filter.hasOptions && filter.mode != 'ExcelRow') {
+                filter.validate(column.rowFilter.querySelector('.mvc-grid-value'));
             }
 
-            column.filter.first.method = column.filter.first.method || filter.methods[0];
-            column.filter.second.method = column.filter.second.method || filter.methods[0];
+            if (filter.methods.indexOf(column.filter.first.method) < 0) {
+                column.filter.first.method = filter.methods[0];
+            }
+
+            if (filter.methods.indexOf(column.filter.second.method) < 0) {
+                column.filter.second.method = filter.methods[0];
+            }
         },
 
         show: function () {
