@@ -31,13 +31,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridFilters_SetFalseBooleanText()
         {
-            Assert.Equal("No", new GridFilters().BooleanFalseOptionText());
+            Assert.Equal("False", new GridFilters().BooleanFalseOptionText());
         }
 
         [Fact]
         public void GridFilters_SetTrueBooleanText()
         {
-            Assert.Equal("Yes", new GridFilters().BooleanTrueOptionText());
+            Assert.Equal("True", new GridFilters().BooleanTrueOptionText());
         }
 
         [Theory]

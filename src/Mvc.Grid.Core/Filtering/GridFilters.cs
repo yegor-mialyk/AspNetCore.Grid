@@ -20,8 +20,8 @@ namespace NonFactors.Mvc.Grid
         public GridFilters()
         {
             BooleanEmptyOptionText = () => "";
-            BooleanTrueOptionText = () => "Yes";
-            BooleanFalseOptionText = () => "No";
+            BooleanTrueOptionText = () => "True";
+            BooleanFalseOptionText = () => "False";
             Filters = new Dictionary<Type, IDictionary<String, Type>>();
 
             Register(typeof(SByte), "equals", typeof(NumberFilter<SByte>));
