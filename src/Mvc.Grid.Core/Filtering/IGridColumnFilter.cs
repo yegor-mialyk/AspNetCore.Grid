@@ -10,6 +10,7 @@ namespace NonFactors.Mvc.Grid
         String Name { get; set; }
         Boolean? IsMulti { get; set; }
         Boolean? IsEnabled { get; set; }
+        String DefaultMethod { get; set; }
         IEnumerable<SelectListItem> Options { get; set; }
 
         String Operator { get; set; }

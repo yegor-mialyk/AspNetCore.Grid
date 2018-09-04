@@ -304,6 +304,7 @@ var MvcGridColumn = (function () {
             column.filter = {
                 isApplied: data.filterFirstMethod != '' || data.filterSecondMethod != '',
                 hasOptions: options && options.children.length > 0,
+                defaultMethod: data.filterDefaultMethod,
                 isMulti: data.filterMulti == 'True',
                 operator: data.filterOperator,
                 name: data.filterName,
@@ -438,6 +439,7 @@ var MvcGridColumn = (function () {
         cleanUp: function () {
             var data = this.header.dataset;
 
+            delete data.filterDefaultMethod;
             delete data.filterSecondMethod;
             delete data.filterSecondValue;
             delete data.filterFirstMethod;
@@ -661,11 +663,11 @@ var MvcGridFilter = (function () {
             }
 
             if (filter.methods.indexOf(column.filter.first.method) < 0) {
-                column.filter.first.method = filter.methods[0];
+                column.filter.first.method = column.filter.defaultMethod || filter.methods[0];
             }
 
             if (filter.methods.indexOf(column.filter.second.method) < 0) {
-                column.filter.second.method = filter.methods[0];
+                column.filter.second.method = column.filter.defaultMethod || filter.methods[0];
             }
         },
 

@@ -65,6 +65,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region WithDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
+
+        [Fact]
+        public void WithDefaultFilterMethod_SetsDefaultFilterMethod()
+        {
+            String expected = "test";
+            String actual = column.WithDefaultFilterMethod("test").Filter.DefaultMethod;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void WithDefaultFilterMethod_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.WithDefaultFilterMethod("test");
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
 
         [Theory]

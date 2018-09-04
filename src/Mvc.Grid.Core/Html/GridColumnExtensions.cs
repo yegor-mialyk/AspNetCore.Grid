@@ -20,6 +20,12 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
+        public static IGridColumn<T, TValue> WithDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
+        {
+            column.Filter.DefaultMethod = method;
+
+            return column;
+        }
         public static IGridColumn<T, TValue> MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
         {
             if (isMultiple && column.Filter.IsEnabled == null)
