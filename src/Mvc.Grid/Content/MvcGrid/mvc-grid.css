@@ -100,9 +100,13 @@
 .mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #aaaaaa;
     margin-right: 0.25em;
-    padding: 0 0.25em;
+    padding: 0 0.2em;
     font: inherit;
     flex: 1;
+}
+
+.mvc-grid-row-filters input.mvc-grid-value {
+    padding: 0 0.5em;
 }
 
 .mvc-grid-row-filters .mvc-grid-value.invalid {
@@ -205,13 +209,17 @@
     border: 1px solid #cccccc;
     box-sizing: border-box;
     font-size: 0.9em;
-    padding: 0.25em;
+    padding: 0 0.2em;
     height: 2.5em;
     width: 100%;
 }
 
 .mvc-grid-popup .mvc-grid-operator {
     width: auto;
+}
+
+.mvc-grid-popup input.mvc-grid-value {
+    padding: 0 0.5em;
 }
 
 .mvc-grid-popup .mvc-grid-value.invalid {
