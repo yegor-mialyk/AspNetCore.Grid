@@ -581,7 +581,7 @@ var MvcGridPopup = (function () {
                 target = target.parentElement;
             }
 
-            if (!target && MvcGridPopup.prototype.element.parentNode) {
+            if ((!target || e.which == 27) && MvcGridPopup.prototype.element.parentNode) {
                 document.body.removeChild(MvcGridPopup.prototype.element);
             }
         },
@@ -589,6 +589,7 @@ var MvcGridPopup = (function () {
         bind: function () {
             window.addEventListener('click', this.hide);
             window.addEventListener('resize', this.hide);
+            window.addEventListener('keydown', this.hide);
         }
     };
 
