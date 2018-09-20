@@ -113,6 +113,10 @@ var MvcGrid = (function () {
         findGrid: function (element) {
             var grid = element;
 
+            if (!grid) {
+                throw new Error('Grid element was not specified.');
+            }
+
             while (grid && !grid.classList.contains('mvc-grid')) {
                 grid = grid.parentElement;
             }
