@@ -10,7 +10,7 @@
 <div class="mvc-grid-pager @Model.CssClasses" data-show-page-sizes="@Model.ShowPageSizes">
     @if (totalPages > 0)
     {
-        @if (currentPage > 1)
+        if (currentPage > 1)
         {
             <button data-page="1">&laquo;</button>
             <button data-page="@(currentPage - 1)">&lsaquo;</button>
@@ -20,7 +20,7 @@
             <button class="disabled" tabindex="-1">&laquo;</button>
             <button class="disabled" tabindex="-1">&lsaquo;</button>
         }
-        @for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
+        for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
         {
             if (page == currentPage)
             {
@@ -31,7 +31,7 @@
                 <button data-page="@(page)">@(page)</button>
             }
         }
-        @if (currentPage < totalPages)
+        if (currentPage < totalPages)
         {
             <button data-page="@(currentPage + 1)">&rsaquo;</button>
             <button data-page="@totalPages">&raquo;</button>
