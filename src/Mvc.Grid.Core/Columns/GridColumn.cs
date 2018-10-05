@@ -76,7 +76,9 @@ namespace NonFactors.Mvc.Grid
         }
         private String GetName(Expression<Func<T, TValue>> expression)
         {
-            return String.Join("-", Regex.Split(ExpressionHelper.GetExpressionText(expression), "(?<!^)(?=[A-Z])")).ToLower();
+            String text = ExpressionHelper.GetExpressionText(expression).Replace("_", "-");
+
+            return String.Join("-", Regex.Split(text, "(?<=[a-zA-Z])(?=[A-Z])")).ToLower();
         }
         private String GetEnumValue(Type type, String value)
         {

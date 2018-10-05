@@ -57,6 +57,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public Boolean? NullableBooleanField { get; set; }
         public DateTime? NullableDateTimeField { get; set; }
 
+        public String UnderScored_Field { get; set; }
         public String StringField { get; set; }
 
         public GridModel Child { get; set; }
