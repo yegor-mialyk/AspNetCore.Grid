@@ -180,6 +180,10 @@ var MvcGrid = (function () {
 
                     grid.element.outerHTML = result;
 
+                    if (!parent.children[i].classList.contains('mvc-grid')) {
+                        throw new Error('Grid partial should only include grid declaration.');
+                    }
+
                     var newGrid = new MvcGrid(parent.children[i], {
                         loadingDelay: grid.loadingDelay,
                         requestType: grid.requestType,
