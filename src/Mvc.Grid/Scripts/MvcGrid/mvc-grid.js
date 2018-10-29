@@ -19,7 +19,6 @@ var MvcGrid = (function () {
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
-        grid.showLoading = true;
         grid.requestType = 'get';
         grid.name = element.dataset.name;
         grid.popup = new MvcGridPopup(grid);
@@ -145,7 +144,6 @@ var MvcGrid = (function () {
 
             grid.requestType = options.requestType || grid.requestType;
             grid.sourceUrl = options.sourceUrl === undefined ? grid.sourceUrl : options.sourceUrl;
-            grid.showLoading = options.showLoading === undefined ? grid.showLoading : options.showLoading;
             grid.loadingDelay = options.loadingDelay === undefined ? grid.loadingDelay : options.loadingDelay;
 
             if (grid.sourceUrl) {
@@ -184,7 +182,6 @@ var MvcGrid = (function () {
 
                     var newGrid = new MvcGrid(parent.children[i], {
                         loadingDelay: grid.loadingDelay,
-                        showLoading: grid.showLoading,
                         requestType: grid.requestType,
                         query: grid.query.toString(),
                         id: grid.element.dataset.id,
@@ -210,7 +207,7 @@ var MvcGrid = (function () {
             var grid = this;
 
             grid.stopLoading();
-            if (grid.showLoading && !grid.element.querySelector('.mvc-grid-loader')) {
+            if (grid.loadingDelay != null && !grid.element.querySelector('.mvc-grid-loader')) {
                 var content = document.createElement('div');
                 content.appendChild(document.createElement('div'));
                 content.appendChild(document.createElement('div'));
