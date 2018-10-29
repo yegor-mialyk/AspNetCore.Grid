@@ -200,11 +200,12 @@ var MvcGrid = (function () {
                     }));
                 });
             } else {
-                window.location.href = window.location.origin + window.location.pathname + '?' + grid.query;
+                window.location.href = window.location.origin + window.location.pathname + grid.query;
             }
         },
         startLoading: function (success, error) {
             var grid = this;
+            var query = (grid.query.toString() ? grid.query + '&': '?') + '_=' + Date.now();
 
             grid.stopLoading();
             if (grid.loadingDelay != null && !grid.element.querySelector('.mvc-grid-loader')) {
@@ -225,7 +226,7 @@ var MvcGrid = (function () {
             }
 
             grid.request = new XMLHttpRequest();
-            grid.request.open(grid.requestType, grid.sourceUrl + '?' + grid.query + '&_=' + Date.now(), true);
+            grid.request.open(grid.requestType, grid.sourceUrl + query, true);
             grid.request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             grid.request.onload = function () {
@@ -628,7 +629,7 @@ var MvcGridQuery = (function () {
         },
 
         toString: function () {
-            return this.query;
+            return this.query ? '?' + this.query : '';
         }
     };
 
