@@ -528,6 +528,7 @@ var MvcGridPopup = (function () {
     }
 
     MvcGridPopup.prototype = {
+        lastActiveElement: null,
         element: document.createElement('div'),
 
         render: function (filter) {
@@ -574,11 +575,15 @@ var MvcGridPopup = (function () {
         },
 
         show: function (column) {
+            MvcGridPopup.prototype.lastActiveElement = document.activeElement;
+
             if (!this.element.parentElement) {
                 document.body.appendChild(this.element);
             }
 
             this.updatePosition(column);
+
+            this.element.querySelector('input,select,textarea').focus();
         },
         hide: function (e) {
             var target = e && e.target;
@@ -587,8 +592,14 @@ var MvcGridPopup = (function () {
                 target = target.parentElement;
             }
 
-            if ((!target || e.which == 27) && MvcGridPopup.prototype.element.parentNode) {
-                document.body.removeChild(MvcGridPopup.prototype.element);
+            var popup = MvcGridPopup.prototype;
+            if ((!target || e.which == 27) && popup.element.parentNode) {
+                document.body.removeChild(popup.element);
+
+                if (popup.lastActiveElement) {
+                    popup.lastActiveElement.focus();
+                    popup.lastActiveElement = null;
+                }
             }
         },
 
@@ -745,14 +756,20 @@ var MvcGridFilter = (function () {
         },
 
         apply: function () {
-            this.popup.hide();
+            MvcGridPopup.prototype.lastActiveElement = null;
 
             this.column.applyFilter();
+
+            this.popup.hide();
         },
         cancel: function () {
-            this.popup.hide();
+            if (this.column.filter.isApplied) {
+                MvcGridPopup.prototype.lastActiveElement = null;
+            }
 
             this.column.cancelFilter();
+
+            this.popup.hide();
         },
         isValid: function () {
             return true;
