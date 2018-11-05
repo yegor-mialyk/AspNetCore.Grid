@@ -66,12 +66,6 @@ namespace NonFactors.Mvc.Grid
             return column;
         }
 
-        public static IGridColumn<T, TValue> AppendCss<T, TValue>(this IGridColumn<T, TValue> column, String cssClasses)
-        {
-            column.CssClasses = (column.CssClasses + " " + cssClasses?.Trim()).Trim();
-
-            return column;
-        }
         public static IGridColumn<T, TValue> Encoded<T, TValue>(this IGridColumn<T, TValue> column, Boolean isEncoded)
         {
             column.IsEncoded = isEncoded;
@@ -84,9 +78,9 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-        public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String cssClasses)
+        public static IGridColumn<T, TValue> AppendCss<T, TValue>(this IGridColumn<T, TValue> column, String css)
         {
-            column.CssClasses = cssClasses?.Trim();
+            column.CssClasses = (column.CssClasses + " " + css?.Trim()).Trim();
 
             return column;
         }
@@ -99,6 +93,12 @@ namespace NonFactors.Mvc.Grid
         public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
         {
             column.Name = name;
+
+            return column;
+        }
+        public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String css)
+        {
+            column.CssClasses = css?.Trim();
 
             return column;
         }
