@@ -15,10 +15,10 @@ namespace NonFactors.Mvc.Grid
         public IGrid<T> Grid { get; set; }
 
         public String Name { get; set; }
+        public Object Title { get; set; }
         public String Format { get; set; }
         public String CssClasses { get; set; }
         public Boolean IsEncoded { get; set; }
-        public IHtmlContent Title { get; set; }
 
         public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
@@ -67,12 +67,12 @@ namespace NonFactors.Mvc.Grid
             return new HtmlString(value.ToString());
         }
 
-        private IHtmlContent GetTitle(Expression<Func<T, TValue>> expression)
+        private String GetTitle(Expression<Func<T, TValue>> expression)
         {
             MemberExpression body = expression.Body as MemberExpression;
             DisplayAttribute display = body?.Member.GetCustomAttribute<DisplayAttribute>();
 
-            return new HtmlString(display?.GetShortName());
+            return display?.GetShortName() ?? "";
         }
         private String GetName(Expression<Func<T, TValue>> expression)
         {

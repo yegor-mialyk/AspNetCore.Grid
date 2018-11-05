@@ -7,10 +7,10 @@ namespace NonFactors.Mvc.Grid
     public interface IGridColumn
     {
         String Name { get; set; }
+        Object Title { get; set; }
         String Format { get; set; }
         String CssClasses { get; set; }
         Boolean IsEncoded { get; set; }
-        IHtmlContent Title { get; set; }
 
         IGridColumnSort Sort { get; }
         IGridColumnFilter Filter { get; }
