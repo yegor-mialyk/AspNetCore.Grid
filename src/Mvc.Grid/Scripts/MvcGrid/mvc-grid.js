@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 4.0.0
+ * Mvc.Grid 4.0.1
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -167,10 +167,7 @@ var MvcGrid = (function () {
         reload: function () {
             var grid = this;
 
-            grid.element.dispatchEvent(new CustomEvent('reloadstart', {
-                detail: { grid: grid },
-                bubbles: true
-            }));
+            grid.dispatchEvent('reloadstart', { grid: grid });
 
             if (grid.sourceUrl) {
                 grid.startLoading(function (result) {
@@ -193,15 +190,9 @@ var MvcGrid = (function () {
                         filters: grid.filters
                     });
 
-                    newGrid.element.dispatchEvent(new CustomEvent('reloadend', {
-                        detail: { grid: newGrid },
-                        bubbles: true
-                    }));
+                    newGrid.dispatchEvent('reloadend', { grid: newGrid });
                 }, function (result) {
-                    grid.element.dispatchEvent(new CustomEvent('reloadfail', {
-                        detail: { grid: grid, result: result },
-                        bubbles: true
-                    }));
+                    grid.dispatchEvent('reloadfail', { grid: grid, result: result });
                 });
             } else {
                 window.location.href = window.location.origin + window.location.pathname + grid.query;
@@ -259,6 +250,21 @@ var MvcGrid = (function () {
             }
         },
 
+        dispatchEvent: function (type, detail) {
+            var typedEvent = null;
+            if (typeof (Event) === 'function') {
+                typedEvent = new CustomEvent(type, {
+                    detail: detail,
+                    bubbles: true
+                });
+            } else {
+                typedEvent = document.createEvent('Event');
+                typedEvent.initEvent(type, true, true);
+                typedEvent.detail = detail;
+            }
+
+            this.element.dispatchEvent(typedEvent);
+        },
         bind: function () {
             var grid = this;
 
@@ -271,10 +277,20 @@ var MvcGrid = (function () {
                             data[column.name] = row.cells[i].innerText;
                         });
 
-                        this.dispatchEvent(new CustomEvent('rowclick', {
-                            detail: { grid: grid, data: data, originalEvent: e },
-                            bubbles: true
-                        }));
+                        var typedEvent = null;
+                        var detail = { grid: grid, data: data, originalEvent: e };
+                        if (typeof (Event) === 'function') {
+                            typedEvent = new CustomEvent('rowclick', {
+                                detail: detail,
+                                bubbles: true
+                            });
+                        } else {
+                            typedEvent = document.createEvent('Event');
+                            typedEvent.initEvent('rowclick', true, true);
+                            typedEvent.detail = detail;
+                        }
+
+                        this.dispatchEvent(typedEvent);
                     });
                 }
             });
