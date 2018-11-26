@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 4.0.1
+ * Mvc.Grid 4.0.2
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -766,8 +766,8 @@ var MvcGridFilter = (function () {
         },
         renderActions: function () {
             return '<div class="popup-actions">' +
-                       '<button class="mvc-grid-apply" type="button">' + this.lang.filter.apply + '</button>' +
-                       '<button class="mvc-grid-cancel" type="button">' + this.lang.filter.remove + '</button>' +
+                       '<button type="button" class="mvc-grid-apply" type="button">' + this.lang.filter.apply + '</button>' +
+                       '<button type="button" class="mvc-grid-cancel" type="button">' + this.lang.filter.remove + '</button>' +
                    '</div>';
         },
 

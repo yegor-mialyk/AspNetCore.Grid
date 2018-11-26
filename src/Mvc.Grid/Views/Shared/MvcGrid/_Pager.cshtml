@@ -12,34 +12,34 @@
     {
         if (currentPage > 1)
         {
-            <button data-page="1">&laquo;</button>
-            <button data-page="@(currentPage - 1)">&lsaquo;</button>
+            <button type="button" data-page="1">&laquo;</button>
+            <button type="button" data-page="@(currentPage - 1)">&lsaquo;</button>
         }
         else
         {
-            <button class="disabled" tabindex="-1">&laquo;</button>
-            <button class="disabled" tabindex="-1">&lsaquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&laquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&lsaquo;</button>
         }
         for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
         {
             if (page == currentPage)
             {
-                <button class="active" data-page="@(page)">@(page)</button>
+                <button type="button" class="active" data-page="@(page)">@(page)</button>
             }
             else
             {
-                <button data-page="@(page)">@(page)</button>
+                <button type="button" data-page="@(page)">@(page)</button>
             }
         }
         if (currentPage < totalPages)
         {
-            <button data-page="@(currentPage + 1)">&rsaquo;</button>
-            <button data-page="@totalPages">&raquo;</button>
+            <button type="button" data-page="@(currentPage + 1)">&rsaquo;</button>
+            <button type="button" data-page="@totalPages">&raquo;</button>
         }
         else
         {
-            <button class="disabled" tabindex="-1">&rsaquo;</button>
-            <button class="disabled" tabindex="-1">&raquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&rsaquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&raquo;</button>
         }
         if (Model.ShowPageSizes)
         {
