@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 
 namespace NonFactors.Mvc.Grid
@@ -62,7 +61,7 @@ namespace NonFactors.Mvc.Grid
                 value = String.Format(Format, value);
 
             if (IsEncoded)
-                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
+                return new GridHtmlString(value.ToString());
 
             return new HtmlString(value.ToString());
         }

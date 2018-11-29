@@ -2,9 +2,11 @@
 using NSubstitute;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Encodings.Web;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -297,12 +299,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void ValueFor_RenderValue(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
+            TextWriter writer = new StringWriter();
+
             column.RenderValue = (model) => model.Name;
             column.ExpressionValue = null;
             column.IsEncoded = isEncoded;
             column.Format = format;
 
-            String actual = column.ValueFor(row).ToString();
+            column.ValueFor(row).WriteTo(writer, HtmlEncoder.Default);
+
+            String actual = writer.ToString();
             String expected = renderedValue;
 
             Assert.Equal(expected, actual);
@@ -358,11 +364,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void ValueFor_ExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
+            TextWriter writer = new StringWriter();
+
             column.IsEncoded = isEncoded;
             column.Format = format;
 
-            String actual = column.ValueFor(row).ToString();
+            column.ValueFor(row).WriteTo(writer, HtmlEncoder.Default);
+
             String expected = expressionValue;
+            String actual = writer.ToString();
 
             Assert.Equal(expected, actual);
         }
