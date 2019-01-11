@@ -826,7 +826,7 @@ var MvcGridFilter = (function () {
 
                     if (filter.mode != 'ExcelRow') {
                         var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
-                        if (this.tagName == 'SELECT') {
+                        if (filter.mode == 'HeaderRow' && this.tagName == 'SELECT') {
                             rowInput.value = this.options[this.selectedIndex].text;
                         } else {
                             rowInput.value = this.value;
