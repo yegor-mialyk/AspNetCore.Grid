@@ -100,8 +100,9 @@
 .mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #aaaaaa;
     margin-right: 0.25em;
+    font-weight: bold;
     padding: 0 0.2em;
-    font: inherit;
+    line-height: 2;
     flex: 1;
 }
 
@@ -137,7 +138,7 @@
 }
 
 .mvc-grid-row-filters.mvc-grid-headers .mvc-grid-value {
-    padding: 0.75em 3.5em 0.75em 0.75em;
+    padding: 0.325em 3.5em 0.325em 0.75em;
     background-color: #f7f7f7;
     border: none;
     margin: 0;
