@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 4.0.2
+ * Mvc.Grid 4.0.3
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -821,7 +821,7 @@ var MvcGridFilter = (function () {
             var filter = this;
 
             [].forEach.call(filter.popup.element.querySelectorAll('.mvc-grid-value'), function (input) {
-                input.addEventListener('input', function () {
+                input.addEventListener(input.tagName == 'SELECT' ? 'change' : 'input', function () {
                     filter.column.filter[this.dataset.filter].value = this.value;
 
                     if (filter.mode != 'ExcelRow') {
