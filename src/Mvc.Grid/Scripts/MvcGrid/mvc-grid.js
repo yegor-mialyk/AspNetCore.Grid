@@ -367,6 +367,10 @@ var MvcGridColumn = (function () {
             } else {
                 this.filter.first.value = '';
                 this.filter.second.value = '';
+
+                if (this.grid.filterMode != 'ExcelRow') {
+                    this.rowFilter.querySelector('.mvc-grid-value').value = '';
+                }
             }
         },
         applyFilter: function () {
