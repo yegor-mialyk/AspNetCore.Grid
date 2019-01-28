@@ -200,7 +200,7 @@ var MvcGrid = (function () {
         },
         startLoading: function (success, error) {
             var grid = this;
-            var query = (grid.query.toString() ? grid.query + '&': '?') + '_=' + Date.now();
+            var query = (grid.query.toString() ? grid.query + '&' : '?') + '_=' + Date.now();
 
             grid.stopLoading();
             if (grid.loadingDelay != null && !grid.element.querySelector('.mvc-grid-loader')) {
