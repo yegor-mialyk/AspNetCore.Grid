@@ -15,6 +15,7 @@ namespace NonFactors.Mvc.Grid
 
         public static IGridColumn<T, TValue> WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
         {
+            column.Filter.DefaultMethod = column.Filter.DefaultMethod ?? "equals";
             column.Filter.Options = options;
 
             return column;

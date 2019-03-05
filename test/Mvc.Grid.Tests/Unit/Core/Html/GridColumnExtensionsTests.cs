@@ -45,6 +45,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
 
+        [Theory]
+        [InlineData(null, "equals")]
+        [InlineData("contains", "contains")]
+        public void WithFilterOptions_SetsDefaultFilterMethod(String current, String method)
+        {
+            column.Filter.DefaultMethod = current;
+
+            String actual = column.WithFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
+            String expected = method;
+
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public void WithFilterOptions_SetsOptions()
         {
