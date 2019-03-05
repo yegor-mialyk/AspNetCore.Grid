@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -20,6 +21,22 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
+        public static IGridColumn<T, TValue> WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
+        {
+            return column.WithFilterOptions(column
+                .Grid
+                .Source
+                .OrderBy(column.Expression)
+                .Select(column.Expression)
+                .Select(value => value == null ? null : value.ToString())
+                .Distinct()
+                .Select(value => new SelectListItem
+                {
+                    Value = value,
+                    Text = value
+                }));
+        }
+
         public static IGridColumn<T, TValue> WithDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
         {
             column.Filter.DefaultMethod = method;

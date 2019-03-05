@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -72,6 +73,60 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Object expected = column;
             Object actual = column.WithFilterOptions(new SelectListItem[0]);
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
+        #region WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
+
+        [Theory]
+        [InlineData(null, "equals")]
+        [InlineData("contains", "contains")]
+        public void WithFilterOptions_FromValues_SetsDefaultFilterMethod(String current, String method)
+        {
+            column.Filter.DefaultMethod = current;
+
+            String actual = column.WithFilterOptions().Filter.DefaultMethod;
+            String expected = method;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void WithFilterOptions_FromValues()
+        {
+            column.Grid.Source = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Test" },
+                new GridModel { Name = "Next" },
+                new GridModel { Name = "Next" },
+                new GridModel { Name = "Last" }
+            }.AsQueryable();
+
+            IEnumerator<SelectListItem> actual = column.WithFilterOptions().Filter.Options.GetEnumerator();
+            IEnumerator<SelectListItem> expected = new List<SelectListItem>
+            {
+                new SelectListItem { Value = null, Text = null },
+                new SelectListItem { Value = "Last", Text = "Last" },
+                new SelectListItem { Value = "Next", Text = "Next" },
+                new SelectListItem { Value = "Test", Text = "Test" }
+            }.GetEnumerator();
+
+            while (expected.MoveNext() | actual.MoveNext())
+            {
+                Assert.Same(expected.Current.Value, actual.Current.Value);
+                Assert.Same(expected.Current.Text, actual.Current.Text);
+            }
+        }
+
+        [Fact]
+        public void WithFilterOptions_FromValues_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.WithFilterOptions();
 
             Assert.Same(expected, actual);
         }
