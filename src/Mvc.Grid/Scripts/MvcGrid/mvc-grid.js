@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 4.0.3
+ * Mvc.Grid 4.1.0
  * https://github.com/NonFactors/MVC6.Grid
  *
  * Copyright © NonFactors
@@ -700,12 +700,20 @@ var MvcGridFilter = (function () {
                 filter.validate(column.rowFilter.querySelector('.mvc-grid-value'));
             }
 
+            if (!column.filter.first.method) {
+                column.filter.first.method = column.filter.defaultMethod;
+            }
+
+            if (!column.filter.second.method) {
+                column.filter.second.method = column.filter.defaultMethod;
+            }
+
             if (filter.methods.indexOf(column.filter.first.method) < 0) {
-                column.filter.first.method = column.filter.defaultMethod || filter.methods[0];
+                column.filter.first.method = filter.methods[0];
             }
 
             if (filter.methods.indexOf(column.filter.second.method) < 0) {
-                column.filter.second.method = column.filter.defaultMethod || filter.methods[0];
+                column.filter.second.method = filter.methods[0];
             }
         },
 
