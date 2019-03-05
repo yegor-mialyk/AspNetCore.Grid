@@ -248,17 +248,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IHtmlHelper helper = Substitute.For<IHtmlHelper>();
             column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
             column.Grid.ViewContext.HttpContext.RequestServices.GetService<IHtmlHelper>().Returns(helper);
-            helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "Test" } });
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
+            helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "2", Text = "Second" }, new SelectListItem { Value = "1", Text = "First" } });
 
             SelectListItem[] actual = filters.GetFilterOptions(enumColumn).ToArray();
 
-            Assert.Equal(2, actual.Length);
+            Assert.Equal(3, actual.Length);
 
             Assert.Null(actual[0].Text);
             Assert.Null(actual[0].Value);
-            Assert.Equal("0", actual[1].Value);
-            Assert.Equal("Test", actual[1].Text);
+            Assert.Equal("1", actual[1].Value);
+            Assert.Equal("2", actual[2].Value);
+            Assert.Equal("First", actual[1].Text);
+            Assert.Equal("Second", actual[2].Text);
         }
 
         [Fact]
