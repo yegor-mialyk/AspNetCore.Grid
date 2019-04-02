@@ -240,8 +240,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Attributed_SetsAttributes()
         {
-            KeyValuePair<String, Object> actual = htmlGrid.Attributed(new { width = 1 }).Grid.Attributes.Single();
-            KeyValuePair<String, Object> expected = new KeyValuePair<String, Object>("width", 1);
+            htmlGrid.Grid.Attributes["width"] = 10;
+            htmlGrid.Grid.Attributes["class"] = "test";
+
+            IDictionary<String, Object> actual = htmlGrid.Attributed(new { width = 1 }).Grid.Attributes;
+            IDictionary<String, Object> expected = new Dictionary<String, Object> { ["width"] = 1, ["class"] = "test" };
 
             Assert.Equal(expected, actual);
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -67,7 +69,8 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Attributed<T>(this IHtmlGrid<T> html, Object htmlAttributes)
         {
-            html.Grid.Attributes = new GridHtmlAttributes(htmlAttributes);
+            foreach (KeyValuePair<String, Object> attribute in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))
+                html.Grid.Attributes[attribute.Key] = attribute.Value;
 
             return html;
         }
