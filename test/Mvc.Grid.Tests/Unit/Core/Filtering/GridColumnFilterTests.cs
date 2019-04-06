@@ -738,12 +738,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersByExpressions()
         {
             GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
-            GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn);
-            testFilter.Second = new NumberFilter<Int32> { Method = "greater-than", Value = "25" };
-            testFilter.First = new NumberFilter<Int32> { Method = "equals", Value = "10" };
-            testFilter.IsEnabled = true;
-            testFilter.Operator = "or";
-            testFilter.IsMulti = true;
+            GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn)
+            {
+                Second = new NumberFilter<Int32> { Method = "greater-than", Value = "25" },
+                First = new NumberFilter<Int32> { Method = "equals", Value = "10" },
+                IsEnabled = true,
+                Operator = "or",
+                IsMulti = true
+            };
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
             IQueryable actual = testFilter.Apply(items);

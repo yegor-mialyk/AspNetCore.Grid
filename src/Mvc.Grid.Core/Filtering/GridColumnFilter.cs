@@ -96,7 +96,7 @@ namespace NonFactors.Mvc.Grid
         public GridColumnFilter(IGridColumn<T, TValue> column)
         {
             Column = column;
-            Name = GetName(column);
+            Name = GetName();
             IsEnabled = column.Expression.Body is MemberExpression ? (Boolean?)null : false;
         }
 
@@ -110,6 +110,36 @@ namespace NonFactors.Mvc.Grid
             return expression == null ? items : items.Where(ToLambda(expression));
         }
 
+        private String GetName()
+        {
+            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+            if (type.GetTypeInfo().IsEnum)
+                return "enum";
+
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.SByte:
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.UInt16:
+                case TypeCode.Int32:
+                case TypeCode.UInt32:
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    return "number";
+                case TypeCode.String:
+                    return "text";
+                case TypeCode.DateTime:
+                    return "date";
+                case TypeCode.Boolean:
+                    return "boolean";
+                default:
+                    return type == typeof(Guid) ? "guid" : null;
+            }
+        }
         private IGridFilters GetFilters()
         {
             return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
@@ -161,36 +191,6 @@ namespace NonFactors.Mvc.Grid
                     key.StartsWith(columnName, StringComparison.OrdinalIgnoreCase) &&
                     !key.Equals(columnName + "op", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
-        }
-        private String GetName(IGridColumn<T, TValue> column)
-        {
-            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-            if (type.GetTypeInfo().IsEnum)
-                return "enum";
-
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                    return "number";
-                case TypeCode.String:
-                    return "text";
-                case TypeCode.DateTime:
-                    return "date";
-                case TypeCode.Boolean:
-                    return "boolean";
-                default:
-                    return type == typeof(Guid) ? "guid" : null;
-            }
         }
         private IGridFilter GetFilter(String method, String value)
         {
