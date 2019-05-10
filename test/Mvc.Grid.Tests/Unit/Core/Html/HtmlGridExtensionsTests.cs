@@ -424,8 +424,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void UsingFilterMode_SetsFilterMode()
         {
-            GridFilterMode actual = htmlGrid.UsingFilterMode(GridFilterMode.FilterRow).Grid.FilterMode;
-            GridFilterMode expected = GridFilterMode.FilterRow;
+            GridFilterMode actual = htmlGrid.UsingFilterMode(GridFilterMode.Row).Grid.FilterMode;
+            GridFilterMode expected = GridFilterMode.Row;
 
             Assert.Equal(expected, actual);
         }
@@ -434,7 +434,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void UsingFilterMode_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingFilterMode(GridFilterMode.HeaderRow);
+            Object actual = htmlGrid.UsingFilterMode(GridFilterMode.Header);
 
             Assert.Same(expected, actual);
         }

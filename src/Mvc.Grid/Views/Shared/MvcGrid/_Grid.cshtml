@@ -6,11 +6,11 @@
 <div id="@Model.Id" class="mvc-grid" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-source-url="@Model.SourceUrl">
     <!table@(Model.Attributes)>
         <thead>
-            <tr class="mvc-grid-headers @(Model.FilterMode == GridFilterMode.HeaderRow ? "mvc-grid-row-filters" : "")">
+            <tr class="mvc-grid-headers @(Model.FilterMode == GridFilterMode.Header ? "mvc-grid-row-filters" : "")">
                 @foreach (IGridColumn column in Model.Columns)
                 {
-                    String sortableClass = column.Sort.IsEnabled == true && Model.FilterMode != GridFilterMode.HeaderRow ? "sortable" : null;
-                    String filterableClass = column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.FilterRow ? "filterable" : null;
+                    String sortableClass = column.Sort.IsEnabled == true && Model.FilterMode != GridFilterMode.Header ? "sortable" : null;
+                    String filterableClass = column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row ? "filterable" : null;
 
                     <th class="@filterableClass @sortableClass @column.CssClasses"
                         data-name="@column.Name"
@@ -26,11 +26,11 @@
                         data-sort="@column.Sort.IsEnabled"
                         data-sort-order="@column.Sort.Order.ToString().ToLower()"
                         data-sort-first="@column.Sort.FirstOrder">
-                        @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.FilterRow)
+                        @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row)
                         {
                             String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : "";
 
-                            if (Model.FilterMode == GridFilterMode.HeaderRow)
+                            if (Model.FilterMode == GridFilterMode.Header)
                             {
                                 <div>
                                     @{
@@ -72,7 +72,7 @@
                     </th>
                 }
             </tr>
-            @if (Model.FilterMode == GridFilterMode.FilterRow)
+            @if (Model.FilterMode == GridFilterMode.Row)
             {
                 <tr class="mvc-grid-row-filters">
                     @foreach (IGridColumn column in Model.Columns)

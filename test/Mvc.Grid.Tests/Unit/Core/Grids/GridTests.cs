@@ -71,6 +71,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Grid_SetsFilterMode()
+        {
+            GridFilterMode actual = new Grid<GridModel>(new GridModel[0]).FilterMode;
+            GridFilterMode expected = GridFilterMode.Excel;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Grid_SetsEmptyAttributes()
         {
             Assert.Empty(new Grid<GridModel>(new GridModel[0]).Attributes);

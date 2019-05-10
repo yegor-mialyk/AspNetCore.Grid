@@ -318,7 +318,7 @@ var MvcGridColumn = (function () {
             var options = header.querySelector('.mvc-grid-options');
             if (options) {
                 options.parentElement.removeChild(options);
-            } else if (grid.filterMode == 'FilterRow') {
+            } else if (grid.filterMode == 'Row') {
                 options = rowFilter.querySelector('select.mvc-grid-value');
             }
 
@@ -341,7 +341,7 @@ var MvcGridColumn = (function () {
             };
         }
 
-        if (data.sort == 'True' && grid.filterMode != 'HeaderRow') {
+        if (data.sort == 'True' && grid.filterMode != 'Header') {
             column.sort = {
                 first: data.sortFirst,
                 order: data.sortOrder
@@ -368,7 +368,7 @@ var MvcGridColumn = (function () {
                 column.filter.first.value = '';
                 column.filter.second.value = '';
 
-                if (column.grid.filterMode != 'ExcelRow') {
+                if (column.grid.filterMode != 'Excel') {
                     column.rowFilter.querySelector('.mvc-grid-value').value = '';
                 }
             }
@@ -383,7 +383,7 @@ var MvcGridColumn = (function () {
             grid.query.deleteStartingWith(grid.prefix + column.name + '-');
 
             grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.value);
-            if (grid.filterMode == 'ExcelRow' && filter.isMulti) {
+            if (grid.filterMode == 'Excel' && filter.isMulti) {
                 grid.query.append(grid.prefix + column.name + '-op', filter.operator);
                 grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.value);
             }
@@ -422,18 +422,18 @@ var MvcGridColumn = (function () {
                 });
 
                 if (column.filter.hasOptions) {
-                    if (column.grid.filterMode == 'FilterRow') {
+                    if (column.grid.filterMode == 'Row') {
                         column.rowFilter.querySelector('select').addEventListener('change', function () {
                             column.filter.first.value = this.value;
 
                             column.filter.instance.apply();
                         });
-                    } else if (column.grid.filterMode == 'HeaderRow') {
+                    } else if (column.grid.filterMode == 'Header') {
                         var value = column.rowFilter.querySelector('.mvc-grid-value');
                         value.readOnly = true;
                         value.tabIndex = -1;
                     }
-                } else if (column.grid.filterMode != 'ExcelRow') {
+                } else if (column.grid.filterMode != 'Excel') {
                     var input = column.rowFilter.querySelector('.mvc-grid-value');
 
                     input.addEventListener('input', function () {
@@ -699,7 +699,7 @@ var MvcGridFilter = (function () {
             var filter = this;
             var column = filter.column;
 
-            if (!column.filter.hasOptions && filter.mode != 'ExcelRow') {
+            if (!column.filter.hasOptions && filter.mode != 'Excel') {
                 filter.validate(column.rowFilter.querySelector('.mvc-grid-value'));
             }
 
@@ -741,7 +741,7 @@ var MvcGridFilter = (function () {
                     '<div class="popup-filter">' +
                         this.renderFilter('first') +
                     '</div>' +
-                    (this.mode == 'ExcelRow' && this.isMulti
+                    (this.mode == 'Excel' && this.isMulti
                         ? this.renderOperator() +
                         '<div class="popup-filter">' +
                             this.renderFilter('second') +
@@ -839,9 +839,9 @@ var MvcGridFilter = (function () {
                 input.addEventListener(input.tagName == 'SELECT' ? 'change' : 'input', function () {
                     filter.column.filter[this.dataset.filter].value = this.value;
 
-                    if (filter.mode != 'ExcelRow') {
+                    if (filter.mode != 'Excel') {
                         var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
-                        if (filter.mode == 'HeaderRow' && this.tagName == 'SELECT') {
+                        if (filter.mode == 'Header' && this.tagName == 'SELECT') {
                             rowInput.value = this.options[this.selectedIndex].text;
                         } else {
                             rowInput.value = this.value;
