@@ -14,16 +14,16 @@ namespace NonFactors.Mvc.Grid
             return column;
         }
 
-        public static IGridColumn<T, TValue> WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
+        public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
         {
             column.Filter.DefaultMethod = column.Filter.DefaultMethod ?? "equals";
             column.Filter.Options = options;
 
             return column;
         }
-        public static IGridColumn<T, TValue> WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
+        public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
         {
-            return column.WithFilterOptions(column
+            return column.UsingFilterOptions(column
                 .Grid
                 .Source
                 .OrderBy(column.Expression)
@@ -37,7 +37,7 @@ namespace NonFactors.Mvc.Grid
                 }));
         }
 
-        public static IGridColumn<T, TValue> WithDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
+        public static IGridColumn<T, TValue> UsingDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
         {
             column.Filter.DefaultMethod = method;
 

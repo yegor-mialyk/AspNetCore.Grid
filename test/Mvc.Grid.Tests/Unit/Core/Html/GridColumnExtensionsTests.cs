@@ -44,58 +44,58 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
+        #region UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
 
         [Theory]
         [InlineData(null, "equals")]
         [InlineData("contains", "contains")]
-        public void WithFilterOptions_SetsDefaultFilterMethod(String current, String method)
+        public void UsingFilterOptions_SetsDefaultFilterMethod(String current, String method)
         {
             column.Filter.DefaultMethod = current;
 
-            String actual = column.WithFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
+            String actual = column.UsingFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
             String expected = method;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void WithFilterOptions_SetsOptions()
+        public void UsingFilterOptions_SetsOptions()
         {
             IEnumerable<SelectListItem> expected = new SelectListItem[0];
-            IEnumerable<SelectListItem> actual = column.WithFilterOptions(expected).Filter.Options;
+            IEnumerable<SelectListItem> actual = column.UsingFilterOptions(expected).Filter.Options;
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void WithFilterOptions_ReturnsColumn()
+        public void UsingFilterOptions_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.WithFilterOptions(new SelectListItem[0]);
+            Object actual = column.UsingFilterOptions(new SelectListItem[0]);
 
             Assert.Same(expected, actual);
         }
 
         #endregion
 
-        #region WithFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
+        #region UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
 
         [Theory]
         [InlineData(null, "equals")]
         [InlineData("contains", "contains")]
-        public void WithFilterOptions_FromValues_SetsDefaultFilterMethod(String current, String method)
+        public void UsingFilterOptions_FromValues_SetsDefaultFilterMethod(String current, String method)
         {
             column.Filter.DefaultMethod = current;
 
-            String actual = column.WithFilterOptions().Filter.DefaultMethod;
+            String actual = column.UsingFilterOptions().Filter.DefaultMethod;
             String expected = method;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void WithFilterOptions_FromValues()
+        public void UsingFilterOptions_FromValues()
         {
             column.Grid.Source = new[]
             {
@@ -106,7 +106,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "Last" }
             }.AsQueryable();
 
-            IEnumerator<SelectListItem> actual = column.WithFilterOptions().Filter.Options.GetEnumerator();
+            IEnumerator<SelectListItem> actual = column.UsingFilterOptions().Filter.Options.GetEnumerator();
             IEnumerator<SelectListItem> expected = new List<SelectListItem>
             {
                 new SelectListItem { Value = null, Text = null },
@@ -123,32 +123,32 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void WithFilterOptions_FromValues_ReturnsColumn()
+        public void UsingFilterOptions_FromValues_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.WithFilterOptions();
+            Object actual = column.UsingFilterOptions();
 
             Assert.Same(expected, actual);
         }
 
         #endregion
 
-        #region WithDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
+        #region UsingDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
 
         [Fact]
-        public void WithDefaultFilterMethod_SetsDefaultFilterMethod()
+        public void UsingDefaultFilterMethod_SetsDefaultFilterMethod()
         {
             String expected = "test";
-            String actual = column.WithDefaultFilterMethod("test").Filter.DefaultMethod;
+            String actual = column.UsingDefaultFilterMethod("test").Filter.DefaultMethod;
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void WithDefaultFilterMethod_ReturnsColumn()
+        public void UsingDefaultFilterMethod_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.WithDefaultFilterMethod("test");
+            Object actual = column.UsingDefaultFilterMethod("test");
 
             Assert.Same(expected, actual);
         }
