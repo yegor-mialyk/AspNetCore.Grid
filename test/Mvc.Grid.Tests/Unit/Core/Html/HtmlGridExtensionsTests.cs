@@ -396,6 +396,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
+        #region WithProcessingMode<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
+
+        [Fact]
+        public void WithProcessingMode_SetsProcessingMode()
+        {
+            GridProcessingMode actual = htmlGrid.WithProcessingMode(GridProcessingMode.Manual).Grid.Mode;
+            GridProcessingMode expected = GridProcessingMode.Manual;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void WithProcessingMode_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.WithProcessingMode(GridProcessingMode.Manual);
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
 
         [Fact]

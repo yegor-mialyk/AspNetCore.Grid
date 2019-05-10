@@ -25,32 +25,49 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region GetEnumerator()
 
         [Fact]
-        public void GetEnumerator_ProcessesRows()
+        public void GetEnumerator_ManuallyProcessesRows()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             IGridProcessor<GridModel> postProcessor = Substitute.For<IGridProcessor<GridModel>>();
             IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
-            IGridProcessor<GridModel> manProcessor = Substitute.For<IGridProcessor<GridModel>>();
             IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
             IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
-            manProcessor.ProcessorType = GridProcessorType.Manual;
             postProcessor.ProcessorType = GridProcessorType.Post;
             preProcessor.ProcessorType = GridProcessorType.Pre;
             Grid<GridModel> grid = new Grid<GridModel>(items);
+            grid.Mode = GridProcessingMode.Manual;
 
             postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
-            manProcessor.Process(items).Returns(new GridModel[0].AsQueryable());
             preProcessor.Process(items).Returns(preProcessedItems);
             grid.Processors.Add(postProcessor);
             grid.Processors.Add(preProcessor);
-            grid.Processors.Add(manProcessor);
+
+            IEnumerable<Object> actual = new GridRows<GridModel>(grid).ToList().Select(row => row.Model);
+            IEnumerable<Object> expected = items;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GetEnumerator_AutomaticallyProcessesRows()
+        {
+            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
+            IGridProcessor<GridModel> postProcessor = Substitute.For<IGridProcessor<GridModel>>();
+            IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
+            IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
+            IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
+            postProcessor.ProcessorType = GridProcessorType.Post;
+            preProcessor.ProcessorType = GridProcessorType.Pre;
+            Grid<GridModel> grid = new Grid<GridModel>(items);
+            grid.Mode = GridProcessingMode.Automatic;
+
+            postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
+            preProcessor.Process(items).Returns(preProcessedItems);
+            grid.Processors.Add(postProcessor);
+            grid.Processors.Add(preProcessor);
 
             IEnumerable<Object> actual = new GridRows<GridModel>(grid).ToList().Select(row => row.Model);
             IEnumerable<Object> expected = postProcessedItems;
-
-            postProcessor.Received().Process(preProcessedItems);
-            manProcessor.DidNotReceive().Process(items);
-            preProcessor.Received().Process(items);
 
             Assert.Equal(expected, actual);
         }

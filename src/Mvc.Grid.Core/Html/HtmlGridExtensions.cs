@@ -108,6 +108,12 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
+        public static IHtmlGrid<T> WithProcessingMode<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
+        {
+            html.Grid.Mode = mode;
+
+            return html;
+        }
         public static IHtmlGrid<T> WithFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
         {
             html.Grid.FilterMode = mode;

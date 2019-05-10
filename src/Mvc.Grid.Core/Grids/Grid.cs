@@ -17,6 +17,7 @@ namespace NonFactors.Mvc.Grid
         public IQueryable<T> Source { get; set; }
         public IQueryCollection Query { get; set; }
         public ViewContext ViewContext { get; set; }
+        public GridProcessingMode Mode { get; set; }
         public GridFilterMode FilterMode { get; set; }
         public String FooterPartialViewName { get; set; }
         public GridHtmlAttributes Attributes { get; set; }
@@ -35,6 +36,7 @@ namespace NonFactors.Mvc.Grid
         {
             Query = new QueryCollection();
             Source = source.AsQueryable();
+            Mode = GridProcessingMode.Automatic;
             Attributes = new GridHtmlAttributes();
             Processors = new HashSet<IGridProcessor<T>>();
 

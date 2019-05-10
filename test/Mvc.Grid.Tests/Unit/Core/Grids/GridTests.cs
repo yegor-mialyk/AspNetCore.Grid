@@ -98,6 +98,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Grid_SetsMode()
+        {
+            GridProcessingMode actual = new Grid<GridModel>(new GridModel[0]).Mode;
+            GridProcessingMode expected = GridProcessingMode.Automatic;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Grid_SetsRows()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);

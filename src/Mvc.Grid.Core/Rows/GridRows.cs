@@ -24,11 +24,15 @@ namespace NonFactors.Mvc.Grid
             if (Cache == null)
             {
                 IQueryable<T> items = Grid.Source;
-                foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Pre))
-                    items = processor.Process(items);
 
-                foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Post))
-                    items = processor.Process(items);
+                if (Grid.Mode == GridProcessingMode.Automatic)
+                {
+                    foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Pre))
+                        items = processor.Process(items);
+
+                    foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Post))
+                        items = processor.Process(items);
+                }
 
                 Cache = items
                     .ToList()
