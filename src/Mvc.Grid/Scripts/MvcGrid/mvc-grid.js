@@ -625,7 +625,7 @@ var MvcGridPopup = (function () {
                 target = target.parentElement;
             }
 
-            if ((!target || e.which == 27) && popup.element.parentNode) {
+            if ((!target || e.which == 27) && popup.element.parentNode && e.target != window) {
                 document.body.removeChild(popup.element);
 
                 if (popup.lastActiveElement) {

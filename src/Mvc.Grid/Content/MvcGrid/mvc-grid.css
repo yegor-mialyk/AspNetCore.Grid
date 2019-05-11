@@ -149,10 +149,6 @@
     background-color: #e4e4e4;
 }
 
-.mvc-grid-row-mode .filterable:not(.sortable) {
-    padding-right: 0.75em;
-}
-
 .mvc-grid-excel-mode .filterable {
     padding-right: 3.5em;
 }
