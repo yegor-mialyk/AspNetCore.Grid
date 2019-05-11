@@ -341,7 +341,7 @@ var MvcGridColumn = (function () {
             };
         }
 
-        if (data.sort == 'True' && grid.filterMode != 'Header') {
+        if (data.sort == 'True') {
             column.sort = {
                 first: data.sortFirst,
                 order: data.sortOrder
@@ -417,6 +417,7 @@ var MvcGridColumn = (function () {
 
             if (column.filter) {
                 var filter = (column.rowFilter || column.header).querySelector('.mvc-grid-filter');
+
                 filter.addEventListener('click', function () {
                     column.filter.instance.show();
                 });
@@ -454,10 +455,18 @@ var MvcGridColumn = (function () {
             var column = this;
 
             if (column.sort) {
-                column.header.addEventListener('click', function (e) {
-                    if (!e.target.classList.contains('mvc-grid-filter')) {
-                        column.applySort();
-                    }
+                var sort = column.header.querySelector('.mvc-grid-sort');
+
+                if (!column.filter || column.grid.filterMode != 'Header') {
+                    column.header.addEventListener('click', function (e) {
+                        if (!/mvc-grid-(sort|filter)/.test(e.target.className)) {
+                            sort.click();
+                        }
+                    });
+                }
+
+                sort.addEventListener('click', function () {
+                    column.applySort();
                 });
             }
         },
@@ -616,7 +625,7 @@ var MvcGridPopup = (function () {
                 target = target.parentElement;
             }
 
-            if ((!target || e.which == 27) && popup.element.parentNode && e.target != window) {
+            if ((!target || e.which == 27) && popup.element.parentNode) {
                 document.body.removeChild(popup.element);
 
                 if (popup.lastActiveElement) {

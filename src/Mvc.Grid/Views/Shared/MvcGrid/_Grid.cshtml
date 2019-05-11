@@ -3,16 +3,16 @@
 
 @model IGrid
 
-<div id="@Model.Id" class="mvc-grid" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-source-url="@Model.SourceUrl">
+<div id="@Model.Id" class="mvc-grid mvc-grid-@(Model.FilterMode.ToString().ToLower())-mode" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-source-url="@Model.SourceUrl">
     <!table@(Model.Attributes)>
         <thead>
-            <tr class="mvc-grid-headers @(Model.FilterMode == GridFilterMode.Header ? "mvc-grid-row-filters" : "")">
+            <tr class="mvc-grid-headers@(Model.FilterMode == GridFilterMode.Header ? " mvc-grid-row-filters" : "")">
                 @foreach (IGridColumn column in Model.Columns)
                 {
-                    String sortableClass = column.Sort.IsEnabled == true && Model.FilterMode != GridFilterMode.Header ? "sortable" : null;
-                    String filterableClass = column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row ? "filterable" : null;
+                    String sortable = column.Sort.IsEnabled == true ? "sortable" : null;
+                    String filterable = column.Filter.IsEnabled == true ? "filterable" : null;
 
-                    <th class="@filterableClass @sortableClass @column.CssClasses"
+                    <th class="@column.CssClasses @filterable @sortable @column.Sort.Order.ToString().ToLower()"
                         data-name="@column.Name"
                         data-filter="@column.Filter.IsEnabled"
                         data-filter-name="@column.Filter.Name"
@@ -53,7 +53,7 @@
                             }
                             else
                             {
-                                <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
+                                <span class="mvc-grid-header-title">@column.Title</span>
                             }
 
                             <select class="mvc-grid-options">
@@ -63,11 +63,21 @@
                                 }
                             </select>
 
+                            @if (column.Sort.IsEnabled == true)
+                            {
+                                <button type="button" class="mvc-grid-sort"></button>
+                            }
+
                             <button type="button" class="mvc-grid-filter @filterApplied"></button>
                         }
                         else
                         {
-                            <span class="mvc-grid-header-title @column.Sort.Order.ToString().ToLower()">@column.Title</span>
+                            <span class="mvc-grid-header-title">@column.Title</span>
+
+                            @if (column.Sort.IsEnabled == true)
+                            {
+                                <button type="button" class="mvc-grid-sort"></button>
+                            }
                         }
                     </th>
                 }
