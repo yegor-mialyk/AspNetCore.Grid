@@ -89,13 +89,14 @@
 
 .mvc-grid-sort::after {
     font-size: 0.9em;
-    content: '\2191';
+    content: '\0044';
     opacity: 0.15;
 }
 
 .mvc-grid-sort::before {
+    margin-right: -7px;
     font-size: 0.9em;
-    content: '\2193';
+    content: '\0043';
     opacity: 0.15;
 }
 
