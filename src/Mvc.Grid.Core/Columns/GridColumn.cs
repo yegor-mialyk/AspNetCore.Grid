@@ -18,10 +18,10 @@ namespace NonFactors.Mvc.Grid
         public String Format { get; set; }
         public String CssClasses { get; set; }
         public Boolean IsEncoded { get; set; }
-
-        public Func<T, Object> RenderValue { get; set; }
         public GridProcessorType ProcessorType { get; set; }
+
         public Func<T, TValue> ExpressionValue { get; set; }
+        public Func<T, Int32, Object> RenderValue { get; set; }
         public Expression<Func<T, TValue>> Expression { get; set; }
 
         IGridColumnSort IGridColumn.Sort => Sort;
@@ -92,7 +92,7 @@ namespace NonFactors.Mvc.Grid
             try
             {
                 if (RenderValue != null)
-                    return RenderValue(row.Model as T);
+                    return RenderValue(row.Model as T, row.Index);
 
                 Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
                 if (type.GetTypeInfo().IsEnum)

@@ -7,9 +7,15 @@ namespace NonFactors.Mvc.Grid
 {
     public static class GridColumnExtensions
     {
-        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
+        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Int32, Object> value)
         {
             column.RenderValue = value;
+
+            return column;
+        }
+        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
+        {
+            column.RenderValue = (t, i) => value(t);
 
             return column;
         }

@@ -22,7 +22,7 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; }
 
-        Func<T, Object> RenderValue { get; set; }
+        Func<T, Int32, Object> RenderValue { get; set; }
         Expression<Func<T, TValue>> Expression { get; set; }
 
         new IGridColumnSort<T, TValue> Sort { get; set; }

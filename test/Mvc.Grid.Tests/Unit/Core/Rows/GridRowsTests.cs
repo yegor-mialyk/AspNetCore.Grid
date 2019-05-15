@@ -73,6 +73,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GetEnumerator_SetsRowIndexes()
+        {
+            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
+            Grid<GridModel> grid = new Grid<GridModel>(items);
+            Int32 index = 0;
+
+            GridRows<GridModel> rows = new GridRows<GridModel>(grid);
+
+            Assert.All(rows, row => Assert.Equal(index++, row.Index));
+        }
+
+        [Fact]
         public void GetEnumerator_SetsRowCssClasses()
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
@@ -90,7 +102,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             Grid<GridModel> grid = new Grid<GridModel>(items);
 
-            GridRows<GridModel> rows = new GridRows<GridModel>(grid) { Attributes = (model) => new {data_id = "1"} };
+            GridRows<GridModel> rows = new GridRows<GridModel>(grid) { Attributes = (model) => new { data_id = "1" } };
 
             Assert.True(rows.All(row =>
                 row.Attributes.Single().Key == attributes.Key &&

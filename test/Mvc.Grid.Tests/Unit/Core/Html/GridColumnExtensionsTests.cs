@@ -22,13 +22,37 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Filter = new GridColumnFilter<GridModel, String>(column);
         }
 
+        #region RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Int32, Object> value)
+
+        [Fact]
+        public void RenderedAs_SetsIndexedRenderValue()
+        {
+            Func<GridModel, Int32, Object> expected = (model, i) => model.Name;
+            Func<GridModel, Int32, Object> actual = column.RenderedAs(expected).RenderValue;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void RenderedAs_ReturnsIndexedColumn()
+        {
+            Object expected = column;
+            Object actual = column.RenderedAs((model, i) => model.Name);
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
+
         #region RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
 
         [Fact]
         public void RenderedAs_SetsRenderValue()
         {
-            Func<GridModel, Object> expected = (model) => model.Name;
-            Func<GridModel, Object> actual = column.RenderedAs(expected).RenderValue;
+            GridModel gridModel = new GridModel { Name = "Test" };
+
+            Object actual = column.RenderedAs(model => model.Name).RenderValue(gridModel, 0);
+            Object expected = gridModel.Name;
 
             Assert.Same(expected, actual);
         }

@@ -36,7 +36,7 @@ namespace NonFactors.Mvc.Grid
 
                 Cache = items
                     .ToList()
-                    .Select(model => new GridRow<T>(model)
+                    .Select((model, index) => new GridRow<T>(model, index)
                     {
                         CssClasses = CssClasses?.Invoke(model),
                         Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))
