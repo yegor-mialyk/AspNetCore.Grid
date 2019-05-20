@@ -9,10 +9,11 @@
             <tr class="mvc-grid-headers@(Model.FilterMode == GridFilterMode.Header ? " mvc-grid-row-filters" : "")">
                 @foreach (IGridColumn column in Model.Columns)
                 {
+                    String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
                     String sortable = column.Sort.IsEnabled == true ? "sortable" : null;
                     String filterable = column.Filter.IsEnabled == true ? "filterable" : null;
 
-                    <th class="@column.CssClasses @filterable @sortable @column.Sort.Order.ToString().ToLower()"
+                    <th class="@column.CssClasses @filterable @sortable @column.Sort.Order.ToString().ToLower() @hidden"
                         data-name="@column.Name"
                         data-filter="@column.Filter.IsEnabled"
                         data-filter-name="@column.Filter.Name"
@@ -87,9 +88,11 @@
                 <tr class="mvc-grid-row-filters">
                     @foreach (IGridColumn column in Model.Columns)
                     {
+                        String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
+
                         if (column.Filter.IsEnabled == true)
                         {
-                            <th class="filterable @column.CssClasses">
+                            <th class="filterable @column.CssClasses @hidden">
                                 @{ String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : ""; }
 
                                 <div>
@@ -120,7 +123,7 @@
                         }
                         else
                         {
-                            <th class="@column.CssClasses"></th>
+                            <th class="@column.CssClasses @hidden"></th>
                         }
                     }
                 </tr>
@@ -134,7 +137,9 @@
                     <!tr class="@row.CssClasses"@row.Attributes>
                         @foreach (IGridColumn column in Model.Columns)
                         {
-                            <td class="@column.CssClasses">@column.ValueFor(row)</td>
+                            String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
+
+                            <td class="@column.CssClasses @hidden">@column.ValueFor(row)</td>
                         }
                     </!tr>
                 }

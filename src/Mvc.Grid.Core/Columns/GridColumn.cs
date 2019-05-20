@@ -16,6 +16,7 @@ namespace NonFactors.Mvc.Grid
         public String Name { get; set; }
         public Object Title { get; set; }
         public String Format { get; set; }
+        public Boolean IsHidden { get; set; }
         public String CssClasses { get; set; }
         public Boolean IsEncoded { get; set; }
         public GridProcessorType ProcessorType { get; set; }

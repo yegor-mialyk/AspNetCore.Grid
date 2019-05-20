@@ -9,6 +9,7 @@ namespace NonFactors.Mvc.Grid
         String Name { get; set; }
         Object Title { get; set; }
         String Format { get; set; }
+        Boolean IsHidden { get; set; }
         String CssClasses { get; set; }
         Boolean IsEncoded { get; set; }
 
