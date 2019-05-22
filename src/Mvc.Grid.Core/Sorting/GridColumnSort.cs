@@ -56,7 +56,7 @@ namespace NonFactors.Mvc.Grid
         public GridColumnSort(IGridColumn<T, TValue> column)
         {
             Column = column;
-            IsEnabled = column.Expression.Body is MemberExpression ? (Boolean?)null : false;
+            IsEnabled = column.Expression.Body is MemberExpression ? IsEnabled : false;
         }
 
         public IQueryable<T> Apply(IQueryable<T> items)
