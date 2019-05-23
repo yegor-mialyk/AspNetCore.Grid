@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -179,41 +178,30 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
+        #region Filterable<T, TValue>(this IGridColumn<T, TValue> column, GridFilterType type)
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void MultiFilterable_SetsIsMulti(Boolean isMulti)
+        [Fact]
+        public void Filterable_SetsType()
         {
-            Boolean? expected = isMulti;
-            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsMulti;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(true, null, true)]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, null, null)]
-        [InlineData(false, true, true)]
-        [InlineData(false, false, false)]
-        public void MultiFilterable_SetsIsEnabled(Boolean isMulti, Boolean? filterEnabled, Boolean? isEnabled)
-        {
-            column.Filter.IsEnabled = filterEnabled;
-
-            Boolean? actual = column.MultiFilterable(isMulti).Filter.IsEnabled;
-            Boolean? expected = isEnabled;
+            GridFilterType? actual = column.Filterable(GridFilterType.Double).Filter.Type;
+            GridFilterType? expected = GridFilterType.Double;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void MultiFilterable_ReturnsColumn()
+        public void Filterable_EnablesFilter()
+        {
+            column.Filter.IsEnabled = false;
+
+            Assert.True(column.Filterable(GridFilterType.Single).Filter.IsEnabled);
+        }
+
+        [Fact]
+        public void Filterable_Type_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.MultiFilterable(true);
+            Object actual = column.Filterable(GridFilterType.Single);
 
             Assert.Same(expected, actual);
         }

@@ -327,7 +327,7 @@ var MvcGridColumn = (function () {
                 isApplied: data.filterFirstMethod != '' || data.filterSecondMethod != '',
                 hasOptions: options && options.children.length > 0,
                 defaultMethod: data.filterDefaultMethod,
-                isMulti: data.filterMulti == 'True',
+                type: data.filterType || 'single',
                 operator: data.filterOperator,
                 name: data.filterName,
                 options: options,
@@ -384,7 +384,7 @@ var MvcGridColumn = (function () {
             grid.query.deleteStartingWith(grid.prefix + column.name + '-');
 
             grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.value);
-            if (grid.filterMode == 'Excel' && filter.isMulti) {
+            if (grid.filterMode == 'Excel' && filter.type == 'double') {
                 grid.query.append(grid.prefix + column.name + '-op', filter.operator);
                 grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.value);
             }
@@ -481,7 +481,7 @@ var MvcGridColumn = (function () {
             delete data.filterFirstMethod;
             delete data.filterFirstValue;
             delete data.filterOperator;
-            delete data.filterMulti;
+            delete data.filterType;
             delete data.filterName;
             delete data.filter;
 
@@ -696,8 +696,8 @@ function MvcGridExtends(subclass, base) {
 
 var MvcGridFilter = (function () {
     function MvcGridFilter(column) {
-        this.isMulti = column.filter.isMulti;
         this.mode = column.grid.filterMode;
+        this.type = column.filter.type;
         this.popup = column.grid.popup;
         this.cssClasses = '';
         this.column = column;
@@ -751,7 +751,7 @@ var MvcGridFilter = (function () {
                     '<div class="popup-filter">' +
                         this.renderFilter('first') +
                     '</div>' +
-                    (this.mode == 'Excel' && this.isMulti
+                    (this.mode == 'Excel' && this.type == 'double'
                         ? this.renderOperator() +
                         '<div class="popup-filter">' +
                             this.renderFilter('second') +

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -19,15 +19,15 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
-        public static IHtmlGrid<T> MultiFilterable<T>(this IHtmlGrid<T> html)
+        public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterType type)
         {
             foreach (IGridColumn column in html.Grid.Columns)
             {
                 if (column.Filter.IsEnabled == null)
                     column.Filter.IsEnabled = true;
 
-                if (column.Filter.IsMulti == null)
-                    column.Filter.IsMulti = true;
+                if (column.Filter.Type == null)
+                    column.Filter.Type = type;
             }
 
             return html;

@@ -49,18 +49,16 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-        public static IGridColumn<T, TValue> MultiFilterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isMultiple)
-        {
-            if (isMultiple && column.Filter.IsEnabled == null)
-                column.Filter.IsEnabled = true;
-
-            column.Filter.IsMulti = isMultiple;
-
-            return column;
-        }
         public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
         {
             column.Filter.IsEnabled = isFilterable;
+
+            return column;
+        }
+        public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, GridFilterType type)
+        {
+            column.Filter.IsEnabled = true;
+            column.Filter.Type = type;
 
             return column;
         }

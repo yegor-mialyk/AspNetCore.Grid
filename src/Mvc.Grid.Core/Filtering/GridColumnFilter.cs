@@ -12,9 +12,9 @@ namespace NonFactors.Mvc.Grid
     public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     {
         public String Name { get; set; }
-        public Boolean? IsMulti { get; set; }
         public Boolean? IsEnabled { get; set; }
         public String DefaultMethod { get; set; }
+        public GridFilterType? Type { get; set; }
 
         private Boolean OptionsIsSet { get; set; }
         public virtual IEnumerable<SelectListItem> Options
@@ -38,7 +38,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (IsEnabled == true && IsMulti == true && !OperatorIsSet)
+                if (IsEnabled == true && Type == GridFilterType.Double && !OperatorIsSet)
                 {
                     String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
                     Operator = Column.Grid.Query[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
@@ -77,7 +77,7 @@ namespace NonFactors.Mvc.Grid
         {
             get
             {
-                if (IsEnabled == true && IsMulti == true && !SecondIsSet)
+                if (IsEnabled == true && Type == GridFilterType.Double && !SecondIsSet)
                     Second = GetSecondFilter();
 
                 return SecondValue;
@@ -116,7 +116,7 @@ namespace NonFactors.Mvc.Grid
             if (type.GetTypeInfo().IsEnum)
                 return "enum";
 
-            switch (Type.GetTypeCode(type))
+            switch (System.Type.GetTypeCode(type))
             {
                 case TypeCode.SByte:
                 case TypeCode.Byte:
@@ -207,7 +207,7 @@ namespace NonFactors.Mvc.Grid
             Expression left = First?.Apply(Column.Expression.Body);
             Expression right = Second?.Apply(Column.Expression.Body);
 
-            if (IsMulti == true && left != null && right != null)
+            if (Type == GridFilterType.Double && left != null && right != null)
             {
                 if ("and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.AndAlso(left, right);

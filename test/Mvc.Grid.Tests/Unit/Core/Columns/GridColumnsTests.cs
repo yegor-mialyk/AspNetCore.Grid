@@ -39,9 +39,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
-            Assert.Equal(expected.Filter.IsMulti, actual.Filter.IsMulti);
             Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
+            Assert.Equal(expected.Filter.Type, actual.Filter.Type);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Null(actual.Expression.Compile().Invoke(null));
             Assert.Equal(expected.CssClasses, actual.CssClasses);
@@ -67,9 +67,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
-            Assert.Equal(expected.Filter.IsMulti, actual.Filter.IsMulti);
             Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
+            Assert.Equal(expected.Filter.Type, actual.Filter.Type);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.Expression, actual.Expression);
             Assert.Equal(expected.CssClasses, actual.CssClasses);
@@ -115,10 +115,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
-            Assert.Equal(expected.Filter.IsMulti, actual.Filter.IsMulti);
             Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(1, actual.Expression.Compile().Invoke(null));
+            Assert.Equal(expected.Filter.Type, actual.Filter.Type);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.CssClasses, actual.CssClasses);
             Assert.Equal(expected.Sort.Order, actual.Sort.Order);
@@ -144,9 +144,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
-            Assert.Equal(expected.Filter.IsMulti, actual.Filter.IsMulti);
             Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
+            Assert.Equal(expected.Filter.Type, actual.Filter.Type);
             Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.Expression, actual.Expression);
             Assert.Equal(expected.CssClasses, actual.CssClasses);

@@ -179,9 +179,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(column, actual.Column);
             Assert.Null(actual.IsEnabled);
             Assert.Null(actual.Operator);
-            Assert.Null(actual.IsMulti);
             Assert.Null(actual.Second);
             Assert.Null(actual.First);
+            Assert.Null(actual.Type);
             Assert.Null(actual.Name);
         }
 

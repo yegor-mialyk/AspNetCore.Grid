@@ -66,43 +66,43 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region MultiFilterable<T>(this IHtmlGrid<T> html)
+        #region Filterable<T>(this IHtmlGrid<T> html, GridFilterType type)
 
         [Theory]
-        [InlineData(null, true)]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void MultiFilterable_SetsIsMulti(Boolean? isMulti, Boolean? expected)
+        [InlineData(null, GridFilterType.Double)]
+        [InlineData(GridFilterType.Single, GridFilterType.Single)]
+        [InlineData(GridFilterType.Double, GridFilterType.Double)]
+        public void Filterable_Type_SetsType(GridFilterType? type, GridFilterType? expected)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.Filter.IsMulti = isMulti;
+                column.Filter.Type = type;
 
-            htmlGrid.MultiFilterable();
+            htmlGrid.Filterable(GridFilterType.Double);
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.Filter.IsMulti);
+                Assert.Equal(expected, actual.Filter.Type);
         }
 
         [Theory]
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MultiFilterable_SetsIsEnabled(Boolean? isEnabled, Boolean? expected)
+        public void Filterable_Type_SetsIsEnabled(Boolean? isEnabled, Boolean? expected)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
                 column.Filter.IsEnabled = isEnabled;
 
-            htmlGrid.MultiFilterable();
+            htmlGrid.Filterable(GridFilterType.Single);
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
                 Assert.Equal(expected, actual.Filter.IsEnabled);
         }
 
         [Fact]
-        public void MultiFilterable_ReturnsHtmlGrid()
+        public void Filterable_Type_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.MultiFilterable();
+            Object actual = htmlGrid.Filterable(GridFilterType.Single);
 
             Assert.Same(expected, actual);
         }

@@ -104,12 +104,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData(null, null)]
-        [InlineData(null, false)]
         [InlineData(false, null)]
-        [InlineData(false, false)]
-        public void Operator_Get_Disabled(Boolean? isEnabled, Boolean? isMulti)
+        [InlineData(null, GridFilterType.Single)]
+        [InlineData(false, GridFilterType.Double)]
+        public void Operator_Get_Disabled(Boolean? isEnabled, GridFilterType? type)
         {
-            filter.IsMulti = isMulti;
+            filter.Type = type;
             filter.IsEnabled = isEnabled;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
@@ -146,8 +146,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
         public void Operator_Get_FromQuery(String name, String query, String op)
         {
-            filter.IsMulti = true;
             filter.Column.Grid.Name = name;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             String actual = filter.Operator;
@@ -159,7 +159,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Operator_Get_Caches()
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=or");
 
             String op = filter.Operator;
@@ -275,7 +275,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Second_Set_Caches()
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
             
             filter.Second = null;
@@ -285,12 +285,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData(null, null)]
-        [InlineData(null, false)]
         [InlineData(false, null)]
-        [InlineData(false, false)]
-        public void Second_Get_Disabled(Boolean? isEnabled, Boolean? isMulti)
+        [InlineData(null, GridFilterType.Single)]
+        [InlineData(false, GridFilterType.Double)]
+        public void Second_Get_Disabled(Boolean? isEnabled, GridFilterType? type)
         {
-            filter.IsMulti = isMulti;
+            filter.Type = type;
             filter.IsEnabled = isEnabled;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=a&name-equals=b");
 
@@ -328,7 +328,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("grid", "grid-name-equals=a&grid-name-eq=b")]
         public void Second_Get_NotFoundReturnNull(String name, String query)
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Name = name;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
@@ -359,7 +359,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
         public void Second_Get_FromQuery(String name, String query, String value)
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Name = name;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
@@ -373,7 +373,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Second_Get_Caches()
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
 
             IGridFilter expected = filter.Second;
@@ -618,7 +618,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(false)]
         public void Apply_NotEnabled_ReturnsSameItems(Boolean? isEnabled)
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.IsEnabled = isEnabled;
             filter.First = new StringContainsFilter { Value = "A" };
 
@@ -633,7 +633,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.First = null;
             filter.Second = null;
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.IsEnabled = true;
 
             Object expected = items;
@@ -645,7 +645,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_NullAppliedFilter_ReturnsSameItems()
         {
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.Operator = "or";
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = Substitute.For<IGridFilter>();
@@ -662,7 +662,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_UsingAndOperator(String op)
         {
             filter.Operator = op;
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.First = new StringContainsFilter { Value = "a" };
             filter.Second = new StringContainsFilter { Value = "aA" };
 
@@ -678,7 +678,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_UsingOrOperator(String op)
         {
             filter.Operator = op;
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.First = new StringContainsFilter { Value = "a" };
             filter.Second = new StringContainsFilter { Value = "bB" };
 
@@ -695,7 +695,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_InvalidOperator_FirstFilter(String op)
         {
             filter.Operator = op;
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.First = new StringContainsFilter { Value = "a" };
             filter.Second = new StringContainsFilter { Value = "BB" };
 
@@ -712,7 +712,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_InvalidOperator_SecondFilter(String op)
         {
             filter.Operator = op;
-            filter.IsMulti = true;
+            filter.Type = GridFilterType.Double;
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = new StringContainsFilter { Value = "a" };
 
@@ -725,8 +725,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FirstFilter()
         {
-            filter.IsMulti = false;
             filter.Operator = "or";
+            filter.Type = GridFilterType.Single;
             filter.First = new StringContainsFilter { Value = "a" };
             filter.Second = new StringContainsFilter { Value = "bb" };
 
@@ -739,8 +739,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_SecondFilter()
         {
-            filter.IsMulti = false;
             filter.Operator = "or";
+            filter.Type = GridFilterType.Single;
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = new StringContainsFilter { Value = "bB" };
 
@@ -758,9 +758,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             {
                 Second = new NumberFilter<Int32> { Method = "greater-than", Value = "25" },
                 First = new NumberFilter<Int32> { Method = "equals", Value = "10" },
+                Type = GridFilterType.Double,
                 IsEnabled = true,
-                Operator = "or",
-                IsMulti = true
+                Operator = "or"
             };
 
             IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
