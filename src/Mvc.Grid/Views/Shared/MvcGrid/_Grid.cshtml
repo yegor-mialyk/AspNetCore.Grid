@@ -12,25 +12,20 @@
                     String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
                     String sortable = column.Sort.IsEnabled == true ? "sortable" : null;
                     String filterable = column.Filter.IsEnabled == true ? "filterable" : null;
+                    Boolean filterApplied = (column.Filter.First ?? column.Filter.Second) != null;
 
                     <th class="@column.CssClasses @filterable @sortable @column.Sort.Order.ToString().ToLower() @hidden"
                         data-name="@column.Name"
                         data-filter="@column.Filter.IsEnabled"
+                        data-filter-applied="@filterApplied"
                         data-filter-name="@column.Filter.Name"
                         data-filter-type="@column.Filter.Type?.ToString().ToLower()"
                         data-filter-default-method="@column.Filter.DefaultMethod"
-                        data-filter-first-method="@column.Filter.First?.Method"
-                        data-filter-first-value="@column.Filter.First?.Value"
-                        data-filter-operator="@column.Filter.Operator"
-                        data-filter-second-method="@column.Filter.Second?.Method"
-                        data-filter-second-value="@column.Filter.Second?.Value"
                         data-sort="@column.Sort.IsEnabled"
                         data-sort-order="@column.Sort.Order.ToString().ToLower()"
                         data-sort-first="@column.Sort.FirstOrder">
                         @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row)
                         {
-                            String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : "";
-
                             if (Model.FilterMode == GridFilterMode.Header)
                             {
                                 <div>
@@ -69,7 +64,7 @@
                                 <button type="button" class="mvc-grid-sort"></button>
                             }
 
-                            <button type="button" class="mvc-grid-filter @filterApplied"></button>
+                            <button type="button" class="mvc-grid-filter @(filterApplied ? "applied" : "")"></button>
                         }
                         else
                         {
@@ -92,9 +87,8 @@
 
                         if (column.Filter.IsEnabled == true)
                         {
+                            String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : "";
                             <th class="filterable @column.CssClasses @hidden">
-                                @{ String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : ""; }
-
                                 <div>
                                     @if (column.Filter.Options.Any())
                                     {

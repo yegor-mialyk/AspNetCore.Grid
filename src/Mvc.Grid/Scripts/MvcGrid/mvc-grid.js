@@ -135,13 +135,6 @@ var MvcGrid = (function () {
                 grid.filters[key] = filters[key];
             }
 
-            grid.columns.forEach(function (column) {
-                if (column.filter && grid.filters[column.filter.name]) {
-                    column.filter.instance = new grid.filters[column.filter.name](column);
-                    column.filter.instance.init();
-                }
-            });
-
             grid.requestType = options.requestType || grid.requestType;
             grid.sourceUrl = options.sourceUrl === undefined ? grid.sourceUrl : options.sourceUrl;
             grid.loadingDelay = options.loadingDelay === undefined ? grid.loadingDelay : options.loadingDelay;
@@ -160,6 +153,15 @@ var MvcGrid = (function () {
             } else {
                 grid.query = new MvcGridQuery(options.query);
             }
+
+            grid.columns.forEach(function (column) {
+                column.updateFilter();
+
+                if (column.filter && grid.filters[column.filter.name]) {
+                    column.filter.instance = new grid.filters[column.filter.name](column);
+                    column.filter.instance.init();
+                }
+            });
 
             return this;
         },
@@ -324,21 +326,12 @@ var MvcGridColumn = (function () {
             }
 
             column.filter = {
-                isApplied: data.filterFirstMethod != '' || data.filterSecondMethod != '',
                 hasOptions: options && options.children.length > 0,
                 defaultMethod: data.filterDefaultMethod,
+                isApplied: data.filterApplied == 'True',
                 type: data.filterType || 'single',
-                operator: data.filterOperator,
                 name: data.filterName,
-                options: options,
-                first: {
-                    method: data.filterFirstMethod,
-                    value: data.filterFirstValue
-                },
-                second: {
-                    method: data.filterSecondMethod,
-                    value: data.filterSecondValue
-                }
+                options: options
             };
         }
 
@@ -413,6 +406,38 @@ var MvcGridColumn = (function () {
             grid.reload();
         },
 
+        updateFilter: function () {
+            var filter = this.filter;
+            var query = this.grid.query;
+            var name = this.grid.prefix + this.name + '-';
+
+            if (filter) {
+                var entries = query.getStartingWith(name);
+                var methods = entries.filter(function (entry) {
+                    return entry.indexOf(name + 'op');
+                }).map(function (entry) {
+                    return entry.split('=', 1)[0].substring(name.length);
+                });
+                var values = entries.filter(function (entry) {
+                    return entry.indexOf(name + 'op');
+                }).map(function (entry) {
+                    return entry.split('=', 2)[1];
+                });
+
+                filter.first = {
+                    method: methods[0] || '',
+                    value: values[0] || ''
+                };
+
+                filter.operator = filter.type == 'double' ? (query.get(name + 'op') || '').split('=')[1] || '' : '';
+
+                filter.second = {
+                    method: filter.type == 'double' ? methods[1] || '' : '',
+                    value: filter.type == 'double' ? values[1] || '' : ''
+                };
+            }
+        },
+
         bindFilter: function () {
             var column = this;
 
@@ -476,11 +501,7 @@ var MvcGridColumn = (function () {
             var data = this.header.dataset;
 
             delete data.filterDefaultMethod;
-            delete data.filterSecondMethod;
-            delete data.filterSecondValue;
-            delete data.filterFirstMethod;
-            delete data.filterFirstValue;
-            delete data.filterOperator;
+            delete data.filterApplied;
             delete data.filterType;
             delete data.filterName;
             delete data.filter;
@@ -648,36 +669,49 @@ var MvcGridPopup = (function () {
 
 var MvcGridQuery = (function () {
     function MvcGridQuery(value) {
-        this.query = (value || '').replace('?', '');
+        this.entries = (value || '').replace('?', '').split('&');
     }
 
     MvcGridQuery.prototype = {
+        entries: function () {
+            return this.entries.slice();
+        },
+
+        get: function (name) {
+            return this.entries.filter(function (parameter) {
+                return parameter.indexOf(name + '=') == 0;
+            })[0];
+        },
+        getStartingWith: function (name) {
+            return this.entries.filter(function (parameter) {
+                return parameter.indexOf(name) == 0;
+            });
+        },
         set: function (name, value) {
             this.delete(name);
             this.append(name, value);
         },
 
         append: function (name, value) {
-            this.query += this.query ? '&' : '';
-            this.query += encodeURIComponent(name) + '=' + encodeURIComponent(value || '');
+            this.entries.push(encodeURIComponent(name) + '=' + encodeURIComponent(value || ''));
         },
         delete: function (name) {
             name = encodeURIComponent(name);
 
-            this.query = this.query.split('&').filter(function (parameter) {
-                return parameter.split('=', 1)[0] != name;
-            }).join('&');
+            this.entries = this.entries.filter(function (parameter) {
+                return parameter.indexOf(name + '=');
+            });
         },
         deleteStartingWith: function (name) {
             name = encodeURIComponent(name);
 
-            this.query = this.query.split('&').filter(function (parameter) {
+            this.entries = this.entries.filter(function (parameter) {
                 return parameter.split('=', 1)[0].indexOf(name);
-            }).join('&');
+            });
         },
 
         toString: function () {
-            return this.query ? '?' + this.query : '';
+            return this.entries.length ? '?' + this.entries.join('&') : '';
         }
     };
 
