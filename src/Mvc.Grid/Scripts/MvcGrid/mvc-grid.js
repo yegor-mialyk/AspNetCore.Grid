@@ -658,9 +658,10 @@ var MvcGridPopup = (function () {
         },
 
         bind: function () {
-            window.addEventListener('click', this.hide);
             window.addEventListener('resize', this.hide);
             window.addEventListener('keydown', this.hide);
+            window.addEventListener('mousedown', this.hide);
+            window.addEventListener('touchstart', this.hide);
         }
     };
 
