@@ -22,9 +22,9 @@ var MvcGrid = (function () {
         grid.requestType = 'get';
         grid.name = element.dataset.name;
         grid.popup = new MvcGridPopup(grid);
-        grid.filterMode = element.dataset.filterMode;
         grid.prefix = grid.name ? grid.name + '-' : '';
         grid.sourceUrl = grid.element.dataset.sourceUrl;
+        grid.filterMode = element.dataset.filterMode.toLowerCase();
         grid.element.dataset.id = options.id || grid.instances.length;
         grid.filters = {
             'enum': MvcGridEnumFilter,
@@ -321,15 +321,15 @@ var MvcGridColumn = (function () {
             var options = header.querySelector('.mvc-grid-options');
             if (options) {
                 options.parentElement.removeChild(options);
-            } else if (grid.filterMode == 'Row') {
+            } else if (grid.filterMode == 'row') {
                 options = rowFilter.querySelector('select.mvc-grid-value');
             }
 
             column.filter = {
                 hasOptions: options && options.children.length > 0,
+                type: data.filterType.toLowerCase() || 'single',
                 defaultMethod: data.filterDefaultMethod,
                 isApplied: data.filterApplied == 'True',
-                type: data.filterType || 'single',
                 name: data.filterName,
                 options: options
             };
@@ -338,7 +338,7 @@ var MvcGridColumn = (function () {
         if (data.sort == 'True') {
             column.sort = {
                 first: data.sortFirst,
-                order: data.sortOrder
+                order: data.sortOrder.toLowerCase()
             };
         }
 
@@ -362,7 +362,7 @@ var MvcGridColumn = (function () {
                 column.filter.first.value = '';
                 column.filter.second.value = '';
 
-                if (column.grid.filterMode != 'Excel') {
+                if (column.grid.filterMode != 'excel') {
                     column.rowFilter.querySelector('.mvc-grid-value').value = '';
                 }
             }
@@ -377,7 +377,7 @@ var MvcGridColumn = (function () {
             grid.query.deleteStartingWith(grid.prefix + column.name + '-');
 
             grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.value);
-            if (grid.filterMode == 'Excel' && filter.type == 'double') {
+            if (grid.filterMode == 'excel' && filter.type == 'double') {
                 grid.query.append(grid.prefix + column.name + '-op', filter.operator);
                 grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.value);
             }
@@ -449,18 +449,18 @@ var MvcGridColumn = (function () {
                 });
 
                 if (column.filter.hasOptions) {
-                    if (column.grid.filterMode == 'Row') {
+                    if (column.grid.filterMode == 'row') {
                         column.rowFilter.querySelector('select').addEventListener('change', function () {
                             column.filter.first.value = this.value;
 
                             column.filter.instance.apply();
                         });
-                    } else if (column.grid.filterMode == 'Header') {
+                    } else if (column.grid.filterMode == 'header') {
                         var value = column.rowFilter.querySelector('.mvc-grid-value');
                         value.readOnly = true;
                         value.tabIndex = -1;
                     }
-                } else if (column.grid.filterMode != 'Excel') {
+                } else if (column.grid.filterMode != 'excel') {
                     var input = column.rowFilter.querySelector('.mvc-grid-value');
 
                     input.addEventListener('input', function () {
@@ -483,7 +483,7 @@ var MvcGridColumn = (function () {
             if (column.sort) {
                 var sort = column.header.querySelector('.mvc-grid-sort');
 
-                if (!column.filter || column.grid.filterMode != 'Header') {
+                if (!column.filter || column.grid.filterMode != 'header') {
                     column.header.addEventListener('click', function (e) {
                         if (!/mvc-grid-(sort|filter)/.test(e.target.className)) {
                             sort.click();
@@ -743,7 +743,7 @@ var MvcGridFilter = (function () {
             var filter = this;
             var column = filter.column;
 
-            if (!column.filter.hasOptions && filter.mode != 'Excel') {
+            if (!column.filter.hasOptions && filter.mode != 'excel') {
                 filter.validate(column.rowFilter.querySelector('.mvc-grid-value'));
             }
 
@@ -785,7 +785,7 @@ var MvcGridFilter = (function () {
                     '<div class="popup-filter">' +
                         this.renderFilter('first') +
                     '</div>' +
-                    (this.mode == 'Excel' && this.type == 'double'
+                    (this.mode == 'excel' && this.type == 'double'
                         ? this.renderOperator() +
                         '<div class="popup-filter">' +
                             this.renderFilter('second') +
@@ -883,9 +883,9 @@ var MvcGridFilter = (function () {
                 input.addEventListener(input.tagName == 'SELECT' ? 'change' : 'input', function () {
                     filter.column.filter[this.dataset.filter].value = this.value;
 
-                    if (filter.mode != 'Excel') {
+                    if (filter.mode != 'excel') {
                         var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
-                        if (filter.mode == 'Header' && this.tagName == 'SELECT') {
+                        if (filter.mode == 'header' && this.tagName == 'SELECT') {
                             rowInput.value = this.options[this.selectedIndex].text;
                         } else {
                             rowInput.value = this.value;

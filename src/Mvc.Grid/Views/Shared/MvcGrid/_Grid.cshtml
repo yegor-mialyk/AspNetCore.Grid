@@ -19,10 +19,10 @@
                         data-filter="@column.Filter.IsEnabled"
                         data-filter-applied="@filterApplied"
                         data-filter-name="@column.Filter.Name"
-                        data-filter-type="@column.Filter.Type?.ToString().ToLower()"
+                        data-filter-type="@column.Filter.Type"
                         data-filter-default-method="@column.Filter.DefaultMethod"
                         data-sort="@column.Sort.IsEnabled"
-                        data-sort-order="@column.Sort.Order.ToString().ToLower()"
+                        data-sort-order="@column.Sort.Order"
                         data-sort-first="@column.Sort.FirstOrder">
                         @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row)
                         {
