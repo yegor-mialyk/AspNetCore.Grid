@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http.Internal;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridPagerTests()
         {
-            pager = new GridPager<GridModel>(new Grid<GridModel>(new GridModel[0]));
+            pager = new GridPager<GridModel>(new Grid<GridModel>(new GridModel[0]) { Query = new QueryCollection() });
         }
 
         #region TotalPages

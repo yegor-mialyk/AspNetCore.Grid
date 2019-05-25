@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -34,7 +33,6 @@ namespace NonFactors.Mvc.Grid
 
         public Grid(IEnumerable<T> source)
         {
-            Query = new QueryCollection();
             Source = source.AsQueryable();
             FilterMode = GridFilterMode.Excel;
             Mode = GridProcessingMode.Automatic;

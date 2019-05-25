@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
@@ -30,17 +32,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
-            htmlGrid.Grid.ViewContext = null;
-
-            Object expected = htmlGrid.Grid.Query;
+            Object expected = htmlGrid.Grid.Query = new QueryCollection();
             Object actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query;
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void HtmlGrid_SetsGridQuery()
+        public void HtmlGrid_SetsRequestGridQuery()
         {
+            htmlGrid.Grid.Query = null;
             htmlGrid.Html.ViewContext.Returns(new ViewContext());
             htmlGrid.Html.ViewContext.HttpContext = new DefaultHttpContext();
 
@@ -49,6 +50,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
             Assert.NotNull(actual);
+        }
+
+        [Fact]
+        public void HtmlGrid_SetsEmptyGridQuery()
+        {
+            htmlGrid.Grid.Query = null;
+            htmlGrid.Html.ViewContext.ReturnsNull();
+
+            Assert.Empty(new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query);
         }
 
         [Fact]

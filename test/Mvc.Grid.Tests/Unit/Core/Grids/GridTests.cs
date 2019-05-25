@@ -86,15 +86,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Grid_SetsEmptyQuery()
-        {
-            IQueryCollection actual = new Grid<GridModel>(new GridModel[0]).Query;
-            IQueryCollection expected = new QueryCollection();
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void Grid_SetsColumns()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
