@@ -24,6 +24,7 @@ namespace NonFactors.Mvc.Grid
         {
             column.Filter.DefaultMethod = column.Filter.DefaultMethod ?? "equals";
             column.Filter.Options = options;
+            column.Filter.IsEnabled = true;
 
             return column;
         }

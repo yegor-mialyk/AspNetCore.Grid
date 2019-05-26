@@ -92,6 +92,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void UsingFilterOptions_EnablesFilter()
+        {
+            column.Filter.IsEnabled = false;
+
+            Assert.True(column.UsingFilterOptions(new SelectListItem[0]).Filter.IsEnabled);
+        }
+
+        [Fact]
         public void UsingFilterOptions_ReturnsColumn()
         {
             Object expected = column;
@@ -143,6 +151,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 Assert.Same(expected.Current.Value, actual.Current.Value);
                 Assert.Same(expected.Current.Text, actual.Current.Text);
             }
+        }
+
+        [Fact]
+        public void UsingFilterOptions_FromValues_EnablesFilter()
+        {
+            column.Filter.IsEnabled = false;
+
+            Assert.True(column.UsingFilterOptions().Filter.IsEnabled);
         }
 
         [Fact]
