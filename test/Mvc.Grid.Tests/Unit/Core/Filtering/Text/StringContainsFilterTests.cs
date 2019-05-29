@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class StringContainsFilterTests : BaseGridFilterTests
+    public class StringContainsFilterTests
     {
         #region Apply(Expression expression)
 
@@ -16,13 +16,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
-            Assert.Null(new StringContainsFilter { Value = value }.Apply(expression));
+            Assert.Null(new StringContainsFilter { Method = "contains", Values = value }.Apply(expression));
         }
 
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {
-            StringContainsFilter filter = new StringContainsFilter { Value = "Est" };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = "Est" };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
             IQueryable<GridModel> items = new[]
@@ -34,9 +34,26 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("EST"));
-            IQueryable actual = Filter(items, filter.Apply(expression.Body), expression);
+            IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_FiltersMultipleItems()
+        {
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "", "Est" } };
+            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" }
+            }.AsQueryable();
+
+            Assert.Null(filter.Apply(expression));
         }
 
         #endregion

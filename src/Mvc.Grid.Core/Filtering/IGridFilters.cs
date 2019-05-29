@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace NonFactors.Mvc.Grid
         Func<String> BooleanFalseOptionText { get; set; }
         Func<String> BooleanEmptyOptionText { get; set; }
 
-        IGridFilter GetFilter(Type type, String method);
+        IGridFilter Create(Type type, String method, StringValues values);
         IEnumerable<SelectListItem> GetFilterOptions<T, TValue>(IGridColumn<T, TValue> column);
 
         void Register(Type type, String method, Type filter);

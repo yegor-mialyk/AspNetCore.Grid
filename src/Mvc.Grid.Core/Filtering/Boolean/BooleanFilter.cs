@@ -1,43 +1,34 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
     public class BooleanFilter : BaseGridFilter
     {
-        public override Expression Apply(Expression expression)
+        protected override Expression Apply(Expression expression, String value)
         {
-            Object value = null;
-            if (String.IsNullOrEmpty(Value))
+            if (String.IsNullOrEmpty(value) && Nullable.GetUnderlyingType(expression.Type) == null)
+                expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+
+            try
             {
-                if (Nullable.GetUnderlyingType(expression.Type) == null)
-                    expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+                Object boolValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
+
+                switch (Method)
+                {
+                    case "equals":
+                        return Expression.Equal(expression, Expression.Constant(boolValue, expression.Type));
+                    case "not-equals":
+                        return Expression.NotEqual(expression, Expression.Constant(boolValue, expression.Type));
+                    default:
+                        return null;
+                }
             }
-            else if ((value = GetTypedValue()) == null)
+            catch
             {
                 return null;
             }
-
-            switch (Method)
-            {
-                case "equals":
-                    return Expression.Equal(expression, Expression.Constant(value, expression.Type));
-                case "not-equals":
-                    return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
-                default:
-                    return null;
-            }
-        }
-
-        private Object GetTypedValue()
-        {
-            if ("false".Equals(Value, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            if ("true".Equals(Value, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            return null;
         }
     }
 }

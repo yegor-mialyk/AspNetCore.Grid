@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class StringEqualsFilterTests : BaseGridFilterTests
+    public class StringEqualsFilterTests
     {
         #region Apply(Expression expression)
 
@@ -15,7 +15,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersEmptyOrNullValues(String value)
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringEqualsFilter filter = new StringEqualsFilter { Value = value };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = value };
 
             IQueryable<GridModel> items = new[]
             {
@@ -27,7 +27,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name == null || model.Name == "");
-            IQueryable actual = Filter(items, filter.Apply(expression.Body), expression);
+            IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -36,7 +36,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersItemsByIgnoringCase()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringEqualsFilter filter = new StringEqualsFilter { Value = "Test" };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = "Test" };
 
             IQueryable<GridModel> items = new[]
             {
@@ -48,7 +48,29 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper() == "TEST");
-            IQueryable actual = Filter(items, filter.Apply(expression.Body), expression);
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_FiltersMultipleItems()
+        {
+            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "Test", "TES" } };
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "TES" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TEST2" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && (model.Name.ToUpper() == "TES" || model.Name.ToUpper() == "TEST"));
+            IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
         }

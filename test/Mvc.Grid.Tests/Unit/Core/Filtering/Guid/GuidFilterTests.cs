@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
-    public class GuidFilterTests : BaseGridFilterTests
+    public class GuidFilterTests
     {
         private Expression<Func<GridModel, Guid?>> nGuidExpression;
         private Expression<Func<GridModel, Guid>> guidExpression;
@@ -32,7 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadValue_ReturnsItems()
         {
-            filter.Value = "Test";
+            filter.Values = "Test";
 
             Assert.Null(filter.Apply(guidExpression.Body));
         }
@@ -43,11 +43,23 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("bfce0004-8af9-4f28-99d9-ea24b58b9588")]
         public void Apply_NullableEqualsFilter(String value)
         {
-            filter.Value = value;
+            filter.Values = value;
             filter.Method = "equals";
 
-            IEnumerable actual = Filter(items, filter.Apply(nGuidExpression.Body), nGuidExpression);
+            IEnumerable actual = items.Where(nGuidExpression, filter);
             IEnumerable expected = items.Where(model => model.NGuid == (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultipleNullableEqualsFilter()
+        {
+            filter.Method = "equals";
+            filter.Values = new[] { "", "bf64a86e-0b70-4430-99f6-8dd947e64948" };
+
+            IEnumerable expected = items.Where(model => model.NGuid == null || model.NGuid == Guid.Parse("bf64a86e-0b70-4430-99f6-8dd947e64947"));
+            IEnumerable actual = items.Where(nGuidExpression, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -58,11 +70,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_EqualsFilter(String value)
         {
-            filter.Value = value;
+            filter.Values = value;
             filter.Method = "equals";
 
-            IEnumerable actual = Filter(items, filter.Apply(guidExpression.Body), guidExpression);
+            IEnumerable actual = items.Where(guidExpression, filter);
             IEnumerable expected = items.Where(model => model.Guid == (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultipleEqualsFilter()
+        {
+            filter.Method = "equals";
+            filter.Values = new[] { "bfce0004-8af9-4f28-99d9-ea24b58b9588", "bf64a86e-0b70-4430-99f6-8dd947e64948" };
+
+            IEnumerable actual = items.Where(guidExpression, filter);
+            IEnumerable expected = items.Where(model =>
+                model.Guid == Guid.Parse("bfce0004-8af9-4f28-99d9-ea24b58b9588") ||
+                model.Guid == Guid.Parse("bf64a86e-0b70-4430-99f6-8dd947e64948"));
 
             Assert.Equal(expected, actual);
         }
@@ -73,11 +99,23 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_NullableNotEqualsFilter(String value)
         {
-            filter.Value = value;
+            filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = Filter(items, filter.Apply(nGuidExpression.Body), nGuidExpression);
+            IEnumerable actual = items.Where(nGuidExpression, filter);
             IEnumerable expected = items.Where(model => model.NGuid != (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultipleNullableNotEqualsFilter()
+        {
+            filter.Method = "not-equals";
+            filter.Values = new[] { "", "bf64a86e-0b70-4430-99f6-8dd947e64948" };
+
+            IEnumerable expected = items.Where(model => model.NGuid != null && model.NGuid != Guid.Parse("bf64a86e-0b70-4430-99f6-8dd947e64947"));
+            IEnumerable actual = items.Where(nGuidExpression, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -88,11 +126,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_NotEqualsFilter(String value)
         {
-            filter.Value = value;
+            filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = Filter(items, filter.Apply(guidExpression.Body), guidExpression);
+            IEnumerable actual = items.Where(guidExpression, filter);
             IEnumerable expected = items.Where(model => model.Guid != (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultipleNotEqualsFilter()
+        {
+            filter.Method = "not-equals";
+            filter.Values = new[] { "bfce0004-8af9-4f28-99d9-ea24b58b9588", "bf64a86e-0b70-4430-99f6-8dd947e64948" };
+
+            IEnumerable actual = items.Where(guidExpression, filter);
+            IEnumerable expected = items.Where(model =>
+                model.Guid != Guid.Parse("bfce0004-8af9-4f28-99d9-ea24b58b9588") &&
+                model.Guid != Guid.Parse("bf64a86e-0b70-4430-99f6-8dd947e64948"));
 
             Assert.Equal(expected, actual);
         }
@@ -101,7 +153,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";
-            filter.Value = "bf64a86e-0b70-4430-99f6-8dd947e64948";
+            filter.Values = "bf64a86e-0b70-4430-99f6-8dd947e64948";
 
             Assert.Null(filter.Apply(guidExpression.Body));
         }

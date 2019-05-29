@@ -154,9 +154,11 @@ namespace NonFactors.Mvc.Grid
                 return null;
 
             String method = keys[0].Substring(columnName.Length);
-            String value = Column.Grid.Query[keys[0]][0];
 
-            return GetFilter(method, value);
+            if (Type == GridFilterType.Multi)
+                return CreateFilter(method, Column.Grid.Query[keys[0]]);
+
+            return CreateFilter(method, Column.Grid.Query[keys[0]].FirstOrDefault());
         }
         private IGridFilter GetSecondFilter()
         {
@@ -173,13 +175,13 @@ namespace NonFactors.Mvc.Grid
                 if (values.Count < 2)
                     return null;
 
-                return GetFilter(keys[0].Substring(columnName.Length), values[1]);
+                return CreateFilter(keys[0].Substring(columnName.Length), values[1]);
             }
 
             String method = keys[1].Substring(columnName.Length);
             String value = Column.Grid.Query[keys[1]][0];
 
-            return GetFilter(method, value);
+            return CreateFilter(method, value);
         }
         private String[] GetFilterKeys(String columnName)
         {
@@ -191,15 +193,6 @@ namespace NonFactors.Mvc.Grid
                     key.StartsWith(columnName, StringComparison.OrdinalIgnoreCase) &&
                     !key.Equals(columnName + "op", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
-        }
-        private IGridFilter GetFilter(String method, String value)
-        {
-            IGridFilter filter = GetFilters().GetFilter(typeof(TValue), method);
-
-            if (filter != null)
-                filter.Value = value;
-
-            return filter;
         }
 
         private Expression CreateFilterExpression()
@@ -217,6 +210,10 @@ namespace NonFactors.Mvc.Grid
             }
 
             return left ?? right;
+        }
+        private IGridFilter CreateFilter(String method, StringValues values)
+        {
+            return GetFilters().Create(typeof(TValue), method, values);
         }
         private Expression<Func<T, Boolean>> ToLambda(Expression expression)
         {

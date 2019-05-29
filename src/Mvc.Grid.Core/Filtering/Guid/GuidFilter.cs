@@ -1,40 +1,34 @@
 using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
     public class GuidFilter : BaseGridFilter
     {
-        public override Expression Apply(Expression expression)
+        protected override Expression Apply(Expression expression, String value)
         {
-            Object value = null;
-            if (String.IsNullOrEmpty(Value))
+            if (String.IsNullOrEmpty(value) && Nullable.GetUnderlyingType(expression.Type) == null)
+                expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+
+            try
             {
-                if (Nullable.GetUnderlyingType(expression.Type) == null)
-                    expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
+                Object guidValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
+
+                switch (Method)
+                {
+                    case "equals":
+                        return Expression.Equal(expression, Expression.Constant(guidValue, expression.Type));
+                    case "not-equals":
+                        return Expression.NotEqual(expression, Expression.Constant(guidValue, expression.Type));
+                    default:
+                        return null;
+                }
             }
-            else if ((value = GetTypedValue()) == null)
+            catch
             {
                 return null;
             }
-
-            switch (Method)
-            {
-                case "equals":
-                    return Expression.Equal(expression, Expression.Constant(value, expression.Type));
-                case "not-equals":
-                    return Expression.NotEqual(expression, Expression.Constant(value, expression.Type));
-                default:
-                    return null;
-            }
-        }
-
-        private Object GetTypedValue()
-        {
-            if (Guid.TryParse(Value, out Guid guid))
-                return guid;
-
-            return null;
         }
     }
 }

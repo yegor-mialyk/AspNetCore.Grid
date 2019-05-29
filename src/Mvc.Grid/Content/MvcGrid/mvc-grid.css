@@ -248,6 +248,11 @@
     width: 100%;
 }
 
+.mvc-grid-popup .mvc-grid-value[multiple] {
+    overflow-y: auto;
+    height: 8em;
+}
+
 .mvc-grid-popup .mvc-grid-operator {
     width: auto;
 }

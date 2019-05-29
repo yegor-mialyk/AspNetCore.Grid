@@ -359,8 +359,8 @@ var MvcGridColumn = (function () {
 
                 grid.reload();
             } else {
-                column.filter.first.value = '';
-                column.filter.second.value = '';
+                column.filter.first.values = [];
+                column.filter.second.values = [];
 
                 if (column.grid.filterMode != 'excel') {
                     column.rowFilter.querySelector('.mvc-grid-value').value = '';
@@ -376,10 +376,14 @@ var MvcGridColumn = (function () {
             grid.query.delete(grid.prefix + 'rows');
             grid.query.deleteStartingWith(grid.prefix + column.name + '-');
 
-            grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.value);
-            if (grid.filterMode == 'excel' && filter.type == 'double') {
+            grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[0]);
+            for (var i = 1; filter.type == 'multi' && i < filter.first.values.length; i++) {
+                grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[i]);
+            }
+
+            if (grid.filterMode == 'excel' && filter.type == 'double' && filter.operator) {
                 grid.query.append(grid.prefix + column.name + '-op', filter.operator);
-                grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.value);
+                grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.values[0]);
             }
 
             if (grid.pager && grid.pager.showPageSizes) {
@@ -426,14 +430,14 @@ var MvcGridColumn = (function () {
 
                 filter.first = {
                     method: methods[0] || '',
-                    value: values[0] || ''
+                    values: filter.type == 'multi' ? values : values.slice(0, 1)
                 };
 
                 filter.operator = filter.type == 'double' ? (query.get(name + 'op') || '').split('=')[1] || '' : '';
 
                 filter.second = {
                     method: filter.type == 'double' ? methods[1] || '' : '',
-                    value: filter.type == 'double' ? values[1] || '' : ''
+                    values: filter.type == 'double' ? values.slice(1, 2) : []
                 };
             }
         },
@@ -451,7 +455,7 @@ var MvcGridColumn = (function () {
                 if (column.filter.hasOptions) {
                     if (column.grid.filterMode == 'row') {
                         column.rowFilter.querySelector('select').addEventListener('change', function () {
-                            column.filter.first.value = this.value;
+                            column.filter.first.values = [this.value];
 
                             column.filter.instance.apply();
                         });
@@ -464,7 +468,7 @@ var MvcGridColumn = (function () {
                     var input = column.rowFilter.querySelector('.mvc-grid-value');
 
                     input.addEventListener('input', function () {
-                        column.filter.first.value = this.value;
+                        column.filter.first.values = [this.value];
 
                         column.filter.instance.validate(this);
                     });
@@ -612,17 +616,30 @@ var MvcGridPopup = (function () {
             var popup = this;
             var filter = column.filter;
 
-            popup.updateValue('.mvc-grid-operator', filter.operator);
-            popup.updateValue('.mvc-grid-value[data-filter="first"]', filter.first.value);
-            popup.updateValue('.mvc-grid-value[data-filter="second"]', filter.second.value);
-            popup.updateValue('.mvc-grid-method[data-filter="first"]', filter.first.method);
-            popup.updateValue('.mvc-grid-method[data-filter="second"]', filter.second.method);
+            popup.setValue('.mvc-grid-operator', filter.operator);
+            popup.setValue('.mvc-grid-method[data-filter="first"]', filter.first.method);
+            popup.setValues('.mvc-grid-value[data-filter="first"]', filter.first.values);
+            popup.setValue('.mvc-grid-method[data-filter="second"]', filter.second.method);
+            popup.setValues('.mvc-grid-value[data-filter="second"]', filter.second.values);
         },
-        updateValue: function (selector, value) {
+        setValue: function (selector, value) {
             var input = this.element.querySelector(selector);
 
             if (input) {
                 input.value = value;
+            }
+        },
+        setValues: function (selector, values) {
+            var input = this.element.querySelector(selector);
+
+            if (input) {
+                if (input.tagName == 'SELECT' && input.multiple) {
+                    [].forEach.call(input.options, function (option) {
+                        option.selected = values.indexOf(option.value) >= 0;
+                    });
+                } else {
+                    input.value = values[0] || '';
+                }
             }
         },
 
@@ -798,6 +815,7 @@ var MvcGridFilter = (function () {
         renderFilter: function (name) {
             var hasOptions = this.column.filter.hasOptions;
             var lang = this.lang[this.column.filter.name] || {};
+            var multiple = this.type == 'multi' ? ' multiple' : '';
 
             return '<div class="popup-group">' +
                        '<select class="mvc-grid-method" data-filter="' + name + '">' +
@@ -807,7 +825,7 @@ var MvcGridFilter = (function () {
                        '</select>' +
                    '</div>' +
                    '<div class="popup-group">' + (hasOptions
-                       ? '<select class="mvc-grid-value" data-filter="' + name + '">' +
+                       ? '<select class="mvc-grid-value" data-filter="' + name + '"' + multiple + '>' +
                            this.column.filter.options.innerHTML +
                        '</select>'
                        : '<input class="mvc-grid-value" data-filter="' + name + '">') +
@@ -881,28 +899,53 @@ var MvcGridFilter = (function () {
             var filter = this;
 
             [].forEach.call(filter.popup.element.querySelectorAll('.mvc-grid-value'), function (input) {
-                input.addEventListener(input.tagName == 'SELECT' ? 'change' : 'input', function () {
-                    filter.column.filter[this.dataset.filter].value = this.value;
+                if (input.tagName == 'SELECT') {
+                    input.addEventListener('change', function () {
+                        filter.column.filter[input.dataset.filter].values = [].filter.call(input.options, function (option) {
+                            return option.selected;
+                        }).map(function (option) {
+                            return option.value;
+                        });
 
-                    if (filter.mode != 'excel') {
-                        var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
-                        if (filter.mode == 'header' && this.tagName == 'SELECT') {
-                            rowInput.value = this.options[this.selectedIndex].text;
-                        } else {
-                            rowInput.value = this.value;
+                        if (filter.mode != 'excel') {
+                            var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
+
+                            if (filter.mode == 'header') {
+                                rowInput.value = [].filter.call(input.options, function (option) {
+                                    return option.selected;
+                                }).map(function (option) {
+                                    return option.text;
+                                }).join(', ');
+                            } else {
+                                rowInput.value = input.value;
+                            }
+
+                            filter.validate(rowInput);
                         }
 
-                        filter.validate(rowInput);
-                    }
+                        filter.validate(input);
+                    });
+                } else {
+                    input.addEventListener('input', function () {
+                        filter.column.filter[input.dataset.filter].values = [input.value];
 
-                    filter.validate(this);
-                });
+                        if (filter.mode != 'excel') {
+                            var rowInput = filter.column.rowFilter.querySelector('.mvc-grid-value');
 
-                input.addEventListener('keyup', function (e) {
-                    if (e.which == 13 && filter.isValid(this.value)) {
-                        filter.apply();
-                    }
-                });
+                            rowInput.value = filter.column.filter[input.dataset.filter].values.join(', ');
+
+                            filter.validate(rowInput);
+                        }
+
+                        filter.validate(input);
+                    });
+
+                    input.addEventListener('keyup', function (e) {
+                        if (e.which == 13 && filter.isValid(this.value)) {
+                            filter.apply();
+                        }
+                    });
+                }
 
                 filter.validate(input);
             });

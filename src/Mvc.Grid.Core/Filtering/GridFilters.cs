@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,7 +126,7 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(Guid), "not-equals", typeof(GuidFilter));
         }
 
-        public virtual IGridFilter GetFilter(Type type, String method)
+        public virtual IGridFilter Create(Type type, String method, StringValues values)
         {
             type = Nullable.GetUnderlyingType(type) ?? type;
 
@@ -142,6 +143,7 @@ namespace NonFactors.Mvc.Grid
 
             IGridFilter filter = (IGridFilter)Activator.CreateInstance(filterType);
             filter.Method = method.ToLower();
+            filter.Values = values;
 
             return filter;
         }

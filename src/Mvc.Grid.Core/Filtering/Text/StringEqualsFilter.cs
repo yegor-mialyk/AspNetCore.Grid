@@ -6,9 +6,9 @@ namespace NonFactors.Mvc.Grid
 {
     public class StringEqualsFilter : BaseGridFilter
     {
-        public override Expression Apply(Expression expression)
+        protected override Expression Apply(Expression expression, String value)
         {
-            if (String.IsNullOrEmpty(Value))
+            if (String.IsNullOrEmpty(value))
             {
                 Expression equalsNull = Expression.Equal(expression, Expression.Constant(null, expression.Type));
                 Expression isEmpty = Expression.Equal(expression, Expression.Constant(""));
@@ -17,11 +17,11 @@ namespace NonFactors.Mvc.Grid
             }
 
             MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
-            Expression value = Expression.Constant(Value.ToUpper());
+            Expression expressionValue = Expression.Constant(value.ToUpper());
 
             Expression notNull = Expression.NotEqual(expression, Expression.Constant(null, expression.Type));
             Expression toUpper = Expression.Call(expression, toUpperMethod);
-            Expression equals = Expression.Equal(toUpper, value);
+            Expression equals = Expression.Equal(toUpper, expressionValue);
 
             return Expression.AndAlso(notNull, equals);
         }
