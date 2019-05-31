@@ -460,9 +460,11 @@ var MvcGridColumn = (function () {
                             column.filter.instance.apply();
                         });
                     } else if (column.grid.filterMode == 'header') {
-                        var value = column.rowFilter.querySelector('.mvc-grid-value');
-                        value.readOnly = true;
-                        value.tabIndex = -1;
+                        column.rowFilter.querySelector('.mvc-grid-value').addEventListener('click', function () {
+                            if (this.selectionStart == this.selectionEnd) {
+                                column.filter.instance.show();
+                            }
+                        });
                     }
                 } else if (column.grid.filterMode != 'excel') {
                     var input = column.rowFilter.querySelector('.mvc-grid-value');
