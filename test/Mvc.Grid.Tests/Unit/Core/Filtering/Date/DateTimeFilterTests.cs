@@ -240,7 +240,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-        
+
         [Fact]
         public void Apply_MultipleLaterThanFilter()
         {

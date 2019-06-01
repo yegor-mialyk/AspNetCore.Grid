@@ -9,7 +9,7 @@ namespace NonFactors.Mvc.Grid
     {
         public override Expression Apply(Expression expression)
         {
-            if (Values.Count == 0 || Values.Any(value => String.IsNullOrEmpty(value)))
+            if (Values.Count == 0 || Values.Any(String.IsNullOrEmpty))
                 return null;
 
             return base.Apply(expression);

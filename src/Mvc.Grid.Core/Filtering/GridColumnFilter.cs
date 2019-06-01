@@ -22,7 +22,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (IsEnabled == true && !OptionsIsSet)
-                    Options = GetFilters().GetFilterOptions(Column);
+                    Options = GetFilters().OptionsFor(Column);
 
                 return OptionsValue;
             }
@@ -60,7 +60,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (IsEnabled == true && !FirstIsSet)
-                    First = GetFirstFilter();
+                    First = CreateFirstFilter();
 
                 return FirstValue;
             }
@@ -78,7 +78,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (IsEnabled == true && Type == GridFilterType.Double && !SecondIsSet)
-                    Second = GetSecondFilter();
+                    Second = CreateSecondFilter();
 
                 return SecondValue;
             }
@@ -105,9 +105,57 @@ namespace NonFactors.Mvc.Grid
             if (IsEnabled != true)
                 return items;
 
-            Expression expression = CreateFilterExpression();
+            Expression expression = BuildFilterExpression();
 
             return expression == null ? items : items.Where(ToLambda(expression));
+        }
+
+        private IGridFilters GetFilters()
+        {
+            return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
+        }
+        private IGridFilter CreateFirstFilter()
+        {
+            String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
+            String columnName = (prefix + Column.Name + "-").ToLower();
+            String[] keys = FilterKeysFor(columnName);
+
+            if (keys.Length == 0)
+                return null;
+
+            String method = keys[0].Substring(columnName.Length);
+
+            if (Type == GridFilterType.Multi)
+                return CreateFilter(method, Column.Grid.Query[keys[0]]);
+
+            return CreateFilter(method, Column.Grid.Query[keys[0]].FirstOrDefault());
+        }
+        private IGridFilter CreateSecondFilter()
+        {
+            String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
+            String columnName = (prefix + Column.Name + "-").ToLower();
+            String[] keys = FilterKeysFor(columnName);
+
+            if (keys.Length == 0)
+                return null;
+
+            if (keys.Length == 1)
+            {
+                StringValues values = Column.Grid.Query[keys[0]];
+                if (values.Count < 2)
+                    return null;
+
+                return CreateFilter(keys[0].Substring(columnName.Length), values[1]);
+            }
+
+            String method = keys[1].Substring(columnName.Length);
+            String value = Column.Grid.Query[keys[1]][0];
+
+            return CreateFilter(method, value);
+        }
+        private IGridFilter CreateFilter(String method, StringValues values)
+        {
+            return GetFilters().Create(typeof(TValue), method, values);
         }
 
         private String GetName()
@@ -140,62 +188,7 @@ namespace NonFactors.Mvc.Grid
                     return type == typeof(Guid) ? "guid" : null;
             }
         }
-        private IGridFilters GetFilters()
-        {
-            return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
-        }
-        private IGridFilter GetFirstFilter()
-        {
-            String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-            String columnName = (prefix + Column.Name + "-").ToLower();
-            String[] keys = GetFilterKeys(columnName);
-
-            if (keys.Length == 0)
-                return null;
-
-            String method = keys[0].Substring(columnName.Length);
-
-            if (Type == GridFilterType.Multi)
-                return CreateFilter(method, Column.Grid.Query[keys[0]]);
-
-            return CreateFilter(method, Column.Grid.Query[keys[0]].FirstOrDefault());
-        }
-        private IGridFilter GetSecondFilter()
-        {
-            String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-            String columnName = (prefix + Column.Name + "-").ToLower();
-            String[] keys = GetFilterKeys(columnName);
-
-            if (keys.Length == 0)
-                return null;
-
-            if (keys.Length == 1)
-            {
-                StringValues values = Column.Grid.Query[keys[0]];
-                if (values.Count < 2)
-                    return null;
-
-                return CreateFilter(keys[0].Substring(columnName.Length), values[1]);
-            }
-
-            String method = keys[1].Substring(columnName.Length);
-            String value = Column.Grid.Query[keys[1]][0];
-
-            return CreateFilter(method, value);
-        }
-        private String[] GetFilterKeys(String columnName)
-        {
-            return Column
-                .Grid
-                .Query
-                .Keys
-                .Where(key =>
-                    key.StartsWith(columnName, StringComparison.OrdinalIgnoreCase) &&
-                    !key.Equals(columnName + "op", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
-        }
-
-        private Expression CreateFilterExpression()
+        private Expression BuildFilterExpression()
         {
             Expression left = First?.Apply(Column.Expression.Body);
             Expression right = Second?.Apply(Column.Expression.Body);
@@ -211,9 +204,16 @@ namespace NonFactors.Mvc.Grid
 
             return left ?? right;
         }
-        private IGridFilter CreateFilter(String method, StringValues values)
+        private String[] FilterKeysFor(String prefix)
         {
-            return GetFilters().Create(typeof(TValue), method, values);
+            return Column
+                .Grid
+                .Query
+                .Keys
+                .Where(key =>
+                    key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) &&
+                    !key.Equals(prefix + "op", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
         }
         private Expression<Func<T, Boolean>> ToLambda(Expression expression)
         {

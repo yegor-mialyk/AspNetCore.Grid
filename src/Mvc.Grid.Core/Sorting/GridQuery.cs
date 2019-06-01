@@ -4,32 +4,33 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public static class GridQuery
+    public class GridQuery : ExpressionVisitor
     {
+        private Boolean Ordered { get; set; }
+
+        private GridQuery()
+        {
+        }
+
         public static Boolean IsOrdered(IQueryable models)
         {
-            GridExpressionVisitor expression = new GridExpressionVisitor();
+            GridQuery expression = new GridQuery();
             expression.Visit(models.Expression);
 
             return expression.Ordered;
         }
 
-        private class GridExpressionVisitor : ExpressionVisitor
+        protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            public Boolean Ordered { get; set; }
+            if (node.Method.DeclaringType != typeof(Queryable))
+                return base.VisitMethodCall(node);
 
-            protected override Expression VisitMethodCall(MethodCallExpression node)
-            {
-                if (node.Method.DeclaringType != typeof(Queryable))
-                    return base.VisitMethodCall(node);
+            if (!node.Method.Name.StartsWith("OrderBy"))
+                return base.VisitMethodCall(node);
 
-                if (!node.Method.Name.StartsWith("OrderBy"))
-                    return base.VisitMethodCall(node);
+            Ordered = true;
 
-                Ordered = true;
-
-                return node;
-            }
+            return node;
         }
     }
 }

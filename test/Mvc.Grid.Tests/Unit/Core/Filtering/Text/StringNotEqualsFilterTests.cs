@@ -70,7 +70,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "Test2" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name == null || (model.Name.ToUpper() != "TES" && model.Name.ToUpper() != "TEST"));
+            IQueryable expected = items.Where(model => model.Name == null || model.Name.ToUpper() != "TES" && model.Name.ToUpper() != "TEST");
             IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);

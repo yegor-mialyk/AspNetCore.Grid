@@ -36,8 +36,8 @@ namespace NonFactors.Mvc.Grid
             Grid = grid;
             IsEncoded = true;
             Expression = expression;
-            Name = GetName(expression);
-            Title = GetTitle(expression);
+            Name = NameFor(expression);
+            Title = TitleFor(expression);
             ProcessorType = GridProcessorType.Pre;
             ExpressionValue = expression.Compile();
             Sort = new GridColumnSort<T, TValue>(this);
@@ -50,7 +50,7 @@ namespace NonFactors.Mvc.Grid
         }
         public virtual IHtmlContent ValueFor(IGridRow<Object> row)
         {
-            Object value = GetValueFor(row);
+            Object value = ColumnValueFor(row);
 
             if (value == null)
                 return HtmlString.Empty;
@@ -67,28 +67,20 @@ namespace NonFactors.Mvc.Grid
             return new HtmlString(value.ToString());
         }
 
-        private String GetTitle(Expression<Func<T, TValue>> expression)
+        private String TitleFor(Expression<Func<T, TValue>> expression)
         {
             MemberExpression body = expression.Body as MemberExpression;
             DisplayAttribute display = body?.Member.GetCustomAttribute<DisplayAttribute>();
 
             return display?.GetShortName() ?? "";
         }
-        private String GetName(Expression<Func<T, TValue>> expression)
+        private String NameFor(Expression<Func<T, TValue>> expression)
         {
             String text = ExpressionHelper.GetExpressionText(expression).Replace("_", "-");
 
             return String.Join("-", Regex.Split(text, "(?<=[a-zA-Z])(?=[A-Z])")).ToLower();
         }
-        private String GetEnumValue(Type type, String value)
-        {
-            return type
-                .GetMember(value)
-                .FirstOrDefault()?
-                .GetCustomAttribute<DisplayAttribute>()?
-                .GetName() ?? value;
-        }
-        private Object GetValueFor(IGridRow<Object> row)
+        private Object ColumnValueFor(IGridRow<Object> row)
         {
             try
             {
@@ -97,7 +89,7 @@ namespace NonFactors.Mvc.Grid
 
                 Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
                 if (type.GetTypeInfo().IsEnum)
-                    return GetEnumValue(type, ExpressionValue(row.Model as T).ToString());
+                    return EnumValue(type, ExpressionValue(row.Model as T).ToString());
 
                 return ExpressionValue(row.Model as T);
             }
@@ -105,6 +97,14 @@ namespace NonFactors.Mvc.Grid
             {
                 return null;
             }
+        }
+        private String EnumValue(Type type, String value)
+        {
+            return type
+                .GetMember(value)
+                .FirstOrDefault()?
+                .GetCustomAttribute<DisplayAttribute>()?
+                .GetName() ?? value;
         }
     }
 }

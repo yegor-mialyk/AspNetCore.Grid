@@ -59,7 +59,7 @@
                                 }
                             </select>
 
-                            @if (column.Sort.IsEnabled == true)
+                            if (column.Sort.IsEnabled == true)
                             {
                                 <button type="button" class="mvc-grid-sort"></button>
                             }
@@ -70,7 +70,7 @@
                         {
                             <span class="mvc-grid-header-title">@column.Title</span>
 
-                            @if (column.Sort.IsEnabled == true)
+                            if (column.Sort.IsEnabled == true)
                             {
                                 <button type="button" class="mvc-grid-sort"></button>
                             }

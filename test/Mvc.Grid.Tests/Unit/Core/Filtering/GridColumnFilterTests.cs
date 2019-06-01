@@ -59,11 +59,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Column.Grid.ViewContext = new ViewContext();
             IGridFilters filters = Substitute.For<IGridFilters>();
-            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
             filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
 
-            Object expected = filters.GetFilterOptions(filter.Column);
+            Object expected = filters.OptionsFor(filter.Column);
             Object actual = filter.Options;
 
             Assert.Same(expected, actual);
@@ -74,13 +74,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Column.Grid.ViewContext = new ViewContext();
             IGridFilters filters = Substitute.For<IGridFilters>();
-            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
             filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
 
             Object options = filter.Options;
 
-            filters.GetFilterOptions(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
 
             Object actual = filter.Options;
             Object expected = options;

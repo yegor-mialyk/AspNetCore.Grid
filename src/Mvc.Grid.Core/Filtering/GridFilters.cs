@@ -147,7 +147,7 @@ namespace NonFactors.Mvc.Grid
 
             return filter;
         }
-        public virtual IEnumerable<SelectListItem> GetFilterOptions<T, TValue>(IGridColumn<T, TValue> column)
+        public virtual IEnumerable<SelectListItem> OptionsFor<T, TValue>(IGridColumn<T, TValue> column)
         {
             List<SelectListItem> options = new List<SelectListItem>();
             Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);

@@ -45,14 +45,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "", "Est" } };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
-            IQueryable<GridModel> items = new[]
-            {
-                new GridModel { Name = null },
-                new GridModel { Name = "Tes" },
-                new GridModel { Name = "test" },
-                new GridModel { Name = "TEST" }
-            }.AsQueryable();
-
             Assert.Null(filter.Apply(expression));
         }
 

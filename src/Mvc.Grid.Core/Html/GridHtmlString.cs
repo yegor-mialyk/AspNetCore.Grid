@@ -16,10 +16,7 @@ namespace NonFactors.Mvc.Grid
 
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
-            if (encoder == null)
-                writer.Write(Value);
-            else
-                writer.Write(encoder.Encode(Value));
+            writer.Write(encoder?.Encode(Value) ?? Value);
         }
 
         public override String ToString()

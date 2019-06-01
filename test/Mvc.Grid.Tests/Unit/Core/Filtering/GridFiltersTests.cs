@@ -201,12 +201,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region GetFilterOptions<T, TValue>(IGridColumn<T, TValue> column)
+        #region OptionsFor<T, TValue>(IGridColumn<T, TValue> column)
 
         [Fact]
-        public void GetFilterOptions_ForBoolean()
+        public void OptionsFor_ForBoolean()
         {
-            SelectListItem[] actual = filters.GetFilterOptions<GridModel, Boolean>(null).ToArray();
+            SelectListItem[] actual = filters.OptionsFor<GridModel, Boolean>(null).ToArray();
 
             Assert.Equal(3, actual.Length);
             Assert.Equal("", actual[0].Value);
@@ -218,9 +218,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilterOptions_ForNullableBoolean()
+        public void OptionsFor_ForNullableBoolean()
         {
-            SelectListItem[] actual = filters.GetFilterOptions<GridModel, Boolean?>(null).ToArray();
+            SelectListItem[] actual = filters.OptionsFor<GridModel, Boolean?>(null).ToArray();
 
             Assert.Equal(3, actual.Length);
             Assert.Equal("", actual[0].Value);
@@ -232,11 +232,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilterOptions_NullViewContext_ForEnum()
+        public void OptionsFor_NullViewContext_ForEnum()
         {
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
 
-            SelectListItem[] actual = filters.GetFilterOptions(enumColumn).ToArray();
+            SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
 
             Assert.Single(actual);
             Assert.Null(actual[0].Text);
@@ -244,7 +244,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilterOptions_ForEnum()
+        public void OptionsFor_ForEnum()
         {
             IHtmlHelper helper = Substitute.For<IHtmlHelper>();
             column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
@@ -252,7 +252,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
             helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "2", Text = "Second" }, new SelectListItem { Value = "1", Text = "First" } });
 
-            SelectListItem[] actual = filters.GetFilterOptions(enumColumn).ToArray();
+            SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
 
             Assert.Equal(3, actual.Length);
 
@@ -265,9 +265,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetFilterOptions_ForOtherTypes()
+        public void OptionsFor_ForOtherTypes()
         {
-            Assert.Empty(filters.GetFilterOptions<GridModel, String>(null));
+            Assert.Empty(filters.OptionsFor<GridModel, String>(null));
         }
 
         #endregion

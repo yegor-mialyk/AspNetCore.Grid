@@ -9,8 +9,8 @@
  */
 
 @font-face {
-    font-family: 'GridGlyphs';
     src: url('../MvcGrid/Fonts/GridGlyphs.woff') format('woff');
+    font-family: 'GridGlyphs';
 }
 
 .mvc-grid {
@@ -84,7 +84,7 @@
 .mvc-grid-sort {
     background: transparent;
     font-weight: normal;
-    transition: 0;
+    transition: none;
 }
 
 .mvc-grid-sort::after {
