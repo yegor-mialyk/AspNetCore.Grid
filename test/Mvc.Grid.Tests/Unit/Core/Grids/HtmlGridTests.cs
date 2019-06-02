@@ -64,8 +64,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeViewContext()
         {
-            htmlGrid.Html.ViewContext.Returns((ViewContext)null);
             htmlGrid.Grid.ViewContext = new ViewContext { HttpContext = new DefaultHttpContext() };
+            htmlGrid.Html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
             Object expected = htmlGrid.Grid.ViewContext;
             Object actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.ViewContext;
