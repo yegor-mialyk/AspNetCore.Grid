@@ -130,7 +130,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.Grid.Source = new[]
             {
-                new GridModel { Name = null },
                 new GridModel { Name = "Test" },
                 new GridModel { Name = "Next" },
                 new GridModel { Name = "Next" },
