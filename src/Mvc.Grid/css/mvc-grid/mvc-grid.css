@@ -9,7 +9,7 @@
  */
 
 @font-face {
-    src: url('../MvcGrid/Fonts/GridGlyphs.woff') format('woff');
+    src: url('../mvc-grid/fonts/grid-glyphs.woff') format('woff');
     font-family: 'GridGlyphs';
 }
 
