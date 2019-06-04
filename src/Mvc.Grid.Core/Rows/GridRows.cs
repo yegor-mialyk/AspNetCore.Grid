@@ -9,7 +9,6 @@ namespace NonFactors.Mvc.Grid
     {
         public IGrid<T> Grid { get; set; }
 
-        public Func<T, String> CssClasses { get; set; }
         public Func<T, Object> Attributes { get; set; }
 
         private IEnumerable<IGridRow<T>> Cache { get; set; }
@@ -38,7 +37,6 @@ namespace NonFactors.Mvc.Grid
                     .ToList()
                     .Select((model, index) => new GridRow<T>(model, index)
                     {
-                        CssClasses = CssClasses?.Invoke(model),
                         Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))
                     });
             }

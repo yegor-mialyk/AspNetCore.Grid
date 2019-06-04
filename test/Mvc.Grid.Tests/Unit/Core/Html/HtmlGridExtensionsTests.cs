@@ -187,28 +187,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #endregion
 
-        #region RowCss<T>(this IHtmlGrid<T> html, Func<T, String> cssClasses)
-
-        [Fact]
-        public void RowCss_SetsRowsCssClasses()
-        {
-            Func<GridModel, String> expected = (model) => "";
-            Func<GridModel, String> actual = htmlGrid.RowCss(expected).Grid.Rows.CssClasses;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void RowCss_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.RowCss(null);
-
-            Assert.Same(expected, actual);
-        }
-
-        #endregion
-
         #region Attributed<T>(this IHtmlGrid<T> html, Object htmlAttributes)
 
         [Fact]

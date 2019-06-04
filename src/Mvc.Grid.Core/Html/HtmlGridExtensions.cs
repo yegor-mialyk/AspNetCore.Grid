@@ -55,12 +55,6 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
-        public static IHtmlGrid<T> RowCss<T>(this IHtmlGrid<T> html, Func<T, String> cssClasses)
-        {
-            html.Grid.Rows.CssClasses = cssClasses;
-
-            return html;
-        }
         public static IHtmlGrid<T> Attributed<T>(this IHtmlGrid<T> html, Object htmlAttributes)
         {
             foreach (KeyValuePair<String, Object> attribute in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))

@@ -85,17 +85,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GetEnumerator_SetsRowCssClasses()
-        {
-            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
-            Grid<GridModel> grid = new Grid<GridModel>(items);
-
-            GridRows<GridModel> rows = new GridRows<GridModel>(grid) { CssClasses = (model) => "grid-row" };
-
-            Assert.True(rows.All(row => row.CssClasses == "grid-row"));
-        }
-
-        [Fact]
         public void GetEnumerator_SetsRowAttributes()
         {
             KeyValuePair<String, Object> attributes = new KeyValuePair<String, Object>("data-id", "1");
