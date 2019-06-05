@@ -705,23 +705,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("xor")]
-        public void Apply_InvalidOperator_SecondFilter(String op)
-        {
-            filter.Operator = op;
-            filter.Type = GridFilterType.Double;
-            filter.First = Substitute.For<IGridFilter>();
-            filter.Second = new StringContainsFilter { Values = "a" };
-
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
-            IQueryable actual = filter.Apply(items);
-
-            Assert.Equal(expected, actual);
-        }
-
         [Fact]
         public void Apply_FirstFilter()
         {
@@ -731,20 +714,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Second = new StringContainsFilter { Values = "bb" };
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
-            IQueryable actual = filter.Apply(items);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void Apply_SecondFilter()
-        {
-            filter.Operator = "or";
-            filter.Type = GridFilterType.Single;
-            filter.First = Substitute.For<IGridFilter>();
-            filter.Second = new StringContainsFilter { Values = "bB" };
-
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("BB"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);

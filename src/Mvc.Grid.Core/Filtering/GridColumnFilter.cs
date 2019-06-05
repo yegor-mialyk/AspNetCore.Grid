@@ -191,18 +191,19 @@ namespace NonFactors.Mvc.Grid
         private Expression BuildFilterExpression()
         {
             Expression left = First?.Apply(Column.Expression.Body);
-            Expression right = Second?.Apply(Column.Expression.Body);
 
-            if (Type == GridFilterType.Double && left != null && right != null)
+            if (Type == GridFilterType.Double && left != null)
             {
-                if ("and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
+                Expression right = Second?.Apply(Column.Expression.Body);
+
+                if (right != null && "and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.AndAlso(left, right);
 
-                if ("or".Equals(Operator, StringComparison.OrdinalIgnoreCase))
+                if (right != null && "or".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.OrElse(left, right);
             }
 
-            return left ?? right;
+            return left;
         }
         private String[] FilterKeysFor(String prefix)
         {

@@ -387,7 +387,7 @@ var MvcGridColumn = (function () {
                 grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[i]);
             }
 
-            if (grid.filterMode == 'excel' && filter.type == 'double' && filter.operator) {
+            if (grid.filterMode == 'excel' && filter.type == 'double') {
                 grid.query.append(grid.prefix + column.name + '-op', filter.operator);
                 grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.values[0]);
             }
