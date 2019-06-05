@@ -648,7 +648,7 @@ var MvcGridPopup = (function () {
 
             popup.updatePosition(column);
 
-            popup.element.querySelector('input,select,textarea').focus();
+            popup.element.querySelector('.mvc-grid-value').focus();
         },
         hide: function (e) {
             var target = e && e.target;
