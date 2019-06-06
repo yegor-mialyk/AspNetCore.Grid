@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -117,7 +118,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
         {
-            column.Name = name;
+            column.Name = String.Join("-", Regex.Split((name ?? "").Replace("_", "-"), "(?<=[a-zA-Z])(?=[A-Z])")).ToLower().Trim();
 
             return column;
         }

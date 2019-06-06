@@ -306,11 +306,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Named<T>(this IHtmlGrid<T> html, String name)
 
-        [Fact]
-        public void Named_SetsName()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData(" ", "")]
+        [InlineData(null, "")]
+        [InlineData("Name", "name")]
+        [InlineData(" Name ", "name")]
+        [InlineData("NameTest", "name-test")]
+        [InlineData(" NameTest ", "name-test")]
+        [InlineData(" Name_Test ", "name-test")]
+        [InlineData("name-test-apply", "name-test-apply")]
+        public void Named_SetsName(String rawName, String name)
         {
-            String actual = htmlGrid.Named("Name").Grid.Name;
-            String expected = "Name";
+            String expected = name;
+            String actual = htmlGrid.Named(rawName).Grid.Name;
 
             Assert.Equal(expected, actual);
         }

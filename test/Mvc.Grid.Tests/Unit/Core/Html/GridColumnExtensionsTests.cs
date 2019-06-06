@@ -454,11 +454,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         #region Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
 
-        [Fact]
-        public void Named_SetsName()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData(" ", "")]
+        [InlineData(null, "")]
+        [InlineData("Name", "name")]
+        [InlineData(" Name ", "name")]
+        [InlineData("NameTest", "name-test")]
+        [InlineData(" NameTest ", "name-test")]
+        [InlineData(" Name_Test ", "name-test")]
+        [InlineData("name-test-apply", "name-test-apply")]
+        public void Named_SetsName(String rawName, String name)
         {
-            String actual = column.Named("Name").Name;
-            String expected = "Name";
+            String expected = name;
+            String actual = column.Named(rawName).Name;
 
             Assert.Equal(expected, actual);
         }
