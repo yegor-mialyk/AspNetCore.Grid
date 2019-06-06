@@ -115,6 +115,7 @@
 
 .mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #aaaaaa;
+    text-overflow: ellipsis;
     margin-right: 0.25em;
     line-height: normal;
     font-weight: bold;
@@ -258,6 +259,7 @@
 }
 
 .mvc-grid-popup input.mvc-grid-value {
+    text-overflow: ellipsis;
     padding: 0 0.5em;
 }
 
