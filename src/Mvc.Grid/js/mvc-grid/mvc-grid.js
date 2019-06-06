@@ -361,7 +361,7 @@ var MvcGridColumn = (function () {
             if (column.filter.isApplied) {
                 grid.query.delete(grid.prefix + 'page');
                 grid.query.delete(grid.prefix + 'rows');
-                grid.query.deleteStartingWith(grid.prefix + column.name + '-');
+                grid.query.deleteAllStartingWith(grid.prefix + column.name + '-');
 
                 grid.reload();
             } else {
@@ -380,7 +380,7 @@ var MvcGridColumn = (function () {
 
             grid.query.delete(grid.prefix + 'page');
             grid.query.delete(grid.prefix + 'rows');
-            grid.query.deleteStartingWith(grid.prefix + column.name + '-');
+            grid.query.deleteAllStartingWith(grid.prefix + column.name + '-');
 
             grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[0]);
             for (var i = 1; filter.type == 'multi' && i < filter.first.values.length; i++) {
@@ -423,7 +423,7 @@ var MvcGridColumn = (function () {
             var name = column.grid.prefix + column.name + '-';
 
             if (filter) {
-                var entries = query.getStartingWith(name);
+                var entries = query.getAllStartingWith(name);
                 var methods = entries.filter(function (entry) {
                     return entry.indexOf(name + 'op');
                 }).map(function (entry) {
@@ -440,7 +440,7 @@ var MvcGridColumn = (function () {
                     values: filter.type == 'multi' ? values : values.slice(0, 1)
                 };
 
-                filter.operator = filter.type == 'double' ? (query.get(name + 'op') || '').split('=')[1] || '' : '';
+                filter.operator = filter.type == 'double' ? query.get(name + 'op') : '';
 
                 filter.second = {
                     method: filter.type == 'double' ? methods[1] || '' : '',
@@ -683,7 +683,7 @@ var MvcGridPopup = (function () {
 
 var MvcGridQuery = (function () {
     function MvcGridQuery(value) {
-        this.entries = (value || '').replace('?', '').split('&');
+        this.entries = (value || '').replace('?', '').split('&').filter(Boolean);
     }
 
     MvcGridQuery.prototype = {
@@ -693,10 +693,12 @@ var MvcGridQuery = (function () {
 
         get: function (name) {
             return this.entries.filter(function (parameter) {
-                return parameter.indexOf(name + '=') == 0;
-            })[0];
+                return parameter == name || parameter.indexOf(name + '=') == 0;
+            }).map(function (parameter) {
+                return parameter.split('=', 2)[1];
+            })[0] || '';
         },
-        getStartingWith: function (name) {
+        getAllStartingWith: function (name) {
             return this.entries.filter(function (parameter) {
                 return parameter.indexOf(name) == 0;
             });
@@ -716,7 +718,7 @@ var MvcGridQuery = (function () {
                 return parameter.indexOf(name + '=');
             });
         },
-        deleteStartingWith: function (name) {
+        deleteAllStartingWith: function (name) {
             name = encodeURIComponent(name);
 
             this.entries = this.entries.filter(function (parameter) {
