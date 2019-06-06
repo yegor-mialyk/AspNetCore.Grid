@@ -199,6 +199,19 @@ var MvcGrid = (function () {
                 window.location.href = window.location.origin + window.location.pathname + grid.query;
             }
         },
+        clearQuery: function () {
+            var query = this.query;
+            var prefix = this.prefix;
+
+            this.columns.forEach(function (column) {
+                query.deleteAllStartingWith(prefix + column.name + '-');
+            });
+
+            query.delete(prefix + 'order');
+            query.delete(prefix + 'sort');
+            query.delete(prefix + 'page');
+            query.delete(prefix + 'rows');
+        },
         startLoading: function (success, error) {
             var grid = this;
             var query = (grid.query.toString() ? grid.query + '&' : '?') + '_=' + Date.now();
