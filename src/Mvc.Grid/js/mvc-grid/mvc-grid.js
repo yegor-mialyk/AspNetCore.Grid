@@ -199,6 +199,46 @@ var MvcGrid = (function () {
                 window.location.href = window.location.origin + window.location.pathname + grid.query;
             }
         },
+        applyFilters: function (initiator) {
+            var grid = this;
+            var query = grid.query;
+            var prefix = grid.prefix;
+            var sort = grid.query.get(prefix + 'sort');
+            var order = grid.query.get(prefix + 'order');
+
+            grid.clearQuery();
+
+            grid.columns.filter(function (column) {
+                return column.filter && (column == initiator || column.filter.first.values[0]);
+            }).forEach(function (column) {
+                var filter = column.filter;
+
+                query.append(prefix + column.name + '-' + filter.first.method, filter.first.values[0]);
+
+                for (var i = 1; filter.type == 'multi' && i < filter.first.values.length; i++) {
+                    query.append(prefix + column.name + '-' + filter.first.method, filter.first.values[i]);
+                }
+
+                if (grid.filterMode == 'excel' && filter.type == 'double') {
+                    query.append(prefix + column.name + '-op', filter.operator);
+                    query.append(prefix + column.name + '-' + filter.second.method, filter.second.values[0]);
+                }
+            });
+
+            if (sort) {
+                query.append(prefix + 'sort', sort);
+            }
+
+            if (order) {
+                query.append(prefix + 'order', order);
+            }
+
+            if (grid.pager && grid.pager.showPageSizes) {
+                query.append(prefix + 'rows', grid.pager.rowsPerPage.value);
+            }
+
+            grid.reload();
+        },
         clearQuery: function () {
             var query = this.query;
             var prefix = this.prefix;
@@ -385,31 +425,6 @@ var MvcGridColumn = (function () {
                     column.filter.inlineInput.value = '';
                 }
             }
-        },
-        applyFilter: function () {
-            var column = this;
-            var grid = column.grid;
-            var filter = column.filter;
-
-            grid.query.delete(grid.prefix + 'page');
-            grid.query.delete(grid.prefix + 'rows');
-            grid.query.deleteAllStartingWith(grid.prefix + column.name + '-');
-
-            grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[0]);
-            for (var i = 1; filter.type == 'multi' && i < filter.first.values.length; i++) {
-                grid.query.append(grid.prefix + column.name + '-' + filter.first.method, filter.first.values[i]);
-            }
-
-            if (grid.filterMode == 'excel' && filter.type == 'double') {
-                grid.query.append(grid.prefix + column.name + '-op', filter.operator);
-                grid.query.append(grid.prefix + column.name + '-' + filter.second.method, filter.second.values[0]);
-            }
-
-            if (grid.pager && grid.pager.showPageSizes) {
-                grid.query.append(grid.prefix + 'rows', grid.pager.rowsPerPage.value);
-            }
-
-            grid.reload();
         },
         applySort: function () {
             var column = this;
@@ -868,7 +883,7 @@ var MvcGridFilter = (function () {
         apply: function () {
             MvcGridPopup.prototype.lastActiveElement = null;
 
-            this.column.applyFilter();
+            this.column.grid.applyFilters(this.column);
 
             this.popup.hide();
         },
