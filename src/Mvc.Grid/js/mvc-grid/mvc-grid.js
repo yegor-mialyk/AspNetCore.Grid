@@ -458,7 +458,7 @@ var MvcGridColumn = (function () {
                     return entry.split('=', 1)[0].substring(name.length);
                 });
                 var values = entries.filter(function (entry) {
-                    return entry.indexOf(name + 'op');
+                    return entry.split('=', 1) != name + 'op';
                 }).map(function (entry) {
                     return entry.split('=', 2)[1];
                 });
