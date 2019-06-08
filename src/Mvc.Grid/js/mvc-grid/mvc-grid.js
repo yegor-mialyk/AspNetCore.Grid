@@ -373,10 +373,12 @@ var MvcGridColumn = (function () {
         if (data.filter == 'True') {
             var options = header.querySelector('.mvc-grid-options');
 
-            if (options) {
+            if (grid.filterMode == 'row') {
+                options = rowFilter.querySelector('select');
+            }
+
+            if (options && options.classList.contains('mvc-grid-options')) {
                 options.parentElement.removeChild(options);
-            } else if (grid.filterMode == 'row') {
-                options = rowFilter.querySelector('select.mvc-grid-value');
             }
 
             column.filter = {
@@ -486,13 +488,13 @@ var MvcGridColumn = (function () {
             });
 
             if (filter.hasOptions) {
-                if (column.grid.filterMode == 'row') {
+                if (column.grid.filterMode == 'row' && filter.type != 'multi') {
                     column.filter.inlineInput.addEventListener('change', function () {
                         filter.first.values = [this.value];
 
                         filter.instance.apply();
                     });
-                } else if (column.grid.filterMode == 'header') {
+                } else if (column.grid.filterMode == 'header' || column.grid.filterMode == 'row') {
                     column.filter.inlineInput.addEventListener('click', function () {
                         if (this.selectionStart == this.selectionEnd) {
                             filter.instance.show();
@@ -941,7 +943,7 @@ var MvcGridFilter = (function () {
                         if (filter.mode != 'excel') {
                             var inlineInput = filter.column.filter.inlineInput;
 
-                            if (filter.mode == 'header') {
+                            if (filter.mode == 'header' || filter.mode == 'row' && filter.type == 'multi') {
                                 inlineInput.value = [].filter.call(input.options, function (option) {
                                     return option.selected;
                                 }).map(function (option) {
