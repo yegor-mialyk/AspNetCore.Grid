@@ -3,7 +3,9 @@
   <PropertyGroup>
     <Version>5.0.0</Version>
     <DebugType>Full</DebugType>
+    <Company>NonFactors</Company>
     <GenerateFullPaths>true</GenerateFullPaths>
+    <Copyright>Copyright © NonFactors</Copyright>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>NonFactors.Mvc.Grid.Tests</RootNamespace>
     <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>

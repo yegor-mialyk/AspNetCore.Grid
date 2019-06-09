@@ -32,8 +32,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadValue_ReturnsNull()
         {
-            filter.Values = "Test";
             filter.Method = "equals";
+            filter.Values = new[] { "Test" };
 
             Assert.Null(filter.Apply(booleanExpression.Body));
         }
@@ -47,8 +47,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("FALSE", false)]
         public void Apply_NullableEqualsFilter(String value, Boolean? isChecked)
         {
-            filter.Values = value;
             filter.Method = "equals";
+            filter.Values = new [] { value };
 
             IEnumerable actual = items.Where(nBooleanExpression, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked == isChecked);
@@ -77,8 +77,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("FALSE", false)]
         public void Apply_EqualsFilter(String value, Boolean? isChecked)
         {
-            filter.Values = value;
             filter.Method = "equals";
+            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(booleanExpression, filter);
             IEnumerable expected = items.Where(model => model.IsChecked == isChecked);
@@ -107,8 +107,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("FALSE", false)]
         public void Apply_NullableNotEqualsFilter(String value, Boolean? isChecked)
         {
-            filter.Values = value;
             filter.Method = "not-equals";
+            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nBooleanExpression, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked != isChecked);
@@ -137,8 +137,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("FALSE", false)]
         public void Apply_NotEqualsFilter(String value, Boolean? isChecked)
         {
-            filter.Values = value;
             filter.Method = "not-equals";
+            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(booleanExpression, filter);
             IEnumerable expected = items.Where(model => model.IsChecked != isChecked);
@@ -159,7 +159,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";
-            filter.Values = "false";
+            filter.Values = new[] { "false" };
 
             Assert.Null(filter.Apply(booleanExpression.Body));
         }

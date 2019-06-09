@@ -13,10 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.7" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" Condition="'$(TargetFramework)'=='netstandard1.6'" />
   </ItemGroup>
 
 </Project>

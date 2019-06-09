@@ -1,4 +1,4 @@
-namespace NonFactors.Mvc.Grid
+﻿namespace NonFactors.Mvc.Grid
 {
     public enum GridFilterMode
     {

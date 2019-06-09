@@ -16,13 +16,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
-            Assert.Null(new StringContainsFilter { Method = "contains", Values = value }.Apply(expression));
+            Assert.Null(new StringContainsFilter { Method = "contains", Values = new[] { value } }.Apply(expression));
         }
 
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = "Est" };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "Est" } };
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
             IQueryable<GridModel> items = new[]

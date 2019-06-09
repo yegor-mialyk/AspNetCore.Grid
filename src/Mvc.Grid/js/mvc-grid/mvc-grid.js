@@ -306,6 +306,7 @@ var MvcGrid = (function () {
 
         dispatchEvent: function (type, detail) {
             var event;
+
             if (typeof Event === 'function') {
                 event = new CustomEvent(type, {
                     detail: detail,
