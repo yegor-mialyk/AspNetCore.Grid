@@ -61,7 +61,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridFilters filters = Substitute.For<IGridFilters>();
             filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
             Object expected = filters.OptionsFor(filter.Column);
             Object actual = filter.Options;
@@ -76,7 +76,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridFilters filters = Substitute.For<IGridFilters>();
             filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService<IGridFilters>().Returns(filters);
+            filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
             Object options = filter.Options;
 

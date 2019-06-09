@@ -248,7 +248,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IHtmlHelper helper = Substitute.For<IHtmlHelper>();
             column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
-            column.Grid.ViewContext.HttpContext.RequestServices.GetService<IHtmlHelper>().Returns(helper);
+            column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
             helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
 
