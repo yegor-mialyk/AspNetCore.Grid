@@ -18,8 +18,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public HtmlGridTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
+            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
+            html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
 
@@ -76,6 +77,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsViewContext()
         {
+            htmlGrid.Grid.ViewContext = null;
             htmlGrid.Html.ViewContext.Returns(new ViewContext());
             htmlGrid.Html.ViewContext.HttpContext = new DefaultHttpContext();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;
@@ -17,6 +18,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         static MvcGridExtensionsTests()
         {
             html = Substitute.For<IHtmlHelper>();
+            html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
         }
 
         #region Grid<T>(this HtmlHelper html, IEnumerable<T> source)

@@ -14,11 +14,11 @@ namespace NonFactors.Mvc.Grid
 
         public HtmlGrid(IHtmlHelper html, IGrid<T> grid)
         {
-            Grid = grid;
             Html = html;
+            Grid = grid;
             PartialViewName = "MvcGrid/_Grid";
             grid.ViewContext = grid.ViewContext ?? html.ViewContext;
-            grid.Query = grid.Query ?? grid.ViewContext?.HttpContext.Request.Query ?? new QueryCollection();
+            grid.Query = grid.Query ?? grid.ViewContext.HttpContext.Request.Query;
         }
 
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)

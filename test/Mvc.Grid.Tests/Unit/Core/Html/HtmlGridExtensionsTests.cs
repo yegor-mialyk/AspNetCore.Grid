@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public HtmlGridExtensionsTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
+            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
+            html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
             grid.Columns.Add(model => model.Name);
