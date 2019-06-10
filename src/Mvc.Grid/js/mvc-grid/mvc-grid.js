@@ -454,16 +454,14 @@ var MvcGridColumn = (function () {
             var name = column.grid.prefix + column.name + '-';
 
             if (filter) {
-                var entries = query.getAllStartingWith(name);
-                var methods = entries.filter(function (entry) {
-                    return entry.indexOf(name + 'op');
-                }).map(function (entry) {
-                    return entry.split('=', 1)[0].substring(name.length);
+                var parameters = query.entries().filter(function (parameter) {
+                    return parameter.split('=', 1) != name + 'op' && parameter.indexOf(name) == 0;
                 });
-                var values = entries.filter(function (entry) {
-                    return entry.split('=', 1) != name + 'op';
-                }).map(function (entry) {
-                    return entry.split('=', 2)[1];
+                var methods = parameters.map(function (parameter) {
+                    return decodeURIComponent(parameter.split('=', 1)[0].substring(name.length) || '');
+                });
+                var values = parameters.map(function (parameter) {
+                    return decodeURIComponent(parameter.split('=', 2)[1]);
                 });
 
                 filter.first = {
@@ -471,7 +469,7 @@ var MvcGridColumn = (function () {
                     values: filter.type == 'multi' ? values : values.slice(0, 1)
                 };
 
-                filter.operator = filter.type == 'double' ? query.get(name + 'op') : '';
+                filter.operator = filter.type == 'double' && query.get(name + 'op') || '';
 
                 filter.second = {
                     method: filter.type == 'double' ? methods[1] || '' : '',
@@ -714,25 +712,20 @@ var MvcGridPopup = (function () {
 
 var MvcGridQuery = (function () {
     function MvcGridQuery(value) {
-        this.entries = (value || '').replace('?', '').split('&').filter(Boolean);
+        this.parameters = (value || '').replace('?', '').split('&').filter(Boolean);
     }
 
     MvcGridQuery.prototype = {
         entries: function () {
-            return this.entries.slice();
+            return this.parameters.slice();
         },
 
         get: function (name) {
-            return this.entries.filter(function (parameter) {
+            return this.parameters.filter(function (parameter) {
                 return parameter == name || parameter.indexOf(name + '=') == 0;
             }).map(function (parameter) {
-                return parameter.split('=', 2)[1];
-            })[0] || '';
-        },
-        getAllStartingWith: function (name) {
-            return this.entries.filter(function (parameter) {
-                return parameter.indexOf(name) == 0;
-            });
+                return decodeURIComponent(parameter.split('=', 2)[1]);
+            })[0];
         },
         set: function (name, value) {
             this.delete(name);
@@ -740,25 +733,25 @@ var MvcGridQuery = (function () {
         },
 
         append: function (name, value) {
-            this.entries.push(encodeURIComponent(name) + '=' + encodeURIComponent(value || ''));
+            this.parameters.push(encodeURIComponent(name) + '=' + encodeURIComponent(value || ''));
         },
         delete: function (name) {
             name = encodeURIComponent(name);
 
-            this.entries = this.entries.filter(function (parameter) {
+            this.parameters = this.parameters.filter(function (parameter) {
                 return parameter.indexOf(name + '=');
             });
         },
         deleteAllStartingWith: function (name) {
             name = encodeURIComponent(name);
 
-            this.entries = this.entries.filter(function (parameter) {
+            this.parameters = this.parameters.filter(function (parameter) {
                 return parameter.split('=', 1)[0].indexOf(name);
             });
         },
 
         toString: function () {
-            return this.entries.length ? '?' + this.entries.join('&') : '';
+            return this.parameters.length ? '?' + this.parameters.join('&') : '';
         }
     };
 
