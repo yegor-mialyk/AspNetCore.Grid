@@ -24,8 +24,8 @@ var MvcGrid = (function () {
         grid.popup = new MvcGridPopup(grid);
         grid.prefix = grid.name ? grid.name + '-' : '';
         grid.sourceUrl = grid.element.dataset.sourceUrl;
-        grid.filterMode = element.dataset.filterMode.toLowerCase();
         grid.element.dataset.id = options.id || grid.instances.length;
+        grid.filterMode = (element.dataset.filterMode || 'excel').toLowerCase();
         grid.filters = {
             'enum': MvcGridEnumFilter,
             'date': MvcGridDateFilter,
