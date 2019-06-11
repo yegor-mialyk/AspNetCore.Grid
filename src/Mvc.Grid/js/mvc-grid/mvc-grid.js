@@ -461,7 +461,7 @@ var MvcGridColumn = (function () {
                     return decodeURIComponent(parameter.split('=', 1)[0].substring(name.length) || '');
                 });
                 var values = parameters.map(function (parameter) {
-                    return decodeURIComponent(parameter.split('=', 2)[1]);
+                    return decodeURIComponent(parameter.split('=', 2)[1] || '');
                 });
 
                 filter.first = {
