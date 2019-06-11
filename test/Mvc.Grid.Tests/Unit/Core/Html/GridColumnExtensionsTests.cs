@@ -504,5 +504,26 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         #endregion
+
+        #region Hidden<T, TValue>(this IGridColumn<T, TValue> column)
+
+        [Fact]
+        public void Hidden_SetsHidden()
+        {
+            column.IsHidden = false;
+
+            Assert.True(column.Hidden().IsHidden);
+        }
+
+        [Fact]
+        public void Hidden_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.Hidden();
+
+            Assert.Same(expected, actual);
+        }
+
+        #endregion
     }
 }

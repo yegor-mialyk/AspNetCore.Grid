@@ -128,5 +128,12 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
+
+        public static IGridColumn<T, TValue> Hidden<T, TValue>(this IGridColumn<T, TValue> column)
+        {
+            column.IsHidden = true;
+
+            return column;
+        }
     }
 }
