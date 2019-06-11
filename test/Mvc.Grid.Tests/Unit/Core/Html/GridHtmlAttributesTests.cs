@@ -31,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 data_null = (String)null
             }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = " id=\"\" src=\"test.png\" data-temp=\"10000\" data-null=\"\"";
+            String expected = " id=\"\" src=\"test.png\" data-temp=\"10000\"";
             String actual = writer.ToString();
 
             Assert.Equal(expected, actual);
