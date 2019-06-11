@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Mvc.Grid 5.0.0
  * https://github.com/NonFactors/MVC6.Grid
  *
@@ -115,6 +115,7 @@
 
 .mvc-grid-row-filters .mvc-grid-value {
     border: 0.5px solid #aaaaaa;
+    background-color: #ffffff;
     text-overflow: ellipsis;
     margin-right: 0.25em;
     line-height: normal;
@@ -238,6 +239,7 @@
 .mvc-grid-popup .mvc-grid-method,
 .mvc-grid-popup .mvc-grid-operator {
     border: 1px solid #cccccc;
+    background-color: #ffffff;
     box-sizing: border-box;
     font-size: 0.9em;
     padding: 0 0.2em;
