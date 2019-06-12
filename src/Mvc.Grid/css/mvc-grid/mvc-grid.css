@@ -279,6 +279,7 @@
     background-color: #28a745;
     border-color: #28a745;
     margin-right: 0.3em;
+    font-weight: bold;
 }
 
 .mvc-grid-popup .mvc-grid-apply:focus {

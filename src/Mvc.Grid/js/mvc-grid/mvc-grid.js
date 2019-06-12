@@ -99,7 +99,7 @@ var MvcGrid = (function () {
                 'not-equals': 'Not equals'
             },
             filter: {
-                'apply': '&#10004;',
+                'apply': '&#10003;',
                 'remove': '&#10008;'
             },
             operator: {
