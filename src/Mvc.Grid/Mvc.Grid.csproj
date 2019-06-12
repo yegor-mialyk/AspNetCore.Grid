@@ -5,6 +5,7 @@
     <DebugType>Full</DebugType>
     <Company>NonFactors</Company>
     <TargetFramework>net46</TargetFramework>
+    <PackageId>NonFactors.Grid.Mvc6</PackageId>
     <GenerateFullPaths>true</GenerateFullPaths>
     <Copyright>Copyright © NonFactors</Copyright>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>

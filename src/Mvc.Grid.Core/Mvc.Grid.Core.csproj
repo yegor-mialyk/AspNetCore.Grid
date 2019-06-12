@@ -6,6 +6,7 @@
     <Company>NonFactors</Company>
     <GenerateFullPaths>true</GenerateFullPaths>
     <Copyright>Copyright © NonFactors</Copyright>
+    <PackageId>NonFactors.Grid.Core.Mvc6</PackageId>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
