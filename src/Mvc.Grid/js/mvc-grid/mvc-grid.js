@@ -371,7 +371,7 @@ var MvcGridColumn = (function () {
         column.rowFilter = rowFilter;
         column.isHidden = header.classList.contains('mvc-grid-hidden');
 
-        if (data.filter == 'True') {
+        if (data.filter == 'True' && data.filterName) {
             var options = header.querySelector('.mvc-grid-options');
 
             if (grid.filterMode == 'row') {

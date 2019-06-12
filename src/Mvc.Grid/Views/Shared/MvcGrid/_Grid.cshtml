@@ -12,11 +12,11 @@
             {
                 String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
                 String sortable = column.Sort.IsEnabled == true ? "sortable" : null;
-                String filterable = column.Filter.IsEnabled == true ? "filterable" : null;
                 Boolean filterApplied = (column.Filter.First ?? column.Filter.Second) != null;
+                String filterable = column.Filter.IsEnabled == true && !String.IsNullOrEmpty(column.Filter.Name) ? "filterable" : null;
 
                 <th class="@column.CssClasses @filterable @sortable @column.Sort.Order.ToString().ToLower() @hidden" data-name="@column.Name" data-filter="@column.Filter.IsEnabled" data-filter-applied="@filterApplied" data-filter-name="@column.Filter.Name" data-filter-type="@column.Filter.Type" data-filter-default-method="@column.Filter.DefaultMethod" data-sort="@column.Sort.IsEnabled" data-sort-order="@column.Sort.Order" data-sort-first="@column.Sort.FirstOrder">
-                @if (column.Filter.IsEnabled == true && Model.FilterMode != GridFilterMode.Row)
+                @if (column.Filter.IsEnabled == true && !String.IsNullOrEmpty(column.Filter.Name) && Model.FilterMode != GridFilterMode.Row)
                 {
                     if (Model.FilterMode == GridFilterMode.Header)
                     {
@@ -74,7 +74,7 @@
             {
                 String hidden = column.IsHidden ? "mvc-grid-hidden" : null;
 
-                if (column.Filter.IsEnabled == true)
+                if (column.Filter.IsEnabled == true && !String.IsNullOrEmpty(column.Filter.Name))
                 {
                     String filterApplied = (column.Filter.First ?? column.Filter.Second) != null ? "applied" : "";
 
