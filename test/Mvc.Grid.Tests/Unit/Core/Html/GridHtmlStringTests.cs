@@ -14,8 +14,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             writer = new StringWriter();
         }
 
-        #region WriteTo(TextWriter writer, HtmlEncoder encoder)
-
         [Fact]
         public void WriteTo_RawString()
         {
@@ -38,10 +36,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        #endregion
-
-        #region ToString()
-
         [Theory]
         [InlineData("", "")]
         [InlineData(" ", " ")]
@@ -54,7 +48,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

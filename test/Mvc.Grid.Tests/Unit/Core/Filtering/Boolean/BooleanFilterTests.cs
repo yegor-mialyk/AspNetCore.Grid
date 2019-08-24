@@ -27,8 +27,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             nBooleanExpression = (model) => model.NIsChecked;
         }
 
-        #region Apply(Expression expression)
-
         [Fact]
         public void Apply_BadValue_ReturnsNull()
         {
@@ -163,7 +161,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Null(filter.Apply(booleanExpression.Body));
         }
-
-        #endregion
     }
 }

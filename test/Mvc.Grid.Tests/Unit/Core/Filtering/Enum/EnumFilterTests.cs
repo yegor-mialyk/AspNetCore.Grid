@@ -29,8 +29,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter = new EnumFilter();
         }
 
-        #region Apply(Expression expression)
-
         [Fact]
         public void Apply_BadValue_ReturnsNull()
         {
@@ -108,7 +106,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Null(filter.Apply(enumExpression.Body));
         }
-
-        #endregion
     }
 }

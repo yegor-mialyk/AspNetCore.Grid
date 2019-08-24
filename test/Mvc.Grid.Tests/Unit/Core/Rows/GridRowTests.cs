@@ -5,8 +5,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridRowTests
     {
-        #region GridRow(T model, Int32 index)
-
         [Fact]
         public void GridRow_SetsIndex()
         {
@@ -21,7 +19,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
     }
 }

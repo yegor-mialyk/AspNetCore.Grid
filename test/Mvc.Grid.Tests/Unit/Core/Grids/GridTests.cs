@@ -6,8 +6,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridTests
     {
-        #region IGrid.Columns
-
         [Fact]
         public void IGrid_ReturnsColumns()
         {
@@ -18,10 +16,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region IGrid.Rows
 
         [Fact]
         public void IGrid_ReturnsRows()
@@ -34,10 +28,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region IGrid.Pager
-
         [Fact]
         public void IGrid_ReturnsPager()
         {
@@ -48,10 +38,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Grid(IEnumerable<T> source)
 
         [Fact]
         public void Grid_SetsProcessors()
@@ -115,7 +101,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected.Grid, actual.Grid);
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

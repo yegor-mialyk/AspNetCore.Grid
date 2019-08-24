@@ -6,8 +6,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridQueryTests
     {
-        #region IsOrdered(IQueryable models)
-
         [Fact]
         public void IsOrdered_False()
         {
@@ -19,7 +17,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Assert.True(GridQuery.IsOrdered(new Object[0].AsQueryable().OrderBy(model => 0)));
         }
-
-        #endregion
     }
 }

@@ -9,8 +9,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridRowsTests
     {
-        #region GridRows(IGrid<T> grid)
-
         [Fact]
         public void GridRows_SetsGrid()
         {
@@ -19,10 +17,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region GetEnumerator()
 
         [Fact]
         public void GetEnumerator_ManuallyProcessesRows()
@@ -133,7 +127,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             while (expected.MoveNext() | actual.MoveNext())
                 Assert.Same((expected.Current as IGridRow<GridModel>).Model, (actual.Current as IGridRow<GridModel>).Model);
         }
-
-        #endregion
     }
 }

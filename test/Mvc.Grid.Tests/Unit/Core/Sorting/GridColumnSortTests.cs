@@ -17,8 +17,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             sort = new GridColumnSort<GridModel, Object>(column) { IsEnabled = true };
         }
 
-        #region Order
-
         [Fact]
         public void Order_Set_Caches()
         {
@@ -132,10 +130,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Null(sort.Order);
         }
 
-        #endregion
-
-        #region GridColumnSort<GridModel, Object>(IGridColumn<T, TValue> column)
-
         [Fact]
         public void GridColumnSort_SetsColumn()
         {
@@ -160,10 +154,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Null(new GridColumnSort<GridModel, String>(column).IsEnabled);
         }
-
-        #endregion
-
-        #region Apply(IQueryable<T> items)
 
         [Fact]
         public void Apply_NoOrder_ReturnsSameItems()
@@ -213,7 +203,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

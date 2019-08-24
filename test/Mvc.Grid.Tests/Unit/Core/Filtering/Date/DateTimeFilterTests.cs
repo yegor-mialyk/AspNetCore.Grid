@@ -27,8 +27,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter = new DateTimeFilter();
         }
 
-        #region Apply(Expression expression)
-
         [Fact]
         public void Apply_BadValue_ReturnsItems()
         {
@@ -369,7 +367,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Null(filter.Apply(dateExpression.Body));
         }
-
-        #endregion
     }
 }

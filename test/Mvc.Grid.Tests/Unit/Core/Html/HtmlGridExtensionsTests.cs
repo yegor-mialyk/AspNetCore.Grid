@@ -23,8 +23,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.Columns.Add(model => model.Sum);
         }
 
-        #region Build<T>(this IHtmlGrid<T> html, Action<IGridColumnsOf<T>> builder)
-
         [Fact]
         public void Build_Columns()
         {
@@ -44,10 +42,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region UsingSourceUrl<T>(this IHtmlGrid<T> html, String url)
-
         [Fact]
         public void UsingSourceUrl_SetsSourceUrl()
         {
@@ -65,10 +59,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Filterable<T>(this IHtmlGrid<T> html, GridFilterType type)
 
         [Theory]
         [InlineData(null, GridFilterType.Double)]
@@ -109,10 +99,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Filterable<T>(this IHtmlGrid<T> html)
-
         [Theory]
         [InlineData(null, true)]
         [InlineData(true, true)]
@@ -136,10 +122,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Sortable<T>(this IHtmlGrid<T> html)
 
         [Theory]
         [InlineData(null, true)]
@@ -165,10 +147,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region RowAttributed<T>(this IHtmlGrid<T> html, Func<T, Object> htmlAttributes)
-
         [Fact]
         public void RowAttributed_SetsRowAttributes()
         {
@@ -186,10 +164,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Attributed<T>(this IHtmlGrid<T> html, Object htmlAttributes)
 
         [Fact]
         public void Attributed_SetsAttributes()
@@ -211,10 +185,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
 
         [Theory]
         [InlineData("", "", "")]
@@ -260,10 +230,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Css<T>(this IHtmlGrid<T> html, String cssClasses)
-
         [Fact]
         public void Css_SetsCssClasses()
         {
@@ -282,10 +248,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Empty<T>(this IHtmlGrid<T> html, String text)
-
         [Fact]
         public void Empty_SetsEmptyText()
         {
@@ -303,10 +265,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Named<T>(this IHtmlGrid<T> html, String name)
 
         [Theory]
         [InlineData("", "")]
@@ -335,10 +293,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Id<T>(this IHtmlGrid<T> html, String id)
-
         [Fact]
         public void Id_SetsId()
         {
@@ -356,10 +310,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region UsingProcessor<T>(this IHtmlGrid<T> html, IGridProcessor<T> processor)
 
         [Fact]
         public void UsingProcessor_AddsProcessorToGrid()
@@ -384,10 +334,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region UsingProcessingMode<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
-
         [Fact]
         public void UsingProcessingMode_SetsProcessingMode()
         {
@@ -405,10 +351,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region UsingFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
 
         [Fact]
         public void UsingFilterMode_SetsFilterMode()
@@ -428,10 +370,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region UsingFooter<T>(this IHtmlGrid<T> html, String partialViewName)
-
         [Fact]
         public void UsingFooter_SetsFooterPartialViewName()
         {
@@ -449,10 +387,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Pageable<T>(this IHtmlGrid<T> html, Action<IGridPager<T>> builder)
 
         [Fact]
         public void Pageable_Builder_DoesNotChangePager()
@@ -527,10 +461,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Pageable<T>(this IHtmlGrid<T> html)
-
         [Fact]
         public void Pageable_DoesNotChangeExistingPager()
         {
@@ -601,7 +531,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
     }
 }

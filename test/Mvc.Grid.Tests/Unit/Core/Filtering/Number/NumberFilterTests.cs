@@ -25,8 +25,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             sumExpression = (model) => model.Sum;
         }
 
-        #region Apply(Expression expression)
-
         [Theory]
         [InlineData("test")]
         [InlineData("79228162514264337593543950336")]
@@ -453,7 +451,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Assert.Null(new NumberFilter<Int32> { Method = "test", Values = new[] { "1" } }.Apply(sumExpression.Body));
         }
-
-        #endregion
     }
 }

@@ -21,8 +21,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
         }
 
-        #region Grid<T>(this HtmlHelper html, IEnumerable<T> source)
-
         [Fact]
         public void Grid_CreatesHtmlGridWithHtml()
         {
@@ -40,10 +38,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Grid<T>(this HtmlHelper html, String partialViewName, IEnumerable<T> source)
 
         [Fact]
         public void Grid_PartialViewName_CreatesHtmlGridWithHtml()
@@ -72,10 +66,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        #endregion
-
-        #region AjaxGrid(this HtmlHelper, String dataSource, Object htmlAttributes = null)
-
         [Fact]
         public void AjaxGrid_Div()
         {
@@ -102,10 +92,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        #endregion
-
-        #region AddMvcGrid(this IServiceCollection services)
-
         [Fact]
         public void AddMvcGrid_FiltersInstance()
         {
@@ -118,10 +104,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(typeof(IGridFilters), actual.ServiceType);
             Assert.IsType<GridFilters>(actual.ImplementationInstance);
         }
-
-        #endregion
-
-        #region AddMvcGrid(this IServiceCollection services, Action<GridFilters> configure)
 
         [Fact]
         public void AddMvcGrid_ConfiguredFiltersInstance()
@@ -148,7 +130,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             configure.Received()(actual.ImplementationInstance as GridFilters);
         }
-
-        #endregion
     }
 }

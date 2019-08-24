@@ -35,8 +35,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }.AsQueryable();
         }
 
-        #region Options
-
         [Fact]
         public void Options_Set_Caches()
         {
@@ -87,10 +85,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Operator
 
         [Fact]
         public void Operator_Set_Caches()
@@ -171,10 +165,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
-
-        #region First
 
         [Fact]
         public void First_Set_Caches()
@@ -267,10 +257,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal("contains", actual.Method);
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Second
 
         [Fact]
         public void Second_Set_Caches()
@@ -387,10 +373,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal("equals", actual.Method);
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region GridColumnFilter(IGridColumn<T, TValue> column)
 
         [Fact]
         public void GridColumnFilter_SetsColumn()
@@ -609,10 +591,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Null(new GridColumnFilter<GridModel, String>(column).IsEnabled);
         }
 
-        #endregion
-
-        #region Apply(IQueryable<T> items)
-
         [Theory]
         [InlineData(null)]
         [InlineData(false)]
@@ -738,10 +716,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        #endregion
-
-        #region Test helpers
-
         private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
@@ -751,7 +725,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

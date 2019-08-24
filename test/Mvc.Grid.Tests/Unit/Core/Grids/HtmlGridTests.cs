@@ -28,8 +28,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             grid.Columns.Add(model => model.Sum);
         }
 
-        #region HtmlGrid(HtmlHelper html, IGrid<T> grid)
-
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
@@ -114,10 +112,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region WriteTo(TextWriter writer, IHtmlEncoder encoder)
-
         [Fact]
         public void WriteTo_WritesPartialView()
         {
@@ -132,7 +126,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

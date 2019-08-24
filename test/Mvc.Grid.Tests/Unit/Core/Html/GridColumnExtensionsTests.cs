@@ -21,8 +21,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Filter = new GridColumnFilter<GridModel, String>(column);
         }
 
-        #region RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Int32, Object> value)
-
         [Fact]
         public void RenderedAs_SetsIndexedRenderValue()
         {
@@ -40,10 +38,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
 
         [Fact]
         public void RenderedAs_SetsRenderValue()
@@ -64,10 +58,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
 
         [Theory]
         [InlineData(null, "equals")]
@@ -107,10 +97,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
 
         [Theory]
         [InlineData(null, "equals")]
@@ -169,10 +155,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region UsingDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
-
         [Fact]
         public void UsingDefaultFilterMethod_SetsDefaultFilterMethod()
         {
@@ -190,10 +172,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Filterable<T, TValue>(this IGridColumn<T, TValue> column, GridFilterType type)
 
         [Fact]
         public void Filterable_SetsType()
@@ -221,10 +199,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
-
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -245,10 +219,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region FilteredAs<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
-
         [Fact]
         public void FilteredAs_SetsFilterName()
         {
@@ -266,10 +236,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region InitialSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
 
         [Fact]
         public void InitialSort_SetsInitialSortOrder()
@@ -289,10 +255,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region FirstSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
-
         [Fact]
         public void FirstSort_SetsFirstOrder()
         {
@@ -310,10 +272,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Sortable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isSortable)
 
         [Theory]
         [InlineData(true)]
@@ -335,10 +293,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Encoded<T, TValue>(this IGridColumn<T, TValue> column, Boolean isEncoded)
-
         [Fact]
         public void Encoded_SetsIsEncoded()
         {
@@ -353,10 +307,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Formatted<T, TValue>(this IGridColumn<T, TValue> column, String format)
 
         [Fact]
         public void Formatted_SetsFormat()
@@ -375,10 +325,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region AppendCss<T, TValue>(this IGridColumn<T, TValue> column, String css)
 
         [Theory]
         [InlineData("", "", "")]
@@ -424,10 +370,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Titled<T, TValue>(this IGridColumn<T, TValue> column, Object title)
-
         [Theory]
         [InlineData(1)]
         [InlineData("")]
@@ -449,10 +391,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
 
         [Theory]
         [InlineData("", "")]
@@ -481,10 +419,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Css<T, TValue>(this IGridColumn<T, TValue> column, String css)
-
         [Fact]
         public void Css_SetsCssClasses()
         {
@@ -503,10 +437,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Hidden<T, TValue>(this IGridColumn<T, TValue> column)
-
         [Fact]
         public void Hidden_SetsHidden()
         {
@@ -523,7 +453,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
     }
 }

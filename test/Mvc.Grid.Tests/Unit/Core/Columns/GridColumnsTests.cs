@@ -14,8 +14,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             columns = new GridColumns<GridModel>(new Grid<GridModel>(new GridModel[0]));
         }
 
-        #region GridColumns(IGrid<T> grid)
-
         [Fact]
         public void GridColumns_SetsGrid()
         {
@@ -24,10 +22,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
-
-        #region Add()
 
         [Fact]
         public void Add_GridColumn()
@@ -51,10 +45,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Grid, actual.Grid);
         }
-
-        #endregion
-
-        #region Add<TValue>(Expression<Func<T, TValue>> expression)
 
         [Fact]
         public void Add_Expression_GridColumn()
@@ -100,10 +90,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        #endregion
-
-        #region Insert(Int32 index)
-
         [Fact]
         public void Insert_GridColumn()
         {
@@ -127,10 +113,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Grid, actual.Grid);
         }
-
-        #endregion
-
-        #region Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
 
         [Fact]
         public void Insert_Expression_GridColumn()
@@ -176,7 +158,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
-
-        #endregion
     }
 }

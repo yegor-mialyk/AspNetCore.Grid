@@ -7,8 +7,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class StringNotEqualsFilterTests
     {
-        #region Apply(Expression expression)
-
         [Theory]
         [InlineData("")]
         [InlineData(null)]
@@ -75,7 +73,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

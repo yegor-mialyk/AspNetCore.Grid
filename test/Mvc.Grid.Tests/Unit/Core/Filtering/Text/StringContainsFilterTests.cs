@@ -7,8 +7,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class StringContainsFilterTests
     {
-        #region Apply(Expression expression)
-
         [Theory]
         [InlineData("")]
         [InlineData(null)]
@@ -47,7 +45,5 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Null(filter.Apply(expression));
         }
-
-        #endregion
     }
 }
