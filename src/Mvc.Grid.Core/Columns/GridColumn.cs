@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -76,7 +75,9 @@ namespace NonFactors.Mvc.Grid
         }
         private String NameFor(Expression<Func<T, TValue>> expression)
         {
-            String text = ExpressionHelper.GetExpressionText(expression).Replace("_", "-");
+            String text = expression.Body is MemberExpression member ? member.ToString() : "";
+            text = text.IndexOf('.') > 0 ? text.Substring(text.IndexOf('.') + 1) : text;
+            text = text.Replace("_", "-");
 
             return String.Join("-", Regex.Split(text, "(?<=[a-zA-Z])(?=[A-Z])")).ToLower();
         }

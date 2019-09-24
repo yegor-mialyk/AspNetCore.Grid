@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
