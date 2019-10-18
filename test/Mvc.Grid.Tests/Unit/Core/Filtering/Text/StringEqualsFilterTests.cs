@@ -34,7 +34,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersItemsByIgnoringCase()
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new [] { "Test" } };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "Test" } };
 
             IQueryable<GridModel> items = new[]
             {

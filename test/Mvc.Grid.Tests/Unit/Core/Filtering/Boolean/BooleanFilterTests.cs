@@ -46,7 +46,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableEqualsFilter(String value, Boolean? isChecked)
         {
             filter.Method = "equals";
-            filter.Values = new [] { value };
+            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nBooleanExpression, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked == isChecked);

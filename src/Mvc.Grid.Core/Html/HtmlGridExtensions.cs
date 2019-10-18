@@ -125,7 +125,7 @@ namespace NonFactors.Mvc.Grid
 
         public static IHtmlGrid<T> Pageable<T>(this IHtmlGrid<T> html, Action<IGridPager<T>> builder)
         {
-            builder(html.Grid.Pager = html.Grid.Pager ?? new GridPager<T>(html.Grid));
+            builder(html.Grid.Pager ??= new GridPager<T>(html.Grid));
 
             html.Grid.Processors.Add(html.Grid.Pager);
 

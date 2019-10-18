@@ -4,6 +4,7 @@
     <Version>5.0.1</Version>
     <DebugType>Full</DebugType>
     <Company>NonFactors</Company>
+    <LangVersion>8.0</LangVersion>
     <GenerateFullPaths>true</GenerateFullPaths>
     <Copyright>Copyright © NonFactors</Copyright>
     <PackageId>NonFactors.Grid.Core.Mvc6</PackageId>

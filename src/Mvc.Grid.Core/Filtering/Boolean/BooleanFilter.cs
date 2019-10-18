@@ -15,15 +15,12 @@ namespace NonFactors.Mvc.Grid
             {
                 Object boolValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
 
-                switch (Method)
+                return Method switch
                 {
-                    case "equals":
-                        return Expression.Equal(expression, Expression.Constant(boolValue, expression.Type));
-                    case "not-equals":
-                        return Expression.NotEqual(expression, Expression.Constant(boolValue, expression.Type));
-                    default:
-                        return null;
-                }
+                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(boolValue, expression.Type)),
+                    "equals" => Expression.Equal(expression, Expression.Constant(boolValue, expression.Type)),
+                    _ => null
+                };
             }
             catch
             {

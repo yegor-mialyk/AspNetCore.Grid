@@ -15,23 +15,16 @@ namespace NonFactors.Mvc.Grid
             {
                 Object dateValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
 
-                switch (Method)
+                return Method switch
                 {
-                    case "equals":
-                        return Expression.Equal(expression, Expression.Constant(dateValue, expression.Type));
-                    case "not-equals":
-                        return Expression.NotEqual(expression, Expression.Constant(dateValue, expression.Type));
-                    case "earlier-than":
-                        return Expression.LessThan(expression, Expression.Constant(dateValue, expression.Type));
-                    case "later-than":
-                        return Expression.GreaterThan(expression, Expression.Constant(dateValue, expression.Type));
-                    case "earlier-than-or-equal":
-                        return Expression.LessThanOrEqual(expression, Expression.Constant(dateValue, expression.Type));
-                    case "later-than-or-equal":
-                        return Expression.GreaterThanOrEqual(expression, Expression.Constant(dateValue, expression.Type));
-                    default:
-                        return null;
-                }
+                    "later-than-or-equal" => Expression.GreaterThanOrEqual(expression, Expression.Constant(dateValue, expression.Type)),
+                    "earlier-than-or-equal" => Expression.LessThanOrEqual(expression, Expression.Constant(dateValue, expression.Type)),
+                    "later-than" => Expression.GreaterThan(expression, Expression.Constant(dateValue, expression.Type)),
+                    "earlier-than" => Expression.LessThan(expression, Expression.Constant(dateValue, expression.Type)),
+                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(dateValue, expression.Type)),
+                    "equals" => Expression.Equal(expression, Expression.Constant(dateValue, expression.Type)),
+                    _ => null
+                };
             }
             catch
             {

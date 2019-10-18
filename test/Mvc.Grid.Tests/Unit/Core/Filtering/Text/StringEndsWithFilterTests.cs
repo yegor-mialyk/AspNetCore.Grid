@@ -14,7 +14,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String>> expression = (model) => model.Name;
 
-            Assert.Null(new StringEndsWithFilter { Method = "ends-with", Values = new [] { value } }.Apply(expression));
+            Assert.Null(new StringEndsWithFilter { Method = "ends-with", Values = new[] { value } }.Apply(expression));
         }
 
         [Fact]

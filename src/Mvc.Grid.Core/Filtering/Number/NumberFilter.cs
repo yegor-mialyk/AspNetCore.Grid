@@ -15,23 +15,16 @@ namespace NonFactors.Mvc.Grid
             {
                 Object numberValue = String.IsNullOrEmpty(value) ? null : TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(value);
 
-                switch (Method)
+                return Method switch
                 {
-                    case "equals":
-                        return Expression.Equal(expression, Expression.Constant(numberValue, expression.Type));
-                    case "not-equals":
-                        return Expression.NotEqual(expression, Expression.Constant(numberValue, expression.Type));
-                    case "less-than":
-                        return Expression.LessThan(expression, Expression.Constant(numberValue, expression.Type));
-                    case "greater-than":
-                        return Expression.GreaterThan(expression, Expression.Constant(numberValue, expression.Type));
-                    case "less-than-or-equal":
-                        return Expression.LessThanOrEqual(expression, Expression.Constant(numberValue, expression.Type));
-                    case "greater-than-or-equal":
-                        return Expression.GreaterThanOrEqual(expression, Expression.Constant(numberValue, expression.Type));
-                    default:
-                        return null;
-                }
+                    "greater-than-or-equal" => Expression.GreaterThanOrEqual(expression, Expression.Constant(numberValue, expression.Type)),
+                    "less-than-or-equal" => Expression.LessThanOrEqual(expression, Expression.Constant(numberValue, expression.Type)),
+                    "greater-than" => Expression.GreaterThan(expression, Expression.Constant(numberValue, expression.Type)),
+                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(numberValue, expression.Type)),
+                    "less-than" => Expression.LessThan(expression, Expression.Constant(numberValue, expression.Type)),
+                    "equals" => Expression.Equal(expression, Expression.Constant(numberValue, expression.Type)),
+                    _ => null
+                };
             }
             catch
             {

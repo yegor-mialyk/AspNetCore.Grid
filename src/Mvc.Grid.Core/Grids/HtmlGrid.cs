@@ -16,8 +16,8 @@ namespace NonFactors.Mvc.Grid
             Html = html;
             Grid = grid;
             PartialViewName = "MvcGrid/_Grid";
-            grid.ViewContext = grid.ViewContext ?? html.ViewContext;
-            grid.Query = grid.Query ?? grid.ViewContext.HttpContext.Request.Query;
+            grid.ViewContext ??= html.ViewContext;
+            grid.Query ??= grid.ViewContext.HttpContext.Request.Query;
         }
 
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)

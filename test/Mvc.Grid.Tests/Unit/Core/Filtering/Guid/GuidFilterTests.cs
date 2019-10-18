@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableEqualsFilter(String value)
         {
             filter.Method = "equals";
-            filter.Values = new [] { value };
+            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nGuidExpression, filter);
             IEnumerable expected = items.Where(model => model.NGuid == (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));

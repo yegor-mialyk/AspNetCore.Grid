@@ -15,15 +15,12 @@ namespace NonFactors.Mvc.Grid
             {
                 Object enumValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
 
-                switch (Method)
+                return Method switch
                 {
-                    case "equals":
-                        return Expression.Equal(expression, Expression.Constant(enumValue, expression.Type));
-                    case "not-equals":
-                        return Expression.NotEqual(expression, Expression.Constant(enumValue, expression.Type));
-                    default:
-                        return null;
-                }
+                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(enumValue, expression.Type)),
+                    "equals" => Expression.Equal(expression, Expression.Constant(enumValue, expression.Type)),
+                    _ => null
+                };
             }
             catch
             {
