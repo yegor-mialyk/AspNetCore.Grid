@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridRows_SetsGrid()
         {
-            IGrid<GridModel> expected = new Grid<GridModel>(new GridModel[0]);
+            IGrid<GridModel> expected = new Grid<GridModel>(Array.Empty<GridModel>());
             IGrid<GridModel> actual = new GridRows<GridModel>(expected).Grid;
 
             Assert.Same(expected, actual);
@@ -97,7 +97,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IQueryable<GridModel> items = new[] { new GridModel(), new GridModel() }.AsQueryable();
             IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
-            preProcessor.Process(items).Returns(new GridModel[0].AsQueryable());
+            preProcessor.Process(items).Returns(Array.Empty<GridModel>().AsQueryable());
             preProcessor.ProcessorType = GridProcessorType.Pre;
             Grid<GridModel> grid = new Grid<GridModel>(items);
 

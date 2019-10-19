@@ -11,7 +11,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnSortTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            IGrid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
             GridColumn<GridModel, Object?> column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
 
             sort = new GridColumnSort<GridModel, Object?>(column) { IsEnabled = true };

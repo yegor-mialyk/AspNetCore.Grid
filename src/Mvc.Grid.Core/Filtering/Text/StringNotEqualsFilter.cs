@@ -17,7 +17,7 @@ namespace NonFactors.Mvc.Grid
             }
 
             Expression expressionValue = Expression.Constant(value?.ToUpper());
-            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), new Type[0])!;
+            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), Array.Empty<Type>())!;
 
             Expression toUpper = Expression.Call(expression, toUpperMethod);
             Expression notEquals = Expression.NotEqual(toUpper, expressionValue);

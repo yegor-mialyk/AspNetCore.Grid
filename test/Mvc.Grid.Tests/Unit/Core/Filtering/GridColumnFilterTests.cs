@@ -16,7 +16,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnFilterTests()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
             GridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(grid, model => model.Name);
 
             filter = new GridColumnFilter<GridModel, String?>(column) { IsEnabled = true };
@@ -56,7 +56,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Column.Grid.ViewContext = new ViewContext();
             IGridFilters filters = Substitute.For<IGridFilters>();
-            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
             filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
@@ -71,13 +71,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Column.Grid.ViewContext = new ViewContext();
             IGridFilters filters = Substitute.For<IGridFilters>();
-            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
             filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
             filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
             Object options = filter.Options;
 
-            filters.OptionsFor(filter.Column).Returns(new SelectListItem[0]);
+            filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
 
             Object actual = filter.Options;
             Object expected = options;
@@ -705,7 +705,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersByExpressions()
         {
-            GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(new GridModel[0]), model => model.NSum);
+            GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(Array.Empty<GridModel>()), model => model.NSum);
             GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn)
             {
                 Second = new NumberFilter<Int32> { Method = "greater-than", Values = new[] { "25" } },
@@ -723,7 +723,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             String actual = new GridColumnFilter<GridModel, TValue>(new GridColumn<GridModel, TValue>(grid, property)).Name;
             String expected = name;

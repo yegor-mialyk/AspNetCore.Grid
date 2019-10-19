@@ -66,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.Filter.DefaultMethod = current;
 
-            String? actual = column.UsingFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
+            String? actual = column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.DefaultMethod;
             String? expected = method;
 
             Assert.Equal(expected, actual);
@@ -75,7 +75,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void UsingFilterOptions_SetsOptions()
         {
-            IEnumerable<SelectListItem> expected = new SelectListItem[0];
+            IEnumerable<SelectListItem> expected = Array.Empty<SelectListItem>();
             IEnumerable<SelectListItem> actual = column.UsingFilterOptions(expected).Filter.Options;
 
             Assert.Same(expected, actual);
@@ -86,14 +86,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.Filter.IsEnabled = false;
 
-            Assert.True(column.UsingFilterOptions(new SelectListItem[0]).Filter.IsEnabled);
+            Assert.True(column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.IsEnabled);
         }
 
         [Fact]
         public void UsingFilterOptions_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.UsingFilterOptions(new SelectListItem[0]);
+            Object actual = column.UsingFilterOptions(Array.Empty<SelectListItem>());
 
             Assert.Same(expected, actual);
         }

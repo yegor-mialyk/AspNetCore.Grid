@@ -18,7 +18,7 @@ namespace NonFactors.Mvc.Grid
         protected override Expression? Apply(Expression expression, String? value)
         {
             Expression expressionValue = Expression.Constant(value?.ToUpper());
-            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), new Type[0])!;
+            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), Array.Empty<Type>())!;
             MethodInfo startsWithMethod = typeof(String).GetMethod(nameof(String.StartsWith), new[] { typeof(String) })!;
 
             Expression toUpper = Expression.Call(expression, toUpperMethod);

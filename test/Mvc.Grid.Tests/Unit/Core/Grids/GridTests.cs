@@ -9,7 +9,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void IGrid_ReturnsColumns()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             Object actual = ((IGrid)grid).Columns;
             Object expected = grid.Columns;
@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void IGrid_ReturnsRows()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             Object actual = ((IGrid)grid).Rows;
             Object expected = grid.Rows;
@@ -31,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void IGrid_ReturnsPager()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             Object? actual = ((IGrid)grid).Pager;
             Object? expected = grid.Pager;
@@ -42,25 +42,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsName()
         {
-            Assert.Empty(new Grid<GridModel>(new GridModel[0]).Name);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Name);
         }
 
         [Fact]
         public void Grid_SetsSourceUrl()
         {
-            Assert.Empty(new Grid<GridModel>(new GridModel[0]).SourceUrl);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).SourceUrl);
         }
 
         [Fact]
         public void Grid_SetsFooterPartialViewName()
         {
-            Assert.Empty(new Grid<GridModel>(new GridModel[0]).FooterPartialViewName);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).FooterPartialViewName);
         }
 
         [Fact]
         public void Grid_SetsProcessors()
         {
-            Assert.Empty(new Grid<GridModel>(new GridModel[0]).Processors);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Processors);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsFilterMode()
         {
-            GridFilterMode actual = new Grid<GridModel>(new GridModel[0]).FilterMode;
+            GridFilterMode actual = new Grid<GridModel>(Array.Empty<GridModel>()).FilterMode;
             GridFilterMode expected = GridFilterMode.Excel;
 
             Assert.Equal(expected, actual);
@@ -84,13 +84,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsEmptyAttributes()
         {
-            Assert.Empty(new Grid<GridModel>(new GridModel[0]).Attributes);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Attributes);
         }
 
         [Fact]
         public void Grid_SetsColumns()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             GridColumns<GridModel> actual = (GridColumns<GridModel>)grid.Columns;
             GridColumns<GridModel> expected = new GridColumns<GridModel>(grid);
@@ -102,7 +102,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsMode()
         {
-            GridProcessingMode actual = new Grid<GridModel>(new GridModel[0]).Mode;
+            GridProcessingMode actual = new Grid<GridModel>(Array.Empty<GridModel>()).Mode;
             GridProcessingMode expected = GridProcessingMode.Automatic;
 
             Assert.Equal(expected, actual);
@@ -111,7 +111,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_SetsRows()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
             GridRows<GridModel> expected = new GridRows<GridModel>(grid);
             GridRows<GridModel> actual = (GridRows<GridModel>)grid.Rows;

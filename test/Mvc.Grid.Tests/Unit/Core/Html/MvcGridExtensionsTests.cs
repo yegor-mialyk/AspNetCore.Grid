@@ -25,7 +25,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Grid_CreatesHtmlGridWithHtml()
         {
             Object expected = html;
-            Object actual = html.Grid(new GridModel[0]).Html;
+            Object actual = html.Grid(Array.Empty<GridModel>()).Html;
 
             Assert.Same(expected, actual);
         }
@@ -33,7 +33,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_CreatesGridWithSource()
         {
-            IEnumerable<GridModel> expected = new GridModel[0].AsQueryable();
+            IEnumerable<GridModel> expected = Array.Empty<GridModel>().AsQueryable();
             IEnumerable<GridModel> actual = html.Grid(expected).Grid.Source;
 
             Assert.Same(expected, actual);
@@ -43,7 +43,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Grid_PartialViewName_CreatesHtmlGridWithHtml()
         {
             Object expected = html;
-            Object actual = html.Grid("_Partial", new GridModel[0]).Html;
+            Object actual = html.Grid("_Partial", Array.Empty<GridModel>()).Html;
 
             Assert.Same(expected, actual);
         }
@@ -51,7 +51,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_PartialViewName_CreatesGridWithSource()
         {
-            IEnumerable<GridModel> expected = new GridModel[0].AsQueryable();
+            IEnumerable<GridModel> expected = Array.Empty<GridModel>().AsQueryable();
             IEnumerable<GridModel> actual = html.Grid("_Partial", expected).Grid.Source;
 
             Assert.Same(expected, actual);
@@ -60,7 +60,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Grid_PartialViewName_CreatesGridWithPartialViewName()
         {
-            String actual = html.Grid("_Partial", new GridModel[0]).PartialViewName;
+            String actual = html.Grid("_Partial", Array.Empty<GridModel>()).PartialViewName;
             String expected = "_Partial";
 
             Assert.Equal(expected, actual);

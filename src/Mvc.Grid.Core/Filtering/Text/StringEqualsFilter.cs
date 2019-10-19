@@ -16,7 +16,7 @@ namespace NonFactors.Mvc.Grid
                 return Expression.OrElse(equalsNull, isEmpty);
             }
 
-            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), new Type[0])!;
+            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), Array.Empty<Type>())!;
             Expression expressionValue = Expression.Constant(value?.ToUpper());
 
             Expression notNull = Expression.NotEqual(expression, Expression.Constant(null, expression.Type));

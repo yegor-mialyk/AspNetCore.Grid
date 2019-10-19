@@ -11,7 +11,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnsTests()
         {
-            columns = new GridColumns<GridModel>(new Grid<GridModel>(new GridModel[0]));
+            columns = new GridColumns<GridModel>(new Grid<GridModel>(Array.Empty<GridModel>()));
         }
 
         [Fact]
