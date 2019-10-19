@@ -132,7 +132,7 @@
         <tbody>
         @foreach (IGridRow<Object> row in Model.Rows)
         {
-            <!tr class="@row.CssClasses"@row.Attributes>
+            <!tr@(row.Attributes)>
             @foreach (IGridColumn column in Model.Columns)
             {
                 String classes = column.IsHidden ? column.CssClasses + " mvc-grid-hidden" : column.CssClasses;
