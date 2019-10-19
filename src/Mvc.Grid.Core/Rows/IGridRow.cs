@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid
         T Model { get; }
         Int32 Index { get; }
 
-        String CssClasses { get; set; }
-        GridHtmlAttributes Attributes { get; set; }
+        String? CssClasses { get; set; }
+        GridHtmlAttributes? Attributes { get; set; }
     }
 }

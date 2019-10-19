@@ -90,22 +90,22 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
-        public static IHtmlGrid<T> Id<T>(this IHtmlGrid<T> html, String id)
+        public static IHtmlGrid<T> Id<T>(this IHtmlGrid<T> html, String? id)
         {
             html.Grid.Id = id;
 
             return html;
         }
 
-        public static IHtmlGrid<T> UsingProcessor<T>(this IHtmlGrid<T> html, IGridProcessor<T> processor)
-        {
-            html.Grid.Processors.Add(processor);
-
-            return html;
-        }
         public static IHtmlGrid<T> UsingProcessingMode<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
         {
             html.Grid.Mode = mode;
+
+            return html;
+        }
+        public static IHtmlGrid<T> UsingProcessor<T>(this IHtmlGrid<T> html, IGridProcessor<T> processor)
+        {
+            html.Grid.Processors.Add(processor);
 
             return html;
         }

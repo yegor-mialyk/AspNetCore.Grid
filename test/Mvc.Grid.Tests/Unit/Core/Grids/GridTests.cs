@@ -11,7 +11,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            Object actual = ((IGrid) grid).Columns;
+            Object actual = ((IGrid)grid).Columns;
             Object expected = grid.Columns;
 
             Assert.Same(expected, actual);
@@ -22,7 +22,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            Object actual = ((IGrid) grid).Rows;
+            Object actual = ((IGrid)grid).Rows;
             Object expected = grid.Rows;
 
             Assert.Same(expected, actual);
@@ -33,10 +33,28 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            Object actual = ((IGrid)grid).Pager;
-            Object expected = grid.Pager;
+            Object? actual = ((IGrid)grid).Pager;
+            Object? expected = grid.Pager;
 
             Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Grid_SetsName()
+        {
+            Assert.Empty(new Grid<GridModel>(new GridModel[0]).Name);
+        }
+
+        [Fact]
+        public void Grid_SetsSourceUrl()
+        {
+            Assert.Empty(new Grid<GridModel>(new GridModel[0]).SourceUrl);
+        }
+
+        [Fact]
+        public void Grid_SetsFooterPartialViewName()
+        {
+            Assert.Empty(new Grid<GridModel>(new GridModel[0]).FooterPartialViewName);
         }
 
         [Fact]
@@ -74,7 +92,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            GridColumns<GridModel> actual = grid.Columns as GridColumns<GridModel>;
+            GridColumns<GridModel> actual = (GridColumns<GridModel>)grid.Columns;
             GridColumns<GridModel> expected = new GridColumns<GridModel>(grid);
 
             Assert.Same(expected.Grid, actual.Grid);
@@ -95,8 +113,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
 
-            GridRows<GridModel> actual = grid.Rows as GridRows<GridModel>;
             GridRows<GridModel> expected = new GridRows<GridModel>(grid);
+            GridRows<GridModel> actual = (GridRows<GridModel>)grid.Rows;
 
             Assert.Same(expected.Grid, actual.Grid);
             Assert.Equal(expected, actual);

@@ -8,13 +8,13 @@ namespace NonFactors.Mvc.Grid
 {
     public static class GridColumnExtensions
     {
-        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Int32, Object> value)
+        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Int32, Object?> value)
         {
             column.RenderValue = value;
 
             return column;
         }
-        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object> value)
+        public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object?> value)
         {
             column.RenderValue = (t, i) => value(t);
 
@@ -23,7 +23,8 @@ namespace NonFactors.Mvc.Grid
 
         public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
         {
-            column.Filter.DefaultMethod ??= "equals";
+            if (String.IsNullOrEmpty(column.Filter.DefaultMethod))
+                column.Filter.DefaultMethod = "equals";
             column.Filter.Options = options;
             column.Filter.IsEnabled = true;
 
@@ -38,7 +39,7 @@ namespace NonFactors.Mvc.Grid
                 .OrderBy(column.Expression)
                 .Select(column.Expression)
                 .Where(value => value != null)
-                .Select(value => value.ToString())
+                .Select(value => value!.ToString())
                 .Distinct()
                 .Select(value => new SelectListItem
                 {
@@ -98,7 +99,7 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-        public static IGridColumn<T, TValue> Formatted<T, TValue>(this IGridColumn<T, TValue> column, String format)
+        public static IGridColumn<T, TValue> Formatted<T, TValue>(this IGridColumn<T, TValue> column, String? format)
         {
             column.Format = format;
 
@@ -124,7 +125,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String css)
         {
-            column.CssClasses = css?.Trim();
+            column.CssClasses = css?.Trim() ?? "";
 
             return column;
         }

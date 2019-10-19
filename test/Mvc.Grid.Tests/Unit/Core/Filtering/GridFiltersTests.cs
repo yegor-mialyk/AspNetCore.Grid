@@ -10,13 +10,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
     public class GridFiltersTests
     {
         private GridFilters filters;
-        private IGridColumn<GridModel, String> column;
+        private IGridColumn<GridModel, String?> column;
 
         public GridFiltersTests()
         {
             filters = new GridFilters();
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
-            column = new GridColumn<GridModel, String>(grid, model => model.Name);
+            column = new GridColumn<GridModel, String?>(grid, model => model.Name);
         }
 
         [Fact]
@@ -156,10 +156,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Create_ForNullableType()
         {
-            IGridFilter actual = filters.Create(typeof(Int32?), "EQUALS", new String[0]);
+            IGridFilter? actual = filters.Create(typeof(Int32?), "EQUALS", new String[0]);
 
-            Assert.IsType<NumberFilter<Int32>>(actual);
-            Assert.Equal("equals", actual.Method);
+            Assert.Equal("equals", Assert.IsType<NumberFilter<Int32>>(actual).Method);
         }
 
         [Fact]
@@ -167,55 +166,52 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filters.Register(typeof(TestEnum), "equals", typeof(StringEqualsFilter));
 
-            IGridFilter actual = filters.Create(typeof(TestEnum), "EQUALS", new String[0]);
+            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", new String[0]);
 
-            Assert.IsType<StringEqualsFilter>(actual);
-            Assert.Equal("equals", actual.Method);
+            Assert.Equal("equals", Assert.IsType<StringEqualsFilter>(actual).Method);
         }
 
         [Fact]
         public void Create_ForEnumType()
         {
-            IGridFilter actual = filters.Create(typeof(TestEnum), "EQUALS", new String[0]);
+            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", new String[0]);
 
-            Assert.Equal("equals", actual.Method);
-            Assert.IsType<EnumFilter>(actual);
+            Assert.Equal("equals", Assert.IsType<EnumFilter>(actual).Method);
         }
 
         [Fact]
         public void Create_ForType()
         {
-            IGridFilter actual = filters.Create(typeof(String), "CONTAINS", new String[0]);
+            IGridFilter? actual = filters.Create(typeof(String), "CONTAINS", new String[0]);
 
-            Assert.IsType<StringContainsFilter>(actual);
-            Assert.Equal("contains", actual.Method);
+            Assert.Equal("contains", Assert.IsType<StringContainsFilter>(actual).Method);
         }
 
         [Fact]
         public void OptionsFor_ForBoolean()
         {
-            SelectListItem[] actual = filters.OptionsFor<GridModel, Boolean>(null).ToArray();
+            SelectListItem[] actual = filters.OptionsFor(Substitute.For<IGridColumn<GridModel, Boolean>>()).ToArray();
 
             Assert.Equal(3, actual.Length);
             Assert.Equal("", actual[0].Value);
             Assert.Equal("true", actual[1].Value);
             Assert.Equal("false", actual[2].Value);
-            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
             Assert.Equal(filters.BooleanTrueOptionText(), actual[1].Text);
+            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
             Assert.Equal(filters.BooleanFalseOptionText(), actual[2].Text);
         }
 
         [Fact]
         public void OptionsFor_ForNullableBoolean()
         {
-            SelectListItem[] actual = filters.OptionsFor<GridModel, Boolean?>(null).ToArray();
+            SelectListItem[] actual = filters.OptionsFor(Substitute.For<IGridColumn<GridModel, Boolean?>>()).ToArray();
 
             Assert.Equal(3, actual.Length);
             Assert.Equal("", actual[0].Value);
             Assert.Equal("true", actual[1].Value);
             Assert.Equal("false", actual[2].Value);
-            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
             Assert.Equal(filters.BooleanTrueOptionText(), actual[1].Text);
+            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
             Assert.Equal(filters.BooleanFalseOptionText(), actual[2].Text);
         }
 
@@ -255,7 +251,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void OptionsFor_ForOtherTypes()
         {
-            Assert.Empty(filters.OptionsFor<GridModel, String>(null));
+            Assert.Empty(filters.OptionsFor(Substitute.For<IGridColumn<GridModel, String>>()));
         }
 
         [Fact]

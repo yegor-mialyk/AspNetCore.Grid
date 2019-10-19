@@ -125,7 +125,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerator expected = rows.GetEnumerator();
 
             while (expected.MoveNext() | actual.MoveNext())
-                Assert.Same((expected.Current as IGridRow<GridModel>).Model, (actual.Current as IGridRow<GridModel>).Model);
+                Assert.Same(((IGridRow<GridModel>?)expected.Current)?.Model, ((IGridRow<GridModel>?)actual.Current)?.Model);
         }
     }
 }

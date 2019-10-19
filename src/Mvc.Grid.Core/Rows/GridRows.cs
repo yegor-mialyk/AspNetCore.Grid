@@ -9,9 +9,9 @@ namespace NonFactors.Mvc.Grid
     {
         public IGrid<T> Grid { get; set; }
 
-        public Func<T, Object> Attributes { get; set; }
+        public Func<T, Object>? Attributes { get; set; }
 
-        private IEnumerable<IGridRow<T>> Cache { get; set; }
+        private IEnumerable<IGridRow<T>>? Cache { get; set; }
 
         public GridRows(IGrid<T> grid)
         {

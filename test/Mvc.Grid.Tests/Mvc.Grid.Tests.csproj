@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>5.0.1</Version>
+    <Version>5.1.0</Version>
+    <Nullable>enable</Nullable>
     <DebugType>Full</DebugType>
     <Company>NonFactors</Company>
     <LangVersion>8.0</LangVersion>
@@ -9,7 +10,7 @@
     <Copyright>Copyright © NonFactors</Copyright>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>NonFactors.Mvc.Grid.Tests</RootNamespace>
-    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

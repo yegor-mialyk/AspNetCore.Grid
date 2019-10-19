@@ -16,9 +16,9 @@ namespace NonFactors.Mvc.Grid
                 if (IsEnabled == true && !OrderIsSet)
                 {
                     String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                    if (String.Equals(Column.Grid.Query[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
+                    if (String.Equals(Column.Grid.Query?[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        String order = Column.Grid.Query[prefix + "order"];
+                        String? order = Column.Grid.Query?[prefix + "order"];
 
                         if ("asc".Equals(order, StringComparison.OrdinalIgnoreCase))
                             Order = GridSortOrder.Asc;
@@ -27,7 +27,7 @@ namespace NonFactors.Mvc.Grid
                         else
                             Order = null;
                     }
-                    else if (Column.Grid.Query[prefix + "sort"] == StringValues.Empty)
+                    else if ((Column.Grid.Query?[prefix + "sort"] ?? StringValues.Empty) == StringValues.Empty)
                     {
                         Order = InitialOrder;
                     }

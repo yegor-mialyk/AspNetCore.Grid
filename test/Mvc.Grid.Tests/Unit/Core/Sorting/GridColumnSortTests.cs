@@ -7,14 +7,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnSortTests
     {
-        private GridColumnSort<GridModel, Object> sort;
+        private GridColumnSort<GridModel, Object?> sort;
 
         public GridColumnSortTests()
         {
             IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
-            GridColumn<GridModel, Object> column = new GridColumn<GridModel, Object>(grid, model => model.Name);
+            GridColumn<GridModel, Object?> column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
 
-            sort = new GridColumnSort<GridModel, Object>(column) { IsEnabled = true };
+            sort = new GridColumnSort<GridModel, Object?>(column) { IsEnabled = true };
         }
 
         [Fact]
@@ -133,8 +133,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnSort_SetsColumn()
         {
-            IGridColumn<GridModel, String> expected = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.Name);
-            IGridColumn<GridModel, String> actual = new GridColumnSort<GridModel, String>(expected).Column;
+            IGridColumn<GridModel, String?> expected = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.Name);
+            IGridColumn<GridModel, String?> actual = new GridColumnSort<GridModel, String?>(expected).Column;
 
             Assert.Same(expected, actual);
         }
@@ -142,17 +142,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnSort_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.ToString());
+            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.ToString());
 
-            Assert.False(new GridColumnSort<GridModel, String>(column).IsEnabled);
+            Assert.False(new GridColumnSort<GridModel, String?>(column).IsEnabled);
         }
 
         [Fact]
         public void GridColumnSort_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(sort.Column.Grid, model => model.Name);
+            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.Name);
 
-            Assert.Null(new GridColumnSort<GridModel, String>(column).IsEnabled);
+            Assert.Null(new GridColumnSort<GridModel, String?>(column).IsEnabled);
         }
 
         [Fact]

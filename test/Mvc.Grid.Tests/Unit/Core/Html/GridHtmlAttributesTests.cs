@@ -19,14 +19,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             TextWriter writer = new StringWriter();
             new GridHtmlAttributes(new
             {
-                id= "",
+                id = "",
                 src = "test.png",
                 data_temp = 10000,
-                data_null = (String)null
+                data_null = (String?)null
             }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = " id=\"\" src=\"test.png\" data-temp=\"10000\"";
-            String actual = writer.ToString();
+            String? expected = " id=\"\" src=\"test.png\" data-temp=\"10000\"";
+            String? actual = writer.ToString();
 
             Assert.Equal(expected, actual);
         }
@@ -37,8 +37,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             TextWriter writer = new StringWriter();
             new GridHtmlAttributes(new { value = "Temp \"str\"" }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = " value=\"Temp &quot;str&quot;\"";
-            String actual = writer.ToString();
+            String? expected = " value=\"Temp &quot;str&quot;\"";
+            String? actual = writer.ToString();
 
             Assert.Equal(expected, actual);
         }

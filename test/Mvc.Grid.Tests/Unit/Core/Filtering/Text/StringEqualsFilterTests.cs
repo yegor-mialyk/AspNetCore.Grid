@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         public void Apply_FiltersEmptyOrNullValues(String value)
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { value } };
 
             IQueryable<GridModel> items = new[]
@@ -33,7 +33,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersItemsByIgnoringCase()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "Test" } };
 
             IQueryable<GridModel> items = new[]
@@ -54,7 +54,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_FiltersMultipleItems()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "Test", "TES" } };
 
             IQueryable<GridModel> items = new[]

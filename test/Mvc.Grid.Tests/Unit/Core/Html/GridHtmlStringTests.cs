@@ -19,8 +19,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             new GridHtmlString("<test>").WriteTo(writer, null);
 
-            String actual = writer.ToString();
-            String expected = "<test>";
+            String? actual = writer.ToString();
+            String? expected = "<test>";
 
             Assert.Equal(expected, actual);
         }
@@ -30,8 +30,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             new GridHtmlString("<test>").WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = HtmlEncoder.Default.Encode("<test>");
-            String actual = writer.ToString();
+            String? expected = HtmlEncoder.Default.Encode("<test>");
+            String? actual = writer.ToString();
 
             Assert.Equal(expected, actual);
         }

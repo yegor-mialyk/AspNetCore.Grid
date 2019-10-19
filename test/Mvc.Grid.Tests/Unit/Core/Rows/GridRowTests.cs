@@ -8,7 +8,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridRow_SetsIndex()
         {
-            Assert.Equal(3, new GridRow<Object>(null, 3).Index);
+            Assert.Equal(3, new GridRow<Object>(new Object(), 3).Index);
         }
 
         [Fact]

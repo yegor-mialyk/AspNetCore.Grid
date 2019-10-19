@@ -10,22 +10,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnExtensionsTests
     {
-        private IGridColumn<GridModel, String> column;
+        private IGridColumn<GridModel, String?> column;
 
         public GridColumnExtensionsTests()
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
-            column = Substitute.For<IGridColumn<GridModel, String>>();
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            column = Substitute.For<IGridColumn<GridModel, String?>>();
             column.Expression.Returns(expression);
 
-            column.Filter = new GridColumnFilter<GridModel, String>(column);
+            column.Filter = new GridColumnFilter<GridModel, String?>(column);
         }
 
         [Fact]
         public void RenderedAs_SetsIndexedRenderValue()
         {
-            Func<GridModel, Int32, Object> expected = (model, i) => model.Name;
-            Func<GridModel, Int32, Object> actual = column.RenderedAs(expected).RenderValue;
+            Func<GridModel, Int32, Object?>? expected = (model, i) => model.Name;
+            Func<GridModel, Int32, Object?>? actual = column.RenderedAs(expected).RenderValue;
 
             Assert.Same(expected, actual);
         }
@@ -44,8 +44,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             GridModel gridModel = new GridModel { Name = "Test" };
 
-            Object actual = column.RenderedAs(model => model.Name).RenderValue(gridModel, 0);
-            Object expected = gridModel.Name;
+            Object? actual = column.RenderedAs(model => model.Name).RenderValue?.Invoke(gridModel, 0);
+            Object? expected = gridModel.Name;
 
             Assert.Same(expected, actual);
         }
@@ -66,8 +66,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.Filter.DefaultMethod = current;
 
-            String actual = column.UsingFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
-            String expected = method;
+            String? actual = column.UsingFilterOptions(new SelectListItem[0]).Filter.DefaultMethod;
+            String? expected = method;
 
             Assert.Equal(expected, actual);
         }
@@ -105,8 +105,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.Filter.DefaultMethod = current;
 
-            String actual = column.UsingFilterOptions().Filter.DefaultMethod;
-            String expected = method;
+            String? actual = column.UsingFilterOptions().Filter.DefaultMethod;
+            String? expected = method;
 
             Assert.Equal(expected, actual);
         }
@@ -222,8 +222,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void FilteredAs_SetsFilterName()
         {
-            String actual = column.FilteredAs("Numeric").Filter.Name;
             String expected = "Numeric";
+            String actual = column.FilteredAs("Numeric").Filter.Name;
 
             Assert.Equal(expected, actual);
         }
@@ -311,8 +311,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Formatted_SetsFormat()
         {
-            String actual = column.Formatted("Format").Format;
-            String expected = "Format";
+            String? expected = "Format";
+            String? actual = column.Formatted("Format").Format;
 
             Assert.Equal(expected, actual);
         }
@@ -355,8 +355,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             column.CssClasses = current;
 
-            String expected = css;
-            String actual = column.AppendCss(toAppend).CssClasses;
+            String? expected = css;
+            String? actual = column.AppendCss(toAppend).CssClasses;
 
             Assert.Equal(expected, actual);
         }
@@ -371,14 +371,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData(1)]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("Title")]
-        public void Titled_SetsTitle(Object title)
+        [InlineData(1, 1)]
+        [InlineData("", "")]
+        [InlineData(null, "")]
+        [InlineData("Title", "Title")]
+        public void Titled_SetsTitle(Object rawTitle, Object title)
         {
-            Object expected = title ?? "";
-            Object actual = column.Titled(title).Title;
+            Object expected = title;
+            Object actual = column.Titled(rawTitle).Title;
 
             Assert.Equal(expected, actual);
         }
@@ -432,7 +432,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Css_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.Css(null);
+            Object actual = column.Css("");
 
             Assert.Same(expected, actual);
         }

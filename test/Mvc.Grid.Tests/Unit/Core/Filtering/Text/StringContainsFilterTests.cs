@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         public void Apply_NullOrEmptyValue_ReturnsNull(String value)
         {
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
             Assert.Null(new StringContainsFilter { Method = "contains", Values = new[] { value } }.Apply(expression));
         }
@@ -21,7 +21,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersItemsByIgnoringCase()
         {
             StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "Est" } };
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
             IQueryable<GridModel> items = new[]
             {
@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_FiltersMultipleItems()
         {
             StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "", "Est" } };
-            Expression<Func<GridModel, String>> expression = (model) => model.Name;
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
             Assert.Null(filter.Apply(expression));
         }

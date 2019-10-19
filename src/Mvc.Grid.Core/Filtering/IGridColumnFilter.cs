@@ -13,9 +13,9 @@ namespace NonFactors.Mvc.Grid
         GridFilterType? Type { get; set; }
         IEnumerable<SelectListItem> Options { get; set; }
 
-        String Operator { get; set; }
-        IGridFilter First { get; set; }
-        IGridFilter Second { get; set; }
+        String? Operator { get; set; }
+        IGridFilter? First { get; set; }
+        IGridFilter? Second { get; set; }
     }
     public interface IGridColumnFilter<T, TValue> : IGridColumnFilter
     {

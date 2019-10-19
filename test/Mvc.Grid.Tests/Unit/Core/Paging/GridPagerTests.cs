@@ -301,6 +301,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GridPager_SetsCssClasses()
+        {
+            Assert.Empty(new GridPager<GridModel>(pager.Grid).CssClasses);
+        }
+
+        [Fact]
         public void GridPager_SetsCurrentPage()
         {
             Int32 actual = new GridPager<GridModel>(pager.Grid).CurrentPage;

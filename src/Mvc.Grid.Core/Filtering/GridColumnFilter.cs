@@ -34,14 +34,14 @@ namespace NonFactors.Mvc.Grid
         }
         private IEnumerable<SelectListItem> OptionsValue { get; set; }
 
-        public virtual String Operator
+        public virtual String? Operator
         {
             get
             {
                 if (IsEnabled == true && Type == GridFilterType.Double && !OperatorIsSet)
                 {
                     String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                    Operator = Column.Grid.Query[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
+                    Operator = Column.Grid.Query?[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
                 }
 
                 return OperatorValue;
@@ -52,10 +52,10 @@ namespace NonFactors.Mvc.Grid
                 OperatorIsSet = true;
             }
         }
-        private String OperatorValue { get; set; }
+        private String? OperatorValue { get; set; }
         private Boolean OperatorIsSet { get; set; }
 
-        public virtual IGridFilter First
+        public virtual IGridFilter? First
         {
             get
             {
@@ -71,9 +71,9 @@ namespace NonFactors.Mvc.Grid
             }
         }
         private Boolean FirstIsSet { get; set; }
-        private IGridFilter FirstValue { get; set; }
+        private IGridFilter? FirstValue { get; set; }
 
-        public virtual IGridFilter Second
+        public virtual IGridFilter? Second
         {
             get
             {
@@ -89,7 +89,7 @@ namespace NonFactors.Mvc.Grid
             }
         }
         private Boolean SecondIsSet { get; set; }
-        private IGridFilter SecondValue { get; set; }
+        private IGridFilter? SecondValue { get; set; }
 
         public IGridColumn<T, TValue> Column { get; set; }
 
@@ -97,6 +97,8 @@ namespace NonFactors.Mvc.Grid
         {
             Column = column;
             Name = GetName();
+            DefaultMethod = "";
+            OptionsValue = Array.Empty<SelectListItem>();
             IsEnabled = column.Expression.Body is MemberExpression ? IsEnabled : false;
         }
 
@@ -105,7 +107,7 @@ namespace NonFactors.Mvc.Grid
             if (IsEnabled != true)
                 return items;
 
-            Expression expression = BuildFilterExpression();
+            Expression? expression = BuildFilterExpression();
 
             return expression == null ? items : items.Where(ToLambda(expression));
         }
@@ -114,7 +116,7 @@ namespace NonFactors.Mvc.Grid
         {
             return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
         }
-        private IGridFilter CreateFirstFilter()
+        private IGridFilter? CreateFirstFilter()
         {
             String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
             String columnName = (prefix + Column.Name + "-").ToLower();
@@ -126,11 +128,11 @@ namespace NonFactors.Mvc.Grid
             String method = keys[0].Substring(columnName.Length);
 
             if (Type == GridFilterType.Multi)
-                return CreateFilter(method, Column.Grid.Query[keys[0]]);
+                return CreateFilter(method, Column.Grid.Query?[keys[0]] ?? "");
 
-            return CreateFilter(method, Column.Grid.Query[keys[0]].FirstOrDefault());
+            return CreateFilter(method, Column.Grid.Query?[keys[0]].FirstOrDefault());
         }
-        private IGridFilter CreateSecondFilter()
+        private IGridFilter? CreateSecondFilter()
         {
             String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
             String columnName = (prefix + Column.Name + "-").ToLower();
@@ -141,7 +143,7 @@ namespace NonFactors.Mvc.Grid
 
             if (keys.Length == 1)
             {
-                StringValues values = Column.Grid.Query[keys[0]];
+                StringValues values = Column.Grid.Query?[keys[0]] ?? "";
                 if (values.Count < 2)
                     return null;
 
@@ -149,11 +151,11 @@ namespace NonFactors.Mvc.Grid
             }
 
             String method = keys[1].Substring(columnName.Length);
-            String value = Column.Grid.Query[keys[1]][0];
+            String value = Column.Grid.Query?[keys[1]][0] ?? "";
 
             return CreateFilter(method, value);
         }
-        private IGridFilter CreateFilter(String method, StringValues values)
+        private IGridFilter? CreateFilter(String method, StringValues values)
         {
             return GetFilters().Create(typeof(TValue), method, values);
         }
@@ -185,16 +187,16 @@ namespace NonFactors.Mvc.Grid
                 case TypeCode.Boolean:
                     return "boolean";
                 default:
-                    return type == typeof(Guid) ? "guid" : null;
+                    return type == typeof(Guid) ? "guid" : "";
             }
         }
-        private Expression BuildFilterExpression()
+        private Expression? BuildFilterExpression()
         {
-            Expression left = First?.Apply(Column.Expression.Body);
+            Expression? left = First?.Apply(Column.Expression.Body);
 
             if (Type == GridFilterType.Double && left != null)
             {
-                Expression right = Second?.Apply(Column.Expression.Body);
+                Expression? right = Second?.Apply(Column.Expression.Body);
 
                 if (right != null && "and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                     return Expression.AndAlso(left, right);
@@ -209,12 +211,12 @@ namespace NonFactors.Mvc.Grid
         {
             return Column
                 .Grid
-                .Query
+                .Query?
                 .Keys
                 .Where(key =>
                     key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) &&
                     !key.Equals(prefix + "op", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
+                .ToArray() ?? Array.Empty<String>();
         }
         private Expression<Func<T, Boolean>> ToLambda(Expression expression)
         {

@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>5.0.1</Version>
+    <Version>5.1.0</Version>
+    <Nullable>enable</Nullable>
     <DebugType>Full</DebugType>
     <Company>NonFactors</Company>
+    <LangVersion>8.0</LangVersion>
     <TargetFramework>net46</TargetFramework>
     <PackageId>NonFactors.Grid.Mvc6</PackageId>
     <GenerateFullPaths>true</GenerateFullPaths>

@@ -18,7 +18,7 @@ namespace NonFactors.Mvc.Grid
             return new HtmlGrid<T>(html, new Grid<T>(source)) { PartialViewName = partialViewName };
         }
 
-        public static IHtmlContent AjaxGrid(this IHtmlHelper html, String dataSource, Object htmlAttributes = null)
+        public static IHtmlContent AjaxGrid(this IHtmlHelper html, String dataSource, Object? htmlAttributes = null)
         {
             TagBuilder grid = new TagBuilder("div");
             grid.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));

@@ -7,19 +7,19 @@ using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridHtmlAttributes : Dictionary<String, Object>, IHtmlContent
+    public class GridHtmlAttributes : Dictionary<String, Object?>, IHtmlContent
     {
         public GridHtmlAttributes()
         {
         }
-        public GridHtmlAttributes(Object attributes)
+        public GridHtmlAttributes(Object? attributes)
             : base(HtmlHelper.AnonymousObjectToHtmlAttributes(attributes))
         {
         }
 
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
-            foreach (KeyValuePair<String, Object> attribute in this)
+            foreach (KeyValuePair<String, Object?> attribute in this)
             {
                 if (attribute.Value == null)
                     continue;

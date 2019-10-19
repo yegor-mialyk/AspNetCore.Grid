@@ -11,15 +11,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnFilterTests
     {
-        private GridColumnFilter<GridModel, String> filter;
+        private GridColumnFilter<GridModel, String?> filter;
         private IQueryable<GridModel> items;
 
         public GridColumnFilterTests()
         {
             Grid<GridModel> grid = new Grid<GridModel>(new GridModel[0]);
-            GridColumn<GridModel, String> column = new GridColumn<GridModel, String>(grid, model => model.Name);
+            GridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(grid, model => model.Name);
 
-            filter = new GridColumnFilter<GridModel, String>(column) { IsEnabled = true };
+            filter = new GridColumnFilter<GridModel, String?>(column) { IsEnabled = true };
 
             items = new[]
             {
@@ -48,7 +48,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.IsEnabled = false;
 
-            Assert.Null(filter.Options);
+            Assert.Empty(filter.Options);
         }
 
         [Fact]
@@ -143,8 +143,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
-            String actual = filter.Operator;
-            String expected = op;
+            String? actual = filter.Operator;
+            String? expected = op;
 
             Assert.Equal(expected, actual);
         }
@@ -155,12 +155,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=or");
 
-            String op = filter.Operator;
+            String? op = filter.Operator;
 
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
-            String actual = filter.Operator;
-            String expected = op;
+            String? actual = filter.Operator;
+            String? expected = op;
 
             Assert.Equal(expected, actual);
         }
@@ -233,7 +233,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Column.Grid.Name = name;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
-            IGridFilter actual = filter.First;
+            IGridFilter actual = filter.First!;
 
             Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
@@ -245,11 +245,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a");
 
-            IGridFilter expected = filter.First;
+            IGridFilter? expected = filter.First;
 
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=b");
 
-            IGridFilter actual = filter.First;
+            IGridFilter actual = filter.First!;
 
             Assert.IsType<StringContainsFilter>(actual);
             Assert.Equal("contains", actual.Method);
@@ -348,7 +348,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
-            IGridFilter actual = filter.Second;
+            IGridFilter actual = filter.Second!;
 
             Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
@@ -361,11 +361,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
 
-            IGridFilter expected = filter.Second;
+            IGridFilter? expected = filter.Second;
 
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-starts-with=d&name-ends-with=e");
 
-            IGridFilter actual = filter.Second;
+            IGridFilter actual = filter.Second!;
 
             Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
@@ -376,7 +376,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsColumn()
         {
-            Object actual = new GridColumnFilter<GridModel, String>(filter.Column).Column;
+            Object actual = new GridColumnFilter<GridModel, String?>(filter.Column).Column;
             Object expected = filter.Column;
 
             Assert.Same(expected, actual);
@@ -571,23 +571,29 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForOtherTypes()
         {
-            AssertFilterNameFor(model => model, null);
+            AssertFilterNameFor(model => model, "");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsDefaultMethod()
+        {
+            Assert.Empty(new GridColumnFilter<GridModel, String?>(filter.Column).DefaultMethod);
         }
 
         [Fact]
         public void GridColumnFilter_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(filter.Column.Grid, model => model.ToString());
+            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(filter.Column.Grid, model => model.ToString());
 
-            Assert.False(new GridColumnFilter<GridModel, String>(column).IsEnabled);
+            Assert.False(new GridColumnFilter<GridModel, String?>(column).IsEnabled);
         }
 
         [Fact]
         public void GridColumnFilter_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String> column = new GridColumn<GridModel, String>(filter.Column.Grid, model => model.Name);
+            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(filter.Column.Grid, model => model.Name);
 
-            Assert.Null(new GridColumnFilter<GridModel, String>(column).IsEnabled);
+            Assert.Null(new GridColumnFilter<GridModel, String?>(column).IsEnabled);
         }
 
         [Theory]

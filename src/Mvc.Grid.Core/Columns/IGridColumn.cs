@@ -8,7 +8,7 @@ namespace NonFactors.Mvc.Grid
     {
         String Name { get; set; }
         Object Title { get; set; }
-        String Format { get; set; }
+        String? Format { get; set; }
         Boolean IsHidden { get; set; }
         String CssClasses { get; set; }
         Boolean IsEncoded { get; set; }
@@ -23,7 +23,7 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; }
 
-        Func<T, Int32, Object> RenderValue { get; set; }
+        Func<T, Int32, Object?>? RenderValue { get; set; }
         Expression<Func<T, TValue>> Expression { get; set; }
 
         new IGridColumnSort<T, TValue> Sort { get; set; }

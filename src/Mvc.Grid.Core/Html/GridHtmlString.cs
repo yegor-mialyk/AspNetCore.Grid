@@ -9,19 +9,19 @@ namespace NonFactors.Mvc.Grid
     {
         private String Value { get; }
 
-        public GridHtmlString(String value)
+        public GridHtmlString(String? value)
         {
-            Value = value;
+            Value = value ?? "";
         }
 
-        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
+        public void WriteTo(TextWriter writer, HtmlEncoder? encoder)
         {
             writer.Write(encoder?.Encode(Value) ?? Value);
         }
 
         public override String ToString()
         {
-            return Value ?? String.Empty;
+            return Value;
         }
     }
 }

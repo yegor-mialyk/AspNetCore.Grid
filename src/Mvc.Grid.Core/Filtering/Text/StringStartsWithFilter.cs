@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid
 {
     public class StringStartsWithFilter : BaseGridFilter
     {
-        public override Expression Apply(Expression expression)
+        public override Expression? Apply(Expression expression)
         {
             if (Values.Count == 0 || Values.Any(String.IsNullOrEmpty))
                 return null;
@@ -15,11 +15,11 @@ namespace NonFactors.Mvc.Grid
             return base.Apply(expression);
         }
 
-        protected override Expression Apply(Expression expression, String value)
+        protected override Expression? Apply(Expression expression, String? value)
         {
-            Expression expressionValue = Expression.Constant(value.ToUpper());
-            MethodInfo toUpperMethod = typeof(String).GetMethod("ToUpper", new Type[0]);
-            MethodInfo startsWithMethod = typeof(String).GetMethod("StartsWith", new[] { typeof(String) });
+            Expression expressionValue = Expression.Constant(value?.ToUpper());
+            MethodInfo toUpperMethod = typeof(String).GetMethod(nameof(String.ToUpper), new Type[0])!;
+            MethodInfo startsWithMethod = typeof(String).GetMethod(nameof(String.StartsWith), new[] { typeof(String) })!;
 
             Expression toUpper = Expression.Call(expression, toUpperMethod);
             Expression startsWith = Expression.Call(toUpper, startsWithMethod, expressionValue);

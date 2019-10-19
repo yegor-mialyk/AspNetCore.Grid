@@ -11,6 +11,6 @@ namespace NonFactors.Mvc.Grid
     {
         IGrid<T> Grid { get; }
 
-        Func<T, Object> Attributes { get; set; }
+        Func<T, Object>? Attributes { get; set; }
     }
 }
