@@ -87,13 +87,13 @@ namespace NonFactors.Mvc.Grid
             try
             {
                 if (RenderValue != null)
-                    return RenderValue((T)row.Model, row.Index);
+                    return RenderValue((row.Model as T)!, row.Index);
 
                 Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
                 if (type.GetTypeInfo().IsEnum)
-                    return EnumValue(type, ExpressionValue((T)row.Model)?.ToString()!);
+                    return EnumValue(type, ExpressionValue((row.Model as T)!)!.ToString()!);
 
-                return ExpressionValue((T)row.Model);
+                return ExpressionValue((row.Model as T)!);
             }
             catch (NullReferenceException)
             {

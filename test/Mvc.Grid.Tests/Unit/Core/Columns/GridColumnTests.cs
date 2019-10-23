@@ -349,6 +349,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void ValueFor_NullEnum()
+        {
+            GridColumn<GridModel, TestEnum?> enumColumn = new GridColumn<GridModel, TestEnum?>(column.Grid, model => model.NEnum);
+            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel(), 0);
+
+            Assert.Empty(enumColumn.ValueFor(row).ToString());
+        }
+
         [Theory]
         [InlineData(null, "For {0}", true, "")]
         [InlineData(null, "For {0}", false, "")]
