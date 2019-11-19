@@ -38,9 +38,10 @@ namespace NonFactors.Mvc.Grid
                 .Source
                 .OrderBy(column.Expression)
                 .Select(column.Expression)
+                .Distinct()
+                .ToArray()
                 .Where(value => value != null)
                 .Select(value => value!.ToString())
-                .Distinct()
                 .Select(value => new SelectListItem
                 {
                     Value = value,
