@@ -73,7 +73,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             html.AjaxGrid("DataSource").WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = "<div class=\"mvc-grid\" data-source-url=\"DataSource\"></div>";
+            String expected = "<div class=\"mvc-grid\" data-url=\"DataSource\"></div>";
             String actual = writer.GetStringBuilder().ToString();
 
             Assert.Equal(expected, actual);
@@ -84,9 +84,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             StringWriter writer = new StringWriter();
 
-            html.AjaxGrid("DataSource", new { @class = "classy", data_source_url = "Test", data_id = 1 }).WriteTo(writer, HtmlEncoder.Default);
+            html.AjaxGrid("DataSource", new { @class = "classy", data_url = "Test", data_id = 1 }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = "<div class=\"mvc-grid classy\" data-id=\"1\" data-source-url=\"DataSource\"></div>";
+            String expected = "<div class=\"mvc-grid classy\" data-id=\"1\" data-url=\"DataSource\"></div>";
             String actual = writer.GetStringBuilder().ToString();
 
             Assert.Equal(expected, actual);

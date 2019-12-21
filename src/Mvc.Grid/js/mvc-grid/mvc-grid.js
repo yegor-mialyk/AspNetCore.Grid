@@ -24,9 +24,10 @@ class MvcGrid {
         grid.popup = new MvcGridPopup(grid);
         grid.controller = new AbortController();
         grid.prefix = grid.name ? `${grid.name}-` : '';
-        grid.sourceUrl = grid.element.dataset.sourceUrl;
+        grid.isAjax = grid.element.dataset.url ? true : false;
         grid.filterMode = (element.dataset.filterMode || 'excel').toLowerCase();
         grid.element.dataset.id = options && options.id || MvcGrid.instances.length.toString();
+        grid.url = grid.element.dataset.url ? new URL(grid.element.dataset.url, location.href) : new URL(location.href);
         grid.filters = {
             enum: MvcGridEnumFilter,
             date: MvcGridDateFilter,
@@ -58,7 +59,7 @@ class MvcGrid {
         grid.cleanUp();
         grid.bind();
 
-        if (grid.sourceUrl && !element.children.length) {
+        if (!element.children.length) {
             grid.reload();
         }
     }
@@ -74,24 +75,10 @@ class MvcGrid {
         }
 
         grid.requestType = options.requestType || grid.requestType;
-        grid.sourceUrl = typeof options.sourceUrl == 'undefined' ? grid.sourceUrl : options.sourceUrl;
+        grid.isAjax = typeof options.isAjax == 'undefined' ? grid.isAjax : options.isAjax;
+        grid.url = options.url == null ? grid.url : new URL(options.url.toString(), location.href);
+        grid.url = typeof options.query == 'undefined' ? grid.url : new URL(`?${options.query}`, grid.url.href);
         grid.loadingDelay = typeof options.loadingDelay == 'undefined' ? grid.loadingDelay : options.loadingDelay;
-
-        if (grid.sourceUrl) {
-            const urlsParts = grid.sourceUrl.split('?', 2);
-
-            grid.sourceUrl = urlsParts[0];
-
-            if (typeof options.query != 'undefined') {
-                grid.query = new URLSearchParams(options.query);
-            } else if (urlsParts[1] || !grid.query) {
-                grid.query = new URLSearchParams(urlsParts[1]);
-            }
-        } else if (typeof options.query == 'undefined') {
-            grid.query = new URLSearchParams(window.location.search);
-        } else {
-            grid.query = new URLSearchParams(options.query);
-        }
 
         grid.columns.forEach(column => {
             column.updateFilter();
@@ -107,14 +94,13 @@ class MvcGrid {
 
     reload() {
         const grid = this;
-        const query = grid.query.toString() ? `?${grid.query.toString()}` : '';
 
         grid.element.dispatchEvent(new CustomEvent('reloadstart', {
             detail: { grid },
             bubbles: true
         }));
 
-        if (grid.sourceUrl) {
+        if (grid.isAjax) {
             grid.startLoading()
                 .then(response => {
                     const parent = grid.element.parentElement;
@@ -133,9 +119,9 @@ class MvcGrid {
                         loadingDelay: grid.loadingDelay,
                         requestType: grid.requestType,
                         id: grid.element.dataset.id,
-                        sourceUrl: grid.sourceUrl,
                         filters: grid.filters,
-                        query: query
+                        isAjax: grid.isAjax,
+                        url: grid.url
                     });
 
                     newGrid.element.dispatchEvent(new CustomEvent('reloadend', {
@@ -154,16 +140,16 @@ class MvcGrid {
                     throw result;
                 });
         } else {
-            window.location.href = window.location.origin + window.location.pathname + query;
+            location.href = grid.url.href;
         }
     }
 
     applyFilters(initiator) {
         const grid = this;
-        const query = grid.query;
         const prefix = grid.prefix;
-        const sort = grid.query.get(`${prefix}sort`);
-        const order = grid.query.get(`${prefix}order`);
+        const query = grid.url.searchParams;
+        const sort = query.get(`${prefix}sort`);
+        const order = query.get(`${prefix}order`);
 
         grid.clearQuery();
 
@@ -198,10 +184,11 @@ class MvcGrid {
     }
     startLoading() {
         const grid = this;
-        const query = `${grid.query.toString() ? `?${grid.query}&` : '?'}_=${Date.now()}`;
+        const url = new URL(grid.url.href);
 
         grid.stopLoading();
         grid.controller = new AbortController();
+        url.searchParams.set('_', Date.now().toString());
 
         if (grid.loadingDelay != null && !grid.element.querySelector('.mvc-grid-loader')) {
             const content = document.createElement('div');
@@ -221,7 +208,7 @@ class MvcGrid {
             grid.element.appendChild(grid.loader);
         }
 
-        return fetch(grid.sourceUrl + query, {
+        return fetch(url.href, {
             method: grid.requestType,
             signal: grid.controller.signal,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -245,8 +232,8 @@ class MvcGrid {
         }
     }
     clearQuery() {
-        const query = this.query;
         const prefix = this.prefix;
+        const query = this.url.searchParams;
 
         this.columns.forEach(column => {
             for (const key of [...query.keys()]) {
@@ -272,8 +259,8 @@ class MvcGrid {
         return grid;
     }
     cleanUp() {
-        delete this.element.dataset.sourceUrl;
         delete this.element.dataset.filterMode;
+        delete this.element.dataset.url;
     }
     bind() {
         const grid = this;
@@ -401,7 +388,7 @@ class MvcGridColumn {
         if (filter) {
             const values = [];
             const methods = [];
-            const query = column.grid.query;
+            const query = column.grid.url.searchParams;
             const name = `${column.grid.prefix + column.name}-`;
 
             for (const parameter of query.entries()) {
@@ -427,14 +414,15 @@ class MvcGridColumn {
     cancelFilter() {
         const column = this;
         const grid = column.grid;
+        const query = grid.url.searchParams;
 
         if (column.filter.isApplied) {
-            grid.query.delete(`${grid.prefix}page`);
-            grid.query.delete(`${grid.prefix}rows`);
+            query.delete(`${grid.prefix}page`);
+            query.delete(`${grid.prefix}rows`);
 
-            for (const key of [...grid.query.keys()]) {
+            for (const key of [...query.keys()]) {
                 if (key.startsWith(`${grid.prefix + column.name}-`)) {
-                    grid.query.delete(key);
+                    query.delete(key);
                 }
             }
 
@@ -451,17 +439,18 @@ class MvcGridColumn {
     applySort() {
         const column = this;
         const grid = column.grid;
+        const query = grid.url.searchParams;
         let order = column.sort.order == 'asc' ? 'desc' : 'asc';
 
-        grid.query.delete(`${grid.prefix}sort`);
-        grid.query.delete(`${grid.prefix}order`);
+        query.delete(`${grid.prefix}sort`);
+        query.delete(`${grid.prefix}order`);
 
         if (!column.sort.order && column.sort.first) {
             order = column.sort.first;
         }
 
-        grid.query.append(`${grid.prefix}sort`, column.name || '');
-        grid.query.append(`${grid.prefix}order`, order);
+        query.append(`${grid.prefix}sort`, column.name || '');
+        query.append(`${grid.prefix}order`, order);
 
         grid.reload();
     }
@@ -551,14 +540,15 @@ class MvcGridPager {
 
     apply(page) {
         const grid = this.grid;
+        const query = grid.url.searchParams;
 
-        grid.query.delete(`${grid.prefix}page`);
-        grid.query.delete(`${grid.prefix}rows`);
+        query.delete(`${grid.prefix}page`);
+        query.delete(`${grid.prefix}rows`);
 
-        grid.query.append(`${grid.prefix}page`, page || '');
+        query.append(`${grid.prefix}page`, page || '');
 
         if (this.showPageSizes) {
-            grid.query.append(`${grid.prefix}rows`, this.rowsPerPage.value);
+            query.append(`${grid.prefix}rows`, this.rowsPerPage.value);
         }
 
         grid.reload();

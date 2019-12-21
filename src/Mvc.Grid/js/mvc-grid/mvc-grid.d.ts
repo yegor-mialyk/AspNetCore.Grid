@@ -8,9 +8,10 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 interface MvcGridOptions {
+    url: URL;
     id: string;
     query: string;
-    sourceUrl: string;
+    isAjax: boolean;
     requestType: string;
     loadingDelay: number;
     filters: {
@@ -54,13 +55,13 @@ export declare class MvcGrid {
     columns: MvcGridColumn[];
     popup: MvcGridPopup;
     pager?: MvcGridPager;
-    query: URLSearchParams;
     loader?: HTMLDivElement;
     controller: AbortController;
+    url: URL;
     name: string;
     prefix: string;
+    isAjax: boolean;
     loading: number;
-    sourceUrl: string;
     filterMode: string;
     requestType: string;
     loadingDelay: number;
