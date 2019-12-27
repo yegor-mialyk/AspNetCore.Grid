@@ -19,7 +19,7 @@ class MvcGrid {
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
-        grid.requestType = 'get';
+        grid.requestMethod = 'get';
         grid.name = element.dataset.name;
         grid.popup = new MvcGridPopup(grid);
         grid.controller = new AbortController();
@@ -74,7 +74,7 @@ class MvcGrid {
             }
         }
 
-        grid.requestType = options.requestType || grid.requestType;
+        grid.requestMethod = options.requestMethod || grid.requestMethod;
         grid.isAjax = typeof options.isAjax == 'undefined' ? grid.isAjax : options.isAjax;
         grid.url = options.url == null ? grid.url : new URL(options.url.toString(), location.href);
         grid.url = typeof options.query == 'undefined' ? grid.url : new URL(`?${options.query}`, grid.url.href);
@@ -116,8 +116,8 @@ class MvcGrid {
                     }
 
                     const newGrid = new MvcGrid(parent.children[i], {
+                        requestMethod: grid.requestMethod,
                         loadingDelay: grid.loadingDelay,
-                        requestType: grid.requestType,
                         id: grid.element.dataset.id,
                         filters: grid.filters,
                         isAjax: grid.isAjax,
@@ -209,7 +209,7 @@ class MvcGrid {
         }
 
         return fetch(url.href, {
-            method: grid.requestType,
+            method: grid.requestMethod,
             signal: grid.controller.signal,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {

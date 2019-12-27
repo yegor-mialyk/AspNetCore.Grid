@@ -12,8 +12,8 @@ interface MvcGridOptions {
     id: string;
     query: string;
     isAjax: boolean;
-    requestType: string;
     loadingDelay: number;
+    requestMethod: string;
     filters: {
         [type: string]: typeof MvcGridFilter;
     };
@@ -63,8 +63,8 @@ export declare class MvcGrid {
     isAjax: boolean;
     loading: number;
     filterMode: string;
-    requestType: string;
     loadingDelay: number;
+    requestMethod: string;
     filters: {
         [type: string]: typeof MvcGridFilter;
     };

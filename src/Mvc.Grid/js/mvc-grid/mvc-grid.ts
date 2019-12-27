@@ -13,8 +13,8 @@ interface MvcGridOptions {
     id: string;
     query: string;
     isAjax: boolean;
-    requestType: string;
     loadingDelay: number;
+    requestMethod: string;
     filters: { [type: string]: typeof MvcGridFilter };
 }
 
@@ -112,8 +112,8 @@ export class MvcGrid {
     isAjax: boolean;
     loading: number;
     filterMode: string;
-    requestType: string;
     loadingDelay: number;
+    requestMethod: string;
     filters: { [type: string]: typeof MvcGridFilter };
 
     public constructor(container: HTMLElement, options?: Partial<MvcGridOptions>) {
@@ -127,7 +127,7 @@ export class MvcGrid {
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
-        grid.requestType = 'get';
+        grid.requestMethod = 'get';
         grid.name = element.dataset.name!;
         grid.popup = new MvcGridPopup(grid);
         grid.controller = new AbortController();
@@ -182,7 +182,7 @@ export class MvcGrid {
             }
         }
 
-        grid.requestType = options.requestType || grid.requestType;
+        grid.requestMethod = options.requestMethod || grid.requestMethod;
         grid.isAjax = typeof options.isAjax == 'undefined' ? grid.isAjax : options.isAjax;
         grid.url = options.url == null ? grid.url : new URL(options.url.toString(), location.href);
         grid.url = typeof options.query == 'undefined' ? grid.url : new URL(`?${options.query}`, grid.url.href);
@@ -224,8 +224,8 @@ export class MvcGrid {
                     }
 
                     const newGrid = new MvcGrid(<HTMLElement>parent.children[i], {
+                        requestMethod: grid.requestMethod,
                         loadingDelay: grid.loadingDelay,
-                        requestType: grid.requestType,
                         id: grid.element.dataset.id,
                         filters: grid.filters,
                         isAjax: grid.isAjax,
@@ -317,7 +317,7 @@ export class MvcGrid {
         }
 
         return fetch(url.href, {
-            method: grid.requestType,
+            method: grid.requestMethod,
             signal: grid.controller.signal,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
