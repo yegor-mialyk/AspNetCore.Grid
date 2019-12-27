@@ -266,20 +266,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        [Theory]
-        [InlineData("", "")]
-        [InlineData(" ", "")]
-        [InlineData(null, "")]
-        [InlineData("Name", "name")]
-        [InlineData(" Name ", "name")]
-        [InlineData("NameTest", "name-test")]
-        [InlineData(" NameTest ", "name-test")]
-        [InlineData(" Name_Test ", "name-test")]
-        [InlineData("name-test-apply", "name-test-apply")]
-        public void Named_SetsName(String rawName, String name)
+        [Fact]
+        public void Named_SetsName()
         {
-            String expected = name;
-            String actual = htmlGrid.Named(rawName).Grid.Name;
+            String expected = "Test";
+            String actual = htmlGrid.Named("Test").Grid.Name;
 
             Assert.Equal(expected, actual);
         }

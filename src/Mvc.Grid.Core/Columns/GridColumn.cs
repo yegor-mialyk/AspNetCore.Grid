@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -78,9 +77,8 @@ namespace NonFactors.Mvc.Grid
         {
             String text = expression.Body is MemberExpression member ? member.ToString() : "";
             text = text.IndexOf('.') > 0 ? text.Substring(text.IndexOf('.') + 1) : text;
-            text = text.Replace("_", "-");
 
-            return String.Join("-", Regex.Split(text, "(?<=[a-zA-Z])(?=[A-Z])")).ToLower();
+            return text;
         }
         private Object? ColumnValueFor(IGridRow<Object> row)
         {

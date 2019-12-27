@@ -120,7 +120,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
         {
-            column.Name = String.Join("-", Regex.Split((name ?? "").Replace("_", "-"), "(?<=[a-zA-Z])(?=[A-Z])")).ToLower().Trim();
+            column.Name = name;
 
             return column;
         }

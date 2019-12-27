@@ -138,23 +138,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridColumn_SetsNameFromUnderscoredExpression()
-        {
-            Expression<Func<GridModel, String?>> expression = (model) => model.UnderScored_Field;
-
-            String actual = new GridColumn<GridModel, String?>(column.Grid, expression).Name;
-            String expected = "under-scored-field";
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void GridColumn_SetsNameFromExpression()
         {
             Expression<Func<GridModel, Boolean?>> expression = (model) => model.NIsChecked;
 
             String actual = new GridColumn<GridModel, Boolean?>(column.Grid, expression).Name;
-            String expected = "n-is-checked";
+            String expected = "NIsChecked";
 
             Assert.Equal(expected, actual);
         }
