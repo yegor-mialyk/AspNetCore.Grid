@@ -23,37 +23,11 @@ interface MvcGridLanguage {
         [method: string]: string;
     };
 }
-interface MvcGridColumnSort {
-    order: string;
-    first: string;
-    button: Element;
-}
-interface MvcGridColumnFilter {
-    type: string;
-    name: string;
-    isApplied: boolean;
-    hasOptions: boolean;
-    defaultMethod: string;
-    second: {
-        method: string;
-        values: string[];
-    };
-    operator: string;
-    first: {
-        method: string;
-        values: string[];
-    };
-    button: HTMLElement;
-    instance: MvcGridFilter;
-    options: HTMLSelectElement;
-    inlineInput: HTMLInputElement;
-}
 export declare class MvcGrid {
     private static instances;
     static lang: MvcGridLanguage;
     element: HTMLElement;
     columns: MvcGridColumn[];
-    popup: MvcGridPopup;
     pager?: MvcGridPager;
     loader?: HTMLDivElement;
     controller: AbortController;
@@ -61,20 +35,18 @@ export declare class MvcGrid {
     name: string;
     prefix: string;
     isAjax: boolean;
-    loading: number;
-    filterMode: string;
     loadingDelay: number;
     requestMethod: string;
+    loadingTimerId?: number;
+    filterMode: "row" | "excel" | "header";
     filters: {
         [type: string]: typeof MvcGridFilter;
     };
     constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
     set(options: Partial<MvcGridOptions>): MvcGrid;
     reload(): void;
-    applyFilters(initiator: MvcGridColumn): void;
     private startLoading;
     private stopLoading;
-    private clearQuery;
     private findGrid;
     private cleanUp;
     private bind;
@@ -84,61 +56,81 @@ export declare class MvcGridColumn {
     grid: MvcGrid;
     isHidden: boolean;
     header: HTMLElement;
-    sort?: MvcGridColumnSort;
-    filter?: MvcGridColumnFilter;
-    rowFilter: HTMLElement | null;
-    constructor(grid: MvcGrid, header: HTMLElement, rowFilter: HTMLElement);
-    updateFilter(): void;
-    cancelFilter(): void;
-    applySort(): void;
-    private bindFilter;
-    private bindSort;
+    sort: MvcGridColumnSort | null;
+    filter: MvcGridColumnFilter | null;
+    constructor(grid: MvcGrid, header: HTMLElement, rowFilter: HTMLElement | null);
     private cleanUp;
+}
+export declare class MvcGridColumnSort {
+    column: MvcGridColumn;
+    button: HTMLButtonElement;
+    first: "asc" | "desc" | "";
+    order: "asc" | "desc" | "";
+    constructor(column: MvcGridColumn);
+    toggle(): void;
+    private bind;
+}
+export declare class MvcGridColumnFilter {
+    name: string;
+    isApplied: boolean;
+    defaultMethod: string;
+    type: "single" | "double" | "multi";
+    first: {
+        method: string;
+        values: string[];
+    };
+    operator: string;
+    second: {
+        method: string;
+        values: string[];
+    };
+    column: MvcGridColumn;
+    instance: MvcGridFilter;
+    button: HTMLButtonElement;
+    rowFilter: HTMLElement | null;
+    options: HTMLSelectElement | null;
+    inlineInput: HTMLInputElement | null;
+    constructor(column: MvcGridColumn, rowFilter: HTMLElement | null);
+    apply(): void;
+    cancel(): void;
+    private bind;
 }
 export declare class MvcGridPager {
     grid: MvcGrid;
-    currentPage: number;
+    currentPage: string;
     element: HTMLElement;
     showPageSizes: boolean;
     rowsPerPage: HTMLInputElement;
     pages: NodeListOf<HTMLElement>;
     constructor(grid: MvcGrid, element: HTMLElement);
-    apply(page: string | number): void;
+    apply(page: string): void;
     private cleanUp;
     private bind;
 }
 export declare class MvcGridPopup {
-    static lastActiveElement: HTMLInputElement | null;
+    static lastActiveElement: HTMLElement | null;
     static element: HTMLDivElement;
-    grid: MvcGrid;
-    constructor(grid: MvcGrid);
-    render(filter: MvcGridFilter): void;
-    show(column: MvcGridColumn): void;
-    hide(e?: UIEvent): void;
-    private updatePosition;
-    private updateValues;
-    private setValues;
-    private bind;
+    static show(filter: MvcGridColumnFilter): void;
+    static hide(e?: UIEvent): void;
+    private static updateValues;
+    private static setValues;
+    private static reposition;
+    private static bind;
 }
 export declare class MvcGridFilter {
-    type: string;
-    mode: string;
     methods: string[];
     cssClasses: string;
-    popup: MvcGridPopup;
-    lang: MvcGridLanguage;
     column: MvcGridColumn;
+    mode: "row" | "excel" | "header";
+    type: "single" | "double" | "multi";
     constructor(column: MvcGridColumn);
     init(): void;
-    show(): void;
+    isValid(value: string): boolean;
+    validate(input: HTMLInputElement): void;
     render(): string;
-    renderFilter(name: string): string;
+    renderFilter(name: "first" | "second"): string;
     renderOperator(): string;
     renderActions(): string;
-    apply(): void;
-    cancel(): void;
-    isValid(value: string): boolean;
-    validate(input: HTMLInputElement | HTMLSelectElement): void;
     bindOperator(): void;
     bindMethods(): void;
     bindValues(): void;
