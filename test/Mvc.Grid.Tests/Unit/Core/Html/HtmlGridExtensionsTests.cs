@@ -64,7 +64,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, GridFilterType.Double)]
         [InlineData(GridFilterType.Single, GridFilterType.Single)]
         [InlineData(GridFilterType.Double, GridFilterType.Double)]
-        public void Filterable_Type_SetsType(GridFilterType? type, GridFilterType? expected)
+        public void Filterable_SetsType(GridFilterType? type, GridFilterType? expected)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
                 column.Filter.Type = type;
@@ -73,30 +73,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
                 Assert.Equal(expected, actual.Filter.Type);
-        }
-
-        [Theory]
-        [InlineData(null, true)]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void Filterable_Type_SetsIsEnabled(Boolean? isEnabled, Boolean? expected)
-        {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.Filter.IsEnabled = isEnabled;
-
-            htmlGrid.Filterable(GridFilterType.Single);
-
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.Filter.IsEnabled);
-        }
-
-        [Fact]
-        public void Filterable_Type_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Filterable(GridFilterType.Single);
-
-            Assert.Same(expected, actual);
         }
 
         [Theory]

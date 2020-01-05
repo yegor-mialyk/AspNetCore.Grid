@@ -28,14 +28,10 @@ namespace NonFactors.Mvc.Grid
             return grid;
         }
 
-        public static IServiceCollection AddMvcGrid(this IServiceCollection services)
-        {
-            return services.AddMvcGrid(filters => { });
-        }
-        public static IServiceCollection AddMvcGrid(this IServiceCollection services, Action<GridFilters> configure)
+        public static IServiceCollection AddMvcGrid(this IServiceCollection services, Action<GridFilters>? configure = null)
         {
             GridFilters filters = new GridFilters();
-            configure(filters);
+            configure?.Invoke(filters);
 
             return services.AddSingleton<IGridFilters>(filters);
         }

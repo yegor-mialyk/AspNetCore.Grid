@@ -106,19 +106,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void AddMvcGrid_ConfiguredFiltersInstance()
-        {
-            IServiceCollection services = new ServiceCollection();
-
-            services.AddMvcGrid(filters => { });
-
-            ServiceDescriptor actual = services.Single();
-
-            Assert.Equal(typeof(IGridFilters), actual.ServiceType);
-            Assert.IsType<GridFilters>(actual.ImplementationInstance);
-        }
-
-        [Fact]
         public void AddMvcGrid_ConfiguresFiltersInstance()
         {
             Action<GridFilters> configure = Substitute.For<Action<GridFilters>>();

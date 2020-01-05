@@ -73,7 +73,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingFilterOptions_SetsOptions()
+        public void UsingFilterOptions_Values()
         {
             IEnumerable<SelectListItem> expected = Array.Empty<SelectListItem>();
             IEnumerable<SelectListItem> actual = column.UsingFilterOptions(expected).Filter.Options;
@@ -82,37 +82,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingFilterOptions_EnablesFilter()
-        {
-            column.Filter.IsEnabled = false;
-
-            Assert.True(column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.IsEnabled);
-        }
-
-        [Fact]
-        public void UsingFilterOptions_ReturnsColumn()
-        {
-            Object expected = column;
-            Object actual = column.UsingFilterOptions(Array.Empty<SelectListItem>());
-
-            Assert.Same(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(null, "equals")]
-        [InlineData("contains", "contains")]
-        public void UsingFilterOptions_FromValues_SetsDefaultFilterMethod(String current, String method)
-        {
-            column.Filter.DefaultMethod = current;
-
-            String? actual = column.UsingFilterOptions().Filter.DefaultMethod;
-            String? expected = method;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UsingFilterOptions_FromValues()
+        public void UsingFilterOptions_SourceValues()
         {
             column.Grid.Source = new[]
             {
@@ -139,18 +109,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingFilterOptions_FromValues_EnablesFilter()
+        public void UsingFilterOptions_EnablesFilter()
         {
             column.Filter.IsEnabled = false;
 
-            Assert.True(column.UsingFilterOptions().Filter.IsEnabled);
+            Assert.True(column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.IsEnabled);
         }
 
         [Fact]
-        public void UsingFilterOptions_FromValues_ReturnsColumn()
+        public void UsingFilterOptions_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.UsingFilterOptions();
+            Object actual = column.UsingFilterOptions(Array.Empty<SelectListItem>());
 
             Assert.Same(expected, actual);
         }

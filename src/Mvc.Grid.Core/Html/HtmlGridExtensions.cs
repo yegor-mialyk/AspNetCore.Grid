@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -20,7 +19,7 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
-        public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterType type)
+        public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterType? type = null)
         {
             foreach (IGridColumn column in html.Grid.Columns)
             {
@@ -30,14 +29,6 @@ namespace NonFactors.Mvc.Grid
                 if (column.Filter.Type == null)
                     column.Filter.Type = type;
             }
-
-            return html;
-        }
-        public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html)
-        {
-            foreach (IGridColumn column in html.Grid.Columns)
-                if (column.Filter.IsEnabled == null)
-                    column.Filter.IsEnabled = true;
 
             return html;
         }

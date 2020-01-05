@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -21,18 +20,13 @@ namespace NonFactors.Mvc.Grid
             return column;
         }
 
-        public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem> options)
+        public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column, IEnumerable<SelectListItem>? options = null)
         {
             if (String.IsNullOrEmpty(column.Filter.DefaultMethod))
                 column.Filter.DefaultMethod = "equals";
-            column.Filter.Options = options;
             column.Filter.IsEnabled = true;
 
-            return column;
-        }
-        public static IGridColumn<T, TValue> UsingFilterOptions<T, TValue>(this IGridColumn<T, TValue> column)
-        {
-            return column.UsingFilterOptions(new[] { new SelectListItem() }
+            column.Filter.Options = options ?? new[] { new SelectListItem() }
                 .Concat(column
                 .Grid
                 .Source
@@ -46,7 +40,9 @@ namespace NonFactors.Mvc.Grid
                 {
                     Value = value,
                     Text = value
-                }).ToArray()));
+                }).ToArray());
+
+            return column;
         }
 
         public static IGridColumn<T, TValue> UsingDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
