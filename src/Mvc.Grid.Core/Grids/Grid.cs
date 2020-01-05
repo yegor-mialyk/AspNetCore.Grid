@@ -8,9 +8,9 @@ namespace NonFactors.Mvc.Grid
 {
     public class Grid<T> : IGrid<T> where T : class
     {
+        public String Url { get; set; }
         public String? Id { get; set; }
         public String Name { get; set; }
-        public String SourceUrl { get; set; }
         public String? EmptyText { get; set; }
 
         public IQueryable<T> Source { get; set; }
@@ -33,8 +33,8 @@ namespace NonFactors.Mvc.Grid
 
         public Grid(IEnumerable<T> source)
         {
+            Url = "";
             Name = "";
-            SourceUrl = "";
             FooterPartialViewName = "";
             Source = source.AsQueryable();
             FilterMode = GridFilterMode.Excel;

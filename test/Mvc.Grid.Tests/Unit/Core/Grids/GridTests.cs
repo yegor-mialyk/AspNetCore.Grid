@@ -46,9 +46,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Grid_SetsSourceUrl()
+        public void Grid_SetsUrl()
         {
-            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).SourceUrl);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Url);
         }
 
         [Fact]

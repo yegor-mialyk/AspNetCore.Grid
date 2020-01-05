@@ -13,9 +13,9 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
-        public static IHtmlGrid<T> UsingSourceUrl<T>(this IHtmlGrid<T> html, String url)
+        public static IHtmlGrid<T> UsingUrl<T>(this IHtmlGrid<T> html, String url)
         {
-            html.Grid.SourceUrl = url;
+            html.Grid.Url = url;
 
             return html;
         }

@@ -43,19 +43,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingSourceUrl_SetsSourceUrl()
+        public void UsingUrl_SetsUrl()
         {
-            String actual = htmlGrid.UsingSourceUrl("/test/index").Grid.SourceUrl;
+            String actual = htmlGrid.UsingUrl("/test/index").Grid.Url;
             String expected = "/test/index";
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void UsingSourceUrl_ReturnsHtmlGrid()
+        public void UsingUrl_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingSourceUrl("");
+            Object actual = htmlGrid.UsingUrl("");
 
             Assert.Same(expected, actual);
         }

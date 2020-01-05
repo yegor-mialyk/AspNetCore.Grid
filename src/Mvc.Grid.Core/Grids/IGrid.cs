@@ -8,9 +8,9 @@ namespace NonFactors.Mvc.Grid
 {
     public interface IGrid
     {
+        String Url { get; set; }
         String? Id { get; set; }
         String Name { get; set; }
-        String SourceUrl { get; set; }
         String? EmptyText { get; set; }
 
         IQueryCollection? Query { get; set; }
