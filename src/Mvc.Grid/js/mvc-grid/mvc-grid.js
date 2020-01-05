@@ -417,7 +417,7 @@ class MvcGridColumnFilter {
         query.delete(`${prefix}page`);
         query.delete(`${prefix}rows`);
 
-        for (const column of grid.columns.filter(col => col.filter && (col == this.column || col.filter.first.values[0]))) {
+        for (const column of grid.columns.filter(col => col.filter && (col == this.column || col.filter.isApplied || col.filter.first.values[0]))) {
             const filter = column.filter;
 
             query.set(`${prefix + column.name}-${filter.first.method}`, filter.first.values[0] || "");
