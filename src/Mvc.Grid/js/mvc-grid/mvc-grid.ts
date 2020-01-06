@@ -921,7 +921,7 @@ export class MvcGridFilter {
 
                 filter.validate(<HTMLInputElement>input);
             }
-        });
+        }
     }
     public bindActions(): void {
         const filter = this.column.filter!;
