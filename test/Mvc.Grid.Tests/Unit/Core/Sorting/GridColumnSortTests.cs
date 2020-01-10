@@ -156,6 +156,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GridColumnSort_SetsFirstOrder()
+        {
+            GridSortOrder actual = new GridColumnSort<GridModel, Object?>(sort.Column).FirstOrder;
+            GridSortOrder expected = GridSortOrder.Asc;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Apply_NoOrder_ReturnsSameItems()
         {
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();

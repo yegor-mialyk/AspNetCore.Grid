@@ -64,7 +64,7 @@ export declare class MvcGridColumn {
 export declare class MvcGridColumnSort {
     column: MvcGridColumn;
     button: HTMLButtonElement;
-    first: "asc" | "desc" | "";
+    first: "asc" | "desc";
     order: "asc" | "desc" | "";
     constructor(column: MvcGridColumn);
     toggle(): void;

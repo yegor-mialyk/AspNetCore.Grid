@@ -130,9 +130,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridColumnSort<GridModel, Object?> actual = column.Sort;
 
+            Assert.Equal(GridSortOrder.Asc, actual.FirstOrder);
             Assert.Same(column, actual.Column);
             Assert.Null(actual.InitialOrder);
-            Assert.Null(actual.FirstOrder);
             Assert.Null(actual.IsEnabled);
             Assert.Null(actual.Order);
         }

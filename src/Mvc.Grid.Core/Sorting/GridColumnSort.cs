@@ -48,7 +48,7 @@ namespace NonFactors.Mvc.Grid
         private Boolean OrderIsSet { get; set; }
         private GridSortOrder? OrderValue { get; set; }
 
-        public GridSortOrder? FirstOrder { get; set; }
+        public GridSortOrder FirstOrder { get; set; }
         public GridSortOrder? InitialOrder { get; set; }
 
         public IGridColumn<T, TValue> Column { get; set; }
@@ -56,6 +56,7 @@ namespace NonFactors.Mvc.Grid
         public GridColumnSort(IGridColumn<T, TValue> column)
         {
             Column = column;
+            FirstOrder = GridSortOrder.Asc;
             IsEnabled = column.Expression.Body is MemberExpression ? IsEnabled : false;
         }
 

@@ -319,17 +319,21 @@ class MvcGridColumnSort {
         const grid = sort.column.grid;
         const query = grid.url.searchParams;
 
-        if (!sort.order && sort.first) {
-            sort.order = sort.first;
-        } else {
+        if (sort.order == sort.first) {
             sort.order = sort.order == "asc" ? "desc" : "asc";
+        } else if (sort.order) {
+            sort.order = "";
+        } else {
+            sort.order = sort.first;
         }
 
         query.delete(`${grid.prefix}sort`);
         query.delete(`${grid.prefix}order`);
 
-        query.set(`${grid.prefix}sort`, sort.column.name);
-        query.set(`${grid.prefix}order`, sort.order);
+        if (sort.order) {
+            query.set(`${grid.prefix}sort`, sort.column.name);
+            query.set(`${grid.prefix}order`, sort.order);
+        }
 
         grid.reload();
     }

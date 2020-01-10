@@ -8,7 +8,7 @@ namespace NonFactors.Mvc.Grid
         Boolean? IsEnabled { get; set; }
 
         GridSortOrder? Order { get; set; }
-        GridSortOrder? FirstOrder { get; set; }
+        GridSortOrder FirstOrder { get; set; }
         GridSortOrder? InitialOrder { get; set; }
     }
     public interface IGridColumnSort<T, TValue> : IGridColumnSort
