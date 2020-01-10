@@ -20,20 +20,20 @@
     font-size: 1rem;
 }
 
-.mvc-grid table {
+.mvc-grid > table {
     border-collapse: collapse;
     max-width: 100%;
     width: 100%;
 }
 
-.mvc-grid th {
+.mvc-grid > table > thead > tr > th {
     background-clip: padding-box;
     background-color: #f7f7f7;
     position: relative;
 }
 
-.mvc-grid th,
-.mvc-grid td {
+.mvc-grid > table > thead > tr > th,
+.mvc-grid > table > tbody > tr > td {
     border: 1px solid #dee2e6;
     padding: 0.75em;
 }
