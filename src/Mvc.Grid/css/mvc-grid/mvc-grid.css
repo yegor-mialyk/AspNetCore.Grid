@@ -9,8 +9,8 @@
  */
 
 @font-face {
-    src: url('../mvc-grid/fonts/grid-glyphs.woff') format('woff');
-    font-family: 'GridGlyphs';
+    src: url("../mvc-grid/fonts/grid-glyphs.woff") format("woff");
+    font-family: "GridGlyphs";
 }
 
 .mvc-grid {
@@ -40,11 +40,6 @@
 
 .mvc-grid .sortable {
     padding-right: 3.5em;
-}
-
-.mvc-grid .sortable,
-.mvc-grid .mvc-grid-sort,
-.mvc-grid .mvc-grid-filter {
     cursor: pointer;
 }
 
@@ -61,9 +56,10 @@
 .mvc-grid-filter {
     background-color: rgba(0, 0, 0, 0.03);
     transition: background-color 0.5s;
-    font-family: 'GridGlyphs';
+    font-family: "GridGlyphs";
     position: absolute;
     font-weight: bold;
+    cursor: pointer;
     width: 2.75em;
     border: none;
     height: 100%;
@@ -78,11 +74,11 @@
 }
 
 .mvc-grid-filter::before {
-    content: '\0041';
+    content: "\0041";
 }
 
 .mvc-grid-filter.applied::before {
-    content: '\0042';
+    content: "\0042";
 }
 
 .mvc-grid-sort {
@@ -93,14 +89,14 @@
 
 .mvc-grid-sort::after {
     font-size: 0.9em;
-    content: '\0044';
+    content: "\0044";
     opacity: 0.15;
 }
 
 .mvc-grid-sort::before {
     margin-right: -7px;
     font-size: 0.9em;
-    content: '\0043';
+    content: "\0043";
     opacity: 0.15;
 }
 
@@ -140,7 +136,7 @@
     color: #bbbbbb;
 }
 
-.mvc-grid-row-filters .mvc-grid-value:-ms-input-placeholder {
+.mvc-grid-row-filters .mvc-grid-value::-ms-input-placeholder {
     color: #bbbbbb;
 }
 
@@ -399,11 +395,13 @@
 }
 
 @keyframes loader-points {
-    0%, 80%, 100% {
+    0%,
+    80%,
+    100% {
         transform: scale(0);
     }
 
     40% {
-        transform: scale(1.0);
+        transform: scale(1);
     }
 }
