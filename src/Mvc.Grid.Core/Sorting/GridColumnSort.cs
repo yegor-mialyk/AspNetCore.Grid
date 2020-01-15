@@ -27,10 +27,6 @@ namespace NonFactors.Mvc.Grid
                         else
                             Order = null;
                     }
-                    else if ((Column.Grid.Query?[prefix + "sort"] ?? StringValues.Empty) == StringValues.Empty)
-                    {
-                        Order = InitialOrder;
-                    }
                     else
                     {
                         Order = null;
@@ -49,7 +45,6 @@ namespace NonFactors.Mvc.Grid
         private GridSortOrder? OrderValue { get; set; }
 
         public GridSortOrder FirstOrder { get; set; }
-        public GridSortOrder? InitialOrder { get; set; }
 
         public IGridColumn<T, TValue> Column { get; set; }
 

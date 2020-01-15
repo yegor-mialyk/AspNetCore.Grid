@@ -71,12 +71,6 @@ namespace NonFactors.Mvc.Grid
             return column;
         }
 
-        public static IGridColumn<T, TValue> InitialSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
-        {
-            column.Sort.InitialOrder = order;
-
-            return column;
-        }
         public static IGridColumn<T, TValue> FirstSort<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder order)
         {
             column.Sort.FirstOrder = order;

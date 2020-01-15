@@ -132,7 +132,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Equal(GridSortOrder.Asc, actual.FirstOrder);
             Assert.Same(column, actual.Column);
-            Assert.Null(actual.InitialOrder);
             Assert.Null(actual.IsEnabled);
             Assert.Null(actual.Order);
         }

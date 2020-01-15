@@ -208,24 +208,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void InitialSort_SetsInitialSortOrder()
-        {
-            GridSortOrder? actual = column.InitialSort(GridSortOrder.Desc).Sort.InitialOrder;
-            GridSortOrder? expected = GridSortOrder.Desc;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void InitialSort_ReturnsColumn()
-        {
-            Object expected = column;
-            Object actual = column.InitialSort(GridSortOrder.Desc);
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
         public void FirstSort_SetsFirstOrder()
         {
             GridSortOrder? actual = column.FirstSort(GridSortOrder.Desc).Sort.FirstOrder;
