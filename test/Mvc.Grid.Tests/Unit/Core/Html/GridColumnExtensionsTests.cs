@@ -152,12 +152,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Filterable_EnablesFilter()
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Filterable_Type_SetsIsEnabled(Boolean? current, Boolean enabled)
         {
-            column.Filter.IsEnabled = false;
+            column.Filter.IsEnabled = current;
 
-            Assert.True(column.Filterable(GridFilterType.Single).Filter.IsEnabled);
+            Boolean? actual = column.Filterable(GridFilterType.Single).Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -216,12 +222,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void Sortable_FirstOrder_EnablesSort()
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Sortable_FirstOrder_SetsIsEnabled(Boolean? current, Boolean enabled)
         {
-            column.Sort.IsEnabled = false;
+            column.Sort.IsEnabled = current;
 
-            Assert.True(column.Sortable(GridSortOrder.Desc).Sort.IsEnabled);
+            Boolean? actual = column.Sortable(GridSortOrder.Desc).Sort.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

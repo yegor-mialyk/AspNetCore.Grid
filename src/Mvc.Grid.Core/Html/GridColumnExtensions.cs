@@ -59,7 +59,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, GridFilterType type)
         {
-            column.Filter.IsEnabled = true;
+            column.Filter.IsEnabled ??= true;
             column.Filter.Type = type;
 
             return column;
@@ -74,7 +74,7 @@ namespace NonFactors.Mvc.Grid
         public static IGridColumn<T, TValue> Sortable<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder firstOrder)
         {
             column.Sort.FirstOrder = firstOrder;
-            column.Sort.IsEnabled = true;
+            column.Sort.IsEnabled ??= true;
 
             return column;
         }
