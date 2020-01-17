@@ -18,11 +18,14 @@ namespace NonFactors.Mvc.Grid
 
         IHtmlContent ValueFor(IGridRow<Object> row);
     }
-
-    public interface IGridColumn<T, TValue> : IGridProcessor<T>, IGridColumn
+    public interface IGridColumn<T> : IGridColumn
     {
         IGrid<T> Grid { get; }
 
+        new IGridColumnSort<T> Sort { get; }
+    }
+    public interface IGridColumn<T, TValue> : IGridProcessor<T>, IGridColumn<T>
+    {
         Func<T, Int32, Object?>? RenderValue { get; set; }
         Expression<Func<T, TValue>> Expression { get; set; }
 

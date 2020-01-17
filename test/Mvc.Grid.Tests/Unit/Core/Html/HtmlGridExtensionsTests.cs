@@ -34,6 +34,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Build_AddsSortProcessor()
+        {
+            htmlGrid.Grid.Processors.Clear();
+
+            htmlGrid.Build(columns => { });
+
+            Object expected = htmlGrid.Grid.Sort;
+            Object actual = htmlGrid.Grid.Processors.Single();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Build_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;

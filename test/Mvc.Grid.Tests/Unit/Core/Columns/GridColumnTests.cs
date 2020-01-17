@@ -26,8 +26,19 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IGridColumn gridColumn = column;
 
-            Object actual = gridColumn.Filter;
-            Object expected = column.Filter;
+            Object actual = gridColumn.Sort;
+            Object expected = column.Sort;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void IGridColumnOfT_ReturnsSort()
+        {
+            IGridColumn<GridModel> gridColumn = column;
+
+            Object actual = gridColumn.Sort;
+            Object expected = column.Sort;
 
             Assert.Same(expected, actual);
         }
@@ -164,20 +175,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Process_ReturnsFilteredAndSortedItems()
+        public void Process_FiltereItems()
         {
             column.Filter = Substitute.For<IGridColumnFilter<GridModel, Object?>>();
-            column.Sort = Substitute.For<IGridColumnSort<GridModel, Object?>>();
 
             IQueryable<GridModel> filtered = new GridModel[2].AsQueryable();
-            IQueryable<GridModel> sorted = new GridModel[2].AsQueryable();
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();
 
             column.Filter.Apply(items).Returns(filtered);
-            column.Sort.Apply(filtered).Returns(sorted);
 
             Object actual = column.Process(items);
-            Object expected = sorted;
+            Object expected = filtered;
 
             Assert.Same(expected, actual);
         }

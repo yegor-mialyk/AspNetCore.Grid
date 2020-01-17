@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NSubstitute;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -18,88 +19,27 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Order_Set_Caches()
+        public void Index_ReturnsFromGridSort()
         {
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString("sort=name&order=asc");
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((2, GridSortOrder.Desc));
 
-            sort.Order = null;
-
-            Assert.Null(sort.Order);
-        }
-
-        [Theory]
-        [InlineData("", "sort=name&order=", "name", null)]
-        [InlineData("", "order=desc", null, GridSortOrder.Desc)]
-        [InlineData("", "sort=name&order=asc", "name", GridSortOrder.Asc)]
-        [InlineData("", "sort=name&order=desc", "name", GridSortOrder.Desc)]
-        [InlineData("", "SORT=NAME&ORDER=DESC", "name", GridSortOrder.Desc)]
-        [InlineData(null, "sort=name&order=", "name", null)]
-        [InlineData(null, "order=desc", null, GridSortOrder.Desc)]
-        [InlineData(null, "sort=name&order=asc", "name", GridSortOrder.Asc)]
-        [InlineData(null, "sort=name&order=desc", "name", GridSortOrder.Desc)]
-        [InlineData(null, "SORT=NAME&ORDER=DESC", "name", GridSortOrder.Desc)]
-        [InlineData("grid", "grid-sort=name&grid-order=", "name", null)]
-        [InlineData("grid", "grid-order=desc", null, GridSortOrder.Desc)]
-        [InlineData("grid", "grid-sort=name&grid-order=asc", "name", GridSortOrder.Asc)]
-        [InlineData("grid", "grid-sort=name&grid-order=desc", "name", GridSortOrder.Desc)]
-        [InlineData("grid", "GRID-SORT=NAME&GRID-ORDER=DESC", "name", GridSortOrder.Desc)]
-        public void Order_ReturnsFromQuery(String gridName, String query, String name, GridSortOrder? order)
-        {
-            sort.Column.Name = name;
-            sort.Column.Grid.Name = gridName;
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            GridSortOrder? actual = sort.Order;
-            GridSortOrder? expected = order;
+            Int32? actual = sort.Index;
+            Int32? expected = 2;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Order_Get_Disabled()
+        public void Order_ReturnsFromGridSort()
         {
-            sort.IsEnabled = false;
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString("sort=name&order=asc");
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((0, GridSortOrder.Desc));
 
-            Assert.Null(sort.Order);
-        }
-
-        [Theory]
-        [InlineData("", "sort=name&order=", "sort=name&order=desc")]
-        [InlineData("", "sort=name&order=asc", "sort=name&order=desc")]
-        [InlineData("", "sort=name&order=desc", "sort=name&order=asc")]
-        [InlineData(null, "sort=name&order=", "sort=name&order=desc")]
-        [InlineData(null, "sort=name&order=asc", "sort=name&order=desc")]
-        [InlineData(null, "sort=name&order=desc", "sort=name&order=asc")]
-        [InlineData("grid", "grid-sort=name&grid-order=", "grid-sort=name&grid-order=desc")]
-        [InlineData("grid", "grid-sort=name&grid-order=asc", "grid-sort=name&grid-order=desc")]
-        [InlineData("grid", "grid-sort=name&grid-order=desc", "grid-sort=name&grid-order=asc")]
-        public void Order_Get_Caches(String name, String query, String newQuery)
-        {
-            sort.Column.Grid.Name = name;
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            GridSortOrder? order = sort.Order;
-
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString(newQuery);
-
+            GridSortOrder? expected = GridSortOrder.Desc;
             GridSortOrder? actual = sort.Order;
-            GridSortOrder? expected = order;
 
             Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData("", "sort=test&order=test")]
-        [InlineData(null, "sort=test&order=test")]
-        [InlineData("grid", "grid-sort=test&grid-order=test")]
-        public void Order_OtherColumn_ReturnsNull(String name, String query)
-        {
-            sort.Column.Name = "this";
-            sort.Column.Grid.Name = name;
-            sort.Column.Grid.Query = HttpUtility.ParseQueryString(query);
-
-            Assert.Null(sort.Order);
         }
 
         [Fact]
@@ -137,50 +77,97 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Apply_NoOrder_ReturnsSameItems()
+        public void By_ReturnsSameItems()
         {
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();
-            sort.Order = null;
-
-            Object expected = items;
-            Object actual = sort.Apply(items);
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Apply_NotEnabled_ReturnsSameItems()
-        {
-            IQueryable<GridModel> items = new GridModel[2].AsQueryable();
-            sort.Order = GridSortOrder.Desc;
             sort.IsEnabled = false;
 
             Object expected = items;
-            Object actual = sort.Apply(items);
+            Object actual = sort.By(items);
 
             Assert.Same(expected, actual);
         }
 
         [Fact]
-        public void Apply_ReturnsItemsSortedInAscendingOrder()
+        public void By_AscendingOrder()
         {
-            IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
-            sort.Order = GridSortOrder.Asc;
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = "b" },
+                new GridModel { Name = "a" }
+            }.AsQueryable();
 
-            IEnumerable<GridModel> expected = items.OrderBy(model => model.Name);
-            IEnumerable<GridModel> actual = sort.Apply(items.AsQueryable());
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((0, GridSortOrder.Asc));
+
+            IQueryable<GridModel> expected = items.OrderBy(sort.Column.Expression);
+            IQueryable<GridModel> actual = sort.By(items);
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Apply_ReturnsItemsSortedInDescendingOrder()
+        public void By_DescendingOrder()
         {
-            IQueryable<GridModel> items = new[] { new GridModel { Name = "b" }, new GridModel { Name = "a" } }.AsQueryable();
-            sort.Order = GridSortOrder.Desc;
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = "a" },
+                new GridModel { Name = "b" }
+            }.AsQueryable();
 
-            IEnumerable<GridModel> expected = items.OrderByDescending(model => model.Name);
-            IEnumerable<GridModel> actual = sort.Apply(items.AsQueryable());
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((0, GridSortOrder.Desc));
+
+            IQueryable<GridModel> expected = items.OrderByDescending(sort.Column.Expression);
+            IQueryable<GridModel> actual = sort.By(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ThenBy_ReturnsSameItems()
+        {
+            IOrderedQueryable<GridModel> items = new GridModel[2].AsQueryable().OrderBy(item => item.ShortText);
+            sort.IsEnabled = false;
+
+            Object expected = items;
+            Object actual = sort.ThenBy(items);
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void ThenBy_AscendingOrder()
+        {
+            IOrderedQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = "b", ShortText = "c" },
+                new GridModel { Name = "a", ShortText = "c" }
+            }.AsQueryable().OrderBy(item => item.ShortText);
+
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((1, GridSortOrder.Asc));
+
+            IQueryable<GridModel> expected = items.ThenBy(item => item.Name);
+            IQueryable<GridModel> actual = sort.ThenBy(items);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ThenBy_DescendingOrder()
+        {
+            IOrderedQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = "a", ShortText = "c" },
+                new GridModel { Name = "b", ShortText = "c" }
+            }.AsQueryable().OrderBy(item => item.ShortText);
+
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns((1, GridSortOrder.Desc));
+
+            IQueryable<GridModel> expected = items.ThenByDescending(item => item.Name);
+            IQueryable<GridModel> actual = sort.ThenBy(items);
 
             Assert.Equal(expected, actual);
         }

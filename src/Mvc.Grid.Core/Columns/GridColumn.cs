@@ -24,6 +24,7 @@ namespace NonFactors.Mvc.Grid
         public Expression<Func<T, TValue>> Expression { get; set; }
 
         IGridColumnSort IGridColumn.Sort => Sort;
+        IGridColumnSort<T> IGridColumn<T>.Sort => Sort;
         public virtual IGridColumnSort<T, TValue> Sort { get; set; }
 
         IGridColumnFilter IGridColumn.Filter => Filter;
@@ -45,7 +46,7 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IQueryable<T> Process(IQueryable<T> items)
         {
-            return Sort.Apply(Filter.Apply(items));
+            return Filter.Apply(items);
         }
         public virtual IHtmlContent ValueFor(IGridRow<Object> row)
         {

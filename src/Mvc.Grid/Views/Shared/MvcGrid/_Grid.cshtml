@@ -50,7 +50,7 @@
 
                     if (column.Sort.IsEnabled == true)
                     {
-                    <button type="button" class="mvc-grid-sort"></button>
+                    <button type="button" class="mvc-grid-sort"><span>@(column.Sort.Index + 1)</span></button>
                     }
 
                     <button type="button" class="mvc-grid-filter @(filterApplied ? "applied" : "")"></button>
@@ -61,7 +61,7 @@
 
                     if (column.Sort.IsEnabled == true)
                     {
-                    <button type="button" class="mvc-grid-sort"></button>
+                    <button type="button" class="mvc-grid-sort"><span>@(column.Sort.Index + 1)</span></button>
                     }
                 }
                 </th>

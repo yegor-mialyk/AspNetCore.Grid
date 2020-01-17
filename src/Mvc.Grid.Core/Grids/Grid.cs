@@ -13,6 +13,7 @@ namespace NonFactors.Mvc.Grid
         public String Name { get; set; }
         public String? EmptyText { get; set; }
 
+        public IGridSort<T> Sort { get; set; }
         public IQueryable<T> Source { get; set; }
         public IQueryCollection? Query { get; set; }
         public GridProcessingMode Mode { get; set; }
@@ -44,6 +45,7 @@ namespace NonFactors.Mvc.Grid
 
             Columns = new GridColumns<T>(this);
             Rows = new GridRows<T>(this);
+            Sort = new GridSort<T>(this);
         }
     }
 }

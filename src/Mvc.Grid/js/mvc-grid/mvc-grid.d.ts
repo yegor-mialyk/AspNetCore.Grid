@@ -38,6 +38,7 @@ export declare class MvcGrid {
     loadingDelay: number;
     requestMethod: string;
     loadingTimerId?: number;
+    sort: Map<string, "asc" | "desc">;
     filterMode: "row" | "excel" | "header";
     filters: {
         [type: string]: typeof MvcGridFilter;
@@ -47,6 +48,7 @@ export declare class MvcGrid {
     reload(): void;
     private startLoading;
     private stopLoading;
+    private buildSort;
     private findGrid;
     private cleanUp;
     private bind;
@@ -67,7 +69,7 @@ export declare class MvcGridColumnSort {
     first: "asc" | "desc";
     order: "asc" | "desc" | "";
     constructor(column: MvcGridColumn);
-    toggle(): void;
+    toggle(multi: boolean): void;
     private bind;
 }
 export declare class MvcGridColumnFilter {

@@ -11,12 +11,11 @@
     <PackageId>NonFactors.Grid.Core.Mvc6</PackageId>
     <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <TargetFrameworks>net46;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.8" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" Condition="'$(TargetFramework)'=='netstandard1.6'" />
   </ItemGroup>
 
 </Project>

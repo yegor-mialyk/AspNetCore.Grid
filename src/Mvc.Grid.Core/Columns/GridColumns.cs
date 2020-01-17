@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridColumns<T> : List<IGridColumn>, IGridColumnsOf<T> where T : class
+    public class GridColumns<T> : List<IGridColumn<T>>, IGridColumnsOf<T> where T : class
     {
         public IGrid<T> Grid { get; set; }
 

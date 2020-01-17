@@ -100,6 +100,17 @@
     opacity: 0.15;
 }
 
+.mvc-grid-sort span {
+    position: absolute;
+    font-weight: bold;
+    text-align: left;
+    font-size: 0.7em;
+    color: #adacac;
+    width: 33%;
+    right: 0;
+    top: 40%;
+}
+
 .mvc-grid .desc .mvc-grid-sort::after,
 .mvc-grid .asc .mvc-grid-sort::before {
     opacity: 0.5;

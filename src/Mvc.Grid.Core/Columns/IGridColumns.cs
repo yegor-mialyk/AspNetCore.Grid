@@ -8,7 +8,7 @@ namespace NonFactors.Mvc.Grid
     {
     }
 
-    public interface IGridColumnsOf<T> : IGridColumns<IGridColumn>
+    public interface IGridColumnsOf<T> : IGridColumns<IGridColumn<T>>
     {
         IGrid<T> Grid { get; set; }
 

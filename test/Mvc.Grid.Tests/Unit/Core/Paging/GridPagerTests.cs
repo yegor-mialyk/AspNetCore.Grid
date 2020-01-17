@@ -343,7 +343,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void GridPager_SetsProcessorTypeAsPostProcessor()
+        public void GridPager_SetsProcessorType()
         {
             GridProcessorType actual = new GridPager<GridModel>(pager.Grid).ProcessorType;
             GridProcessorType expected = GridProcessorType.Post;

@@ -10,6 +10,8 @@ namespace NonFactors.Mvc.Grid
         {
             builder(html.Grid.Columns);
 
+            html.Grid.Processors.Add(html.Grid.Sort);
+
             return html;
         }
         public static IHtmlGrid<T> UsingUrl<T>(this IHtmlGrid<T> html, String url)

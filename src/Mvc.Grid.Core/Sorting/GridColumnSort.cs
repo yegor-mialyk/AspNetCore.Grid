@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -7,43 +6,21 @@ namespace NonFactors.Mvc.Grid
 {
     public class GridColumnSort<T, TValue> : IGridColumnSort<T, TValue>
     {
-        public Boolean? IsEnabled { get; set; }
-
+        public virtual Int32? Index
+        {
+            get
+            {
+                return Column.Grid.Sort[Column]?.Index;
+            }
+        }
         public virtual GridSortOrder? Order
         {
             get
             {
-                if (IsEnabled == true && !OrderIsSet)
-                {
-                    String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
-                    if (String.Equals(Column.Grid.Query?[prefix + "sort"], Column.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        String? order = Column.Grid.Query?[prefix + "order"];
-
-                        if ("asc".Equals(order, StringComparison.OrdinalIgnoreCase))
-                            Order = GridSortOrder.Asc;
-                        else if ("desc".Equals(order, StringComparison.OrdinalIgnoreCase))
-                            Order = GridSortOrder.Desc;
-                        else
-                            Order = null;
-                    }
-                    else
-                    {
-                        Order = null;
-                    }
-                }
-
-                return OrderValue;
-            }
-            set
-            {
-                OrderValue = value;
-                OrderIsSet = true;
+                return Column.Grid.Sort[Column]?.Order;
             }
         }
-        private Boolean OrderIsSet { get; set; }
-        private GridSortOrder? OrderValue { get; set; }
-
+        public Boolean? IsEnabled { get; set; }
         public GridSortOrder FirstOrder { get; set; }
 
         public IGridColumn<T, TValue> Column { get; set; }
@@ -55,15 +32,19 @@ namespace NonFactors.Mvc.Grid
             IsEnabled = column.Expression.Body is MemberExpression ? IsEnabled : false;
         }
 
-        public IQueryable<T> Apply(IQueryable<T> items)
+        public IQueryable<T> By(IQueryable<T> items)
         {
-            if (IsEnabled != true || Order == null)
+            if (IsEnabled != true)
                 return items;
 
-            if (Order == GridSortOrder.Asc)
-                return items.OrderBy(Column.Expression);
+            return Order == GridSortOrder.Asc ? items.OrderBy(Column.Expression) : items.OrderByDescending(Column.Expression);
+        }
+        public IQueryable<T> ThenBy(IOrderedQueryable<T> items)
+        {
+            if (IsEnabled != true)
+                return items;
 
-            return items.OrderByDescending(Column.Expression);
+            return Order == GridSortOrder.Asc ? items.ThenBy(Column.Expression) : items.ThenByDescending(Column.Expression);
         }
     }
 }

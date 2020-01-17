@@ -92,8 +92,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
-            GridColumns<GridModel> actual = (GridColumns<GridModel>)grid.Columns;
-            GridColumns<GridModel> expected = new GridColumns<GridModel>(grid);
+            IGridColumnsOf<GridModel> expected = new GridColumns<GridModel>(grid);
+            IGridColumnsOf<GridModel> actual = grid.Columns;
 
             Assert.Same(expected.Grid, actual.Grid);
             Assert.Equal(expected, actual);
@@ -113,11 +113,22 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
 
-            GridRows<GridModel> expected = new GridRows<GridModel>(grid);
-            GridRows<GridModel> actual = (GridRows<GridModel>)grid.Rows;
+            IGridRowsOf<GridModel> expected = new GridRows<GridModel>(grid);
+            IGridRowsOf<GridModel> actual = grid.Rows;
 
             Assert.Same(expected.Grid, actual.Grid);
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Grid_SetsSort()
+        {
+            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+
+            IGridSort<GridModel> expected = new GridSort<GridModel>(grid);
+            IGridSort<GridModel> actual = grid.Sort;
+
+            Assert.Same(expected.Grid, actual.Grid);
         }
     }
 }

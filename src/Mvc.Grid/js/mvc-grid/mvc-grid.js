@@ -29,6 +29,7 @@ class MvcGrid {
         grid.url = element.dataset.url ? new URL(element.dataset.url, location.href) : new URL(location.href);
         grid.url = options.url ? new URL(options.url.toString(), location.href) : grid.url;
         grid.url = options.query ? new URL(`?${options.query}`, grid.url.href) : grid.url;
+        grid.sort = grid.buildSort();
         grid.filters = {
             enum: MvcGridEnumFilter,
             date: MvcGridDateFilter,
@@ -188,6 +189,21 @@ class MvcGrid {
         }
     }
 
+    buildSort() {
+        const map = new Map();
+        const definitions = /(^|,)(.*?) (asc|desc)(?=$|,)/g;
+        const sort = this.url.searchParams.get(`${this.prefix}sort`) || "";
+
+        let match = definitions.exec(sort);
+
+        while (match) {
+            map.set(match[2], match[3]);
+
+            match = definitions.exec(sort);
+        }
+
+        return map;
+    }
     findGrid(element) {
         const grid = element.closest(".mvc-grid");
 
@@ -314,9 +330,10 @@ class MvcGridColumnSort {
         sort.bind();
     }
 
-    toggle() {
+    toggle(multi) {
         const sort = this;
         const grid = sort.column.grid;
+        const map = sort.column.grid.sort;
         const query = grid.url.searchParams;
 
         if (sort.order == sort.first) {
@@ -327,12 +344,22 @@ class MvcGridColumnSort {
             sort.order = sort.first;
         }
 
-        query.delete(`${grid.prefix}sort`);
-        query.delete(`${grid.prefix}order`);
+        if (!multi) {
+            map.clear();
+        }
 
         if (sort.order) {
-            query.set(`${grid.prefix}sort`, sort.column.name);
-            query.set(`${grid.prefix}order`, sort.order);
+            map.set(sort.column.name, sort.order);
+        } else {
+            map.delete(sort.column.name);
+        }
+
+        const order = Array.from(map).map(value => value.join(" ")).join(",");
+
+        query.delete(`${grid.prefix}sort`);
+
+        if (order) {
+            query.set(`${grid.prefix}sort`, order);
         }
 
         grid.reload();
@@ -344,12 +371,14 @@ class MvcGridColumnSort {
         column.header.addEventListener("click", e => {
             if (!column.filter || column.grid.filterMode != "header") {
                 if (!/mvc-grid-(sort|filter)/.test(e.target.className)) {
-                    sort.toggle();
+                    sort.toggle(e.ctrlKey || e.shiftKey);
                 }
             }
         });
 
-        sort.button.addEventListener("click", sort.toggle.bind(sort));
+        sort.button.addEventListener("click", e => {
+            sort.toggle(e.ctrlKey || e.shiftKey);
+        });
     }
 }
 
@@ -405,8 +434,7 @@ class MvcGridColumnFilter {
         const grid = this.column.grid;
         const query = grid.url.searchParams;
         const prefix = this.column.grid.prefix;
-        const sort = query.get(`${prefix}sort`);
-        const order = query.get(`${prefix}order`);
+        const order = query.get(`${prefix}sort`);
 
         for (const column of grid.columns) {
             for (const key of [...query.keys()]) {
@@ -416,7 +444,6 @@ class MvcGridColumnFilter {
             }
         }
 
-        query.delete(`${prefix}order`);
         query.delete(`${prefix}sort`);
         query.delete(`${prefix}page`);
         query.delete(`${prefix}rows`);
@@ -436,12 +463,8 @@ class MvcGridColumnFilter {
             }
         }
 
-        if (sort) {
-            query.set(`${prefix}sort`, sort);
-        }
-
         if (order) {
-            query.set(`${prefix}order`, order);
+            query.set(`${prefix}sort`, order);
         }
 
         if (grid.pager && grid.pager.showPageSizes) {
