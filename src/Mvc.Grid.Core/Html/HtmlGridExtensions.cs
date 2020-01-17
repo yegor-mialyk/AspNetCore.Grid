@@ -116,17 +116,14 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
-        public static IHtmlGrid<T> Pageable<T>(this IHtmlGrid<T> html, Action<IGridPager<T>> builder)
+        public static IHtmlGrid<T> Pageable<T>(this IHtmlGrid<T> html, Action<IGridPager<T>>? builder = null)
         {
-            builder(html.Grid.Pager ??= new GridPager<T>(html.Grid));
-
+            html.Grid.Pager ??= new GridPager<T>(html.Grid);
             html.Grid.Processors.Add(html.Grid.Pager);
 
+            builder?.Invoke(html.Grid.Pager);
+
             return html;
-        }
-        public static IHtmlGrid<T> Pageable<T>(this IHtmlGrid<T> html)
-        {
-            return html.Pageable(builder => { });
         }
     }
 }

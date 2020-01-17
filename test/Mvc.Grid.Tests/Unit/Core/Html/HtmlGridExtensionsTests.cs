@@ -369,88 +369,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Pageable_Builder_DoesNotChangePager()
-        {
-            IGridPager<GridModel> pager = new GridPager<GridModel>(htmlGrid.Grid);
-            htmlGrid.Grid.Pager = pager;
-
-            htmlGrid.Pageable(gridPager => { });
-
-            IGridPager actual = htmlGrid.Grid.Pager;
-            IGridPager expected = pager;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Pageable_Builder_CreatesGridPager()
-        {
-            htmlGrid.Grid.Pager = null;
-
-            htmlGrid.Pageable(pager => { });
-
-            IGridPager<GridModel> expected = new GridPager<GridModel>(htmlGrid.Grid);
-            IGridPager<GridModel> actual = htmlGrid.Grid.Pager!;
-
-            Assert.Equal(expected.FirstDisplayPage, actual.FirstDisplayPage);
-            Assert.Equal(expected.PartialViewName, actual.PartialViewName);
-            Assert.Equal(expected.PagesToDisplay, actual.PagesToDisplay);
-            Assert.Equal(expected.ProcessorType, actual.ProcessorType);
-            Assert.Equal(expected.CurrentPage, actual.CurrentPage);
-            Assert.Equal(expected.RowsPerPage, actual.RowsPerPage);
-            Assert.Equal(expected.TotalPages, actual.TotalPages);
-            Assert.Equal(expected.TotalRows, actual.TotalRows);
-            Assert.Same(expected.Grid, actual.Grid);
-        }
-
-        [Fact]
-        public void Pageable_Builder_Pager()
-        {
-            htmlGrid.Grid.Pager = new GridPager<GridModel>(htmlGrid.Grid);
-            IGridPager expected = htmlGrid.Grid.Pager;
-            Boolean builderCalled = false;
-
-            htmlGrid.Pageable(actual =>
-            {
-                Assert.Same(expected, actual);
-                builderCalled = true;
-            });
-
-            Assert.True(builderCalled);
-        }
-
-        [Fact]
-        public void Pageable_Builder_AddsGridProcessor()
-        {
-            htmlGrid.Grid.Processors.Clear();
-
-            htmlGrid.Pageable(pager => { });
-
-            Object? actual = htmlGrid.Grid.Processors.Single();
-            Object? expected = htmlGrid.Grid.Pager;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Pageable_Builder_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Pageable(gridPager => { });
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void Pageable_DoesNotChangeExistingPager()
+        public void Pageable_DoesNotChangePager()
         {
             IGridPager<GridModel> pager = new GridPager<GridModel>(htmlGrid.Grid);
             htmlGrid.Grid.Pager = pager;
 
             htmlGrid.Pageable();
 
-            Object expected = pager;
-            Object actual = htmlGrid.Grid.Pager;
+            IGridPager actual = htmlGrid.Grid.Pager;
+            IGridPager expected = pager;
 
             Assert.Same(expected, actual);
         }
@@ -477,24 +404,26 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Pageable_AddsGridPagerProcessor()
+        public void Pageable_ConfiguresPager()
         {
-            htmlGrid.Grid.Processors.Clear();
+            htmlGrid.Grid.Pager = new GridPager<GridModel>(htmlGrid.Grid);
+            IGridPager expected = htmlGrid.Grid.Pager;
+            Boolean builderCalled = false;
 
-            htmlGrid.Pageable();
+            htmlGrid.Pageable(actual =>
+            {
+                Assert.Same(expected, actual);
+                builderCalled = true;
+            });
 
-            Object? actual = htmlGrid.Grid.Processors.Single();
-            Object? expected = htmlGrid.Grid.Pager;
-
-            Assert.Same(expected, actual);
+            Assert.True(builderCalled);
         }
 
         [Fact]
-        public void Pageable_DoesNotReaddGridProcessor()
+        public void Pageable_AddsGridProcessor()
         {
             htmlGrid.Grid.Processors.Clear();
 
-            htmlGrid.Pageable();
             htmlGrid.Pageable();
 
             Object? actual = htmlGrid.Grid.Processors.Single();
