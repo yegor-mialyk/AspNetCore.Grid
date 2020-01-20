@@ -94,7 +94,7 @@
 }
 
 .mvc-grid-sort::before {
-    margin-right: -7px;
+    margin-right: -0.5em;
     font-size: 0.9em;
     content: "\0043";
     opacity: 0.15;
