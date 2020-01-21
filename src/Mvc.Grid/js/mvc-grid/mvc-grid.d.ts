@@ -13,7 +13,6 @@ interface MvcGridOptions {
     query: string;
     isAjax: boolean;
     loadingDelay: number;
-    requestMethod: string;
     filters: {
         [type: string]: typeof MvcGridFilter;
     };
@@ -36,7 +35,6 @@ export declare class MvcGrid {
     prefix: string;
     isAjax: boolean;
     loadingDelay: number;
-    requestMethod: string;
     loadingTimerId?: number;
     sort: Map<string, "asc" | "desc">;
     filterMode: "row" | "excel" | "header";
