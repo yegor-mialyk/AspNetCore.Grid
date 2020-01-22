@@ -33,7 +33,8 @@
 }
 
 .mvc-grid > table > thead > tr > th,
-.mvc-grid > table > tbody > tr > td {
+.mvc-grid > table > tbody > tr > td,
+.mvc-grid > table > tfoot > tr > td  {
     border: 1px solid #dee2e6;
     padding: 0.75em;
 }
