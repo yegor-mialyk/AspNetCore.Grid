@@ -219,30 +219,30 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void FilteredAs_SetsIsEnabled(Boolean? current, Boolean enabled)
+        public void Filterable_FilterName_SetsIsEnabled(Boolean? current, Boolean enabled)
         {
             column.Filter.IsEnabled = current;
 
-            Boolean? actual = column.FilteredAs("test").Filter.IsEnabled;
+            Boolean? actual = column.Filterable("test").Filter.IsEnabled;
             Boolean? expected = enabled;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilteredAs_SetsFilterName()
+        public void Filterable_SetsFilterName()
         {
             String expected = "Numeric";
-            String actual = column.FilteredAs("Numeric").Filter.Name;
+            String actual = column.Filterable("Numeric").Filter.Name;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FilteredAs_ReturnsColumn()
+        public void Filterable_FilterName_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.FilteredAs("Numeric");
+            Object actual = column.Filterable("Numeric");
 
             Assert.Same(expected, actual);
         }

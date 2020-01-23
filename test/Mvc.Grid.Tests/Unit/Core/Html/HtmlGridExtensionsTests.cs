@@ -55,24 +55,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Same(expected, actual);
         }
 
-        [Fact]
-        public void UsingUrl_SetsUrl()
-        {
-            String actual = htmlGrid.UsingUrl("/test/index").Grid.Url;
-            String expected = "/test/index";
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void UsingUrl_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingUrl("");
-
-            Assert.Same(expected, actual);
-        }
-
         [Theory]
         [InlineData(null, GridFilterType.Double)]
         [InlineData(GridFilterType.Single, GridFilterType.Single)]
@@ -292,65 +274,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingProcessor_AddsProcessorToGrid()
-        {
-            IGridProcessor<GridModel> processor = Substitute.For<IGridProcessor<GridModel>>();
-            htmlGrid.Grid.Processors.Clear();
-
-            htmlGrid.UsingProcessor(processor);
-
-            Object actual = htmlGrid.Grid.Processors.Single();
-            Object expected = processor;
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void UsingProcessor_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingProcessor(Substitute.For<IGridProcessor<GridModel>>());
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void UsingProcessingMode_SetsProcessingMode()
-        {
-            GridProcessingMode actual = htmlGrid.UsingProcessingMode(GridProcessingMode.Manual).Grid.Mode;
-            GridProcessingMode expected = GridProcessingMode.Manual;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UsingProcessingMode_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingProcessingMode(GridProcessingMode.Manual);
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
-        public void UsingFilterMode_SetsFilterMode()
-        {
-            GridFilterMode actual = htmlGrid.UsingFilterMode(GridFilterMode.Row).Grid.FilterMode;
-            GridFilterMode expected = GridFilterMode.Row;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UsingFilterMode_ReturnsHtmlGrid()
-        {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingFilterMode(GridFilterMode.Header);
-
-            Assert.Same(expected, actual);
-        }
-
-        [Fact]
         public void UsingFooter_SetsFooterPartialViewName()
         {
             String actual = htmlGrid.UsingFooter("Partial").Grid.FooterPartialViewName;
@@ -364,6 +287,83 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Object expected = htmlGrid;
             Object actual = htmlGrid.UsingFooter("Partial");
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Using_Processor_AddsProcessorToGrid()
+        {
+            IGridProcessor<GridModel> processor = Substitute.For<IGridProcessor<GridModel>>();
+            htmlGrid.Grid.Processors.Clear();
+
+            htmlGrid.Using(processor);
+
+            Object actual = htmlGrid.Grid.Processors.Single();
+            Object expected = processor;
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Using_Processor_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Using(Substitute.For<IGridProcessor<GridModel>>());
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Using_ProcessingMode_SetsProcessingMode()
+        {
+            GridProcessingMode actual = htmlGrid.Using(GridProcessingMode.Manual).Grid.Mode;
+            GridProcessingMode expected = GridProcessingMode.Manual;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Using_ProcessingMode_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Using(GridProcessingMode.Manual);
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Using_FilterMode_SetsFilterMode()
+        {
+            GridFilterMode actual = htmlGrid.Using(GridFilterMode.Row).Grid.FilterMode;
+            GridFilterMode expected = GridFilterMode.Row;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Using_FilterMode_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Using(GridFilterMode.Header);
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void UsingUrl_SetsUrl()
+        {
+            String actual = htmlGrid.UsingUrl("/test/index").Grid.Url;
+            String expected = "/test/index";
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void UsingUrl_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.UsingUrl("");
 
             Assert.Same(expected, actual);
         }

@@ -14,12 +14,6 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
-        public static IHtmlGrid<T> UsingUrl<T>(this IHtmlGrid<T> html, String url)
-        {
-            html.Grid.Url = url;
-
-            return html;
-        }
 
         public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterType? type = null)
         {
@@ -90,28 +84,33 @@ namespace NonFactors.Mvc.Grid
             return html;
         }
 
-        public static IHtmlGrid<T> UsingProcessingMode<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
+        public static IHtmlGrid<T> UsingFooter<T>(this IHtmlGrid<T> html, String partialViewName)
         {
-            html.Grid.Mode = mode;
+            html.Grid.FooterPartialViewName = partialViewName;
 
             return html;
         }
-        public static IHtmlGrid<T> UsingProcessor<T>(this IHtmlGrid<T> html, IGridProcessor<T> processor)
+        public static IHtmlGrid<T> Using<T>(this IHtmlGrid<T> html, IGridProcessor<T> processor)
         {
             html.Grid.Processors.Add(processor);
 
             return html;
         }
-        public static IHtmlGrid<T> UsingFilterMode<T>(this IHtmlGrid<T> html, GridFilterMode mode)
+        public static IHtmlGrid<T> Using<T>(this IHtmlGrid<T> html, GridProcessingMode mode)
+        {
+            html.Grid.Mode = mode;
+
+            return html;
+        }
+        public static IHtmlGrid<T> Using<T>(this IHtmlGrid<T> html, GridFilterMode mode)
         {
             html.Grid.FilterMode = mode;
 
             return html;
         }
-
-        public static IHtmlGrid<T> UsingFooter<T>(this IHtmlGrid<T> html, String partialViewName)
+        public static IHtmlGrid<T> UsingUrl<T>(this IHtmlGrid<T> html, String url)
         {
-            html.Grid.FooterPartialViewName = partialViewName;
+            html.Grid.Url = url;
 
             return html;
         }

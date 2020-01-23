@@ -64,7 +64,7 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-        public static IGridColumn<T, TValue> FilteredAs<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
+        public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
         {
             column.Filter.IsEnabled ??= true;
             column.Filter.Name = filterName;
