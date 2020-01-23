@@ -108,12 +108,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             }
         }
 
-        [Fact]
-        public void UsingFilterOptions_EnablesFilter()
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void UsingFilterOptions_SetsIsEnabled(Boolean? current, Boolean enabled)
         {
-            column.Filter.IsEnabled = false;
+            column.Filter.IsEnabled = current;
 
-            Assert.True(column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.IsEnabled);
+            Boolean? actual = column.UsingFilterOptions(Array.Empty<SelectListItem>()).Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -132,6 +138,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             String actual = column.UsingDefaultFilterMethod("test").Filter.DefaultMethod;
 
             Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void UsingDefaultFilterMethod_SetsIsEnabled(Boolean? current, Boolean enabled)
+        {
+            column.Filter.IsEnabled = current;
+
+            Boolean? actual = column.UsingDefaultFilterMethod("test").Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -193,6 +213,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Object actual = column.Filterable(true);
 
             Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void FilteredAs_SetsIsEnabled(Boolean? current, Boolean enabled)
+        {
+            column.Filter.IsEnabled = current;
+
+            Boolean? actual = column.FilteredAs("test").Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

@@ -24,7 +24,7 @@ namespace NonFactors.Mvc.Grid
         {
             if (String.IsNullOrEmpty(column.Filter.DefaultMethod))
                 column.Filter.DefaultMethod = "equals";
-            column.Filter.IsEnabled = true;
+            column.Filter.IsEnabled ??= true;
 
             column.Filter.Options = options ?? new[] { new SelectListItem() }
                 .Concat(column
@@ -44,10 +44,10 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
-
         public static IGridColumn<T, TValue> UsingDefaultFilterMethod<T, TValue>(this IGridColumn<T, TValue> column, String method)
         {
             column.Filter.DefaultMethod = method;
+            column.Filter.IsEnabled ??= true;
 
             return column;
         }
@@ -66,6 +66,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> FilteredAs<T, TValue>(this IGridColumn<T, TValue> column, String filterName)
         {
+            column.Filter.IsEnabled ??= true;
             column.Filter.Name = filterName;
 
             return column;
