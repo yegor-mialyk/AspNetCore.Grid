@@ -180,7 +180,7 @@ class MvcGrid {
         grid.controller.abort();
         clearTimeout(grid.loadingTimerId);
 
-        if (grid.loader) {
+        if (grid.loader && grid.loader.parentElement) {
             grid.loader.parentElement.removeChild(grid.loader);
         }
     }

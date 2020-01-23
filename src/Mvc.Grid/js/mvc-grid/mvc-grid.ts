@@ -267,8 +267,8 @@ export class MvcGrid {
 
         clearTimeout(grid.loadingTimerId);
 
-        if (grid.loader) {
-            grid.loader.parentElement!.removeChild(grid.loader);
+        if (grid.loader && grid.loader.parentElement) {
+            grid.loader.parentElement.removeChild(grid.loader);
         }
     }
 
