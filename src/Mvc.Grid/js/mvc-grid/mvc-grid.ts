@@ -189,15 +189,10 @@ export class MvcGrid {
                 if (grid.loader && grid.loader.parentElement) {
                     clearTimeout(grid.loadingTimerId);
                 } else {
-                    const content = document.createElement("div");
+                    const loader = document.createElement("template");
 
-                    content.appendChild(document.createElement("div"));
-                    content.appendChild(document.createElement("div"));
-                    content.appendChild(document.createElement("div"));
-
-                    grid.loader = document.createElement("div");
-                    grid.loader.className = "mvc-grid-loader";
-                    grid.loader.appendChild(content);
+                    loader.innerHTML = `<div class="mvc-grid-loader"><div><div></div><div></div><div></div></div></div>`;
+                    grid.loader = <HTMLDivElement>loader.content.firstElementChild;
 
                     grid.element.appendChild(grid.loader);
                 }
