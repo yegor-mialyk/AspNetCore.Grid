@@ -93,95 +93,89 @@ class MvcGrid {
         }));
 
         if (grid.isAjax) {
-            grid.startLoading()
-                .then(response => {
-                    const parent = grid.element.parentElement;
-                    const template = document.createElement("template");
-                    const i = [].indexOf.call(parent.children, grid.element);
+            const url = new URL(grid.url.href);
 
-                    template.innerHTML = response.trim();
+            grid.controller.abort();
+            MvcGridPopup.lastActiveElement = null;
+            grid.controller = new AbortController();
+            url.searchParams.set("_", String(Date.now()));
 
-                    if (template.content.firstElementChild.classList.contains("mvc-grid")) {
-                        grid.element.outerHTML = response;
-                    } else {
-                        throw new Error("Grid partial should only include grid declaration.");
-                    }
+            if (grid.loadingDelay != null) {
+                if (grid.loader && grid.loader.parentElement) {
+                    clearTimeout(grid.loadingTimerId);
+                } else {
+                    const content = document.createElement("div");
 
-                    const newGrid = new MvcGrid(parent.children[i], {
-                        loadingDelay: grid.loadingDelay,
-                        id: grid.element.dataset.id,
-                        filters: grid.filters,
-                        isAjax: grid.isAjax,
-                        url: grid.url
-                    });
+                    content.appendChild(document.createElement("div"));
+                    content.appendChild(document.createElement("div"));
+                    content.appendChild(document.createElement("div"));
 
-                    newGrid.element.dispatchEvent(new CustomEvent("reloadend", {
-                        detail: { grid: newGrid },
-                        bubbles: true
-                    }));
-                })
-                .catch(result => {
-                    grid.stopLoading();
+                    grid.loader = document.createElement("div");
+                    grid.loader.className = "mvc-grid-loader";
+                    grid.loader.appendChild(content);
 
-                    grid.element.dispatchEvent(new CustomEvent("reloadfail", {
-                        detail: { grid, result },
-                        bubbles: true
-                    }));
+                    grid.element.appendChild(grid.loader);
+                }
 
-                    throw result;
-                });
-        } else {
-            location.href = grid.url.href;
-        }
-    }
-    startLoading() {
-        const grid = this;
-        const url = new URL(grid.url.href);
-
-        grid.stopLoading();
-        MvcGridPopup.lastActiveElement = null;
-        grid.controller = new AbortController();
-        url.searchParams.set("_", String(Date.now()));
-
-        if (grid.loadingDelay != null && !grid.element.querySelector(".mvc-grid-loader")) {
-            const content = document.createElement("div");
-
-            content.appendChild(document.createElement("div"));
-            content.appendChild(document.createElement("div"));
-            content.appendChild(document.createElement("div"));
-
-            grid.loader = document.createElement("div");
-            grid.loader.className = "mvc-grid-loader";
-            grid.loader.appendChild(content);
-
-            grid.loadingTimerId = setTimeout(() => {
-                grid.loader.classList.add("mvc-grid-loading");
-            }, grid.loadingDelay);
-
-            grid.element.appendChild(grid.loader);
-        }
-
-        MvcGridPopup.hide();
-
-        return fetch(url.href, {
-            signal: grid.controller.signal,
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-        }).then(response => {
-            if (response.ok) {
-                return response.text();
+                grid.loadingTimerId = setTimeout(() => {
+                    grid.loader.classList.add("mvc-grid-loading");
+                }, grid.loadingDelay);
             }
 
-            return Promise.reject(new Error(`Invalid response status: ${response.status}`));
-        });
-    }
-    stopLoading() {
-        const grid = this;
+            MvcGridPopup.hide();
 
-        grid.controller.abort();
-        clearTimeout(grid.loadingTimerId);
+            fetch(url.href, {
+                signal: grid.controller.signal,
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Invalid response status: ${response.status}`);
+                }
 
-        if (grid.loader && grid.loader.parentElement) {
-            grid.loader.parentElement.removeChild(grid.loader);
+                return response.text();
+            }).then(response => {
+                const parent = grid.element.parentElement;
+                const template = document.createElement("template");
+                const i = [].indexOf.call(parent.children, grid.element);
+
+                template.innerHTML = response.trim();
+
+                if (template.content.firstElementChild.classList.contains("mvc-grid")) {
+                    grid.element.outerHTML = response;
+                } else {
+                    throw new Error("Grid partial should only include grid declaration.");
+                }
+
+                const newGrid = new MvcGrid(parent.children[i], {
+                    loadingDelay: grid.loadingDelay,
+                    id: grid.element.dataset.id,
+                    filters: grid.filters,
+                    isAjax: grid.isAjax,
+                    url: grid.url
+                });
+
+                newGrid.element.dispatchEvent(new CustomEvent("reloadend", {
+                    detail: { grid: newGrid },
+                    bubbles: true
+                }));
+            }).catch(reason => {
+                if (reason.name == "AbortError") {
+                    return Promise.resolve();
+                }
+
+                if (grid.loader && grid.loader.parentElement) {
+                    grid.loader.parentElement.removeChild(grid.loader);
+                }
+
+                grid.element.dispatchEvent(new CustomEvent("reloadfail", {
+                    detail: { grid, result: reason },
+                    bubbles: true
+                }));
+
+                return Promise.reject(reason);
+            });
+        } else {
+            location.href = grid.url.href;
         }
     }
 

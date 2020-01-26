@@ -44,8 +44,6 @@ export declare class MvcGrid {
     constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
     set(options: Partial<MvcGridOptions>): MvcGrid;
     reload(): void;
-    private startLoading;
-    private stopLoading;
     private buildSort;
     private findGrid;
     private cleanUp;
