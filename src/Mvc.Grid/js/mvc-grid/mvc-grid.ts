@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-interface MvcGridOptions {
+export interface MvcGridOptions {
     url: URL;
     id: string;
     query: string;
@@ -19,7 +19,7 @@ interface MvcGridOptions {
     };
 }
 
-interface MvcGridLanguage {
+export interface MvcGridLanguage {
     [type: string]: {
         [method: string]: string
     };

@@ -7,7 +7,7 @@
  * Licensed under the terms of the MIT License
  * http://www.opensource.org/licenses/mit-license.php
  */
-interface MvcGridOptions {
+export interface MvcGridOptions {
     url: URL;
     id: string;
     query: string;
@@ -17,7 +17,7 @@ interface MvcGridOptions {
         [type: string]: typeof MvcGridFilter;
     };
 }
-interface MvcGridLanguage {
+export interface MvcGridLanguage {
     [type: string]: {
         [method: string]: string;
     };
@@ -154,4 +154,3 @@ export declare class MvcGridGuidFilter extends MvcGridFilter {
 export declare class MvcGridBooleanFilter extends MvcGridFilter {
     constructor(column: MvcGridColumn);
 }
-export {};
