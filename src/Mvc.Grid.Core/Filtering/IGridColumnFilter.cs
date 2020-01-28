@@ -10,6 +10,7 @@ namespace NonFactors.Mvc.Grid
         String Name { get; set; }
         Boolean? IsEnabled { get; set; }
         String DefaultMethod { get; set; }
+        GridFilterCase? Case { get; set; }
         GridFilterType? Type { get; set; }
         IEnumerable<SelectListItem> Options { get; set; }
 

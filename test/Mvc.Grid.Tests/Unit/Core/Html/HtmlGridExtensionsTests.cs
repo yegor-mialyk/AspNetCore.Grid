@@ -59,30 +59,30 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, GridFilterType.Double)]
         [InlineData(GridFilterType.Single, GridFilterType.Single)]
         [InlineData(GridFilterType.Double, GridFilterType.Double)]
-        public void Filterable_SetsType(GridFilterType? type, GridFilterType? expected)
+        public void Filterable_SetsType(GridFilterType? current, GridFilterType type)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.Filter.Type = type;
+                column.Filter.Type = current;
 
             htmlGrid.Filterable(GridFilterType.Double);
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.Filter.Type);
+                Assert.Equal(type, actual.Filter.Type);
         }
 
         [Theory]
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void Filterable_SetsIsEnabled(Boolean? isEnabled, Boolean? expected)
+        public void Filterable_SetsIsEnabled(Boolean? current, Boolean isEnabled)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.Filter.IsEnabled = isEnabled;
+                column.Filter.IsEnabled = current;
 
             htmlGrid.Filterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.Filter.IsEnabled);
+                Assert.Equal(isEnabled, actual.Filter.IsEnabled);
         }
 
         [Fact]
@@ -98,15 +98,55 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void Sortable_SetsIsEnabled(Boolean? isEnabled, Boolean? expected)
+        public void Filterable_Case_SetsIsEnabled(Boolean? current, Boolean isEnabled)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.Sort.IsEnabled = isEnabled;
+                column.Filter.IsEnabled = current;
+
+            htmlGrid.Filterable(GridFilterCase.Original);
+
+            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+                Assert.Equal(isEnabled, actual.Filter.IsEnabled);
+        }
+
+        [Theory]
+        [InlineData(null, GridFilterCase.Lower)]
+        [InlineData(GridFilterCase.Lower, GridFilterCase.Lower)]
+        [InlineData(GridFilterCase.Upper, GridFilterCase.Upper)]
+        [InlineData(GridFilterCase.Original, GridFilterCase.Original)]
+        public void Filterable_SetsCase(GridFilterCase? current, GridFilterCase filterCace)
+        {
+            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+                column.Filter.Case = current;
+
+            htmlGrid.Filterable(GridFilterCase.Lower);
+
+            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+                Assert.Equal(filterCace, actual.Filter.Case);
+        }
+
+        [Fact]
+        public void Filterable_Case_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Filterable(GridFilterCase.Upper);
+
+            Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Sortable_SetsIsEnabled(Boolean? current, Boolean? isEnabled)
+        {
+            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+                column.Sort.IsEnabled = current;
 
             htmlGrid.Sortable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.Sort.IsEnabled);
+                Assert.Equal(isEnabled, actual.Sort.IsEnabled);
         }
 
         [Fact]

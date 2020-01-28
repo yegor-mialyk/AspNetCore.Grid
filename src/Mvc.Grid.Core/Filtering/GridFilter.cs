@@ -5,10 +5,16 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public abstract class BaseGridFilter : IGridFilter
+    public abstract class GridFilter : IGridFilter
     {
         public String? Method { get; set; }
         public StringValues Values { get; set; }
+        public GridFilterCase Case { get; set; }
+
+        public GridFilter()
+        {
+            Case = GridFilterCase.Original;
+        }
 
         public virtual Expression? Apply(Expression expression)
         {

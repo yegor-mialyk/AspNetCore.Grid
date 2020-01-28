@@ -640,16 +640,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("or")]
-        [InlineData("OR")]
+        [InlineData("and")]
+        [InlineData("AND")]
         public void Apply_UsingAndOperator(String op)
         {
             filter.Operator = op;
             filter.Type = GridFilterType.Double;
             filter.First = new StringContainsFilter { Values = new[] { "a" } };
-            filter.Second = new StringContainsFilter { Values = new[] { "aA" } };
+            filter.Second = new StringContainsFilter { Values = new[] { "A" } };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A") && item.Name.ToUpper().Contains("AA"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a") && item.Name.Contains("A"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -665,7 +665,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.First = new StringContainsFilter { Values = new[] { "a" } };
             filter.Second = new StringContainsFilter { Values = new[] { "bB" } };
 
-            IQueryable expected = items.Where(item => item.Name != null && (item.Name.ToUpper().Contains("A") || item.Name.ToUpper().Contains("BB")));
+            IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("a") || item.Name.Contains("bB")));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -682,7 +682,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.First = new StringContainsFilter { Values = new[] { "a" } };
             filter.Second = new StringContainsFilter { Values = new[] { "BB" } };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);
@@ -696,7 +696,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filter.First = new StringContainsFilter { Values = new[] { "a" } };
             filter.Second = new StringContainsFilter { Values = new[] { "bb" } };
 
-            IQueryable expected = items.Where(item => item.Name != null && item.Name.ToUpper().Contains("A"));
+            IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
             IQueryable actual = filter.Apply(items);
 
             Assert.Equal(expected, actual);

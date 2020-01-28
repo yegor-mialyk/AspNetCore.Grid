@@ -51,6 +51,21 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
+
+        public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, Action<IGridColumnFilter<T, TValue>> configure)
+        {
+            column.Filter.IsEnabled ??= true;
+            configure(column.Filter);
+
+            return column;
+        }
+        public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, GridFilterCase filterCase)
+        {
+            column.Filter.IsEnabled ??= true;
+            column.Filter.Case = filterCase;
+
+            return column;
+        }
         public static IGridColumn<T, TValue> Filterable<T, TValue>(this IGridColumn<T, TValue> column, Boolean isFilterable)
         {
             column.Filter.IsEnabled = isFilterable;

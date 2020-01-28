@@ -14,35 +14,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-            Assert.Null(new StringEndsWithFilter { Method = "ends-with", Values = new[] { value } }.Apply(expression));
+            Assert.Null(new StringEndsWithFilter { Method = "ends-with", Values = new[] { value, "1" } }.Apply(expression));
         }
 
         [Fact]
-        public void Apply_FiltersItemsByIgnoringCase()
+        public void Apply_UsingOriginalCaseFilter()
         {
             StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "est" } };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
-
-            IQueryable<GridModel> items = new[]
-            {
-                new GridModel { Name = null },
-                new GridModel { Name = "Tes" },
-                new GridModel { Name = "test" },
-                new GridModel { Name = "TEST" },
-                new GridModel { Name = "TESTE" }
-            }.AsQueryable();
-
-            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().EndsWith("TEST"));
-            IQueryable actual = items.Where(expression, filter);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void Apply_FiltersMultipleItems()
-        {
-            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "est", "ER" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
             {
@@ -54,7 +34,76 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "TESTEr" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name != null && (model.Name.ToUpper().EndsWith("TEST") || model.Name.ToUpper().EndsWith("ER")));
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.EndsWith("est"));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_UsingUpperCaseFilter()
+        {
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "est" } };
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Upper;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TESTE" },
+                new GridModel { Name = "TESTEr" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().EndsWith("EST"));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_UsingLowerCaseFilter()
+        {
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "EST" } };
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Lower;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TESTE" },
+                new GridModel { Name = "TESTEr" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().EndsWith("est"));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultiFilter()
+        {
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "t", "Er" } };
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Original;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" },
+                new GridModel { Name = "TESTE" },
+                new GridModel { Name = "TESTEr" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && (model.Name.EndsWith("t") || model.Name.EndsWith("Er")));
             IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);

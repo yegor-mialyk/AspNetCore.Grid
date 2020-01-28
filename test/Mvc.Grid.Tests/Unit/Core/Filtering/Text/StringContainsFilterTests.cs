@@ -14,14 +14,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-            Assert.Null(new StringContainsFilter { Method = "contains", Values = new[] { value } }.Apply(expression));
+            Assert.Null(new StringContainsFilter { Method = "contains", Values = new[] { value, "1" } }.Apply(expression));
         }
 
         [Fact]
-        public void Apply_FiltersItemsByIgnoringCase()
+        public void Apply_UsingOriginalCaseFilter()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "Est" } };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "es" } };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
             {
@@ -31,19 +32,73 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "TEST" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("EST"));
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("es"));
             IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Apply_FiltersMultipleItems()
+        public void Apply_UsingUpperCaseFilter()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "", "Est" } };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "es" } };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Upper;
 
-            Assert.Null(filter.Apply(expression));
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("ES"));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_UsingLowerCaseFilter()
+        {
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "ES" } };
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Lower;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().Contains("es"));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_MultiFilter()
+        {
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "Te", "es" } };
+            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            filter.Case = GridFilterCase.Original;
+
+            IQueryable<GridModel> items = new[]
+            {
+                new GridModel { Name = null },
+                new GridModel { Name = "Tes" },
+                new GridModel { Name = "test" },
+                new GridModel { Name = "TEST" }
+            }.AsQueryable();
+
+            IQueryable expected = items.Where(model => model.Name != null && (model.Name.Contains("Te") || model.Name.Contains("es")));
+            IQueryable actual = items.Where(expression, filter);
+
+            Assert.Equal(expected, actual);
         }
     }
 }

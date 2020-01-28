@@ -8,6 +8,7 @@ namespace NonFactors.Mvc.Grid
     {
         String? Method { get; set; }
         StringValues Values { get; set; }
+        GridFilterCase Case { get; set; }
 
         Expression? Apply(Expression expression);
     }

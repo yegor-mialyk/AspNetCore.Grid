@@ -28,6 +28,19 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
+        public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterCase filterCase)
+        {
+            foreach (IGridColumn column in html.Grid.Columns)
+            {
+                if (column.Filter.IsEnabled == null)
+                    column.Filter.IsEnabled = true;
+
+                if (column.Filter.Case == null)
+                    column.Filter.Case = filterCase;
+            }
+
+            return html;
+        }
         public static IHtmlGrid<T> Sortable<T>(this IHtmlGrid<T> html)
         {
             foreach (IGridColumn column in html.Grid.Columns)

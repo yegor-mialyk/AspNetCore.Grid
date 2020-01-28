@@ -132,7 +132,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void UsingDefaultFilterMethod_SetsDefaultFilterMethod()
+        public void UsingDefaultFilterMethod_SetsMethod()
         {
             String expected = "test";
             String actual = column.UsingDefaultFilterMethod("test").Filter.DefaultMethod;
@@ -159,6 +159,91 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             Object expected = column;
             Object actual = column.UsingDefaultFilterMethod("test");
+
+            Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Filterable_Configure_SetsIsEnabled(Boolean? current, Boolean enabled)
+        {
+            column.Filter.IsEnabled = current;
+
+            Boolean? actual = column.Filterable(filter => { }).Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Filterable_ConfiguresColumn()
+        {
+            column.Filter.IsEnabled = null;
+
+            column.Filterable(filter => filter.IsEnabled = false);
+
+            Assert.False(column.Filter.IsEnabled);
+        }
+
+        [Fact]
+        public void Filterable_Configure_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.Filterable(filter => { });
+
+            Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, true)]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Filterable_Case_SetsIsEnabled(Boolean? current, Boolean enabled)
+        {
+            column.Filter.IsEnabled = current;
+
+            Boolean? actual = column.Filterable(GridFilterCase.Lower).Filter.IsEnabled;
+            Boolean? expected = enabled;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Filterable_SetsCase()
+        {
+            GridFilterCase? actual = column.Filterable(GridFilterCase.Lower).Filter.Case;
+            GridFilterCase? expected = GridFilterCase.Lower;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Filterable_Case_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.Filterable(GridFilterCase.Lower);
+
+            Assert.Same(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Filterable_SetsIsEnabled(Boolean isEnabled)
+        {
+            Boolean? actual = column.Filterable(isEnabled).Filter.IsEnabled;
+            Boolean? expected = isEnabled;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Filterable_ReturnsColumn()
+        {
+            Object expected = column;
+            Object actual = column.Filterable(true);
 
             Assert.Same(expected, actual);
         }
@@ -196,30 +281,10 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void Filterable_SetsIsEnabled(Boolean isEnabled)
-        {
-            Boolean? actual = column.Filterable(isEnabled).Filter.IsEnabled;
-            Boolean? expected = isEnabled;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void Filterable_ReturnsColumn()
-        {
-            Object expected = column;
-            Object actual = column.Filterable(true);
-
-            Assert.Same(expected, actual);
-        }
-
-        [Theory]
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void Filterable_FilterName_SetsIsEnabled(Boolean? current, Boolean enabled)
+        public void Filterable_Name_SetsIsEnabled(Boolean? current, Boolean enabled)
         {
             column.Filter.IsEnabled = current;
 
@@ -230,7 +295,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Filterable_SetsFilterName()
+        public void Filterable_SetsName()
         {
             String expected = "Numeric";
             String actual = column.Filterable("Numeric").Filter.Name;
@@ -239,7 +304,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Filterable_FilterName_ReturnsColumn()
+        public void Filterable_Name_ReturnsColumn()
         {
             Object expected = column;
             Object actual = column.Filterable("Numeric");

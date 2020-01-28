@@ -14,6 +14,7 @@ namespace NonFactors.Mvc.Grid
         public String Name { get; set; }
         public Boolean? IsEnabled { get; set; }
         public String DefaultMethod { get; set; }
+        public GridFilterCase? Case { get; set; }
         public GridFilterType? Type { get; set; }
 
         private Boolean OptionsIsSet { get; set; }
@@ -157,7 +158,14 @@ namespace NonFactors.Mvc.Grid
         }
         private IGridFilter? CreateFilter(String method, StringValues values)
         {
-            return GetFilters().Create(typeof(TValue), method, values);
+            if (GetFilters().Create(typeof(TValue), method, values) is IGridFilter filter)
+            {
+                filter.Case = Case ?? GridFilterCase.Original;
+
+                return filter;
+            }
+
+            return null;
         }
 
         private String GetName()
