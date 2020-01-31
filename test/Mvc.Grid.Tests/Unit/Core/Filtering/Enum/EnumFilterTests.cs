@@ -32,8 +32,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadValue_ReturnsNull()
         {
+            filter.Values = "test";
             filter.Method = "equals";
-            filter.Values = new[] { "test" };
 
             Assert.Null(filter.Apply(enumExpression.Body));
         }
@@ -44,8 +44,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("1", TestEnum.Second)]
         public void Apply_NullableEqualsFilter(String value, TestEnum? test)
         {
+            filter.Values = value;
             filter.Method = "equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nEnumExpression, filter);
             IEnumerable expected = items.Where(model => model.NEnum == test);
@@ -59,8 +59,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("1", TestEnum.Second)]
         public void Apply_EqualsFilter(String value, TestEnum? test)
         {
+            filter.Values = value;
             filter.Method = "equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(enumExpression, filter);
             IEnumerable expected = items.Where(model => model.Enum == test);
@@ -74,8 +74,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("1", TestEnum.Second)]
         public void Apply_NullableNotEqualsFilter(String value, TestEnum? test)
         {
+            filter.Values = value;
             filter.Method = "not-equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nEnumExpression, filter);
             IEnumerable expected = items.Where(model => model.NEnum != test);
@@ -89,8 +89,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("1", TestEnum.Second)]
         public void Apply_NotEqualsFilter(String value, TestEnum? test)
         {
+            filter.Values = value;
             filter.Method = "not-equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(enumExpression, filter);
             IEnumerable expected = items.Where(model => model.Enum != test);
@@ -101,8 +101,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
+            filter.Values = "0";
             filter.Method = "test";
-            filter.Values = new[] { "0" };
 
             Assert.Null(filter.Apply(enumExpression.Body));
         }

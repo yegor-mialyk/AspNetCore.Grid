@@ -4,7 +4,6 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -132,7 +131,7 @@ namespace NonFactors.Mvc.Grid
 
             if (!Filters.ContainsKey(type))
             {
-                if (type.GetTypeInfo().IsEnum && Filters.ContainsKey(typeof(Enum)))
+                if (type.IsEnum && Filters.ContainsKey(typeof(Enum)))
                     type = typeof(Enum);
                 else
                     return null;
@@ -158,7 +157,7 @@ namespace NonFactors.Mvc.Grid
                 options.Add(new SelectListItem { Value = "true", Text = BooleanTrueOptionText?.Invoke() });
                 options.Add(new SelectListItem { Value = "false", Text = BooleanFalseOptionText?.Invoke() });
             }
-            else if (type.GetTypeInfo().IsEnum)
+            else if (type.IsEnum)
             {
                 options.Add(new SelectListItem());
 

@@ -31,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-79228162514264337593543950336")]
         public void Apply_BadDecimalValue_ReturnsNull(String value)
         {
-            NumberFilter<Decimal> filter = new NumberFilter<Decimal> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Decimal> filter = new NumberFilter<Decimal> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-1.8076931348623157E+308")]
         public void Apply_BadDoubleValue_ReturnsNull(String value)
         {
-            NumberFilter<Double> filter = new NumberFilter<Double> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Double> filter = new NumberFilter<Double> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -53,7 +53,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-3.50282347E+38")]
         public void Apply_BadSingleValue_ReturnsNull(String value)
         {
-            NumberFilter<Single> filter = new NumberFilter<Single> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Single> filter = new NumberFilter<Single> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -64,7 +64,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-9223372036854775809")]
         public void Apply_BadInt64Value_ReturnsNull(String value)
         {
-            NumberFilter<Int64> filter = new NumberFilter<Int64> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Int64> filter = new NumberFilter<Int64> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -75,7 +75,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("18446744073709551616")]
         public void Apply_BadUInt64Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt64> filter = new NumberFilter<UInt64> { Method = "equals", Values = new[] { value } };
+            NumberFilter<UInt64> filter = new NumberFilter<UInt64> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -86,7 +86,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-2147483649")]
         public void Apply_BadInt32Value_ReturnsNull(String value)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -97,7 +97,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("4294967296")]
         public void Apply_BadUInt32Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt32> filter = new NumberFilter<UInt32> { Method = "equals", Values = new[] { value } };
+            NumberFilter<UInt32> filter = new NumberFilter<UInt32> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -108,7 +108,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("-32769")]
         public void Apply_BadInt16Value_ReturnsNull(String value)
         {
-            NumberFilter<Int16> filter = new NumberFilter<Int16> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Int16> filter = new NumberFilter<Int16> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -119,7 +119,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("65536")]
         public void Apply_BadUInt16Value_ReturnsNull(String value)
         {
-            NumberFilter<UInt16> filter = new NumberFilter<UInt16> { Method = "equals", Values = new[] { value } };
+            NumberFilter<UInt16> filter = new NumberFilter<UInt16> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -130,7 +130,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("test")]
         public void Apply_BadSByteValue_ReturnsNull(String value)
         {
-            NumberFilter<SByte> filter = new NumberFilter<SByte> { Method = "equals", Values = new[] { value } };
+            NumberFilter<SByte> filter = new NumberFilter<SByte> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -141,7 +141,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("test")]
         public void Apply_BadByteValue_ReturnsNull(String value)
         {
-            NumberFilter<Byte> filter = new NumberFilter<Byte> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Byte> filter = new NumberFilter<Byte> { Method = "equals", Values = value };
 
             Assert.Null(filter.Apply(sumExpression.Body));
         }
@@ -152,7 +152,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableEqualsFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = value };
 
             IEnumerable expected = items.Where(model => model.NSum == number);
             IEnumerable actual = items.Where(nSumExpression, filter);
@@ -177,7 +177,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_EqualsFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = value };
 
             IEnumerable expected = items.Where(model => model.Sum == number);
             IEnumerable actual = items.Where(sumExpression, filter);
@@ -202,7 +202,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableNotEqualsFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = value };
 
             IEnumerable expected = items.Where(model => model.NSum != number);
             IEnumerable actual = items.Where(nSumExpression, filter);
@@ -227,7 +227,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NotEqualsFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = value };
 
             IEnumerable expected = items.Where(model => model.Sum != number);
             IEnumerable actual = items.Where(sumExpression, filter);
@@ -252,7 +252,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableLessThanFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = value };
 
             IEnumerable expected = items.Where(model => model.NSum < number);
             IEnumerable actual = items.Where(nSumExpression, filter);
@@ -277,7 +277,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_LessThanFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = value };
 
             IEnumerable expected = items.Where(model => model.Sum < number);
             IEnumerable actual = items.Where(sumExpression, filter);
@@ -302,7 +302,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableGreaterThanFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = value };
 
             IEnumerable expected = items.Where(model => model.NSum > number);
             IEnumerable actual = items.Where(nSumExpression, filter);
@@ -327,7 +327,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_GreaterThanFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = value };
 
             IEnumerable expected = items.Where(model => model.Sum > number);
             IEnumerable actual = items.Where(sumExpression, filter);
@@ -352,7 +352,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableLessThanOrEqualFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = value };
 
             IEnumerable expected = items.Where(model => model.NSum <= number);
             IEnumerable actual = items.Where(nSumExpression, filter);
@@ -377,7 +377,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_LessThanOrEqualFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = value };
 
             IEnumerable expected = items.Where(model => model.Sum <= number);
             IEnumerable actual = items.Where(sumExpression, filter);
@@ -402,7 +402,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_NullableGreaterThanOrEqualFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = value };
 
             IEnumerable actual = items.Where(nSumExpression, filter);
             IEnumerable expected = items.Where(model => model.NSum >= number);
@@ -427,7 +427,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, null)]
         public void Apply_GreaterThanOrEqualFilter(String value, Int32? number)
         {
-            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = new[] { value } };
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = value };
 
             IEnumerable actual = items.Where(sumExpression, filter);
             IEnumerable expected = items.Where(model => model.Sum >= number);
@@ -449,7 +449,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
-            Assert.Null(new NumberFilter<Int32> { Method = "test", Values = new[] { "1" } }.Apply(sumExpression.Body));
+            Assert.Null(new NumberFilter<Int32> { Method = "test", Values = "1" }.Apply(sumExpression.Body));
         }
     }
 }

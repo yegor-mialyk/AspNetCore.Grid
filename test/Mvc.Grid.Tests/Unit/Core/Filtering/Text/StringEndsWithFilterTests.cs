@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingOriginalCaseFilter()
         {
-            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "est" } };
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = "est" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -43,7 +43,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingUpperCaseFilter()
         {
-            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "est" } };
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = "est" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Upper;
 
@@ -66,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingLowerCaseFilter()
         {
-            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = new[] { "EST" } };
+            StringEndsWithFilter filter = new StringEndsWithFilter { Method = "ends-with", Values = "EST" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Lower;
 

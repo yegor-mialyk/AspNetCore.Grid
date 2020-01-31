@@ -138,25 +138,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(Guid), "not-equals", typeof(GuidFilter))]
         public void GridFilters_RegistersDefaultFilters(Type type, String method, Type filter)
         {
-            Assert.IsType(filter, new GridFilters().Create(type, method, Array.Empty<String>()));
+            Assert.IsType(filter, new GridFilters().Create(type, method, ""));
         }
 
         [Fact]
         public void Create_NotFoundForType_ReturnsNull()
         {
-            Assert.Null(filters.Create(typeof(Object), "equals", Array.Empty<String>()));
+            Assert.Null(filters.Create(typeof(Object), "equals", ""));
         }
 
         [Fact]
         public void Create_NotFoundFilterType_ReturnsNull()
         {
-            Assert.Null(filters.Create(typeof(String), "less-than", Array.Empty<String>()));
+            Assert.Null(filters.Create(typeof(String), "less-than", ""));
         }
 
         [Fact]
         public void Create_ForNullableType()
         {
-            IGridFilter? actual = filters.Create(typeof(Int32?), "EQUALS", Array.Empty<String>());
+            IGridFilter? actual = filters.Create(typeof(Int32?), "EQUALS", "");
 
             Assert.Equal("equals", Assert.IsType<NumberFilter<Int32>>(actual).Method);
         }
@@ -166,7 +166,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filters.Register(typeof(TestEnum), "equals", typeof(StringEqualsFilter));
 
-            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", Array.Empty<String>());
+            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", "");
 
             Assert.Equal("equals", Assert.IsType<StringEqualsFilter>(actual).Method);
         }
@@ -174,7 +174,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Create_ForEnumType()
         {
-            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", Array.Empty<String>());
+            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", "");
 
             Assert.Equal("equals", Assert.IsType<EnumFilter>(actual).Method);
         }
@@ -182,7 +182,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Create_ForType()
         {
-            IGridFilter? actual = filters.Create(typeof(String), "CONTAINS", Array.Empty<String>());
+            IGridFilter? actual = filters.Create(typeof(String), "CONTAINS", "");
 
             Assert.Equal("contains", Assert.IsType<StringContainsFilter>(actual).Method);
         }
@@ -260,7 +260,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters.Register(typeof(Int32), "TEST", typeof(Object));
             filters.Register(typeof(Int32), "TEST-FILTER", typeof(StringEqualsFilter));
 
-            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", Array.Empty<String>()));
+            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
@@ -269,7 +269,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters.Register(typeof(Int32), "TEST", typeof(Object));
             filters.Register(typeof(Int32?), "TEST-FILTER", typeof(StringEqualsFilter));
 
-            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", Array.Empty<String>()));
+            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
             filters.Register(typeof(Int32?), "TEST-filter", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test-filter", Array.Empty<String>()));
+            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters.Register(typeof(Int32), "test-filter", typeof(Object));
             filters.Register(typeof(Int32), "TEST-filter", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test-filter", Array.Empty<String>()));
+            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
@@ -295,7 +295,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filters.Register(typeof(Int32?), "TEST", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test", Array.Empty<String>()));
+            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Int32), "test", ""));
         }
 
         [Fact]
@@ -303,7 +303,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filters.Register(typeof(Object), "test", typeof(NumberFilter<Int32>));
 
-            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Object), "test", Array.Empty<String>()));
+            Assert.IsType<NumberFilter<Int32>>(filters.Create(typeof(Object), "test", ""));
         }
 
         [Fact]
@@ -313,7 +313,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             filters.Unregister(typeof(Object), "TEST");
 
-            Assert.Null(filters.Create(typeof(Object), "test", Array.Empty<String>()));
+            Assert.Null(filters.Create(typeof(Object), "test", ""));
         }
 
         [Fact]
@@ -324,7 +324,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             filters.Unregister(typeof(Object), "test");
             filters.Unregister(typeof(Object), "test");
 
-            Assert.Null(filters.Create(typeof(Object), "test", Array.Empty<String>()));
+            Assert.Null(filters.Create(typeof(Object), "test", ""));
         }
     }
 }

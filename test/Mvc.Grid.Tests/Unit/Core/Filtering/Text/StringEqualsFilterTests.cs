@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         public void Apply_FiltersEmptyOrNullValues(String value)
         {
-            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { value } };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = value };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -34,7 +34,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingOriginalCaseFilter()
         {
-            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "test" } };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = "test" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -55,7 +55,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingUpperCaseFilter()
         {
-            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "test" } };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = "test" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Upper;
 
@@ -76,7 +76,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingLowerCaseFilter()
         {
-            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = new[] { "TEST" } };
+            StringEqualsFilter filter = new StringEqualsFilter { Method = "equals", Values = "TEST" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Lower;
 

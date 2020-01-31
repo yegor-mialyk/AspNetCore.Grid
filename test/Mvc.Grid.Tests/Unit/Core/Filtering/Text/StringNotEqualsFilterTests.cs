@@ -12,7 +12,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null)]
         public void Apply_FiltersNotEmptyAndNotNullValues(String value)
         {
-            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = new[] { value } };
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = value };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -34,7 +34,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingOriginalCaseFilter()
         {
-            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = new[] { "test" } };
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = "test" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -55,7 +55,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingUpperCaseFilter()
         {
-            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = new[] { "test" } };
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = "test" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Upper;
 
@@ -76,7 +76,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingLowerCaseFilter()
         {
-            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = new[] { "TEST" } };
+            StringNotEqualsFilter filter = new StringNotEqualsFilter { Method = "not-equals", Values = "TEST" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Lower;
 

@@ -30,7 +30,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_BadValue_ReturnsItems()
         {
-            filter.Values = new[] { "Test" };
+            filter.Values = "Test";
 
             Assert.Null(filter.Apply(dateExpression.Body));
         }
@@ -42,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_NullableEqualsFilter(String value)
         {
             filter.Method = "equals";
-            filter.Values = new[] { value };
+            filter.Values = value;
 
             IEnumerable actual = items.Where(nDateExpression, filter);
             IEnumerable expected = items.Where(model => model.NDate == (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -68,8 +68,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_EqualsFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(dateExpression, filter);
             IEnumerable expected = items.Where(model => model.Date == (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -95,8 +95,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NullableNotEqualsFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "not-equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nDateExpression, filter);
             IEnumerable expected = items.Where(model => model.NDate != (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -122,8 +122,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NotEqualsFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "not-equals";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(dateExpression, filter);
             IEnumerable expected = items.Where(model => model.Date != (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -149,8 +149,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NullableEarlierThanFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "earlier-than";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nDateExpression, filter);
             IEnumerable expected = items.Where(model => model.NDate < (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -176,8 +176,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_EalierThanFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "earlier-than";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(dateExpression, filter);
             IEnumerable expected = items.Where(model => model.Date < (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -203,8 +203,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NullableLaterThanFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "later-than";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(nDateExpression, filter);
             IEnumerable expected = items.Where(model => model.NDate > (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -230,8 +230,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_LaterThanFilter(String value)
         {
+            filter.Values = value;
             filter.Method = "later-than";
-            filter.Values = new[] { value };
 
             IEnumerable actual = items.Where(dateExpression, filter);
             IEnumerable expected = items.Where(model => model.Date > (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
@@ -257,7 +257,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NullableEarlierThanOrEqualFilter(String value)
         {
-            filter.Values = new[] { value };
+            filter.Values = value;
             filter.Method = "earlier-than-or-equal";
 
             IEnumerable actual = items.Where(nDateExpression, filter);
@@ -284,7 +284,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_EarlierThanOrEqualFilter(String value)
         {
-            filter.Values = new[] { value };
+            filter.Values = value;
             filter.Method = "earlier-than-or-equal";
 
             IEnumerable actual = items.Where(dateExpression, filter);
@@ -311,7 +311,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_NullableLaterThanOrEqualFilter(String value)
         {
-            filter.Values = new[] { value };
+            filter.Values = value;
             filter.Method = "later-than-or-equal";
 
             IEnumerable actual = items.Where(nDateExpression, filter);
@@ -338,7 +338,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("2014-01-01")]
         public void Apply_LaterThanOrEqualFilter(String value)
         {
-            filter.Values = new[] { value };
+            filter.Values = value;
             filter.Method = "later-than-or-equal";
 
             IEnumerable actual = items.Where(dateExpression, filter);
@@ -363,7 +363,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";
-            filter.Values = new[] { "2014-01-01" };
+            filter.Values = "2014-01-01";
 
             Assert.Null(filter.Apply(dateExpression.Body));
         }

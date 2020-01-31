@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingOriginalCaseFilter()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "es" } };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = "es" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Original;
 
@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingUpperCaseFilter()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "es" } };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = "es" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Upper;
 
@@ -62,7 +62,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Apply_UsingLowerCaseFilter()
         {
-            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = new[] { "ES" } };
+            StringContainsFilter filter = new StringContainsFilter { Method = "contains", Values = "ES" };
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
             filter.Case = GridFilterCase.Lower;
 

@@ -89,7 +89,8 @@ namespace NonFactors.Mvc.Grid
                     return RenderValue((T)row.Model, row.Index);
 
                 Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-                if (type.GetTypeInfo().IsEnum)
+
+                if (type.IsEnum)
                     return EnumValue(type, ExpressionValue((T)row.Model)!.ToString()!);
 
                 return ExpressionValue((T)row.Model);
