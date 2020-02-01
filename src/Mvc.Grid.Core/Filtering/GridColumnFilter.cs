@@ -129,9 +129,9 @@ namespace NonFactors.Mvc.Grid
             String method = keys[0].Substring(columnName.Length);
 
             if (Type == GridFilterType.Multi)
-                return CreateFilter(method, Column.Grid.Query?[keys[0]] ?? "");
+                return CreateFilter(method, Column.Grid.Query![keys[0]]);
 
-            return CreateFilter(method, Column.Grid.Query?[keys[0]].FirstOrDefault());
+            return CreateFilter(method, Column.Grid.Query![keys[0]][0]);
         }
         private IGridFilter? CreateSecondFilter()
         {
@@ -144,7 +144,8 @@ namespace NonFactors.Mvc.Grid
 
             if (keys.Length == 1)
             {
-                StringValues values = Column.Grid.Query?[keys[0]] ?? "";
+                StringValues values = Column.Grid.Query![keys[0]];
+
                 if (values.Count < 2)
                     return null;
 
@@ -152,7 +153,7 @@ namespace NonFactors.Mvc.Grid
             }
 
             String method = keys[1].Substring(columnName.Length);
-            String value = Column.Grid.Query?[keys[1]][0] ?? "";
+            String value = Column.Grid.Query![keys[1]][0];
 
             return CreateFilter(method, value);
         }

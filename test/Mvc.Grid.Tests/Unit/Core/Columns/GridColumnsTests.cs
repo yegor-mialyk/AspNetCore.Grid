@@ -93,21 +93,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             columns.Add(model => 0);
 
             IGridColumn<GridModel, Int32> expected = new GridColumn<GridModel, Int32>(columns.Grid, model => 1);
-            IGridColumn<GridModel, Int32> actual = columns.Insert(0, model => 1);
+            IGridColumn<GridModel, Object> actual = columns.Insert(0);
 
-            Assert.Equal(1, actual.Expression.Compile().Invoke(new GridModel()));
+            Assert.Equal("", actual.Expression.Compile().Invoke(new GridModel()));
             Assert.Equal(expected.Filter.IsEnabled, actual.Filter.IsEnabled);
             Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
             Assert.Equal(expected.Sort.IsEnabled, actual.Sort.IsEnabled);
             Assert.Equal(expected.ProcessorType, actual.ProcessorType);
             Assert.Equal(expected.Filter.Type, actual.Filter.Type);
-            Assert.Equal(expected.Filter.Name, actual.Filter.Name);
             Assert.Equal(expected.CssClasses, actual.CssClasses);
             Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Grid, actual.Grid);
+            Assert.Empty(actual.Filter.Name);
         }
 
         [Fact]

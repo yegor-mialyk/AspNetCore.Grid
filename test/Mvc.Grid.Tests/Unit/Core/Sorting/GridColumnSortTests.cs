@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -15,6 +16,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             GridColumn<GridModel, Object?> column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
 
             sort = new GridColumnSort<GridModel, Object?>(column) { IsEnabled = true };
+        }
+
+        [Fact]
+        public void Index_NotSorted_Null()
+        {
+            sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
+            sort.Column.Grid.Sort[sort.Column].Returns(((Int32, GridSortOrder)?)null);
+
+            Assert.Null(sort.Index);
         }
 
         [Fact]

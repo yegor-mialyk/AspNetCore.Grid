@@ -317,14 +317,21 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Unregister_CanBeCalledOnNotExistingFilter()
+        public void Unregister_NotExistingFilter()
+        {
+            filters.Unregister(GetType(), "test");
+
+            Assert.Null(filters.Create(GetType(), "test", ""));
+        }
+
+        [Fact]
+        public void Unregister_NotExistingMethod()
         {
             filters.Register(typeof(Object), "test", typeof(StringEqualsFilter));
 
-            filters.Unregister(typeof(Object), "test");
-            filters.Unregister(typeof(Object), "test");
+            filters.Unregister(typeof(Object), "method");
 
-            Assert.Null(filters.Create(typeof(Object), "test", ""));
+            Assert.Null(filters.Create(typeof(Object), "method", Array.Empty<String>()));
         }
     }
 }

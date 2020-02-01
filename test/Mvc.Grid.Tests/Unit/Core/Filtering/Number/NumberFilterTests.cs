@@ -447,6 +447,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Apply_MultipleWithBadValues()
+        {
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = new[] { "", "test", "1" } };
+
+            IEnumerable expected = items.Where(model => model.NSum == null ||  model.NSum == 1);
+            IEnumerable actual = items.Where(nSumExpression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
             Assert.Null(new NumberFilter<Int32> { Method = "test", Values = "1" }.Apply(sumExpression.Body));

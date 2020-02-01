@@ -207,6 +207,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
+        [InlineData(GridFilterType.Multi)]
+        [InlineData(GridFilterType.Single)]
+        [InlineData(GridFilterType.Double)]
+        public void First_Get_NullQuery(GridFilterType type)
+        {
+            filter.Type = type;
+            filter.Column.Grid.Query = null;
+
+            Assert.Null(filter.First);
+        }
+
+        [Theory]
         [InlineData("", "name-equals=a&name-eq=b", "a")]
         [InlineData("", "name-equals=&name-equals=b", "")]
         [InlineData("", "name-equals=&name-contains=b", "")]
@@ -231,6 +243,23 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void First_Get_FromQuery(String name, String query, String value)
         {
             filter.Column.Grid.Name = name;
+            filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+            IGridFilter actual = filter.First!;
+
+            Assert.IsType<StringEqualsFilter>(actual);
+            Assert.Equal("equals", actual.Method);
+            Assert.Equal(value, actual.Values);
+        }
+
+        [Theory]
+        [InlineData("", "name-equals=a&name-equals=b", "a,b")]
+        [InlineData(null, "name-equals=a&name-equals=b", "a,b")]
+        [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
+        public void First_Get_MultiFilter(String name, String query, String value)
+        {
+            filter.Column.Grid.Name = name;
+            filter.Type = GridFilterType.Multi;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
             IGridFilter actual = filter.First!;

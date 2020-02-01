@@ -360,6 +360,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Apply_MultipleWithBadValues()
+        {
+            filter.Method = "equals";
+            filter.Values = new[] { "", "test", "2014-01-01" };
+
+            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable expected = items.Where(model => model.NDate == null || model.NDate == new DateTime(2014, 1, 1));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";

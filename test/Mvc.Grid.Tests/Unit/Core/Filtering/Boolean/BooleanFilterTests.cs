@@ -154,6 +154,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Apply_MultipleWithBadValues()
+        {
+            filter.Method = "equals";
+            filter.Values = new[] { "", "test", "false" };
+
+            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable expected = items.Where(model => model.NIsChecked != true);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";

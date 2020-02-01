@@ -18,7 +18,7 @@ namespace NonFactors.Mvc.Grid
                 if (!DefinitionsIsSet && Grid.Query != null)
                 {
                     String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
-                    MatchCollection matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString() ?? "",
+                    MatchCollection matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
                         "(^|,)(?<name>.*?) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
 
                     foreach (Match match in matches)
@@ -38,11 +38,6 @@ namespace NonFactors.Mvc.Grid
 
 
                 return DefinitionsValue;
-            }
-            set
-            {
-                DefinitionsIsSet = true;
-                DefinitionsValue = value;
             }
         }
         private Boolean DefinitionsIsSet { get; set; }

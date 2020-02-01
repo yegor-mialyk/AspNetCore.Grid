@@ -211,6 +211,16 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void ValueFor_NullRelationReference_ReturnsEmpty()
+        {
+            column.ExpressionValue = (model) => model.Child!.Name;
+
+            String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
+
+            Assert.Empty(actual);
+        }
+
+        [Fact]
         public void ValueFor_ExpressionValue_ThrowsNotNullReferenceException()
         {
             column.ExpressionValue = (model) => Int32.Parse("Zero");

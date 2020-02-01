@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -9,7 +11,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void IsOrdered_False()
         {
-            Assert.False(GridQuery.IsOrdered(Array.Empty<Object>().OrderBy(model => 0).AsQueryable()));
+            Assert.False(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().Where(model => true)));
         }
 
         [Fact]

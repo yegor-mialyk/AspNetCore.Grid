@@ -22,15 +22,14 @@ namespace NonFactors.Mvc.Grid
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.DeclaringType != typeof(Queryable))
-                return base.VisitMethodCall(node);
+            if (node.Method.DeclaringType == typeof(Queryable) && node.Method.Name == "OrderBy")
+            {
+                Ordered = true;
 
-            if (!node.Method.Name.StartsWith("OrderBy"))
-                return base.VisitMethodCall(node);
+                return node;
+            }
 
-            Ordered = true;
-
-            return node;
+            return base.VisitMethodCall(node);
         }
     }
 }

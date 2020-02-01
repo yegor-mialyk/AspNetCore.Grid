@@ -148,6 +148,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void Apply_MultipleWithBadValues()
+        {
+            filter.Method = "equals";
+            filter.Values = new[] { "", "test", "bf64a86e-0b70-4430-99f6-8dd947e64948" };
+
+            IEnumerable expected = items.Where(model => model.NGuid == null || model.NGuid == Guid.Parse("bf64a86e-0b70-4430-99f6-8dd947e64947"));
+            IEnumerable actual = items.Where(nGuidExpression, filter);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Apply_BadMethod_ReturnsNull()
         {
             filter.Method = "test";
