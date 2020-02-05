@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NonFactors.Mvc.Grid.Tests
@@ -56,6 +57,10 @@ namespace NonFactors.Mvc.Grid.Tests
         public Decimal? NullableDecimalField { get; set; }
         public Boolean? NullableBooleanField { get; set; }
         public DateTime? NullableDateTimeField { get; set; }
+
+        public String?[]? NullableArrayField { get; set; }
+        public List<String?>? NullableListField { get; set; }
+        public IEnumerable<String?>? NullableEnumerableField { get; set; }
 
         public String? StringField { get; set; }
 

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -171,7 +170,8 @@ namespace NonFactors.Mvc.Grid
 
         private String GetName()
         {
-            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+            Type type = GetFilterable(typeof(TValue));
+            type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type.IsEnum)
                 return "enum";
@@ -199,6 +199,20 @@ namespace NonFactors.Mvc.Grid
                 default:
                     return type == typeof(Guid) ? "guid" : "";
             }
+        }
+        private Type GetFilterable(Type type)
+        {
+            if (type == typeof(String))
+                return type;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return type.GetGenericArguments()[0];
+
+            foreach (Type interfaceType in type.GetInterfaces())
+                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                    return interfaceType.GetGenericArguments()[0];
+
+            return type;
         }
         private Expression? BuildFilterExpression()
         {

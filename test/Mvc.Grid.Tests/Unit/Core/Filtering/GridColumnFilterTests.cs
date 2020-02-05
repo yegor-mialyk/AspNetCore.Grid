@@ -490,6 +490,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void GridColumnFilter_SetsNameForStringList()
+        {
+            AssertFilterNameFor(model => model.NullableListField, "text");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForStringArray()
+        {
+            AssertFilterNameFor(model => model.NullableArrayField, "text");
+        }
+
+        [Fact]
+        public void GridColumnFilter_SetsNameForStringEnumerable()
+        {
+            AssertFilterNameFor(model => model.NullableEnumerableField, "text");
+        }
+
+        [Fact]
         public void GridColumnFilter_SetsNameForBoolean()
         {
             AssertFilterNameFor(model => model.BooleanField, "boolean");

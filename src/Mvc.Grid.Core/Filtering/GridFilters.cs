@@ -127,29 +127,22 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IGridFilter? Create(Type type, String method, StringValues values)
         {
-            type = Nullable.GetUnderlyingType(type) ?? type;
-
-            if (!Filters.ContainsKey(type))
+            if (Get(Nullable.GetUnderlyingType(type) ?? type, method) is Type filterType)
             {
-                if (type.IsEnum && Filters.ContainsKey(typeof(Enum)))
-                    type = typeof(Enum);
-                else
-                    return null;
+                IGridFilter filter = (IGridFilter)Activator.CreateInstance(filterType);
+                filter.Method = method.ToLower();
+                filter.Values = values;
+
+                return filter;
             }
 
-            if (!Filters[type].TryGetValue(method, out Type? filterType))
-                return null;
-
-            IGridFilter filter = (IGridFilter)Activator.CreateInstance(filterType)!;
-            filter.Method = method.ToLower();
-            filter.Values = values;
-
-            return filter;
+            return null;
         }
         public virtual IEnumerable<SelectListItem> OptionsFor<T, TValue>(IGridColumn<T, TValue> column)
         {
+            Type? type = GetElementType(typeof(TValue)) ?? typeof(TValue);
             List<SelectListItem> options = new List<SelectListItem>();
-            Type type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+            type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type == typeof(Boolean))
             {
@@ -189,6 +182,51 @@ namespace NonFactors.Mvc.Grid
         {
             if (Filters.ContainsKey(type))
                 Filters[type].Remove(method);
+        }
+
+        private Boolean TryGet(Type type, String method, out Type? filter)
+        {
+            if (Filters.ContainsKey(type) && Filters[type].ContainsKey(method))
+                filter = Filters[type][method];
+            else
+                filter = null;
+
+            return filter != null;
+        }
+        private Type? Get(Type type, String method)
+        {
+            if (TryGet(type, method, out Type? filter))
+                return filter;
+
+            if (GetElementType(type) is Type elementType)
+            {
+                if (TryGet(elementType, method, out filter))
+                    return typeof(EnumerableFilter<>).MakeGenericType(filter);
+                else if (elementType.IsEnum && TryGet(typeof(Enum), method, out filter))
+                    return typeof(EnumerableFilter<>).MakeGenericType(filter);
+            }
+            else if (type.IsEnum && TryGet(typeof(Enum), method, out filter))
+            {
+                return filter;
+            }
+
+            return null;
+        }
+        private Type? GetElementType(Type type)
+        {
+            if (type == typeof(String))
+                return null;
+
+            type = Nullable.GetUnderlyingType(type) ?? type;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return type.GetGenericArguments()[0];
+
+            foreach (Type interfaceType in type.GetInterfaces())
+                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                    return interfaceType.GetGenericArguments()[0];
+
+            return null;
         }
     }
 }

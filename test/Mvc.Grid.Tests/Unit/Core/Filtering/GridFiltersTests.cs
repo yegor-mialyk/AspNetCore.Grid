@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -141,10 +142,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.IsType(filter, new GridFilters().Create(type, method, ""));
         }
 
-        [Fact]
-        public void Create_NotFoundForType_ReturnsNull()
+        [Theory]
+        [InlineData(typeof(Object))]
+        [InlineData(typeof(Object[]))]
+        public void Create_NotFoundForType_ReturnsNull(Type type)
         {
-            Assert.Null(filters.Create(typeof(Object), "equals", ""));
+            Assert.Null(filters.Create(type, "equals", ""));
         }
 
         [Fact]
@@ -161,20 +164,24 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal("equals", Assert.IsType<NumberFilter<Int32>>(actual).Method);
         }
 
-        [Fact]
-        public void Create_ForSpecificEnumType()
+        [Theory]
+        [InlineData(typeof(TestEnum))]
+        [InlineData(typeof(TestEnum?))]
+        public void Create_ForSpecificEnumType(Type type)
         {
-            filters.Register(typeof(TestEnum), "equals", typeof(StringEqualsFilter));
+            filters.Register(type, "equals", typeof(StringEqualsFilter));
 
-            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", "");
+            IGridFilter? actual = filters.Create(type, "EQUALS", "");
 
             Assert.Equal("equals", Assert.IsType<StringEqualsFilter>(actual).Method);
         }
 
-        [Fact]
-        public void Create_ForEnumType()
+        [Theory]
+        [InlineData(typeof(TestEnum))]
+        [InlineData(typeof(TestEnum?))]
+        public void Create_ForEnumType(Type type)
         {
-            IGridFilter? actual = filters.Create(typeof(TestEnum), "EQUALS", "");
+            IGridFilter? actual = filters.Create(type, "EQUALS", "");
 
             Assert.Equal("equals", Assert.IsType<EnumFilter>(actual).Method);
         }
@@ -185,6 +192,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IGridFilter? actual = filters.Create(typeof(String), "CONTAINS", "");
 
             Assert.Equal("contains", Assert.IsType<StringContainsFilter>(actual).Method);
+        }
+
+        [Theory]
+        [InlineData(typeof(String[]))]
+        [InlineData(typeof(List<String>))]
+        [InlineData(typeof(IEnumerable<String>))]
+        public void Create_ForEnumerableType(Type type)
+        {
+            IGridFilter? actual = filters.Create(type, "CONTAINS", "");
+
+            Assert.Equal("contains", Assert.IsType<EnumerableFilter<StringContainsFilter>>(actual).Method);
+        }
+
+        [Fact]
+        public void Create_ForEnumerableEnumType()
+        {
+            IGridFilter? actual = filters.Create(typeof(IEnumerable<TestEnum>), "Equals", "");
+
+            Assert.Equal("equals", Assert.IsType<EnumerableFilter<EnumFilter>>(actual).Method);
         }
 
         [Fact]
@@ -216,6 +242,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
+        public void OptionsFor_ForEnumerableBoolean()
+        {
+            SelectListItem[] actual = filters.OptionsFor(Substitute.For<IGridColumn<GridModel, Boolean?[]>>()).ToArray();
+
+            Assert.Equal(3, actual.Length);
+            Assert.Equal("", actual[0].Value);
+            Assert.Equal("true", actual[1].Value);
+            Assert.Equal("false", actual[2].Value);
+            Assert.Equal(filters.BooleanTrueOptionText(), actual[1].Text);
+            Assert.Equal(filters.BooleanEmptyOptionText(), actual[0].Text);
+            Assert.Equal(filters.BooleanFalseOptionText(), actual[2].Text);
+        }
+
+        [Fact]
         public void OptionsFor_NullViewContext_ForEnum()
         {
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
@@ -234,6 +274,48 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
             column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
             IGridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => TestEnum.First);
+            helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
+
+            SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
+
+            Assert.Equal(3, actual.Length);
+
+            Assert.Null(actual[0].Text);
+            Assert.Null(actual[0].Value);
+            Assert.Equal("0", actual[1].Value);
+            Assert.Equal("1", actual[2].Value);
+            Assert.Equal("1st", actual[1].Text);
+            Assert.Equal("2nd", actual[2].Text);
+        }
+
+        [Fact]
+        public void OptionsFor_ForNullableEnum()
+        {
+            IHtmlHelper helper = Substitute.For<IHtmlHelper>();
+            column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
+            column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
+            IGridColumn<GridModel, TestEnum?> enumColumn = new GridColumn<GridModel, TestEnum?>(column.Grid, model => TestEnum.First);
+            helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
+
+            SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
+
+            Assert.Equal(3, actual.Length);
+
+            Assert.Null(actual[0].Text);
+            Assert.Null(actual[0].Value);
+            Assert.Equal("0", actual[1].Value);
+            Assert.Equal("1", actual[2].Value);
+            Assert.Equal("1st", actual[1].Text);
+            Assert.Equal("2nd", actual[2].Text);
+        }
+
+        [Fact]
+        public void OptionsFor_ForEnumerableEnum()
+        {
+            IHtmlHelper helper = Substitute.For<IHtmlHelper>();
+            column.Grid.ViewContext = new ViewContext { HttpContext = Substitute.For<HttpContext>() };
+            column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
+            IGridColumn<GridModel, IEnumerable<TestEnum?>> enumColumn = new GridColumn<GridModel, IEnumerable<TestEnum?>>(column.Grid, model => new TestEnum?[] { TestEnum.First });
             helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
 
             SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
