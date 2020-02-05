@@ -174,7 +174,7 @@ namespace NonFactors.Mvc.Grid
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type.IsEnum)
-                return "enum";
+                return "default";
 
             switch (System.Type.GetTypeCode(type))
             {
@@ -194,10 +194,8 @@ namespace NonFactors.Mvc.Grid
                     return "text";
                 case TypeCode.DateTime:
                     return "date";
-                case TypeCode.Boolean:
-                    return "boolean";
                 default:
-                    return type == typeof(Guid) ? "guid" : "";
+                    return type == typeof(Guid) ? "guid" : "default";
             }
         }
         private Type GetFilterable(Type type)

@@ -144,13 +144,7 @@ export declare class MvcGridNumberFilter extends MvcGridFilter {
 export declare class MvcGridDateFilter extends MvcGridFilter {
     constructor(column: MvcGridColumn);
 }
-export declare class MvcGridEnumFilter extends MvcGridFilter {
-    constructor(column: MvcGridColumn);
-}
 export declare class MvcGridGuidFilter extends MvcGridFilter {
     constructor(column: MvcGridColumn);
     isValid(value: string): boolean;
-}
-export declare class MvcGridBooleanFilter extends MvcGridFilter {
-    constructor(column: MvcGridColumn);
 }

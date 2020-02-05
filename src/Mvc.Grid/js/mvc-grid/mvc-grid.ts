@@ -28,6 +28,10 @@ export interface MvcGridLanguage {
 export class MvcGrid {
     private static instances: MvcGrid[] = [];
     public static lang: MvcGridLanguage = {
+        default: {
+            "equals": "Equals",
+            "not-equals": "Not equals"
+        },
         text: {
             "contains": "Contains",
             "equals": "Equals",
@@ -51,15 +55,7 @@ export class MvcGrid {
             "earlier-than-or-equal": "Earlier than or equal",
             "later-than-or-equal": "Later than or equal"
         },
-        enum: {
-            "equals": "Equals",
-            "not-equals": "Not equals"
-        },
         guid: {
-            "equals": "Equals",
-            "not-equals": "Not equals"
-        },
-        boolean: {
             "equals": "Equals",
             "not-equals": "Not equals"
         },
@@ -115,12 +111,11 @@ export class MvcGrid {
         grid.url = options.query ? new URL(`?${options.query}`, grid.url.href) : grid.url;
         grid.sort = grid.buildSort();
         grid.filters = {
-            enum: MvcGridEnumFilter,
+            default: MvcGridFilter,
             date: MvcGridDateFilter,
             guid: MvcGridGuidFilter,
             text: MvcGridTextFilter,
-            number: MvcGridNumberFilter,
-            boolean: MvcGridBooleanFilter
+            number: MvcGridNumberFilter
         };
 
         const rowFilters = element.querySelectorAll<HTMLTableHeaderCellElement>(".mvc-grid-row-filters th");
@@ -769,6 +764,7 @@ export class MvcGridFilter {
         filter.cssClasses = "";
         filter.type = column.filter!.type;
         filter.mode = column.grid.filterMode;
+        filter.methods = ["equals", "not-equals"];
     }
 
     public init(): void {
@@ -969,31 +965,14 @@ export class MvcGridDateFilter extends MvcGridFilter {
     }
 }
 
-export class MvcGridEnumFilter extends MvcGridFilter {
-    public constructor(column: MvcGridColumn) {
-        super(column);
-
-        this.methods = ["equals", "not-equals"];
-    }
-}
-
 export class MvcGridGuidFilter extends MvcGridFilter {
     public constructor(column: MvcGridColumn) {
         super(column);
 
-        this.methods = ["equals", "not-equals"];
         this.cssClasses = "mvc-grid-guid-filter";
     }
 
     public isValid(value: string) {
         return !value || /^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$/i.test(value);
-    }
-}
-
-export class MvcGridBooleanFilter extends MvcGridFilter {
-    public constructor(column: MvcGridColumn) {
-        super(column);
-
-        this.methods = ["equals", "not-equals"];
     }
 }

@@ -105,9 +105,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Assert.Equal(expected.Sort.Order, actual.Sort.Order);
             Assert.Equal(expected.IsEncoded, actual.IsEncoded);
             Assert.Equal(expected.Format, actual.Format);
+            Assert.Equal("default", actual.Filter.Name);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Grid, actual.Grid);
-            Assert.Empty(actual.Filter.Name);
         }
 
         [Fact]

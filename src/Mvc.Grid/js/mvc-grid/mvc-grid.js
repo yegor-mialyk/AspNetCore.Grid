@@ -30,12 +30,11 @@ class MvcGrid {
         grid.url = options.query ? new URL(`?${options.query}`, grid.url.href) : grid.url;
         grid.sort = grid.buildSort();
         grid.filters = {
-            enum: MvcGridEnumFilter,
+            default: MvcGridFilter,
             date: MvcGridDateFilter,
             guid: MvcGridGuidFilter,
             text: MvcGridTextFilter,
-            number: MvcGridNumberFilter,
-            boolean: MvcGridBooleanFilter
+            number: MvcGridNumberFilter
         };
 
         const rowFilters = element.querySelectorAll(".mvc-grid-row-filters th");
@@ -226,6 +225,10 @@ class MvcGrid {
 
 MvcGrid.instances = [];
 MvcGrid.lang = {
+    default: {
+        "equals": "Equals",
+        "not-equals": "Not equals"
+    },
     text: {
         "contains": "Contains",
         "equals": "Equals",
@@ -249,15 +252,7 @@ MvcGrid.lang = {
         "earlier-than-or-equal": "Earlier than or equal",
         "later-than-or-equal": "Later than or equal"
     },
-    enum: {
-        "equals": "Equals",
-        "not-equals": "Not equals"
-    },
     guid: {
-        "equals": "Equals",
-        "not-equals": "Not equals"
-    },
-    boolean: {
         "equals": "Equals",
         "not-equals": "Not equals"
     },
@@ -678,6 +673,7 @@ class MvcGridFilter {
         filter.cssClasses = "";
         filter.type = column.filter.type;
         filter.mode = column.grid.filterMode;
+        filter.methods = ["equals", "not-equals"];
     }
 
     init() {
@@ -876,31 +872,14 @@ class MvcGridDateFilter extends MvcGridFilter {
     }
 }
 
-class MvcGridEnumFilter extends MvcGridFilter {
-    constructor(column) {
-        super(column);
-
-        this.methods = ["equals", "not-equals"];
-    }
-}
-
 class MvcGridGuidFilter extends MvcGridFilter {
     constructor(column) {
         super(column);
 
-        this.methods = ["equals", "not-equals"];
         this.cssClasses = "mvc-grid-guid-filter";
     }
 
     isValid(value) {
         return !value || /^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$/i.test(value);
-    }
-}
-
-class MvcGridBooleanFilter extends MvcGridFilter {
-    constructor(column) {
-        super(column);
-
-        this.methods = ["equals", "not-equals"];
     }
 }

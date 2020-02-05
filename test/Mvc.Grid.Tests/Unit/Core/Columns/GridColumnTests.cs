@@ -165,11 +165,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridColumnFilter<GridModel, Object?> actual = column.Filter;
 
+            Assert.Equal("default", actual.Name);
             Assert.Equal(column, actual.Column);
             Assert.Null(actual.IsEnabled);
             Assert.Null(actual.Operator);
             Assert.Null(actual.Second);
-            Assert.Empty(actual.Name);
             Assert.Null(actual.First);
             Assert.Null(actual.Type);
         }

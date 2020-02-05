@@ -414,7 +414,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForEnum()
         {
-            AssertFilterNameFor(model => model.EnumField, "enum");
+            AssertFilterNameFor(model => model.EnumField, "default");
         }
 
         [Fact]
@@ -510,7 +510,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForBoolean()
         {
-            AssertFilterNameFor(model => model.BooleanField, "boolean");
+            AssertFilterNameFor(model => model.BooleanField, "default");
         }
 
         [Fact]
@@ -528,7 +528,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForNullableEnum()
         {
-            AssertFilterNameFor(model => model.NullableEnumField, "enum");
+            AssertFilterNameFor(model => model.NullableEnumField, "default");
         }
 
         [Fact]
@@ -600,7 +600,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForNullableBoolean()
         {
-            AssertFilterNameFor(model => model.NullableBooleanField, "boolean");
+            AssertFilterNameFor(model => model.NullableBooleanField, "default");
         }
 
         [Fact]
@@ -618,7 +618,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumnFilter_SetsNameForOtherTypes()
         {
-            AssertFilterNameFor(model => model, "");
+            AssertFilterNameFor(model => model, "default");
         }
 
         [Fact]
