@@ -126,11 +126,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(Boolean), "equals", typeof(BooleanFilter))]
         [InlineData(typeof(Boolean), "not-equals", typeof(BooleanFilter))]
 
-        [InlineData(typeof(String), "equals", typeof(StringEqualsFilter))]
-        [InlineData(typeof(String), "not-equals", typeof(StringNotEqualsFilter))]
-        [InlineData(typeof(String), "contains", typeof(StringContainsFilter))]
-        [InlineData(typeof(String), "ends-with", typeof(StringEndsWithFilter))]
-        [InlineData(typeof(String), "starts-with", typeof(StringStartsWithFilter))]
+        [InlineData(typeof(String), "equals", typeof(StringFilter))]
+        [InlineData(typeof(String), "not-equals", typeof(StringFilter))]
+        [InlineData(typeof(String), "contains", typeof(StringFilter))]
+        [InlineData(typeof(String), "ends-with", typeof(StringFilter))]
+        [InlineData(typeof(String), "starts-with", typeof(StringFilter))]
 
         [InlineData(typeof(Enum), "equals", typeof(EnumFilter))]
         [InlineData(typeof(Enum), "not-equals", typeof(EnumFilter))]
@@ -169,11 +169,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(typeof(TestEnum?))]
         public void Create_ForSpecificEnumType(Type type)
         {
-            filters.Register(type, "equals", typeof(StringEqualsFilter));
+            filters.Register(type, "equals", typeof(StringFilter));
 
             IGridFilter? actual = filters.Create(type, "EQUALS", "");
 
-            Assert.Equal("equals", Assert.IsType<StringEqualsFilter>(actual).Method);
+            Assert.Equal("equals", Assert.IsType<StringFilter>(actual).Method);
         }
 
         [Theory]
@@ -191,7 +191,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IGridFilter? actual = filters.Create(typeof(String), "CONTAINS", "");
 
-            Assert.Equal("contains", Assert.IsType<StringContainsFilter>(actual).Method);
+            Assert.Equal("contains", Assert.IsType<StringFilter>(actual).Method);
         }
 
         [Theory]
@@ -202,7 +202,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             IGridFilter? actual = filters.Create(type, "CONTAINS", "");
 
-            Assert.Equal("contains", Assert.IsType<EnumerableFilter<StringContainsFilter>>(actual).Method);
+            Assert.Equal("contains", Assert.IsType<EnumerableFilter<StringFilter>>(actual).Method);
         }
 
         [Fact]
@@ -340,18 +340,18 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public void Register_FilterForExistingType()
         {
             filters.Register(typeof(Int32), "TEST", typeof(Object));
-            filters.Register(typeof(Int32), "TEST-FILTER", typeof(StringEqualsFilter));
+            filters.Register(typeof(Int32), "TEST-FILTER", typeof(StringFilter));
 
-            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", ""));
+            Assert.IsType<StringFilter>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
         public void Register_NullableFilterTypeForExistingType()
         {
             filters.Register(typeof(Int32), "TEST", typeof(Object));
-            filters.Register(typeof(Int32?), "TEST-FILTER", typeof(StringEqualsFilter));
+            filters.Register(typeof(Int32?), "TEST-FILTER", typeof(StringFilter));
 
-            Assert.IsType<StringEqualsFilter>(filters.Create(typeof(Int32), "test-filter", ""));
+            Assert.IsType<StringFilter>(filters.Create(typeof(Int32), "test-filter", ""));
         }
 
         [Fact]
@@ -391,7 +391,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Unregister_ExistingFilter()
         {
-            filters.Register(typeof(Object), "test", typeof(StringEqualsFilter));
+            filters.Register(typeof(Object), "test", typeof(StringFilter));
 
             filters.Unregister(typeof(Object), "TEST");
 
@@ -409,7 +409,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Unregister_NotExistingMethod()
         {
-            filters.Register(typeof(Object), "test", typeof(StringEqualsFilter));
+            filters.Register(typeof(Object), "test", typeof(StringFilter));
 
             filters.Unregister(typeof(Object), "method");
 

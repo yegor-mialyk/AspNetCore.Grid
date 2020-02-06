@@ -112,11 +112,11 @@ namespace NonFactors.Mvc.Grid
             Register(typeof(Boolean), "equals", typeof(BooleanFilter));
             Register(typeof(Boolean), "not-equals", typeof(BooleanFilter));
 
-            Register(typeof(String), "equals", typeof(StringEqualsFilter));
-            Register(typeof(String), "not-equals", typeof(StringNotEqualsFilter));
-            Register(typeof(String), "contains", typeof(StringContainsFilter));
-            Register(typeof(String), "ends-with", typeof(StringEndsWithFilter));
-            Register(typeof(String), "starts-with", typeof(StringStartsWithFilter));
+            Register(typeof(String), "equals", typeof(StringFilter));
+            Register(typeof(String), "not-equals", typeof(StringFilter));
+            Register(typeof(String), "contains", typeof(StringFilter));
+            Register(typeof(String), "ends-with", typeof(StringFilter));
+            Register(typeof(String), "starts-with", typeof(StringFilter));
 
             Register(typeof(Enum), "equals", typeof(EnumFilter));
             Register(typeof(Enum), "not-equals", typeof(EnumFilter));

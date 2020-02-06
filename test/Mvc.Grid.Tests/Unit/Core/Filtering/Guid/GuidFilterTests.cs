@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
@@ -37,7 +38,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("bfce0004-8af9-4f28-99d9-ea24b58b9588")]
         public void Apply_NullableEqualsFilter(String value)
         {
@@ -64,7 +64,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_EqualsFilter(String value)
         {
@@ -93,7 +92,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_NullableNotEqualsFilter(String value)
         {
@@ -120,7 +118,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("bf64a86e-0b70-4430-99f6-8dd947e64948")]
         public void Apply_NotEqualsFilter(String value)
         {
@@ -157,6 +154,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable actual = items.Where(nGuidExpression, filter);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_EmptyValue_ReturnsNull()
+        {
+            filter.Method = "equals";
+            filter.Values = StringValues.Empty;
+
+            Assert.Null(filter.Apply(guidExpression.Body));
         }
 
         [Fact]

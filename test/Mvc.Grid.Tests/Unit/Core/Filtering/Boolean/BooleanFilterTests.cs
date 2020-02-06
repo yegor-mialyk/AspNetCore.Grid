@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
@@ -38,7 +39,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
@@ -68,7 +68,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
@@ -98,7 +97,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
@@ -128,7 +126,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("true", true)]
         [InlineData("TRUE", true)]
         [InlineData("false", false)]
@@ -163,6 +160,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable expected = items.Where(model => model.NIsChecked != true);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_EmptyValue_ReturnsNull()
+        {
+            filter.Method = "equals";
+            filter.Values = StringValues.Empty;
+
+            Assert.Null(filter.Apply(booleanExpression.Body));
         }
 
         [Fact]

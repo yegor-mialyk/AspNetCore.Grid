@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
@@ -149,7 +150,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableEqualsFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = value };
@@ -174,7 +174,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_EqualsFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = value };
@@ -199,7 +198,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableNotEqualsFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = value };
@@ -224,7 +222,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NotEqualsFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "not-equals", Values = value };
@@ -249,7 +246,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableLessThanFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = value };
@@ -274,7 +270,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_LessThanFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than", Values = value };
@@ -299,7 +294,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableGreaterThanFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = value };
@@ -324,7 +318,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_GreaterThanFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than", Values = value };
@@ -349,7 +342,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableLessThanOrEqualFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = value };
@@ -374,7 +366,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_LessThanOrEqualFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "less-than-or-equal", Values = value };
@@ -399,7 +390,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_NullableGreaterThanOrEqualFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = value };
@@ -424,7 +414,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Theory]
         [InlineData("1", 1)]
         [InlineData("", null)]
-        [InlineData(null, null)]
         public void Apply_GreaterThanOrEqualFilter(String value, Int32? number)
         {
             NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "greater-than-or-equal", Values = value };
@@ -455,6 +444,14 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable actual = items.Where(nSumExpression, filter);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_EmptyValue_ReturnsNull()
+        {
+            NumberFilter<Int32> filter = new NumberFilter<Int32> { Method = "equals", Values = StringValues.Empty };
+
+            Assert.Null(filter.Apply(nSumExpression.Body));
         }
 
         [Fact]

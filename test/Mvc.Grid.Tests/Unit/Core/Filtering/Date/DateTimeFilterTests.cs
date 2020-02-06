@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
@@ -37,7 +38,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableEqualsFilter(String value)
         {
@@ -64,7 +64,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_EqualsFilter(String value)
         {
@@ -91,7 +90,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableNotEqualsFilter(String value)
         {
@@ -118,7 +116,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NotEqualsFilter(String value)
         {
@@ -145,7 +142,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableEarlierThanFilter(String value)
         {
@@ -172,7 +168,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_EalierThanFilter(String value)
         {
@@ -199,7 +194,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableLaterThanFilter(String value)
         {
@@ -226,7 +220,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_LaterThanFilter(String value)
         {
@@ -253,7 +246,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableEarlierThanOrEqualFilter(String value)
         {
@@ -280,7 +272,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_EarlierThanOrEqualFilter(String value)
         {
@@ -307,7 +298,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_NullableLaterThanOrEqualFilter(String value)
         {
@@ -334,7 +324,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
         [InlineData("2014-01-01")]
         public void Apply_LaterThanOrEqualFilter(String value)
         {
@@ -369,6 +358,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable expected = items.Where(model => model.NDate == null || model.NDate == new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_EmptyValue_ReturnsNull()
+        {
+            filter.Method = "equals";
+            filter.Values = StringValues.Empty;
+
+            Assert.Null(filter.Apply(dateExpression.Body));
         }
 
         [Fact]

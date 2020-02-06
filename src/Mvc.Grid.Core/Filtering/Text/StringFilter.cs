@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
-    public abstract class StringFilter : GridFilter
+    public class StringFilter : GridFilter
     {
         protected static Expression Null { get; }
         protected static Expression Empty { get; }
@@ -25,14 +26,56 @@ namespace NonFactors.Mvc.Grid
             StartsWith = typeof(String).GetMethod(nameof(String.StartsWith), new[] { typeof(String) })!;
         }
 
-        protected Expression ConvertCase(String? value)
+        public override Expression? Apply(Expression expression)
         {
-            return Expression.Constant(Case switch
+            if (Values.Count == 0)
+                return null;
+
+            switch (Method)
             {
-                GridFilterCase.Upper => value?.ToUpper(),
-                GridFilterCase.Lower => value?.ToLower(),
-                _ => value
-            });
+                case "starts-with":
+                case "ends-with":
+                case "contains":
+                    if (Values.Any(String.IsNullOrEmpty))
+                        return null;
+
+                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression));
+                case "not-equals":
+                    if (Case == GridFilterCase.Original)
+                        return base.Apply(expression);
+
+                    if (Values.Any(String.IsNullOrEmpty))
+                        return Expression.AndAlso(Apply(expression, null), base.Apply(expression));
+
+                    return Expression.OrElse(Expression.Equal(expression, Null), base.Apply(expression));
+                case "equals":
+                    if (Case == GridFilterCase.Original)
+                        return base.Apply(expression);
+
+                    if (Values.Any(String.IsNullOrEmpty))
+                        return Expression.OrElse(Apply(expression, null), base.Apply(expression));
+
+                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression));
+            }
+
+            return base.Apply(expression);
+        }
+
+        protected override Expression? Apply(Expression expression, String? value)
+        {
+            return Method switch
+            {
+                "not-equals" => String.IsNullOrEmpty(value)
+                    ? Expression.AndAlso(Expression.NotEqual(expression, Null), Expression.NotEqual(expression, Empty))
+                    : Expression.NotEqual(ConvertCase(expression), ConvertCase(value)),
+                "equals" => String.IsNullOrEmpty(value)
+                    ? Expression.OrElse(Expression.Equal(expression, Null), Expression.Equal(expression, Empty))
+                    : Expression.Equal(ConvertCase(expression), ConvertCase(value)),
+                "starts-with" => Expression.Call(ConvertCase(expression), StartsWith, ConvertCase(value)),
+                "ends-with" => Expression.Call(ConvertCase(expression), EndsWith, ConvertCase(value)),
+                "contains" => Expression.Call(ConvertCase(expression), Contains, ConvertCase(value)),
+                _ => null
+            };
         }
         protected Expression ConvertCase(Expression expression)
         {
@@ -42,6 +85,15 @@ namespace NonFactors.Mvc.Grid
                 GridFilterCase.Lower => Expression.Call(expression, ToLower),
                 _ => expression
             };
+        }
+        protected Expression ConvertCase(String? value)
+        {
+            return Expression.Constant(Case switch
+            {
+                GridFilterCase.Upper => value?.ToUpper(),
+                GridFilterCase.Lower => value?.ToLower(),
+                _ => value
+            });
         }
     }
 }

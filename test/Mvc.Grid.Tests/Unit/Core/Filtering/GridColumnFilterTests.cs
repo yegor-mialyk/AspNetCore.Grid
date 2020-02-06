@@ -247,8 +247,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridFilter actual = filter.First!;
 
-            Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
+            Assert.IsType<StringFilter>(actual);
             Assert.Equal(value, actual.Values);
         }
 
@@ -264,8 +264,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridFilter actual = filter.First!;
 
-            Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
+            Assert.IsType<StringFilter>(actual);
             Assert.Equal(value, actual.Values);
         }
 
@@ -280,8 +280,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridFilter actual = filter.First!;
 
-            Assert.IsType<StringContainsFilter>(actual);
             Assert.Equal("contains", actual.Method);
+            Assert.IsType<StringFilter>(actual);
             Assert.Equal("a", actual.Values);
             Assert.Same(expected, actual);
         }
@@ -379,8 +379,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridFilter actual = filter.Second!;
 
-            Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
+            Assert.IsType<StringFilter>(actual);
             Assert.Equal(value, actual.Values);
         }
 
@@ -396,8 +396,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             IGridFilter actual = filter.Second!;
 
-            Assert.IsType<StringEqualsFilter>(actual);
             Assert.Equal("equals", actual.Method);
+            Assert.IsType<StringFilter>(actual);
             Assert.Equal("b", actual.Values);
             Assert.Same(expected, actual);
         }
@@ -650,7 +650,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.IsEnabled = isEnabled;
             filter.Type = GridFilterType.Double;
-            filter.First = new StringContainsFilter { Values = "A" };
+            filter.First = new StringFilter { Values = "A" };
 
             Object actual = filter.Apply(items);
             Object expected = items;
@@ -693,8 +693,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Operator = op;
             filter.Type = GridFilterType.Double;
-            filter.First = new StringContainsFilter { Values = "a" };
-            filter.Second = new StringContainsFilter { Values = "A" };
+            filter.First = new StringFilter { Method = "contains", Values = "a" };
+            filter.Second = new StringFilter { Method = "contains", Values = "A" };
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a") && item.Name.Contains("A"));
             IQueryable actual = filter.Apply(items);
@@ -709,8 +709,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Operator = op;
             filter.Type = GridFilterType.Double;
-            filter.First = new StringContainsFilter { Values = "a" };
-            filter.Second = new StringContainsFilter { Values = "bB" };
+            filter.First = new StringFilter { Method = "contains", Values = "a" };
+            filter.Second = new StringFilter { Method = "contains", Values = "bB" };
 
             IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("a") || item.Name.Contains("bB")));
             IQueryable actual = filter.Apply(items);
@@ -726,8 +726,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Operator = op;
             filter.Type = GridFilterType.Double;
-            filter.First = new StringContainsFilter { Values = "a" };
-            filter.Second = new StringContainsFilter { Values = "BB" };
+            filter.First = new StringFilter { Method = "contains", Values = "a" };
+            filter.Second = new StringFilter { Method = "contains", Values = "BB" };
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
             IQueryable actual = filter.Apply(items);
@@ -740,8 +740,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             filter.Operator = "or";
             filter.Type = GridFilterType.Single;
-            filter.First = new StringContainsFilter { Values = "a" };
-            filter.Second = new StringContainsFilter { Values = "bb" };
+            filter.First = new StringFilter { Method = "contains", Values = "a" };
+            filter.Second = new StringFilter { Method = "contains", Values = "bb" };
 
             IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
             IQueryable actual = filter.Apply(items);

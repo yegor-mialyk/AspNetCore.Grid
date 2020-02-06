@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
@@ -40,7 +41,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("1", TestEnum.Second)]
         public void Apply_NullableEqualsFilter(String value, TestEnum? test)
         {
@@ -55,7 +55,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("1", TestEnum.Second)]
         public void Apply_EqualsFilter(String value, TestEnum? test)
         {
@@ -70,7 +69,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("1", TestEnum.Second)]
         public void Apply_NullableNotEqualsFilter(String value, TestEnum? test)
         {
@@ -85,7 +83,6 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData("", null)]
-        [InlineData(null, null)]
         [InlineData("1", TestEnum.Second)]
         public void Apply_NotEqualsFilter(String value, TestEnum? test)
         {
@@ -96,6 +93,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             IEnumerable expected = items.Where(model => model.Enum != test);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Apply_EmptyValue_ReturnsNull()
+        {
+            filter.Method = "equals";
+            filter.Values = StringValues.Empty;
+
+            Assert.Null(filter.Apply(enumExpression.Body));
         }
 
         [Fact]

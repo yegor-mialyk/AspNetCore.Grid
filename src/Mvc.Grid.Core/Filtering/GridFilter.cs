@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
@@ -11,17 +10,17 @@ namespace NonFactors.Mvc.Grid
         public StringValues Values { get; set; }
         public GridFilterCase Case { get; set; }
 
-        public GridFilter()
+        protected GridFilter()
         {
             Case = GridFilterCase.Original;
         }
 
         public virtual Expression? Apply(Expression expression)
         {
-            Expression? filter = Apply(expression, Values.FirstOrDefault());
+            Expression? filter = null;
 
-            for (Int32 i = 1; i < Values.Count; i++)
-                if (Apply(expression, Values[i]) is Expression next)
+            foreach (String value in Values)
+                if (Apply(expression, value) is Expression next)
                     filter = filter == null
                         ? next
                         : Method == "not-equals"
