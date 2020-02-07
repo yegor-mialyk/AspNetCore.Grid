@@ -7,7 +7,6 @@ namespace NonFactors.Mvc.Grid
         public T Model { get; }
         public Int32 Index { get; }
 
-        public String? CssClasses { get; set; }
         public GridHtmlAttributes? Attributes { get; set; }
 
         public GridRow(T model, Int32 index)

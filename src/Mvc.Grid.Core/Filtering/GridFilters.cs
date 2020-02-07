@@ -202,7 +202,8 @@ namespace NonFactors.Mvc.Grid
             {
                 if (TryGet(elementType, method, out filter))
                     return typeof(EnumerableFilter<>).MakeGenericType(filter);
-                else if (elementType.IsEnum && TryGet(typeof(Enum), method, out filter))
+
+                if (elementType.IsEnum && TryGet(typeof(Enum), method, out filter))
                     return typeof(EnumerableFilter<>).MakeGenericType(filter);
             }
             else if (type.IsEnum && TryGet(typeof(Enum), method, out filter))

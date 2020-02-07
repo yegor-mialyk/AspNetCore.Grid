@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit

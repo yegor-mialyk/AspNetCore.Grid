@@ -41,7 +41,7 @@ namespace NonFactors.Mvc.Grid
             }
         }
         private Boolean DefinitionsIsSet { get; set; }
-        private OrderedDictionary DefinitionsValue { get; set; }
+        private OrderedDictionary DefinitionsValue { get; }
 
         public GridSort(IGrid<T> grid)
         {
@@ -66,12 +66,7 @@ namespace NonFactors.Mvc.Grid
             Int32 index = 0;
 
             foreach (IGridColumn<T> column in Definitions.Keys.Cast<IGridColumn<T>>().Where(column => column.Sort.IsEnabled == true))
-            {
-                if (index++ == 0)
-                    items = column.Sort.By(items);
-                else
-                    items = column.Sort.ThenBy((IOrderedQueryable<T>)items);
-            }
+                items = index++ == 0 ? column.Sort.By(items) : column.Sort.ThenBy((IOrderedQueryable<T>)items);
 
             return items;
         }

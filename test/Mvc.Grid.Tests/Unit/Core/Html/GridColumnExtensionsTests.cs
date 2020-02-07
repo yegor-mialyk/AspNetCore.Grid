@@ -92,8 +92,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
                 new GridModel { Name = "Last" }
             }.AsQueryable();
 
-            IEnumerator<SelectListItem> actual = column.UsingFilterOptions().Filter.Options.GetEnumerator();
-            IEnumerator<SelectListItem> expected = new List<SelectListItem>
+            using IEnumerator<SelectListItem> actual = column.UsingFilterOptions().Filter.Options.GetEnumerator();
+            using IEnumerator<SelectListItem> expected = new List<SelectListItem>
             {
                 new SelectListItem { Value = null, Text = null },
                 new SelectListItem { Value = "Last", Text = "Last" },

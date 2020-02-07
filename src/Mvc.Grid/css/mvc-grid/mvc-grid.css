@@ -34,7 +34,7 @@
 
 .mvc-grid > table > thead > tr > th,
 .mvc-grid > table > tbody > tr > td,
-.mvc-grid > table > tfoot > tr > td  {
+.mvc-grid > table > tfoot > tr > td {
     border: 1px solid #dee2e6;
     padding: 0.75em;
 }
@@ -390,7 +390,7 @@
 
 .mvc-grid-loading > div > div {
     animation: loader-points 1.4s infinite ease-in-out both;
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
     display: inline-block;
     border-radius: 100%;
     margin: 0 0.75em;

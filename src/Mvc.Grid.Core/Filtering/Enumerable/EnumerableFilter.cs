@@ -58,7 +58,7 @@ namespace NonFactors.Mvc.Grid
                 MethodInfo any = typeof(Enumerable).GetMethods()
                     .First(method =>
                         method.Name == nameof(Enumerable.Any) &&
-                        method.GetParameters().Count() == 2)
+                        method.GetParameters().Length == 2)
                     .MakeGenericMethod(type);
 
                 return Expression.Call(any, expression, Expression.Lambda(filter, parameter));
