@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GuidFilter : GridFilter
+    public class GuidFilter : AGridFilter
     {
         protected override Expression? Apply(Expression expression, String? value)
         {

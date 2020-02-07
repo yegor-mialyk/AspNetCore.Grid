@@ -4,13 +4,13 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public abstract class GridFilter : IGridFilter
+    public abstract class AGridFilter : IGridFilter
     {
         public String? Method { get; set; }
         public StringValues Values { get; set; }
         public GridFilterCase Case { get; set; }
 
-        protected GridFilter()
+        protected AGridFilter()
         {
             Case = GridFilterCase.Original;
         }

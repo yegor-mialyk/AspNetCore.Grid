@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class StringFilter : GridFilter
+    public class StringFilter : AGridFilter
     {
         protected static Expression Null { get; }
         protected static Expression Empty { get; }

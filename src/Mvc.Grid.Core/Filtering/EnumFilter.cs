@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class BooleanFilter : GridFilter
+    public class EnumFilter : AGridFilter
     {
         protected override Expression? Apply(Expression expression, String? value)
         {
@@ -13,12 +13,12 @@ namespace NonFactors.Mvc.Grid
 
             try
             {
-                Object boolValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
+                Object enumValue = TypeDescriptor.GetConverter(expression.Type).ConvertFrom(value);
 
                 return Method switch
                 {
-                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(boolValue, expression.Type)),
-                    "equals" => Expression.Equal(expression, Expression.Constant(boolValue, expression.Type)),
+                    "not-equals" => Expression.NotEqual(expression, Expression.Constant(enumValue, expression.Type)),
+                    "equals" => Expression.Equal(expression, Expression.Constant(enumValue, expression.Type)),
                     _ => null
                 };
             }
