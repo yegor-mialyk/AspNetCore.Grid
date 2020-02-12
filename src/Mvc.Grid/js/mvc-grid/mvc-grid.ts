@@ -154,10 +154,10 @@ export class MvcGrid {
         grid.isAjax = typeof options.isAjax == "boolean" ? options.isAjax : grid.isAjax;
         grid.filters = Object.assign(grid.filters, options.filters);
 
-        for (const column of grid.columns.filter(col => col.filter)) {
-            if (grid.filters[column.filter!.name]) {
-                column.filter!.instance = new grid.filters[column.filter!.name](column);
-                column.filter!.instance.init();
+        for (const column of grid.columns) {
+            if (column.filter && grid.filters[column.filter.name]) {
+                column.filter.instance = new grid.filters[column.filter.name](column);
+                column.filter.instance.init();
             }
         }
 
@@ -291,7 +291,7 @@ export class MvcGrid {
                     const data: { [type: string]: string } = {};
 
                     for (const [i, column] of grid.columns.entries()) {
-                        data[column.name!] = row.cells[i].innerText;
+                        data[column.name] = row.cells[i].innerText;
                     }
 
                     this.dispatchEvent(new CustomEvent("rowclick", {
@@ -318,10 +318,10 @@ export class MvcGridColumn {
 
         column.grid = grid;
         column.header = header;
-        column.name = data.name!;
+        column.name = data.name || "";
         column.isHidden = header.classList.contains("mvc-grid-hidden");
-        column.sort = data.sort == "True" ? new MvcGridColumnSort(column) : null;
-        column.filter = data.filter == "True" && data.filterName ? new MvcGridColumnFilter(column, rowFilter) : null;
+        column.filter = data.filter ? new MvcGridColumnFilter(column, rowFilter) : null;
+        column.sort = header.classList.contains("sortable") ? new MvcGridColumnSort(column) : null;
 
         column.cleanUp();
     }
@@ -332,10 +332,8 @@ export class MvcGridColumn {
         delete data.filterDefaultMethod;
         delete data.filterApplied;
         delete data.filterType;
-        delete data.filterName;
         delete data.filter;
 
-        delete data.sortOrder;
         delete data.sortFirst;
         delete data.sort;
 
@@ -354,9 +352,9 @@ export class MvcGridColumnSort {
         const sort = this;
 
         sort.column = column;
-        sort.first = <any>column.header.dataset.sortFirst!.toLowerCase();
-        sort.order = <any>column.header.dataset.sortOrder!.toLowerCase();
         sort.button = column.header.querySelector<HTMLButtonElement>(".mvc-grid-sort")!;
+        sort.order = <any>(column.header.dataset.sort || "").toLowerCase();
+        sort.first = <any>(column.header.dataset.sortFirst || "asc").toLowerCase();
 
         sort.bind();
     }
@@ -461,10 +459,10 @@ export class MvcGridColumnFilter {
 
         filter.column = column;
         filter.rowFilter = rowFilter;
-        filter.name = data.filterName!;
+        filter.name = data.filter || "default";
         filter.isApplied = data.filterApplied == "True";
-        filter.defaultMethod = data.filterDefaultMethod!;
-        filter.type = <any>data.filterType!.toLowerCase() || "single";
+        filter.defaultMethod = data.filterDefaultMethod || "";
+        filter.type = <any>(data.filterType || "single").toLowerCase();
         filter.options = options && options.children.length > 0 ? options : null;
         filter.button = (rowFilter || column.header).querySelector<HTMLButtonElement>(".mvc-grid-filter")!;
         filter.inlineInput = rowFilter ? rowFilter.querySelector<HTMLInputElement>(".mvc-grid-value") : null;

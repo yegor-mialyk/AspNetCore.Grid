@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
@@ -14,11 +14,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnExtensionsTests()
         {
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
-            column = Substitute.For<IGridColumn<GridModel, String?>>();
-            column.Expression.Returns(expression);
-
-            column.Filter = new GridColumnFilter<GridModel, String?>(column);
+            column = new Grid<GridModel>(Array.Empty<GridModel>().AsQueryable()).Columns.Add(model => model.Name);
         }
 
         [Fact]
@@ -514,6 +510,73 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             Object actual = column.Hidden();
 
             Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void AsAttributes_OnEmptyColumn()
+        {
+            column.Name = "";
+            column.CssClasses = "";
+            column.IsHidden = false;
+            column.Filter.Name = "text";
+            column.Sort.IsEnabled = false;
+            column.Filter.IsEnabled = false;
+            column.Filter.DefaultMethod = "equals";
+            column.Filter.Type = GridFilterType.Double;
+            column.Sort.FirstOrder = GridSortOrder.Desc;
+            column.Filter.First = Substitute.For<IGridFilter>();
+
+            Assert.Empty(column.AsAttributes());
+        }
+
+        [Fact]
+        public void AsAttributes_OnPartialColumn()
+        {
+            column.Name = "";
+            column.CssClasses = "";
+            column.IsHidden = false;
+            column.Filter.Name = "";
+            column.Filter.Type = null;
+            column.Filter.First = null;
+            column.Filter.Second = null;
+            column.Sort.IsEnabled = true;
+            column.Filter.IsEnabled = true;
+            column.Filter.DefaultMethod = "";
+            column.Grid.Query = new QueryCollection();
+            column.Sort.FirstOrder = GridSortOrder.Asc;
+
+            IDictionary<String, Object?> actual = column.AsAttributes();
+
+            Assert.Single(actual);
+            Assert.Equal("filterable sortable", actual["class"]);
+        }
+
+        [Fact]
+        public void AsAttributes_OnFullColumn()
+        {
+            column.Name = "name";
+            column.IsHidden = true;
+            column.Filter.Name = "text";
+            column.Sort.IsEnabled = true;
+            column.Filter.IsEnabled = true;
+            column.CssClasses = "test-classes";
+            column.Filter.DefaultMethod = "equals";
+            column.Filter.Type = GridFilterType.Double;
+            column.Sort.FirstOrder = GridSortOrder.Desc;
+            column.Filter.First = Substitute.For<IGridFilter>();
+            column.Grid.Query = HttpUtility.ParseQueryString("sort=name asc");
+
+            IDictionary<String, Object?> actual = column.AsAttributes();
+
+            Assert.Equal("test-classes filterable sortable asc mvc-grid-hidden", actual["class"]);
+            Assert.Equal(GridFilterType.Double, actual["data-filter-type"]);
+            Assert.Equal("equals", actual["data-filter-default-method"]);
+            Assert.Equal(GridSortOrder.Desc, actual["data-sort-first"]);
+            Assert.Equal(GridSortOrder.Asc, actual["data-sort"]);
+            Assert.Equal(true, actual["data-filter-applied"]);
+            Assert.Equal("text", actual["data-filter"]);
+            Assert.Equal("name", actual["data-name"]);
+            Assert.Equal(8, actual.Count);
         }
     }
 }

@@ -144,5 +144,58 @@ namespace NonFactors.Mvc.Grid
 
             return column;
         }
+        public static GridHtmlAttributes AsAttributes(this IGridColumn column)
+        {
+            String classes = column.CssClasses;
+            GridHtmlAttributes attributes = new GridHtmlAttributes();
+
+            attributes["class"] = classes;
+
+            if (!String.IsNullOrEmpty(column.Name))
+                attributes["data-name"] = column.Name;
+
+            if (column.Filter.IsEnabled == true)
+            {
+                classes += " filterable";
+
+                if (!String.IsNullOrEmpty(column.Filter.Name))
+                    attributes["data-filter"] = column.Filter.Name;
+
+                if (column.Filter.Type is GridFilterType type)
+                    attributes["data-filter-type"] = type;
+
+                if ((column.Filter.First ?? column.Filter.Second) != null)
+                    attributes["data-filter-applied"] = true;
+
+                if (!String.IsNullOrEmpty(column.Filter.DefaultMethod))
+                    attributes["data-filter-default-method"] = column.Filter.DefaultMethod;
+            }
+
+            if (column.Sort.IsEnabled == true)
+            {
+                classes += " sortable";
+
+                if (column.Sort.Order is GridSortOrder order)
+                {
+                    attributes["data-sort"] = order;
+                    classes += $" {order.ToString().ToLower()}";
+                }
+
+                if (column.Sort.FirstOrder != GridSortOrder.Asc)
+                    attributes["data-sort-first"] = column.Sort.FirstOrder;
+            }
+
+            if (column.IsHidden)
+                classes += " mvc-grid-hidden";
+
+            classes = classes.Trim();
+
+            if (String.IsNullOrEmpty(classes))
+                attributes.Remove("class");
+            else
+                attributes["class"] = classes;
+
+            return attributes;
+        }
     }
 }
