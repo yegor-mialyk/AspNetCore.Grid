@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Version>6.0.0</Version>
     <Nullable>enable</Nullable>
-    <DebugType>Full</DebugType>
     <Company>NonFactors</Company>
     <LangVersion>8.0</LangVersion>
     <GenerateFullPaths>true</GenerateFullPaths>
@@ -11,6 +10,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>NonFactors.Mvc.Grid.Tests</RootNamespace>
+    <DebugType Condition="'$(Configuration)'=='Release'">none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
