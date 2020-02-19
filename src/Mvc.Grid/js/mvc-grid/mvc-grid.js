@@ -575,15 +575,15 @@ class MvcGridPopup {
         const popup = MvcGridPopup;
         const filterer = filter.instance;
 
-        popup.element.className = `mvc-grid-popup ${filterer.cssClasses}`.trim();
         popup.lastActiveElement = document.activeElement;
-        popup.element.innerHTML = filterer.render();
+        popup.element.className = `mvc-grid-popup ${filterer.cssClasses}`.trim();
+        popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content">${filterer.render()}</div>`;
 
         document.body.appendChild(popup.element);
 
-        popup.updateValues(filter);
-        popup.reposition(filter);
         popup.bind();
+        popup.updateValues(filter);
+        popup.reposition(filter.button);
 
         filterer.bindOperator();
         filterer.bindMethods();
@@ -628,19 +628,18 @@ class MvcGridPopup {
             }
         }
     }
-    static reposition(filter) {
+    static reposition(anchor) {
         const popup = MvcGridPopup;
-        const filterButton = filter.button;
         const width = popup.element.clientWidth;
-        const filterPos = filterButton.getBoundingClientRect();
+        const anchorRect = anchor.getBoundingClientRect();
         const arrow = popup.element.querySelector(".popup-arrow");
-        const top = window.pageYOffset + filterPos.top + filterButton.offsetHeight * 0.6 + arrow.offsetHeight;
+        const top = window.pageYOffset + anchorRect.top + anchor.offsetHeight * 0.6 + arrow.offsetHeight;
 
-        let left = window.pageXOffset + filterPos.left - 8;
-        let arrowLeft = filterButton.offsetWidth / 2;
+        let left = window.pageXOffset + anchorRect.left - 8;
+        let arrowLeft = anchor.offsetWidth / 2;
 
         if (left + width + 8 > window.pageXOffset + document.documentElement.clientWidth) {
-            const offset = width - filterButton.offsetWidth - 16;
+            const offset = width - anchor.offsetWidth - 16;
 
             arrowLeft += offset;
             left -= offset;
@@ -713,19 +712,16 @@ class MvcGridFilter {
     render() {
         const filter = this;
 
-        return `<div class="popup-arrow"></div>
-                <div class="popup-content">
+        return `<div class="popup-filter">
+                    ${filter.renderFilter("first")}
+                </div>
+                ${filter.mode == "excel" && filter.type == "double"
+                    ? `${filter.renderOperator()}
                     <div class="popup-filter">
-                       ${filter.renderFilter("first")}
-                    </div>
-                   ${filter.mode == "excel" && filter.type == "double"
-                       ? `${filter.renderOperator()}
-                       <div class="popup-filter">
-                           ${filter.renderFilter("second")}
-                       </div>`
-                       : ""}
-                   ${filter.renderActions()}
-                </div>`;
+                        ${filter.renderFilter("second")}
+                    </div>`
+                    : ""}
+                ${filter.renderActions()}`;
     }
     renderFilter(name) {
         const filter = this;
