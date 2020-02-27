@@ -256,12 +256,13 @@ export class MvcGrid {
                     grid.loader.parentElement.removeChild(grid.loader);
                 }
 
-                grid.element.dispatchEvent(new CustomEvent("reloadfail", {
-                    detail: { grid, result: reason },
+                const cancelled = !grid.element.dispatchEvent(new CustomEvent("reloadfail", {
+                    detail: { grid, reason },
+                    cancelable: true,
                     bubbles: true
                 }));
 
-                return Promise.reject(reason);
+                return cancelled ? Promise.resolve() : Promise.reject(reason);
             });
         } else {
             location.href = grid.url.href;
