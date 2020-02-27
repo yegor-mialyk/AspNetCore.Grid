@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridPagerTests
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridRowTests
     {

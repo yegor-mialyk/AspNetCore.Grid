@@ -10,7 +10,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class HtmlGridTests
     {

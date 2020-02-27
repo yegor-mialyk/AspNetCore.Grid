@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridColumnFilterTests
     {

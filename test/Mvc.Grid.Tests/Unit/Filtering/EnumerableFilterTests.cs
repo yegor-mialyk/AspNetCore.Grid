@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.Extensions.Primitives;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridEnumerableFilterTests
     {

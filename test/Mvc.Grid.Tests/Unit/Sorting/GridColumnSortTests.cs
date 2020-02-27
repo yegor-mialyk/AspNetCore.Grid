@@ -3,7 +3,7 @@ using System.Linq;
 using NSubstitute;
 using Xunit;
 
-namespace NonFactors.Mvc.Grid.Tests.Unit
+namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridColumnSortTests
     {
