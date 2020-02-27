@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -134,6 +135,25 @@ namespace NonFactors.Mvc.Grid
             html.Grid.Processors.Add(html.Grid.Pager);
 
             builder?.Invoke(html.Grid.Pager);
+
+            return html;
+        }
+
+        public static IHtmlGrid<T> Configure<T>(this IHtmlGrid<T> html, GridConfig grid)
+        {
+            List<IGridColumn<T>> columns = html.Grid.Columns.ToList();
+            html.Grid.Columns.Clear();
+
+            foreach (GridColumnConfig config in grid.Columns)
+                if (columns.FirstOrDefault(column => String.Equals(column.Name, config.Name, StringComparison.OrdinalIgnoreCase)) is IGridColumn<T> column)
+                {
+                    columns.Remove(column);
+                    html.Grid.Columns.Add(column);
+                    column.IsHidden = config.Hidden;
+                }
+
+            foreach (IGridColumn<T> column in columns)
+                html.Grid.Columns.Add(column);
 
             return html;
         }

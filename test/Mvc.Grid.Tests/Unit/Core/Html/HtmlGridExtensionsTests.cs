@@ -480,5 +480,57 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
             Assert.Same(expected, actual);
         }
+
+        [Fact]
+        public void Configure_ColumnOrder()
+        {
+            htmlGrid.Grid.Columns.Clear();
+            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(model => "");
+            IGridColumn<GridModel> sum = htmlGrid.Grid.Columns.Add(model => model.Sum);
+            IGridColumn<GridModel> date = htmlGrid.Grid.Columns.Add(model => model.Date);
+            IGridColumn<GridModel> name = htmlGrid.Grid.Columns.Add(model => model.Name);
+
+            htmlGrid.Configure(new GridConfig
+            {
+                Name = "Test",
+                Columns = new[]
+                {
+                    new GridColumnConfig { Name = date.Name },
+                    new GridColumnConfig { Name = sum.Name },
+                    new GridColumnConfig { Name = name.Name }
+                }
+            });
+
+            IList<IGridColumn<GridModel>> expected = new[] { date, sum, name, empty };
+            IList<IGridColumn<GridModel>> actual = htmlGrid.Grid.Columns;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Configure_ColumnVisibility()
+        {
+            htmlGrid.Grid.Columns.Clear();
+            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(model => "");
+            IGridColumn<GridModel> sum = htmlGrid.Grid.Columns.Add(model => model.Sum);
+            IGridColumn<GridModel> name = htmlGrid.Grid.Columns.Add(model => model.Name);
+            IGridColumn<GridModel> date = htmlGrid.Grid.Columns.Add(model => model.Date).Hidden();
+
+            htmlGrid.Configure(new GridConfig
+            {
+                Name = "Test",
+                Columns = new[]
+                {
+                    new GridColumnConfig { Name = sum.Name, Hidden = true },
+                    new GridColumnConfig { Name = date.Name, Hidden = true },
+                    new GridColumnConfig { Name = name.Name, Hidden = false }
+                }
+            });
+
+            Assert.False(empty.IsHidden);
+            Assert.False(name.IsHidden);
+            Assert.True(date.IsHidden);
+            Assert.True(sum.IsHidden);
+        }
     }
 }

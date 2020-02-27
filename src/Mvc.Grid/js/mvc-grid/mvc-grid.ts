@@ -25,6 +25,14 @@ export interface MvcGridLanguage {
     };
 }
 
+export interface MvcGridConfiguration {
+    name: string;
+    columns: {
+        name: string;
+        hidden: boolean;
+    }[];
+}
+
 export class MvcGrid {
     private static instances: MvcGrid[] = [];
     public static lang: MvcGridLanguage = {
@@ -162,6 +170,12 @@ export class MvcGrid {
         }
 
         return grid;
+    }
+    public getConfiguration(): MvcGridConfiguration {
+        return {
+            name: this.name,
+            columns: this.columns.map(column => ({ name: column.name, hidden: column.isHidden }))
+        };
     }
 
     public reload(): void {
@@ -650,15 +664,40 @@ export class MvcGridPager {
 }
 
 export class MvcGridPopup {
+    static draggedElement: HTMLElement | null;
+    static draggedColumn: MvcGridColumn | null;
     static lastActiveElement: HTMLElement | null;
     static element = document.createElement("div");
 
+    public static showConfiguration(grid: MvcGrid, anchor?: HTMLElement): void {
+        const popup = this;
+
+        popup.lastActiveElement = <HTMLElement>document.activeElement;
+        popup.element.className = "mvc-grid-popup mvc-grid-configuration";
+        popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content"></div>`;
+
+        const content = popup.element.querySelector(".popup-content")!;
+
+        content.appendChild(popup.createDropzone());
+
+        for (const column of grid.columns) {
+            content.appendChild(popup.createPreference(column));
+            content.appendChild(popup.createDropzone());
+        }
+
+        if (grid.columns.length) {
+            document.body.appendChild(popup.element);
+        }
+
+        popup.reposition(grid, anchor);
+        popup.bind();
+    }
     public static show(filter: MvcGridColumnFilter): void {
         if (!filter.instance) {
             return;
         }
 
-        const popup = MvcGridPopup;
+        const popup = this;
         const filterer = filter.instance;
 
         popup.lastActiveElement = <HTMLElement>document.activeElement;
@@ -668,8 +707,8 @@ export class MvcGridPopup {
         document.body.appendChild(popup.element);
 
         popup.bind();
-        popup.updateValues(filter);
-        popup.reposition(filter.button);
+        popup.setValues(filter);
+        popup.reposition(filter.column.grid, filter.button);
 
         filterer.bindOperator();
         filterer.bindMethods();
@@ -692,17 +731,17 @@ export class MvcGridPopup {
         }
     }
 
-    private static updateValues(filter: MvcGridColumnFilter): void {
-        const popup = MvcGridPopup;
+    private static setValues(filter: MvcGridColumnFilter): void {
+        const popup = this;
 
-        popup.setValues(`.mvc-grid-operator`, [filter.operator]);
-        popup.setValues(`.mvc-grid-value[data-filter="first"]`, filter.first.values);
-        popup.setValues(`.mvc-grid-value[data-filter="second"]`, filter.second.values);
-        popup.setValues(`.mvc-grid-method[data-filter="first"]`, [filter.first.method]);
-        popup.setValues(`.mvc-grid-method[data-filter="second"]`, [filter.second.method]);
+        popup.setValue(`.mvc-grid-operator`, [filter.operator]);
+        popup.setValue(`.mvc-grid-value[data-filter="first"]`, filter.first.values);
+        popup.setValue(`.mvc-grid-value[data-filter="second"]`, filter.second.values);
+        popup.setValue(`.mvc-grid-method[data-filter="first"]`, [filter.first.method]);
+        popup.setValue(`.mvc-grid-method[data-filter="second"]`, [filter.second.method]);
     }
-    private static setValues(selector: string, values: string[]): void {
-        const input = MvcGridPopup.element.querySelector<HTMLElement>(selector);
+    private static setValue(selector: string, values: string[]): void {
+        const input = this.element.querySelector<HTMLElement>(selector);
 
         if (input) {
             if (input.tagName == "SELECT" && (<HTMLSelectElement>input).multiple) {
@@ -715,29 +754,135 @@ export class MvcGridPopup {
         }
     }
 
-    private static reposition(anchor: HTMLElement): void {
-        const popup = MvcGridPopup;
-        const width = popup.element.clientWidth;
-        const anchorRect = anchor.getBoundingClientRect();
-        const arrow = popup.element.querySelector<HTMLElement>(".popup-arrow")!;
-        const top = window.pageYOffset + anchorRect.top + anchor.offsetHeight * 0.6 + arrow.offsetHeight;
+    private static createPreference(column: MvcGridColumn): HTMLLabelElement {
+        const popup = this;
+        const name = document.createElement("span");
+        const checkbox = document.createElement("input");
+        const preference = document.createElement("label");
 
-        let left = window.pageXOffset + anchorRect.left - 8;
-        let arrowLeft = anchor.offsetWidth / 2;
+        checkbox.type = "checkbox";
+        preference.draggable = true;
+        preference.className = "mvc-grid-column";
 
-        if (left + width + 8 > window.pageXOffset + document.documentElement.clientWidth) {
-            const offset = width - anchor.offsetWidth - 16;
+        if (column.filter && column.filter.inlineInput) {
+            name.innerText = column.filter.inlineInput.placeholder;
+        } else {
+            name.innerText = column.header.innerText;
+        }
 
-            arrowLeft += offset;
+        checkbox.checked = !column.isHidden;
+
+        checkbox.addEventListener("change", () => {
+            const i = column.grid.columns.indexOf(column);
+
+            for (const tr of column.grid.element.querySelectorAll("tr")) {
+                if (checkbox.checked) {
+                    tr.children[i].classList.remove("mvc-grid-hidden");
+                } else {
+                    tr.children[i].classList.add("mvc-grid-hidden");
+                }
+            }
+
+            column.isHidden = !checkbox.checked;
+
+            column.grid.element.dispatchEvent(new CustomEvent("gridconfigure", {
+                detail: { grid: column.grid },
+                bubbles: true
+            }));
+        });
+
+        preference.addEventListener("dragstart", () => {
+            popup.draggedColumn = column;
+            popup.draggedElement = preference;
+            preference.style.opacity = "0.4";
+            preference.parentElement!.classList.add("mvc-grid-dragging");
+        });
+
+        preference.addEventListener("dragend", () => {
+            popup.draggedColumn = null;
+            popup.draggedElement = null;
+            preference.style.opacity = "";
+            preference.parentElement!.classList.remove("mvc-grid-dragging");
+        });
+
+        preference.appendChild(checkbox);
+        preference.appendChild(name);
+
+        return preference;
+    }
+    private static createDropzone(): HTMLDivElement {
+        const dropzone = document.createElement("div");
+
+        dropzone.className = "mvc-grid-dropzone";
+
+        dropzone.addEventListener("dragenter", () => {
+            dropzone.classList.add("hover");
+        });
+
+        dropzone.addEventListener("dragover", e => {
+            e.preventDefault();
+        });
+
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("hover");
+        });
+
+        dropzone.addEventListener("drop", () => {
+            const popup = this;
+            const dragged = popup.draggedElement!;
+            const grid = popup.draggedColumn!.grid;
+
+            if (dropzone != dragged.previousElementSibling && dropzone != dragged.nextElementSibling) {
+                const index = ([] as HTMLElement[]).indexOf.call(popup.element.querySelectorAll(".mvc-grid-dropzone"), dropzone);
+                const i = grid.columns.indexOf(popup.draggedColumn!);
+
+                dropzone.parentElement!.insertBefore(dragged.previousElementSibling!, dropzone);
+                dropzone.parentElement!.insertBefore(dragged, dropzone);
+
+                for (const tr of grid.element.querySelectorAll("tr")) {
+                    tr.insertBefore(tr.children[i], tr.children[index]);
+                }
+
+                grid.columns.splice(index - (i < index ? 1 : 0), 0, grid.columns.splice(i, 1)[0]);
+
+                grid.element.dispatchEvent(new CustomEvent("gridconfigure", {
+                    detail: { grid },
+                    bubbles: true
+                }));
+            }
+
+            dropzone.classList.remove("hover");
+        });
+
+        return dropzone;
+    }
+
+    private static reposition(grid: MvcGrid, anchor?: HTMLElement): void {
+        const element = this.element;
+        const style = getComputedStyle(element);
+        const arrow = element.querySelector<HTMLElement>(".popup-arrow")!;
+        let { top, left } = (anchor || grid.element).getBoundingClientRect();
+
+        top += window.pageYOffset - parseFloat(style.borderTopWidth);
+        left += window.pageXOffset - parseFloat(style.borderLeftWidth);
+
+        if (anchor) {
+            left -= parseFloat(style.marginLeft) - anchor.offsetWidth / 2 + 26;
+            const arrowLeft = 26 - parseFloat(getComputedStyle(arrow).borderLeftWidth);
+            const width = parseFloat(style.marginLeft) + element.offsetWidth + parseFloat(style.marginRight);
+            const offset = Math.max(0, left + width - window.pageXOffset - document.documentElement.clientWidth);
+
+            top += anchor.offsetHeight / 3 * 2 + arrow.offsetHeight - parseFloat(style.marginTop);
+            arrow.style.left = `${Math.max(0, arrowLeft + offset)}px`;
             left -= offset;
         }
 
-        popup.element.style.left = `${left}px`;
-        popup.element.style.top = `${top}px`;
-        arrow.style.left = `${arrowLeft}px`;
+        element.style.left = `${Math.max(0, left)}px`;
+        element.style.top = `${Math.max(0, top)}px`;
+        arrow.style.display = anchor ? "" : "none";
     }
     private static bind(): void {
-        const popup = MvcGridPopup;
+        const popup = this;
 
         window.addEventListener("resize", popup.hide);
         window.addEventListener("keydown", popup.hide);

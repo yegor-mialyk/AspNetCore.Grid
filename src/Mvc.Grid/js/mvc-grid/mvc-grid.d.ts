@@ -22,6 +22,13 @@ export interface MvcGridLanguage {
         [method: string]: string;
     };
 }
+export interface MvcGridConfiguration {
+    name: string;
+    columns: {
+        name: string;
+        hidden: boolean;
+    }[];
+}
 export declare class MvcGrid {
     private static instances;
     static lang: MvcGridLanguage;
@@ -43,6 +50,7 @@ export declare class MvcGrid {
     };
     constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
     set(options: Partial<MvcGridOptions>): MvcGrid;
+    getConfiguration(): MvcGridConfiguration;
     reload(): void;
     private buildSort;
     private findGrid;
@@ -106,12 +114,17 @@ export declare class MvcGridPager {
     private bind;
 }
 export declare class MvcGridPopup {
+    static draggedElement: HTMLElement | null;
+    static draggedColumn: MvcGridColumn | null;
     static lastActiveElement: HTMLElement | null;
     static element: HTMLDivElement;
+    static showConfiguration(grid: MvcGrid, anchor?: HTMLElement): void;
     static show(filter: MvcGridColumnFilter): void;
     static hide(e?: UIEvent): void;
-    private static updateValues;
     private static setValues;
+    private static setValue;
+    private static createPreference;
+    private static createDropzone;
     private static reposition;
     private static bind;
 }

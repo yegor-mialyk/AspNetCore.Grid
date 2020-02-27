@@ -196,6 +196,7 @@
 .mvc-grid-popup {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     background-clip: padding-box;
+    max-width: calc(100% - 2em);
     background-color: #ffffff;
     border: 1px solid #cccccc;
     border-radius: 4px;
@@ -203,6 +204,7 @@
     min-width: 12em;
     font-size: 1rem;
     z-index: 1100;
+    margin: 1em;
 }
 
 .mvc-grid-popup.mvc-grid-guid-filter {
@@ -308,6 +310,42 @@
     box-shadow: 0 0 0 0.2em rgba(220, 53, 69, 0.5);
 }
 
+.mvc-grid-popup .mvc-grid-column {
+    box-sizing: border-box;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5em;
+    display: flex;
+    width: 100%;
+    margin: 0;
+}
+
+.mvc-grid-popup .mvc-grid-column span {
+    padding: 0 0.5em;
+}
+
+.mvc-grid-popup .mvc-grid-dropzone:first-child {
+    padding-top: 0.5em;
+}
+
+.mvc-grid-popup .mvc-grid-dropzone:last-child {
+    padding-bottom: 0.5em;
+}
+
+.mvc-grid-popup .mvc-grid-dragging .mvc-grid-column {
+    padding: 0 0.5em;
+}
+
+.mvc-grid-popup .mvc-grid-dragging .mvc-grid-dropzone {
+    background-color: #c4daff;
+    padding: 0.5em;
+    opacity: 0.4;
+}
+
+.mvc-grid-popup .mvc-grid-dragging .mvc-grid-dropzone.hover {
+    background-color: #5a90ea;
+}
+
 .mvc-grid-pager,
 .mvc-grid-empty-row {
     text-align: center;
@@ -390,7 +428,7 @@
 
 .mvc-grid-loading > div > div {
     animation: loader-points 1.4s infinite ease-in-out both;
-    background-color: #f5f5f5 !important;
+    background-color: #f5f5f5;
     display: inline-block;
     border-radius: 100%;
     margin: 0 0.75em;
