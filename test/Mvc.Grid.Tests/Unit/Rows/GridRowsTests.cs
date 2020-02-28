@@ -102,12 +102,12 @@ namespace NonFactors.Mvc.Grid.Tests
             Grid<GridModel> grid = new Grid<GridModel>(items);
 
             GridRows<GridModel> rows = new GridRows<GridModel>(grid);
-            rows.ToList();
+            IGridRow<GridModel>[] originalRows = rows.ToArray();
 
             grid.Processors.Add(preProcessor);
 
             IEnumerable<Object> actual = rows.ToList().Select(row => row.Model);
-            IEnumerable<Object> expected = items;
+            IEnumerable<Object> expected = originalRows.Select(row => row.Model);
 
             preProcessor.DidNotReceive().Process(Arg.Any<IQueryable<GridModel>>());
             Assert.Equal(expected, actual);

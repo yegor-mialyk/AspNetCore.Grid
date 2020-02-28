@@ -78,22 +78,22 @@ export class MvcGrid {
         }
     };
 
-    element: HTMLElement;
-    columns: MvcGridColumn[];
+    public element: HTMLElement;
+    public columns: MvcGridColumn[];
 
-    pager?: MvcGridPager;
-    loader?: HTMLDivElement;
-    controller: AbortController;
+    public pager?: MvcGridPager;
+    public loader?: HTMLDivElement;
+    public controller: AbortController;
 
-    url: URL;
-    name: string;
-    prefix: string;
-    isAjax: boolean;
-    loadingTimerId?: number;
-    loadingDelay: number | null;
-    sort: Map<string, "asc" | "desc">;
-    filterMode: "row" | "excel" | "header";
-    filters: {
+    public url: URL;
+    public name: string;
+    public prefix: string;
+    public isAjax: boolean;
+    public loadingTimerId?: number;
+    public loadingDelay: number | null;
+    public sort: Map<string, "asc" | "desc">;
+    public filterMode: "row" | "excel" | "header";
+    public filters: {
         [type: string]: typeof MvcGridFilter
     };
 
@@ -218,7 +218,7 @@ export class MvcGrid {
                 headers: { "X-Requested-With": "XMLHttpRequest" }
             }).then(response => {
                 if (!response.ok) {
-                    throw new Error(`Invalid response status: ${response.status}`)
+                    throw new Error(`Invalid response status: ${response.status}`);
                 }
 
                 return response.text();
@@ -320,12 +320,12 @@ export class MvcGrid {
 }
 
 export class MvcGridColumn {
-    name: string;
-    grid: MvcGrid;
-    isHidden: boolean;
-    header: HTMLElement;
-    sort: MvcGridColumnSort | null;
-    filter: MvcGridColumnFilter | null;
+    public name: string;
+    public grid: MvcGrid;
+    public isHidden: boolean;
+    public header: HTMLElement;
+    public sort: MvcGridColumnSort | null;
+    public filter: MvcGridColumnFilter | null;
 
     public constructor(grid: MvcGrid, header: HTMLElement, rowFilter: HTMLElement | null) {
         const column = this;
@@ -357,11 +357,11 @@ export class MvcGridColumn {
 }
 
 export class MvcGridColumnSort {
-    column: MvcGridColumn;
-    button: HTMLButtonElement;
+    public column: MvcGridColumn;
+    public button: HTMLButtonElement;
 
-    first: "asc" | "desc";
-    order: "asc" | "desc" | "";
+    public first: "asc" | "desc";
+    public order: "asc" | "desc" | "";
 
     constructor(column: MvcGridColumn) {
         const sort = this;
@@ -428,25 +428,25 @@ export class MvcGridColumnSort {
 }
 
 export class MvcGridColumnFilter {
-    name: string;
-    isApplied: boolean;
-    defaultMethod: string;
-    type: "single" | "double" | "multi";
-    first: {
+    public name: string;
+    public isApplied: boolean;
+    public defaultMethod: string;
+    public type: "single" | "double" | "multi";
+    public first: {
         method: string;
         values: string[];
     };
-    operator: string;
-    second: {
+    public operator: string;
+    public second: {
         method: string;
         values: string[];
     };
-    column: MvcGridColumn;
-    instance: MvcGridFilter;
-    button: HTMLButtonElement;
-    rowFilter: HTMLElement | null;
-    options: HTMLSelectElement | null;
-    inlineInput: HTMLInputElement | null;
+    public column: MvcGridColumn;
+    public instance: MvcGridFilter;
+    public button: HTMLButtonElement;
+    public rowFilter: HTMLElement | null;
+    public options: HTMLSelectElement | null;
+    public inlineInput: HTMLInputElement | null;
 
     constructor(column: MvcGridColumn, rowFilter: HTMLElement | null) {
         const values = [];
@@ -609,12 +609,12 @@ export class MvcGridColumnFilter {
 }
 
 export class MvcGridPager {
-    grid: MvcGrid;
-    currentPage: string;
-    element: HTMLElement;
-    showPageSizes: boolean;
-    rowsPerPage: HTMLInputElement;
-    pages: NodeListOf<HTMLElement>;
+    public grid: MvcGrid;
+    public currentPage: string;
+    public element: HTMLElement;
+    public showPageSizes: boolean;
+    public rowsPerPage: HTMLInputElement;
+    public pages: NodeListOf<HTMLElement>;
 
     public constructor(grid: MvcGrid, element: HTMLElement) {
         const pager = this;
@@ -665,10 +665,10 @@ export class MvcGridPager {
 }
 
 export class MvcGridPopup {
-    static draggedElement: HTMLElement | null;
-    static draggedColumn: MvcGridColumn | null;
-    static lastActiveElement: HTMLElement | null;
-    static element = document.createElement("div");
+    public static draggedElement: HTMLElement | null;
+    public static draggedColumn: MvcGridColumn | null;
+    public static lastActiveElement: HTMLElement | null;
+    public static element = document.createElement("div");
 
     public static showConfiguration(grid: MvcGrid, anchor?: HTMLElement): void {
         const popup = this;
@@ -893,11 +893,11 @@ export class MvcGridPopup {
 }
 
 export class MvcGridFilter {
-    methods: string[];
-    cssClasses: string;
-    column: MvcGridColumn;
-    mode: "row" | "excel" | "header";
-    type: "single" | "double" | "multi";
+    public methods: string[];
+    public cssClasses: string;
+    public column: MvcGridColumn;
+    public mode: "row" | "excel" | "header";
+    public type: "single" | "double" | "multi";
 
     public constructor(column: MvcGridColumn) {
         const filter = this;
