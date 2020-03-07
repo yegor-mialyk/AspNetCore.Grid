@@ -671,7 +671,7 @@ class MvcGridPopup {
         if (column.filter && column.filter.inlineInput) {
             name.innerText = column.filter.inlineInput.placeholder;
         } else {
-            name.innerText = column.header.innerText;
+            name.innerText = column.header.innerText.trim();
         }
 
         checkbox.checked = !column.isHidden;
