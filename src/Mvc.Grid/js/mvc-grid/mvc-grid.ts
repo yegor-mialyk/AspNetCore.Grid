@@ -171,6 +171,9 @@ export class MvcGrid {
 
         return grid;
     }
+    public showConfiguration(anchor?: HTMLElement): void {
+        MvcGridPopup.showConfiguration(this, anchor);
+    }
     public getConfiguration(): MvcGridConfiguration {
         return {
             name: this.name,

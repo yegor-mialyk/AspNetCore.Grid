@@ -82,6 +82,9 @@ class MvcGrid {
 
         return grid;
     }
+    showConfiguration(anchor) {
+        MvcGridPopup.showConfiguration(this, anchor);
+    }
     getConfiguration() {
         return {
             name: this.name,

@@ -50,6 +50,7 @@ export declare class MvcGrid {
     };
     constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
     set(options: Partial<MvcGridOptions>): MvcGrid;
+    showConfiguration(anchor?: HTMLElement): void;
     getConfiguration(): MvcGridConfiguration;
     reload(): void;
     private buildSort;
