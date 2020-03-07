@@ -627,9 +627,11 @@ class MvcGridPopup {
     }
     static hide(e) {
         const popup = MvcGridPopup;
-        const target = e && e.target && e.target.closest && e.target.closest(".mvc-grid-popup,.mvc-grid-filter");
+        const initiator = e && e.target;
+        const visible = popup.element.parentNode;
+        const outside = !(initiator && initiator.closest && initiator.closest(".mvc-grid-popup,.mvc-grid-filter"));
 
-        if ((!target || e.which == 27) && popup.element.parentNode && (!e || e.target != window)) {
+        if (visible && outside) {
             document.body.removeChild(popup.element);
 
             if (popup.lastActiveElement) {
@@ -791,7 +793,6 @@ class MvcGridPopup {
         const popup = this;
 
         window.addEventListener("resize", popup.hide);
-        window.addEventListener("keydown", popup.hide);
         window.addEventListener("mousedown", popup.hide);
         window.addEventListener("touchstart", popup.hide);
     }

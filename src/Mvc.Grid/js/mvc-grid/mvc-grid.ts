@@ -723,9 +723,11 @@ export class MvcGridPopup {
     }
     public static hide(e?: UIEvent): void {
         const popup = MvcGridPopup;
-        const target = e && e.target && (<HTMLElement>e.target).closest && (<HTMLElement>e.target).closest(".mvc-grid-popup,.mvc-grid-filter");
+        const initiator = e && (<HTMLElement>e.target);
+        const visible = popup.element.parentNode;
+        const outside = !(initiator && initiator.closest && initiator.closest(".mvc-grid-popup,.mvc-grid-filter"));
 
-        if ((!target || e!.which == 27) && popup.element.parentNode && (!e || e.target != window)) {
+        if (visible && outside) {
             document.body.removeChild(popup.element);
 
             if (popup.lastActiveElement) {
@@ -889,7 +891,6 @@ export class MvcGridPopup {
         const popup = this;
 
         window.addEventListener("resize", popup.hide);
-        window.addEventListener("keydown", popup.hide);
         window.addEventListener("mousedown", popup.hide);
         window.addEventListener("touchstart", popup.hide);
     }
