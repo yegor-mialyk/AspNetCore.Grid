@@ -40,7 +40,7 @@
 }
 
 .mvc-grid .sortable {
-    padding-right: 3.5em;
+    padding-right: 2.75em;
     cursor: pointer;
 }
 
@@ -58,6 +58,7 @@
     background-color: rgba(0, 0, 0, 0.03);
     transition: background-color 0.5s;
     font-family: GridGlyphs;
+    font-size: inherit;
     position: absolute;
     font-weight: bold;
     cursor: pointer;
@@ -126,11 +127,11 @@
 }
 
 .mvc-grid-row-filters .mvc-grid-value {
-    border: 0.5px solid #aaaaaa;
     background-color: #ffffff;
+    border: 1px solid #cccccc;
     text-overflow: ellipsis;
     margin-right: 0.25em;
-    line-height: normal;
+    font-size: inherit;
     font-weight: bold;
     padding: 0 0.5em;
     flex: 1;
@@ -153,10 +154,10 @@
 }
 
 .mvc-grid-row-filters .mvc-grid-filter {
-    border: 0.5px solid #aaaaaa;
-    flex: 0 0 2.125em;
+    border: 1px solid #cccccc;
     position: static;
-    height: 2.125em;
+    height: 2.25em;
+    width: 2.25em;
 }
 
 .mvc-grid-excel-mode .filterable {
@@ -164,7 +165,7 @@
 }
 
 .mvc-grid-excel-mode .sortable.filterable {
-    padding-right: 6.25em;
+    padding-right: 5.5em;
 }
 
 .mvc-grid-excel-mode .filterable .mvc-grid-sort,
@@ -178,7 +179,8 @@
 
 .mvc-grid-header-mode .mvc-grid-value {
     background-color: #f7f7f7;
-    padding: 0.625em 0.75em;
+    padding: 0.75em;
+    font: inherit;
     border: none;
     margin: 0;
 }
@@ -190,7 +192,7 @@
 }
 
 .mvc-grid-header-mode .sortable .mvc-grid-value {
-    padding-right: 3.5em;
+    padding-right: 2.5em;
 }
 
 .mvc-grid-popup {
