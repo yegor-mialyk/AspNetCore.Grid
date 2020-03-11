@@ -187,6 +187,7 @@
 
 .mvc-grid-header-mode .mvc-grid-filter {
     position: absolute;
+    width: 2.75em;
     border: none;
     height: 100%;
 }
