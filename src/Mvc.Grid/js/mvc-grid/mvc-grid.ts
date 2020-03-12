@@ -662,7 +662,7 @@ export class MvcGridPager {
         }
 
         pager.rowsPerPage.addEventListener("change", () => {
-            pager.apply(pager.currentPage);
+            pager.apply("1");
         });
     }
 }
