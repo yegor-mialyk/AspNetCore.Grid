@@ -890,7 +890,6 @@ export class MvcGridPopup {
     private static bind(): void {
         const popup = this;
 
-        window.addEventListener("resize", popup.hide);
         window.addEventListener("mousedown", popup.hide);
         window.addEventListener("touchstart", popup.hide);
     }

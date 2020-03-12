@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 6.0.0
+ * Mvc.Grid 6.0.1
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -792,7 +792,6 @@ class MvcGridPopup {
     static bind() {
         const popup = this;
 
-        window.addEventListener("resize", popup.hide);
         window.addEventListener("mousedown", popup.hide);
         window.addEventListener("touchstart", popup.hide);
     }
