@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 6.0.0
+ * Mvc.Grid 6.1.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -112,7 +112,7 @@ export class MvcGrid {
         grid.controller = new AbortController();
         grid.isAjax = Boolean(element.dataset.url);
         grid.prefix = grid.name ? `${grid.name}-` : "";
-        grid.filterMode = <any>(element.dataset.filterMode|| "").toLowerCase();
+        grid.filterMode = <any>(element.dataset.filterMode || "").toLowerCase();
         element.dataset.id = options.id || MvcGrid.instances.length.toString();
         grid.url = element.dataset.url ? new URL(element.dataset.url, location.href) : new URL(location.href);
         grid.url = options.url ? new URL(options.url.toString(), location.href) : grid.url;
@@ -613,7 +613,8 @@ export class MvcGridColumnFilter {
 
 export class MvcGridPager {
     public grid: MvcGrid;
-    public currentPage: string;
+    public totalRows: number;
+    public currentPage: number;
     public element: HTMLElement;
     public showPageSizes: boolean;
     public rowsPerPage: HTMLInputElement;
@@ -625,9 +626,10 @@ export class MvcGridPager {
         pager.grid = grid;
         pager.element = element;
         pager.pages = element.querySelectorAll<HTMLElement>("[data-page]");
+        pager.totalRows = parseInt(element.dataset.totalRows!);
         pager.showPageSizes = element.dataset.showPageSizes == "True";
         pager.rowsPerPage = element.querySelector<HTMLInputElement>(".mvc-grid-pager-rows")!;
-        pager.currentPage = pager.pages.length ? element.querySelector<HTMLElement>(".active")!.dataset.page! : "1";
+        pager.currentPage = pager.pages.length ? parseInt(element.querySelector<HTMLElement>(".active")!.dataset.page!) : 1;
 
         pager.cleanUp();
         pager.bind();
@@ -651,6 +653,7 @@ export class MvcGridPager {
 
     private cleanUp(): void {
         delete this.element.dataset.showPageSizes;
+        delete this.element.dataset.totalPages;
     }
     private bind(): void {
         const pager = this;
@@ -662,7 +665,15 @@ export class MvcGridPager {
         }
 
         pager.rowsPerPage.addEventListener("change", () => {
-            pager.apply("1");
+            const rows = parseInt(pager.rowsPerPage.value);
+
+            if (rows) {
+                const totalPages = Math.ceil(pager.totalRows / rows);
+
+                pager.apply(Math.min(pager.currentPage, totalPages).toString());
+            } else {
+                pager.apply("1");
+            }
         });
     }
 }

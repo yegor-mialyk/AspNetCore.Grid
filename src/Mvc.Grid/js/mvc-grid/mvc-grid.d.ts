@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 6.0.0
+ * Mvc.Grid 6.1.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -104,7 +104,8 @@ export declare class MvcGridColumnFilter {
 }
 export declare class MvcGridPager {
     grid: MvcGrid;
-    currentPage: string;
+    totalRows: number;
+    currentPage: number;
     element: HTMLElement;
     showPageSizes: boolean;
     rowsPerPage: HTMLInputElement;

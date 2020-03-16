@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 6.0.1
+ * Mvc.Grid 6.1.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -534,9 +534,10 @@ class MvcGridPager {
         pager.grid = grid;
         pager.element = element;
         pager.pages = element.querySelectorAll("[data-page]");
+        pager.totalRows = parseInt(element.dataset.totalRows);
         pager.showPageSizes = element.dataset.showPageSizes == "True";
         pager.rowsPerPage = element.querySelector(".mvc-grid-pager-rows");
-        pager.currentPage = pager.pages.length ? element.querySelector(".active").dataset.page : "1";
+        pager.currentPage = pager.pages.length ? parseInt(element.querySelector(".active").dataset.page) : 1;
 
         pager.cleanUp();
         pager.bind();
@@ -560,6 +561,7 @@ class MvcGridPager {
 
     cleanUp() {
         delete this.element.dataset.showPageSizes;
+        delete this.element.dataset.totalPages;
     }
     bind() {
         const pager = this;
@@ -571,7 +573,15 @@ class MvcGridPager {
         }
 
         pager.rowsPerPage.addEventListener("change", () => {
-            pager.apply("1");
+            const rows = parseInt(pager.rowsPerPage.value);
+
+            if (rows) {
+                const totalPages = Math.ceil(pager.totalRows / rows);
+
+                pager.apply(Math.min(pager.currentPage, totalPages).toString());
+            } else {
+                pager.apply("1");
+            }
         });
     }
 }
