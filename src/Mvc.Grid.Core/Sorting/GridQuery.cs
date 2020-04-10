@@ -22,7 +22,8 @@ namespace NonFactors.Mvc.Grid
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.DeclaringType == typeof(Queryable) && node.Method.Name == "OrderBy")
+            if (node.Method.DeclaringType == typeof(Queryable) &&
+                (node.Method.Name == nameof(Queryable.OrderBy) || node.Method.Name == nameof(Queryable.OrderByDescending)))
             {
                 Ordered = true;
 
