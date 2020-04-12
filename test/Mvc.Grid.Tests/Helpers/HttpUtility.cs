@@ -5,7 +5,7 @@ using System;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
-    public class HttpUtility
+    public static class HttpUtility
     {
         public static IQueryCollection ParseQueryString(String query)
         {

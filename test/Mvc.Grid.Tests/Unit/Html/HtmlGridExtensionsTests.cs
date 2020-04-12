@@ -38,7 +38,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             htmlGrid.Grid.Processors.Clear();
 
-            htmlGrid.Build(columns => { });
+            htmlGrid.Build(_ => { });
 
             Object expected = htmlGrid.Grid.Sort;
             Object actual = htmlGrid.Grid.Processors.Single();
@@ -50,7 +50,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void Build_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.Build(columns => { });
+            Object actual = htmlGrid.Build(_ => { });
 
             Assert.Same(expected, actual);
         }
@@ -161,7 +161,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void RowAttributed_SetsRowAttributes()
         {
-            Func<GridModel, Object>? expected = (model) => new { data_id = 1 };
+            Func<GridModel, Object>? expected = (_) => new { data_id = 1 };
             Func<GridModel, Object>? actual = htmlGrid.RowAttributed(expected).Grid.Rows.Attributes;
 
             Assert.Same(expected, actual);
@@ -171,7 +171,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void RowAttributed_ReturnsHtmlGrid()
         {
             Object expected = htmlGrid;
-            Object actual = htmlGrid.RowAttributed(model => new { });
+            Object actual = htmlGrid.RowAttributed(_ => new { });
 
             Assert.Same(expected, actual);
         }
@@ -485,7 +485,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void Configure_ColumnOrder()
         {
             htmlGrid.Grid.Columns.Clear();
-            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(model => "");
+            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(_ => "");
             IGridColumn<GridModel> sum = htmlGrid.Grid.Columns.Add(model => model.Sum);
             IGridColumn<GridModel> date = htmlGrid.Grid.Columns.Add(model => model.Date);
             IGridColumn<GridModel> name = htmlGrid.Grid.Columns.Add(model => model.Name);
@@ -511,7 +511,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void Configure_ColumnVisibility()
         {
             htmlGrid.Grid.Columns.Clear();
-            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(model => "");
+            IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(_ => "");
             IGridColumn<GridModel> sum = htmlGrid.Grid.Columns.Add(model => model.Sum);
             IGridColumn<GridModel> name = htmlGrid.Grid.Columns.Add(model => model.Name);
             IGridColumn<GridModel> date = htmlGrid.Grid.Columns.Add(model => model.Date).Hidden();

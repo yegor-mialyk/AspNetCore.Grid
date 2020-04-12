@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NonFactors.Mvc.Grid
 {
-    public class GridQuery : ExpressionVisitor
+    public sealed class GridQuery : ExpressionVisitor
     {
         private Boolean Ordered { get; set; }
 

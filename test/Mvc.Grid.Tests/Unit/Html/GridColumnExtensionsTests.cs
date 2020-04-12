@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void RenderedAs_SetsIndexedRenderValue()
         {
-            Func<GridModel, Int32, Object?>? expected = (model, i) => model.Name;
+            Func<GridModel, Int32, Object?>? expected = (model, _) => model.Name;
             Func<GridModel, Int32, Object?>? actual = column.RenderedAs(expected).RenderValue;
 
             Assert.Same(expected, actual);
@@ -30,7 +30,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void RenderedAs_ReturnsIndexedColumn()
         {
             Object expected = column;
-            Object actual = column.RenderedAs((model, i) => model.Name);
+            Object actual = column.RenderedAs((model, _) => model.Name);
 
             Assert.Same(expected, actual);
         }
@@ -167,7 +167,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             column.Filter.IsEnabled = current;
 
-            Boolean? actual = column.Filterable(filter => { }).Filter.IsEnabled;
+            Boolean? actual = column.Filterable(_ => { }).Filter.IsEnabled;
             Boolean? expected = enabled;
 
             Assert.Equal(expected, actual);
@@ -187,7 +187,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void Filterable_Configure_ReturnsColumn()
         {
             Object expected = column;
-            Object actual = column.Filterable(filter => { });
+            Object actual = column.Filterable(_ => { });
 
             Assert.Same(expected, actual);
         }

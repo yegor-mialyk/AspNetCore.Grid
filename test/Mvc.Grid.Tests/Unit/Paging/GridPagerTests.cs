@@ -387,7 +387,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Process_ReturnsPagedItems()
         {
-            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel(), new GridModel() }.AsQueryable().OrderBy(model => 0);
+            IQueryable<GridModel> items = new[] { new GridModel(), new GridModel(), new GridModel() }.AsQueryable().OrderBy(_ => 0);
             pager.RowsPerPage = 1;
             pager.CurrentPage = 2;
 

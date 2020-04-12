@@ -15,7 +15,7 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IGridColumn<T, Object> Add()
         {
-            return Add<Object>(model => "");
+            return Add<Object>(_ => "");
         }
         public virtual IGridColumn<T, TValue> Add<TValue>(Expression<Func<T, TValue>> expression)
         {
@@ -28,7 +28,7 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IGridColumn<T, Object> Insert(Int32 index)
         {
-            return Insert<Object>(index, model => "");
+            return Insert<Object>(index, _ => "");
         }
         public virtual IGridColumn<T, TValue> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
         {

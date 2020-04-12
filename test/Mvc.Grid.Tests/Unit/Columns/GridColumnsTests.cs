@@ -26,7 +26,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Add_GridColumn()
         {
-            IGridColumn<GridModel, Object> expected = new GridColumn<GridModel, Object>(columns.Grid, model => "");
+            IGridColumn<GridModel, Object> expected = new GridColumn<GridModel, Object>(columns.Grid, _ => "");
             IGridColumn<GridModel, Object> actual = columns.Add();
 
             Assert.Equal("", actual.Expression.Compile().Invoke(new GridModel()));
@@ -90,9 +90,9 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Insert_GridColumn()
         {
-            columns.Add(model => 0);
+            columns.Add(_ => 0);
 
-            IGridColumn<GridModel, Int32> expected = new GridColumn<GridModel, Int32>(columns.Grid, model => 1);
+            IGridColumn<GridModel, Int32> expected = new GridColumn<GridModel, Int32>(columns.Grid, _ => 1);
             IGridColumn<GridModel, Object> actual = columns.Insert(0);
 
             Assert.Equal("", actual.Expression.Compile().Invoke(new GridModel()));

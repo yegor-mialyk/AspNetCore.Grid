@@ -324,7 +324,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 new GridModel { Name = "Test2" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name != null && model.Name != "");
+            IQueryable expected = items.Where(model => !String.IsNullOrEmpty(model.Name));
             IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
@@ -433,7 +433,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 new GridModel { Name = "Test2" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name == null || model.Name == "");
+            IQueryable expected = items.Where(model => String.IsNullOrEmpty(model.Name));
             IQueryable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);

@@ -145,7 +145,7 @@ namespace NonFactors.Mvc.Grid
             html.Grid.Columns.Clear();
 
             foreach (GridColumnConfig config in grid.Columns)
-                if (columns.FirstOrDefault(column => String.Equals(column.Name, config.Name, StringComparison.OrdinalIgnoreCase)) is IGridColumn<T> column)
+                if (columns.Find(column => String.Equals(column.Name, config.Name, StringComparison.OrdinalIgnoreCase)) is IGridColumn<T> column)
                 {
                     columns.Remove(column);
                     html.Grid.Columns.Add(column);

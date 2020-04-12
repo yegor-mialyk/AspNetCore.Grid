@@ -15,7 +15,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object?> value)
         {
-            column.RenderValue = (t, i) => value(t);
+            column.RenderValue = (t, _) => value(t);
 
             return column;
         }

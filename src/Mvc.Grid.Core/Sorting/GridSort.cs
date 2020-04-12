@@ -36,7 +36,6 @@ namespace NonFactors.Mvc.Grid
                     DefinitionsIsSet = true;
                 }
 
-
                 return DefinitionsValue;
             }
         }

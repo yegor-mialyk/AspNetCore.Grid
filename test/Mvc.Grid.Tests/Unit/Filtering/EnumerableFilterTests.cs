@@ -66,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_NotEnumerable_ReturnsNull()
         {
-            Expression<Func<GridModel, Object>> expression = (model) => "test";
+            Expression<Func<GridModel, Object>> expression = (_) => "test";
 
             Assert.Null(new EnumerableFilter<StringFilter>().Apply(expression));
         }

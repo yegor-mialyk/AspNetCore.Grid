@@ -77,9 +77,8 @@ namespace NonFactors.Mvc.Grid
         private String NameFor(Expression<Func<T, TValue>> expression)
         {
             String text = expression.Body is MemberExpression member ? member.ToString() : "";
-            text = text.IndexOf('.') > 0 ? text.Substring(text.IndexOf('.') + 1) : text;
 
-            return text;
+            return text.IndexOf('.') > 0 ? text.Substring(text.IndexOf('.') + 1) : text;
         }
         private Object? ColumnValueFor(IGridRow<Object> row)
         {

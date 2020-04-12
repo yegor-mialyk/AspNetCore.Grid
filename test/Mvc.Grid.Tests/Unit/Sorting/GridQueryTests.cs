@@ -9,19 +9,19 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void IsOrdered_False()
         {
-            Assert.False(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().Where(model => true)));
+            Assert.False(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().Where(_ => true)));
         }
 
         [Fact]
         public void IsOrdered_Ascending_True()
         {
-            Assert.True(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().OrderBy(model => 0)));
+            Assert.True(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().OrderBy(_ => 0)));
         }
 
         [Fact]
         public void IsOrdered_Descending_True()
         {
-            Assert.True(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().OrderByDescending(model => 0)));
+            Assert.True(GridQuery.IsOrdered(Array.Empty<Object>().AsQueryable().OrderByDescending(_ => 0)));
         }
     }
 }

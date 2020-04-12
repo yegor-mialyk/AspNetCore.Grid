@@ -57,7 +57,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_SetsGrid()
         {
-            Object actual = new GridColumn<GridModel, Int32>(column.Grid, model => 0).Grid;
+            Object actual = new GridColumn<GridModel, Int32>(column.Grid, _ => 0).Grid;
             Object expected = column.Grid;
 
             Assert.Same(expected, actual);
@@ -66,7 +66,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_SetsIsEncoded()
         {
-            Assert.True(new GridColumn<GridModel, Int32>(column.Grid, model => 1).IsEncoded);
+            Assert.True(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).IsEncoded);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_NotMemberExpression_SetsEmptyTitle()
         {
-            Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, model => 1).Title.ToString());
+            Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).Title.ToString());
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_SetsPreProcessorType()
         {
-            GridProcessorType actual = new GridColumn<GridModel, Object>(column.Grid, model => 0).ProcessorType;
+            GridProcessorType actual = new GridColumn<GridModel, Object>(column.Grid, _ => 0).ProcessorType;
             GridProcessorType expected = GridProcessorType.Pre;
 
             Assert.Equal(expected, actual);
@@ -203,7 +203,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void ValueFor_NullReferenceInRenderValue_ReturnsEmpty()
         {
-            column.RenderValue = (model, i) => model.Name;
+            column.RenderValue = (model, _) => model.Name;
 
             String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
 
@@ -223,7 +223,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void ValueFor_ExpressionValue_ThrowsNotNullReferenceException()
         {
-            column.ExpressionValue = (model) => Int32.Parse("Zero");
+            column.ExpressionValue = (_) => Int32.Parse("Zero");
 
             Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(new GridModel(), 0)));
         }
@@ -231,7 +231,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void ValueFor_RenderValue_ThrowsNotNullReferenceException()
         {
-            column.RenderValue = (model, i) => Int32.Parse("Zero");
+            column.RenderValue = (_, __) => Int32.Parse("Zero");
 
             Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(new GridModel(), 0)));
         }
@@ -246,8 +246,8 @@ namespace NonFactors.Mvc.Grid.Tests
         public void ValueFor_RenderValue_Html(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) }, 0);
-            column.RenderValue = (model, i) => model.Content;
-            column.ExpressionValue = (model) => "";
+            column.RenderValue = (model, _) => model.Content;
+            column.ExpressionValue = (_) => "";
             column.IsEncoded = isEncoded;
             column.Format = format;
 
@@ -262,7 +262,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = "Test" }, 33);
             column.RenderValue = (model, i) => model.Name + " " + i;
-            column.ExpressionValue = (model) => "";
+            column.ExpressionValue = (_) => "";
 
             String? actual = column.ValueFor(row).ToString();
             String? expected = "Test 33";
@@ -302,8 +302,8 @@ namespace NonFactors.Mvc.Grid.Tests
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value }, 33);
             TextWriter writer = new StringWriter();
 
-            column.RenderValue = (model, i) => model.Name;
-            column.ExpressionValue = (model) => "";
+            column.RenderValue = (model, _) => model.Name;
+            column.ExpressionValue = (_) => "";
             column.IsEncoded = isEncoded;
             column.Format = format;
 

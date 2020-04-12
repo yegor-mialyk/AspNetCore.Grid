@@ -73,6 +73,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 Int32 middlePage = PagesToDisplay / 2 + PagesToDisplay % 2;
+
                 if (CurrentPage < middlePage)
                     return 1;
 
@@ -112,7 +113,7 @@ namespace NonFactors.Mvc.Grid
                 return items;
 
             if (!GridQuery.IsOrdered(items))
-                items = items.OrderBy(item => 0);
+                items = items.OrderBy(_ => 0);
 
             return items.Skip((CurrentPage - 1) * RowsPerPage).Take(RowsPerPage);
         }
