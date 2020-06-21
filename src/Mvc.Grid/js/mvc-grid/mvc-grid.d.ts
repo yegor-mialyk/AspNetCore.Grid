@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Mvc.Grid 6.2.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *

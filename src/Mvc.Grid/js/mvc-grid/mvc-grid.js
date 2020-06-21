@@ -562,6 +562,7 @@ class MvcGridPager {
     cleanUp() {
         delete this.element.dataset.showPageSizes;
         delete this.element.dataset.totalPages;
+        delete this.element.dataset.totalRows;
     }
     bind() {
         const pager = this;

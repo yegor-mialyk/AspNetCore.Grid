@@ -654,6 +654,7 @@ export class MvcGridPager {
     private cleanUp(): void {
         delete this.element.dataset.showPageSizes;
         delete this.element.dataset.totalPages;
+        delete this.element.dataset.totalRows;
     }
     private bind(): void {
         const pager = this;
