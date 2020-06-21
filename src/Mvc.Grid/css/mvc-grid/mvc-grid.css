@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 6.1.0
+ * Mvc.Grid 6.2.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -380,9 +380,8 @@
     color: #ffffff;
 }
 
-.mvc-grid-pager .disabled,
-.mvc-grid-pager .disabled:focus,
-.mvc-grid-pager .disabled:hover {
+.mvc-grid-pager [disabled],
+.mvc-grid-pager [disabled]:hover {
     background-color: #efefef;
     cursor: not-allowed;
     color: #777777;
