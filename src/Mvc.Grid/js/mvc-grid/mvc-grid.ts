@@ -919,10 +919,10 @@ export class MvcGridFilter {
 
         filter.methods = [];
         filter.column = column;
-        filter.cssClasses = "";
         filter.type = column.filter!.type;
         filter.mode = column.grid.filterMode;
         filter.methods = ["equals", "not-equals"];
+        filter.cssClasses = "mvc-grid-default-filter";
     }
 
     public init(): void {
@@ -1096,6 +1096,7 @@ export class MvcGridTextFilter extends MvcGridFilter {
     public constructor(column: MvcGridColumn) {
         super(column);
 
+        this.cssClasses = "mvc-grid-text-filter";
         this.methods = ["contains", "equals", "not-equals", "starts-with", "ends-with"];
     }
 }
@@ -1104,6 +1105,7 @@ export class MvcGridNumberFilter extends MvcGridFilter {
     public constructor(column: MvcGridColumn) {
         super(column);
 
+        this.cssClasses = "mvc-grid-number-filter";
         this.methods = ["equals", "not-equals", "less-than", "greater-than", "less-than-or-equal", "greater-than-or-equal"];
     }
 
@@ -1116,6 +1118,7 @@ export class MvcGridDateFilter extends MvcGridFilter {
     public constructor(column: MvcGridColumn) {
         super(column);
 
+        this.cssClasses = "mvc-grid-date-filter";
         this.methods = ["equals", "not-equals", "earlier-than", "later-than", "earlier-than-or-equal", "later-than-or-equal"];
     }
 }
