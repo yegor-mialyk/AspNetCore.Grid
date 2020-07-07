@@ -41,7 +41,7 @@ export declare class MvcGrid {
     name: string;
     prefix: string;
     isAjax: boolean;
-    loadingTimerId?: number;
+    loadingTimerId: number;
     loadingDelay: number | null;
     sort: Map<string, "asc" | "desc">;
     filterMode: "row" | "excel" | "header";

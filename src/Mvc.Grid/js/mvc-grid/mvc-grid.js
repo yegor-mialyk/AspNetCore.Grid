@@ -19,6 +19,7 @@ class MvcGrid {
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
+        grid.loadingTimerId = 0;
         grid.name = element.dataset.name;
         grid.controller = new AbortController();
         grid.isAjax = Boolean(element.dataset.url);

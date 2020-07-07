@@ -89,7 +89,7 @@ export class MvcGrid {
     public name: string;
     public prefix: string;
     public isAjax: boolean;
-    public loadingTimerId?: number;
+    public loadingTimerId: number;
     public loadingDelay: number | null;
     public sort: Map<string, "asc" | "desc">;
     public filterMode: "row" | "excel" | "header";
@@ -108,6 +108,7 @@ export class MvcGrid {
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = 300;
+        grid.loadingTimerId = 0;
         grid.name = element.dataset.name!;
         grid.controller = new AbortController();
         grid.isAjax = Boolean(element.dataset.url);
