@@ -534,8 +534,8 @@ class MvcGridPager {
 
         pager.grid = grid;
         pager.element = element;
-        pager.pages = element.querySelectorAll("[data-page]");
         pager.totalRows = parseInt(element.dataset.totalRows);
+        pager.pages = grid.element.querySelectorAll("[data-page]");
         pager.showPageSizes = element.dataset.showPageSizes == "True";
         pager.rowsPerPage = element.querySelector(".mvc-grid-pager-rows");
         pager.currentPage = pager.pages.length ? parseInt(element.querySelector(".active").dataset.page) : 1;
