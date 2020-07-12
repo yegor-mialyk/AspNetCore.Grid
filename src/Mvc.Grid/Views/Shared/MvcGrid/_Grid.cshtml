@@ -75,7 +75,7 @@
                 {
                     String applied = (column.Filter.First ?? column.Filter.Second) == null ? "" : " applied";
 
-                <th class="filterable@(column.CssClasses)@(hidden)">
+                <th class="filterable @(column.CssClasses)@(hidden)">
                     <div>
                     @if (column.Filter.Options.Any())
                     {
