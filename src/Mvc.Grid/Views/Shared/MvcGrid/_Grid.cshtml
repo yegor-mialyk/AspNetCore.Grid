@@ -4,6 +4,10 @@
 
 @model IGrid
 
+@{
+    IGridRows<Object> rows = Model.Rows;
+}
+
 <div id="@Model.Id" class="mvc-grid mvc-grid-@(Model.FilterMode.ToString().ToLower())-mode" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-url="@Model.Url">
     <!table@(Model.Attributes)>
         <thead>
@@ -127,7 +131,7 @@
         }
         </thead>
         <tbody>
-        @foreach (IGridRow<Object> row in Model.Rows)
+        @foreach (IGridRow<Object> row in rows)
         {
             <!tr@(row.Attributes)>
             @foreach (IGridColumn column in Model.Columns)
