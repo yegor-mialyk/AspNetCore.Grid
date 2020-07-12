@@ -815,7 +815,6 @@ class MvcGridFilter {
     constructor(column) {
         const filter = this;
 
-        filter.methods = [];
         filter.column = column;
         filter.type = column.filter.type;
         filter.mode = column.grid.filterMode;
