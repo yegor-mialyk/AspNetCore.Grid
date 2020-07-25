@@ -14,13 +14,13 @@ export interface MvcGridOptions {
     isAjax: boolean;
     loadingDelay: number | null;
     filters: {
-        [type: string]: typeof MvcGridFilter;
+        [type: string]: typeof MvcGridFilter | undefined;
     };
 }
 export interface MvcGridLanguage {
     [type: string]: {
         [method: string]: string;
-    };
+    } | undefined;
 }
 export interface MvcGridConfiguration {
     name: string;
@@ -46,10 +46,10 @@ export declare class MvcGrid {
     sort: Map<string, "asc" | "desc">;
     filterMode: "row" | "excel" | "header";
     filters: {
-        [type: string]: typeof MvcGridFilter;
+        [type: string]: typeof MvcGridFilter | undefined;
     };
     constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
-    set(options: Partial<MvcGridOptions>): MvcGrid;
+    set(options: Partial<MvcGridOptions>): this;
     showConfiguration(anchor?: HTMLElement): void;
     getConfiguration(): MvcGridConfiguration;
     reload(): void;
@@ -92,7 +92,7 @@ export declare class MvcGridColumnFilter {
         values: string[];
     };
     column: MvcGridColumn;
-    instance: MvcGridFilter;
+    instance?: MvcGridFilter;
     button: HTMLButtonElement;
     rowFilter: HTMLElement | null;
     options: HTMLSelectElement | null;

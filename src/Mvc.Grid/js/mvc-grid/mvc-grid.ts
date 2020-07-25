@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Mvc.Grid 6.2.0
  * https://github.com/NonFactors/AspNetCore.Grid
  *
@@ -15,14 +15,14 @@ export interface MvcGridOptions {
     isAjax: boolean;
     loadingDelay: number | null;
     filters: {
-        [type: string]: typeof MvcGridFilter
+        [type: string]: typeof MvcGridFilter | undefined;
     };
 }
 
 export interface MvcGridLanguage {
     [type: string]: {
-        [method: string]: string
-    };
+        [method: string]: string;
+    } | undefined;
 }
 
 export interface MvcGridConfiguration {
@@ -94,7 +94,7 @@ export class MvcGrid {
     public sort: Map<string, "asc" | "desc">;
     public filterMode: "row" | "excel" | "header";
     public filters: {
-        [type: string]: typeof MvcGridFilter
+        [type: string]: typeof MvcGridFilter | undefined;
     };
 
     public constructor(container: HTMLElement, options: Partial<MvcGridOptions> = {}) {
@@ -113,7 +113,7 @@ export class MvcGrid {
         grid.controller = new AbortController();
         grid.isAjax = Boolean(element.dataset.url);
         grid.prefix = grid.name ? `${grid.name}-` : "";
-        grid.filterMode = <any>(element.dataset.filterMode || "").toLowerCase();
+        grid.filterMode = (element.dataset.filterMode || "").toLowerCase() as any;
         element.dataset.id = options.id || MvcGrid.instances.length.toString();
         grid.url = element.dataset.url ? new URL(element.dataset.url, location.href) : new URL(location.href);
         grid.url = options.url ? new URL(options.url.toString(), location.href) : grid.url;
@@ -154,7 +154,7 @@ export class MvcGrid {
         }
     }
 
-    public set(options: Partial<MvcGridOptions>): MvcGrid {
+    public set(options: Partial<MvcGridOptions>) {
         const grid = this;
 
         grid.loadingDelay = typeof options.loadingDelay == "number" ? options.loadingDelay : grid.loadingDelay;
@@ -165,24 +165,24 @@ export class MvcGrid {
 
         for (const column of grid.columns) {
             if (column.filter && grid.filters[column.filter.name]) {
-                column.filter.instance = new grid.filters[column.filter.name](column);
+                column.filter.instance = new grid.filters[column.filter.name]!(column);
                 column.filter.instance.init();
             }
         }
 
         return grid;
     }
-    public showConfiguration(anchor?: HTMLElement): void {
+    public showConfiguration(anchor?: HTMLElement) {
         MvcGridPopup.showConfiguration(this, anchor);
     }
-    public getConfiguration(): MvcGridConfiguration {
+    public getConfiguration() {
         return {
             name: this.name,
             columns: this.columns.map(column => ({ name: column.name, hidden: column.isHidden }))
-        };
+        } as MvcGridConfiguration;
     }
 
-    public reload(): void {
+    public reload() {
         const grid = this;
 
         grid.element.dispatchEvent(new CustomEvent("reloadstart", {
@@ -205,7 +205,7 @@ export class MvcGrid {
                     const loader = document.createElement("template");
 
                     loader.innerHTML = `<div class="mvc-grid-loader"><div><div></div><div></div><div></div></div></div>`;
-                    grid.loader = <HTMLDivElement>loader.content.firstElementChild;
+                    grid.loader = loader.content.firstElementChild as HTMLDivElement;
 
                     grid.element.appendChild(grid.loader);
                 }
@@ -239,7 +239,7 @@ export class MvcGrid {
                     throw new Error("Grid partial should only include grid declaration.");
                 }
 
-                const newGrid = new MvcGrid(<HTMLElement>parent!.children[i], {
+                const newGrid = new MvcGrid(parent.children[i] as HTMLElement, {
                     loadingDelay: grid.loadingDelay,
                     id: grid.element.dataset.id,
                     filters: grid.filters,
@@ -273,22 +273,22 @@ export class MvcGrid {
         }
     }
 
-    private buildSort(): Map<string, "asc" | "desc"> {
-        const map = new Map();
+    private buildSort() {
+        const map = new Map<string, "asc" | "desc">();
         const definitions = /(^|,)(.*?) (asc|desc)(?=$|,)/g;
         const sort = this.url.searchParams.get(`${this.prefix}sort`) || "";
 
         let match = definitions.exec(sort);
 
         while (match) {
-            map.set(match[2], match[3]);
+            map.set(match[2], match[3] as any);
 
             match = definitions.exec(sort);
         }
 
         return map;
     }
-    private findGrid(element: HTMLElement): HTMLElement {
+    private findGrid(element: HTMLElement) {
         const grid = element.closest<HTMLElement>(".mvc-grid");
 
         if (!grid) {
@@ -297,11 +297,11 @@ export class MvcGrid {
 
         return grid;
     }
-    private cleanUp(): void {
+    private cleanUp() {
         delete this.element.dataset.filterMode;
         delete this.element.dataset.url;
     }
-    private bind(): void {
+    private bind() {
         const grid = this;
 
         for (const row of grid.element.querySelectorAll<HTMLTableRowElement>("tbody tr")) {
@@ -345,7 +345,7 @@ export class MvcGridColumn {
         column.cleanUp();
     }
 
-    private cleanUp(): void {
+    private cleanUp() {
         const data = this.header.dataset;
 
         delete data.filterDefaultMethod;
@@ -367,18 +367,18 @@ export class MvcGridColumnSort {
     public first: "asc" | "desc";
     public order: "asc" | "desc" | "";
 
-    constructor(column: MvcGridColumn) {
+    public constructor(column: MvcGridColumn) {
         const sort = this;
 
         sort.column = column;
         sort.button = column.header.querySelector<HTMLButtonElement>(".mvc-grid-sort")!;
-        sort.order = <any>(column.header.dataset.sort || "").toLowerCase();
-        sort.first = <any>(column.header.dataset.sortFirst || "asc").toLowerCase();
+        sort.order = (column.header.dataset.sort || "").toLowerCase() as any;
+        sort.first = (column.header.dataset.sortFirst || "asc").toLowerCase() as any;
 
         sort.bind();
     }
 
-    public toggle(multi: boolean): void {
+    public toggle(multi: boolean) {
         const sort = this;
         const grid = sort.column.grid;
         const map = sort.column.grid.sort;
@@ -413,13 +413,13 @@ export class MvcGridColumnSort {
         grid.reload();
     }
 
-    private bind(): void {
+    private bind() {
         const sort = this;
         const column = sort.column;
 
         column.header.addEventListener("click", e => {
             if (!column.filter || column.grid.filterMode != "header") {
-                if (!/mvc-grid-(sort|filter)/.test((<HTMLElement>e.target).className)) {
+                if (!/mvc-grid-(sort|filter)/.test((e.target as Element).className)) {
                     sort.toggle(e.ctrlKey || e.shiftKey);
                 }
             }
@@ -446,13 +446,13 @@ export class MvcGridColumnFilter {
         values: string[];
     };
     public column: MvcGridColumn;
-    public instance: MvcGridFilter;
+    public instance?: MvcGridFilter;
     public button: HTMLButtonElement;
     public rowFilter: HTMLElement | null;
     public options: HTMLSelectElement | null;
     public inlineInput: HTMLInputElement | null;
 
-    constructor(column: MvcGridColumn, rowFilter: HTMLElement | null) {
+    public constructor(column: MvcGridColumn, rowFilter: HTMLElement | null) {
         const values = [];
         const methods = [];
         const filter = this;
@@ -481,7 +481,7 @@ export class MvcGridColumnFilter {
         filter.name = data.filter || "default";
         filter.isApplied = data.filterApplied == "True";
         filter.defaultMethod = data.filterDefaultMethod || "";
-        filter.type = <any>(data.filterType || "single").toLowerCase();
+        filter.type = (data.filterType || "single").toLowerCase() as any;
         filter.options = options && options.children.length > 0 ? options : null;
         filter.button = (rowFilter || column.header).querySelector<HTMLButtonElement>(".mvc-grid-filter")!;
         filter.inlineInput = rowFilter ? rowFilter.querySelector<HTMLInputElement>(".mvc-grid-value") : null;
@@ -501,7 +501,7 @@ export class MvcGridColumnFilter {
         this.bind();
     }
 
-    public apply(): void {
+    public apply() {
         const grid = this.column.grid;
         const query = grid.url.searchParams;
         const prefix = this.column.grid.prefix;
@@ -544,7 +544,7 @@ export class MvcGridColumnFilter {
 
         grid.reload();
     }
-    public cancel(): void {
+    public cancel() {
         const filter = this;
         const column = filter.column;
         const grid = filter.column.grid;
@@ -573,7 +573,7 @@ export class MvcGridColumnFilter {
         }
     }
 
-    private bind(): void {
+    private bind() {
         const filter = this;
         const column = filter.column;
         const mode = column.grid.filterMode;
@@ -600,11 +600,11 @@ export class MvcGridColumnFilter {
             filter.inlineInput!.addEventListener("input", function () {
                 filter.first.values = [this.value];
 
-                filter.instance.validate(this);
+                filter.instance!.validate(this);
             });
 
             filter.inlineInput!.addEventListener("keyup", function (e) {
-                if (e.which == 13 && filter.instance.isValid(this.value)) {
+                if (e.which == 13 && filter.instance!.isValid(this.value)) {
                     column.filter!.apply();
                 }
             });
@@ -636,7 +636,7 @@ export class MvcGridPager {
         pager.bind();
     }
 
-    public apply(page: string): void {
+    public apply(page: string) {
         const grid = this.grid;
         const query = grid.url.searchParams;
 
@@ -652,12 +652,12 @@ export class MvcGridPager {
         grid.reload();
     }
 
-    private cleanUp(): void {
+    private cleanUp() {
         delete this.element.dataset.showPageSizes;
         delete this.element.dataset.totalPages;
         delete this.element.dataset.totalRows;
     }
-    private bind(): void {
+    private bind() {
         const pager = this;
 
         for (const page of pager.pages) {
@@ -686,10 +686,10 @@ export class MvcGridPopup {
     public static lastActiveElement: HTMLElement | null;
     public static element = document.createElement("div");
 
-    public static showConfiguration(grid: MvcGrid, anchor?: HTMLElement): void {
+    public static showConfiguration(grid: MvcGrid, anchor?: HTMLElement) {
         const popup = this;
 
-        popup.lastActiveElement = <HTMLElement>document.activeElement;
+        popup.lastActiveElement = document.activeElement as HTMLElement;
         popup.element.className = "mvc-grid-popup mvc-grid-configuration";
         popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content"></div>`;
 
@@ -709,7 +709,7 @@ export class MvcGridPopup {
         popup.reposition(grid, anchor);
         popup.bind();
     }
-    public static show(filter: MvcGridColumnFilter): void {
+    public static show(filter: MvcGridColumnFilter) {
         if (!filter.instance) {
             return;
         }
@@ -717,7 +717,7 @@ export class MvcGridPopup {
         const popup = this;
         const filterer = filter.instance;
 
-        popup.lastActiveElement = <HTMLElement>document.activeElement;
+        popup.lastActiveElement = document.activeElement as HTMLElement;
         popup.element.className = `mvc-grid-popup ${filterer.cssClasses}`.trim();
         popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content">${filterer.render()}</div>`;
 
@@ -734,9 +734,9 @@ export class MvcGridPopup {
 
         popup.element.querySelector<HTMLInputElement>(".mvc-grid-value")!.focus();
     }
-    public static hide(e?: UIEvent): void {
+    public static hide(e?: UIEvent) {
         const popup = MvcGridPopup;
-        const initiator = e && (<HTMLElement>e.target);
+        const initiator = e && e.target as Element;
         const visible = popup.element.parentNode;
         const outside = !(initiator && initiator.closest && initiator.closest(".mvc-grid-popup,.mvc-grid-filter"));
 
@@ -750,7 +750,7 @@ export class MvcGridPopup {
         }
     }
 
-    private static setValues(filter: MvcGridColumnFilter): void {
+    private static setValues(filter: MvcGridColumnFilter) {
         const popup = this;
 
         popup.setValue(`.mvc-grid-operator`, [filter.operator]);
@@ -759,21 +759,21 @@ export class MvcGridPopup {
         popup.setValue(`.mvc-grid-method[data-filter="first"]`, [filter.first.method]);
         popup.setValue(`.mvc-grid-method[data-filter="second"]`, [filter.second.method]);
     }
-    private static setValue(selector: string, values: string[]): void {
+    private static setValue(selector: string, values: string[]) {
         const input = this.element.querySelector<HTMLElement>(selector);
 
         if (input) {
-            if (input.tagName == "SELECT" && (<HTMLSelectElement>input).multiple) {
-                ([] as HTMLOptionElement[]).forEach.call((<HTMLSelectElement>input).options, option => {
+            if (input.tagName == "SELECT" && (input as HTMLSelectElement).multiple) {
+                ([] as HTMLOptionElement[]).forEach.call((input as HTMLSelectElement).options, option => {
                     option.selected = values.indexOf(option.value) >= 0;
                 });
             } else {
-                (<HTMLInputElement>input).value = values[0] || "";
+                (input as HTMLInputElement).value = values[0] || "";
             }
         }
     }
 
-    private static createPreference(column: MvcGridColumn): HTMLLabelElement {
+    private static createPreference(column: MvcGridColumn) {
         const popup = this;
         const name = document.createElement("span");
         const checkbox = document.createElement("input");
@@ -829,7 +829,7 @@ export class MvcGridPopup {
 
         return preference;
     }
-    private static createDropzone(): HTMLDivElement {
+    private static createDropzone() {
         const dropzone = document.createElement("div");
 
         dropzone.className = "mvc-grid-dropzone";
@@ -876,7 +876,7 @@ export class MvcGridPopup {
         return dropzone;
     }
 
-    private static reposition(grid: MvcGrid, anchor?: HTMLElement): void {
+    private static reposition(grid: MvcGrid, anchor?: HTMLElement) {
         const element = this.element;
         const style = getComputedStyle(element);
         const arrow = element.querySelector<HTMLElement>(".popup-arrow")!;
@@ -900,7 +900,7 @@ export class MvcGridPopup {
         element.style.top = `${Math.max(0, top)}px`;
         arrow.style.display = anchor ? "" : "none";
     }
-    private static bind(): void {
+    private static bind() {
         const popup = this;
 
         window.addEventListener("mousedown", popup.hide);
@@ -925,7 +925,7 @@ export class MvcGridFilter {
         filter.cssClasses = "mvc-grid-default-filter";
     }
 
-    public init(): void {
+    public init() {
         const filter = this;
         const column = filter.column;
         const columnFilter = column.filter!;
@@ -950,10 +950,10 @@ export class MvcGridFilter {
             columnFilter.second.method = filter.methods[0];
         }
     }
-    public isValid(value: string): boolean {
+    public isValid(value: string) {
         return !value || true;
     }
-    public validate(input: HTMLInputElement): void {
+    public validate(input: HTMLInputElement) {
         if (this.isValid(input.value)) {
             input.classList.remove("invalid");
         } else {
@@ -961,7 +961,7 @@ export class MvcGridFilter {
         }
     }
 
-    public render(): string {
+    public render() {
         const filter = this;
 
         return `<div class="popup-filter">
@@ -975,7 +975,7 @@ export class MvcGridFilter {
                     : ""}
                 ${filter.renderActions()}`;
     }
-    public renderFilter(name: "first" | "second"): string {
+    public renderFilter(name: "first" | "second") {
         const filter = this;
         const options = filter.column.filter!.options;
         const lang = MvcGrid.lang[filter.column.filter!.name] || {};
@@ -994,8 +994,8 @@ export class MvcGridFilter {
                     : `<input class="mvc-grid-value" data-filter="${name}">`}
                 </div>`;
     }
-    public renderOperator(): string {
-        const lang = MvcGrid.lang.operator;
+    public renderOperator() {
+        const lang = MvcGrid.lang.operator!;
 
         return `<div class="popup-operator">
                     <div class="popup-group">
@@ -1007,8 +1007,8 @@ export class MvcGridFilter {
                     </div>
                 </div>`;
     }
-    public renderActions(): string {
-        const lang = MvcGrid.lang.filter;
+    public renderActions() {
+        const lang = MvcGrid.lang.filter!;
 
         return `<div class="popup-actions">
                     <button type="button" class="mvc-grid-apply" type="button">${lang.apply}</button>
@@ -1016,7 +1016,7 @@ export class MvcGridFilter {
                 </div>`;
     }
 
-    public bindOperator(): void {
+    public bindOperator() {
         const filter = this.column.filter!;
         const operator = MvcGridPopup.element.querySelector<HTMLSelectElement>(".mvc-grid-operator");
 
@@ -1026,29 +1026,29 @@ export class MvcGridFilter {
             });
         }
     }
-    public bindMethods(): void {
+    public bindMethods() {
         const filter = this.column.filter!;
 
         for (const method of MvcGridPopup.element.querySelectorAll<HTMLInputElement>(".mvc-grid-method")) {
             method.addEventListener("change", function () {
-                filter[<"first" | "second">this.dataset.filter].method = this.value;
+                filter[this.dataset.filter as "first" | "second"].method = this.value;
             });
         }
     }
-    public bindValues(): void {
+    public bindValues() {
         const filter = this;
 
         for (const input of MvcGridPopup.element.querySelectorAll<HTMLInputElement | HTMLSelectElement>(".mvc-grid-value")) {
             if (input.tagName == "SELECT") {
                 input.addEventListener("change", () => {
-                    filter.column.filter![<"first" | "second">input.dataset.filter].values = ([] as HTMLOptionElement[]).filter.call((<HTMLSelectElement>input).options, option => option.selected).map(option => option.value);
+                    filter.column.filter![<"first" | "second">input.dataset.filter].values = ([] as HTMLOptionElement[]).filter.call((input as HTMLSelectElement).options, option => option.selected).map(option => option.value);
 
                     if (filter.mode != "excel") {
                         const inlineInput = filter.column.filter!.inlineInput!;
 
-                        if (filter.mode == "header" || filter.mode == "row" && filter.type == "multi") {
+                        if (filter.mode == "header" || filter.type == "multi") {
                             inlineInput.value = ([] as HTMLOptionElement[]).filter
-                                .call((<HTMLSelectElement>input).options, option => option.selected)
+                                .call((input as HTMLSelectElement).options, option => option.selected)
                                 .map(option => option.text)
                                 .join(", ");
                         } else {
@@ -1070,20 +1070,20 @@ export class MvcGridFilter {
                         filter.validate(inlineInput);
                     }
 
-                    filter.validate(<HTMLInputElement>input);
+                    filter.validate(input as HTMLInputElement);
                 });
 
-                (<HTMLInputElement>input).addEventListener("keyup", function (e) {
+                (input as HTMLInputElement).addEventListener("keyup", function (e) {
                     if (e.which == 13 && filter.isValid(this.value)) {
                         filter.column.filter!.apply();
                     }
                 });
 
-                filter.validate(<HTMLInputElement>input);
+                filter.validate(input as HTMLInputElement);
             }
         }
     }
-    public bindActions(): void {
+    public bindActions() {
         const filter = this.column.filter!;
         const popup = MvcGridPopup.element;
 

@@ -942,7 +942,7 @@ class MvcGridFilter {
                     if (filter.mode != "excel") {
                         const inlineInput = filter.column.filter.inlineInput;
 
-                        if (filter.mode == "header" || filter.mode == "row" && filter.type == "multi") {
+                        if (filter.mode == "header" || filter.type == "multi") {
                             inlineInput.value = [].filter
                                 .call(input.options, option => option.selected)
                                 .map(option => option.text)
