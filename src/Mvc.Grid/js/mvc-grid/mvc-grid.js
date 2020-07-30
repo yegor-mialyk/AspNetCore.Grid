@@ -5,7 +5,7 @@
  * Copyright © NonFactors
  *
  * Licensed under the terms of the MIT License
- * http://www.opensource.org/licenses/mit-license.php
+ * https://www.opensource.org/licenses/mit-license.php
  */
 class MvcGrid {
     constructor(container, options = {}) {
