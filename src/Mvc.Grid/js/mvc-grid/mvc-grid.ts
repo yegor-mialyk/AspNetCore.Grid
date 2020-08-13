@@ -229,7 +229,7 @@ export class MvcGrid {
             }).then(response => {
                 const parent = grid.element.parentElement!;
                 const template = document.createElement("template");
-                const i = ([] as HTMLElement[]).indexOf.call(parent.children, grid.element);
+                const i = Array.from(parent.children).indexOf(grid.element);
 
                 template.innerHTML = response.trim();
 
@@ -307,7 +307,7 @@ export class MvcGrid {
         for (const row of grid.element.querySelectorAll<HTMLTableRowElement>("tbody tr")) {
             if (!row.classList.contains("mvc-grid-empty-row")) {
                 row.addEventListener("click", function (e) {
-                    const data: { [type: string]: string } = {};
+                    const data: { [type: string]: string; } = {};
 
                     for (const [i, column] of grid.columns.entries()) {
                         data[column.name] = row.cells[i].innerText;
@@ -764,9 +764,9 @@ export class MvcGridPopup {
 
         if (input) {
             if (input.tagName == "SELECT" && (input as HTMLSelectElement).multiple) {
-                ([] as HTMLOptionElement[]).forEach.call((input as HTMLSelectElement).options, option => {
+                for (const option of Array.from((input as HTMLSelectElement).options)) {
                     option.selected = values.indexOf(option.value) >= 0;
-                });
+                }
             } else {
                 (input as HTMLInputElement).value = values[0] || "";
             }
@@ -852,7 +852,7 @@ export class MvcGridPopup {
             const grid = popup.draggedColumn!.grid;
 
             if (dropzone != dragged.previousElementSibling && dropzone != dragged.nextElementSibling) {
-                const index = ([] as HTMLElement[]).indexOf.call(popup.element.querySelectorAll(".mvc-grid-dropzone"), dropzone);
+                const index = Array.from(popup.element.querySelectorAll(".mvc-grid-dropzone")).indexOf(dropzone);
                 const i = grid.columns.indexOf(popup.draggedColumn!);
 
                 dropzone.parentElement!.insertBefore(dragged.previousElementSibling!, dropzone);
@@ -1041,16 +1041,15 @@ export class MvcGridFilter {
         for (const input of MvcGridPopup.element.querySelectorAll<HTMLInputElement | HTMLSelectElement>(".mvc-grid-value")) {
             if (input.tagName == "SELECT") {
                 input.addEventListener("change", () => {
-                    filter.column.filter![<"first" | "second">input.dataset.filter].values = ([] as HTMLOptionElement[]).filter.call((input as HTMLSelectElement).options, option => option.selected).map(option => option.value);
+                    const options = Array.from((input as HTMLSelectElement).options).filter(option => option.selected);
+
+                    filter.column.filter![<"first" | "second">input.dataset.filter].values = options.map(option => option.value);
 
                     if (filter.mode != "excel") {
                         const inlineInput = filter.column.filter!.inlineInput!;
 
                         if (filter.mode == "header" || filter.type == "multi") {
-                            inlineInput.value = ([] as HTMLOptionElement[]).filter
-                                .call((input as HTMLSelectElement).options, option => option.selected)
-                                .map(option => option.text)
-                                .join(", ");
+                            inlineInput.value = options.map(option => option.text).join(", ");
                         } else {
                             inlineInput.value = input.value;
                         }

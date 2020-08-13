@@ -140,7 +140,7 @@ class MvcGrid {
             }).then(response => {
                 const parent = grid.element.parentElement;
                 const template = document.createElement("template");
-                const i = [].indexOf.call(parent.children, grid.element);
+                const i = Array.from(parent.children).indexOf(grid.element);
 
                 template.innerHTML = response.trim();
 
@@ -667,9 +667,9 @@ class MvcGridPopup {
 
         if (input) {
             if (input.tagName == "SELECT" && input.multiple) {
-                [].forEach.call(input.options, option => {
+                for (const option of Array.from(input.options)) {
                     option.selected = values.indexOf(option.value) >= 0;
-                });
+                }
             } else {
                 input.value = values[0] || "";
             }
@@ -754,7 +754,7 @@ class MvcGridPopup {
             const grid = popup.draggedColumn.grid;
 
             if (dropzone != dragged.previousElementSibling && dropzone != dragged.nextElementSibling) {
-                const index = [].indexOf.call(popup.element.querySelectorAll(".mvc-grid-dropzone"), dropzone);
+                const index = Array.from(popup.element.querySelectorAll(".mvc-grid-dropzone")).indexOf(dropzone);
                 const i = grid.columns.indexOf(popup.draggedColumn);
 
                 dropzone.parentElement.insertBefore(dragged.previousElementSibling, dropzone);
@@ -937,16 +937,15 @@ class MvcGridFilter {
         for (const input of MvcGridPopup.element.querySelectorAll(".mvc-grid-value")) {
             if (input.tagName == "SELECT") {
                 input.addEventListener("change", () => {
-                    filter.column.filter[input.dataset.filter].values = [].filter.call(input.options, option => option.selected).map(option => option.value);
+                    const options = Array.from(input.options).filter(option => option.selected);
+
+                    filter.column.filter[input.dataset.filter].values = options.map(option => option.value);
 
                     if (filter.mode != "excel") {
                         const inlineInput = filter.column.filter.inlineInput;
 
                         if (filter.mode == "header" || filter.type == "multi") {
-                            inlineInput.value = [].filter
-                                .call(input.options, option => option.selected)
-                                .map(option => option.text)
-                                .join(", ");
+                            inlineInput.value = options.map(option => option.text).join(", ");
                         } else {
                             inlineInput.value = input.value;
                         }
