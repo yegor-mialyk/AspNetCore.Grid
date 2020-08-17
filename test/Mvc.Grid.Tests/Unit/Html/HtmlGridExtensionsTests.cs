@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -260,10 +261,28 @@ namespace NonFactors.Mvc.Grid.Tests
         }
 
         [Fact]
-        public void Empty_SetsEmptyText()
+        public void Empty_SetsEmptyHtmlText()
         {
-            String? expected = "Text";
-            String? actual = htmlGrid.Empty("Text").Grid.EmptyText;
+            String? expected = "<Text>";
+            String? actual = htmlGrid.Empty(new HtmlString("<Text>")).Grid.EmptyText;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Empty_Html_ReturnsHtmlGrid()
+        {
+            Object expected = htmlGrid;
+            Object actual = htmlGrid.Empty(new HtmlString("Text"));
+
+            Assert.Same(expected, actual);
+        }
+
+        [Fact]
+        public void Empty_SetsEncodedEmptyText()
+        {
+            String? expected = "&lt;Text&gt;";
+            String? actual = htmlGrid.Empty("<Text>").Grid.EmptyText;
 
             Assert.Equal(expected, actual);
         }

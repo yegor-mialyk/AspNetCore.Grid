@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid
 {
@@ -73,6 +77,15 @@ namespace NonFactors.Mvc.Grid
 
             return html;
         }
+        public static IHtmlGrid<T> Empty<T>(this IHtmlGrid<T> html, IHtmlContent content)
+        {
+            using StringWriter writer = new StringWriter();
+
+            content.WriteTo(writer, NullHtmlEncoder.Default);
+            html.Grid.EmptyText = writer.ToString();
+
+            return html;
+        }
         public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String cssClasses)
         {
             html.Grid.Attributes["class"] = cssClasses?.Trim();
@@ -81,7 +94,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Empty<T>(this IHtmlGrid<T> html, String text)
         {
-            html.Grid.EmptyText = text;
+            html.Grid.EmptyText = HtmlEncoder.Default.Encode(text);
 
             return html;
         }
