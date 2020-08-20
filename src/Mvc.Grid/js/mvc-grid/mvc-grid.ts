@@ -181,6 +181,30 @@ export class MvcGrid {
             columns: this.columns.map(column => ({ name: column.name, hidden: column.isHidden }))
         } as MvcGridConfiguration;
     }
+    public configure(configuration: MvcGridConfiguration) {
+        configuration.columns.forEach((column, index) => {
+            const rows = this.element.querySelectorAll("tr");
+            const i = this.columns.findIndex(col => col.name.toLowerCase() == column.name.toLowerCase());
+
+            if (i >= 0) {
+                this.columns[i].isHidden = column.hidden == true;
+
+                for (const tr of rows) {
+                    if (column.hidden) {
+                        tr.children[i].classList.add("mvc-grid-hidden");
+                    } else {
+                        tr.children[i].classList.remove("mvc-grid-hidden");
+                    }
+
+                    if (i != index) {
+                        tr.insertBefore(tr.children[i], tr.children[index]);
+                    }
+                }
+
+                this.columns.splice(i - (index < i ? 1 : 0), 0, this.columns.splice(index, 1)[0]);
+            }
+        });
+    }
 
     public reload() {
         const grid = this;
