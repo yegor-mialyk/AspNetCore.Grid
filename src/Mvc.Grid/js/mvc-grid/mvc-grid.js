@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 6.2.0
+ * Mvc.Grid 6.2.1
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors

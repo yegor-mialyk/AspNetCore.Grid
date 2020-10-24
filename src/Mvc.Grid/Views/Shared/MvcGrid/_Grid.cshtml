@@ -1,11 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering;
 @using Microsoft.Extensions.Primitives;
 @using NonFactors.Mvc.Grid;
+@using System.Linq;
 
 @model IGrid
 
 @{
-    IGridRows<Object> rows = Model.Rows;
+    IGridRow<Object>[] rows = Model.Rows.ToArray();
 }
 
 <div id="@Model.Id" class="mvc-grid mvc-grid-@(Model.FilterMode.ToString().ToLower())-mode" data-name="@Model.Name" data-filter-mode="@Model.FilterMode" data-url="@Model.Url">
