@@ -112,7 +112,7 @@ export declare class MvcGridPager {
     rowsPerPage: HTMLInputElement;
     pages: NodeListOf<HTMLElement>;
     constructor(grid: MvcGrid, element: HTMLElement);
-    apply(page: string): void;
+    apply(page: string, rows?: string): void;
     private cleanUp;
     private bind;
 }

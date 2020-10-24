@@ -568,7 +568,7 @@ class MvcGridPager {
         pager.bind();
     }
 
-    apply(page) {
+    apply(page, rows) {
         const grid = this.grid;
         const query = grid.url.searchParams;
 
@@ -578,7 +578,7 @@ class MvcGridPager {
         query.set(`${grid.prefix}page`, page);
 
         if (this.showPageSizes) {
-            query.set(`${grid.prefix}rows`, this.rowsPerPage.value);
+            query.set(`${grid.prefix}rows`, rows == null ? this.rowsPerPage.value : rows);
         }
 
         grid.reload();
@@ -598,16 +598,18 @@ class MvcGridPager {
             });
         }
 
-        pager.rowsPerPage.addEventListener("change", () => {
-            const rows = parseInt(pager.rowsPerPage.value);
+        pager.grid.element.querySelectorAll(".mvc-grid-pager-rows").forEach(rowsPerPage => {
+            rowsPerPage.addEventListener("change", function() {
+                const rows = parseInt(this.value);
 
-            if (rows) {
-                const totalPages = Math.ceil(pager.totalRows / rows);
+                if (rows) {
+                    const totalPages = Math.ceil(pager.totalRows / rows);
 
-                pager.apply(Math.min(pager.currentPage, totalPages).toString());
-            } else {
-                pager.apply("1");
-            }
+                    pager.apply(Math.min(pager.currentPage, totalPages).toString(), rows.toString());
+                } else {
+                    pager.apply("1", rows.toString());
+                }
+            });
         });
     }
 }
