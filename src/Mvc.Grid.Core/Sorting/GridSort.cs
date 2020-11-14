@@ -54,7 +54,7 @@ namespace NonFactors.Mvc.Grid
             get
             {
                 if (column.Sort.IsEnabled == true && Definitions.Contains(column))
-                    return ((Int32, GridSortOrder))Definitions[column];
+                    return ((Int32, GridSortOrder)?)Definitions[column];
 
                 return null;
             }

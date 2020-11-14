@@ -39,23 +39,23 @@ namespace NonFactors.Mvc.Grid
                     if (Values.Any(String.IsNullOrEmpty))
                         return null;
 
-                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression));
+                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
                 case "not-equals":
                     if (Case == GridFilterCase.Original)
                         return base.Apply(expression);
 
                     if (Values.Any(String.IsNullOrEmpty))
-                        return Expression.AndAlso(Apply(expression, null), base.Apply(expression));
+                        return Expression.AndAlso(Apply(expression, null)!, base.Apply(expression)!);
 
-                    return Expression.OrElse(Expression.Equal(expression, Null), base.Apply(expression));
+                    return Expression.OrElse(Expression.Equal(expression, Null), base.Apply(expression)!);
                 case "equals":
                     if (Case == GridFilterCase.Original)
                         return base.Apply(expression);
 
                     if (Values.Any(String.IsNullOrEmpty))
-                        return Expression.OrElse(Apply(expression, null), base.Apply(expression));
+                        return Expression.OrElse(Apply(expression, null)!, base.Apply(expression)!);
 
-                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression));
+                    return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
             }
 
             return base.Apply(expression);

@@ -129,11 +129,13 @@ namespace NonFactors.Mvc.Grid
         {
             if (Get(Nullable.GetUnderlyingType(type) ?? type, method) is Type filterType)
             {
-                IGridFilter filter = (IGridFilter)Activator.CreateInstance(filterType);
-                filter.Method = method.ToLower();
-                filter.Values = values;
+                if (Activator.CreateInstance(filterType) is IGridFilter filter)
+                {
+                    filter.Method = method.ToLower();
+                    filter.Values = values;
 
-                return filter;
+                    return filter;
+                }
             }
 
             return null;
@@ -201,10 +203,10 @@ namespace NonFactors.Mvc.Grid
             if (GetElementType(type) is Type elementType)
             {
                 if (TryGet(elementType, method, out filter))
-                    return typeof(EnumerableFilter<>).MakeGenericType(filter);
+                    return typeof(EnumerableFilter<>).MakeGenericType(filter!);
 
                 if (elementType.IsEnum && TryGet(typeof(Enum), method, out filter))
-                    return typeof(EnumerableFilter<>).MakeGenericType(filter);
+                    return typeof(EnumerableFilter<>).MakeGenericType(filter!);
             }
             else if (type.IsEnum && TryGet(typeof(Enum), method, out filter))
             {

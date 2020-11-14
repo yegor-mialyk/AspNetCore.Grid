@@ -28,7 +28,7 @@ namespace NonFactors.Mvc.Grid
                 writer.Write(attribute.Key);
                 writer.Write("=\"");
 
-                writer.Write(encoder.Encode(attribute.Value.ToString()));
+                writer.Write(encoder.Encode(attribute.Value.ToString() ?? ""));
 
                 writer.Write("\"");
             }
