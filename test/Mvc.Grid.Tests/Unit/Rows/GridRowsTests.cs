@@ -87,9 +87,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
             GridRows<GridModel> rows = new GridRows<GridModel>(grid) { Attributes = (_) => new { data_id = "1" } };
 
-            Assert.True(rows.All(row =>
-                row.Attributes.Single().Key == key &&
-                row.Attributes.Single().Value == value));
+            Assert.True(rows.All(row => row.Attributes!.Single().Key == key && row.Attributes.Single().Value == value));
         }
 
         [Fact]

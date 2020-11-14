@@ -28,7 +28,7 @@ namespace NonFactors.Mvc.Grid.Tests
             foreach (GridModel model in items)
             {
                 model.NullableEnumerableField = model.NullableArrayField;
-                model.NullableListField = model.NullableArrayField.ToList();
+                model.NullableListField = model.NullableArrayField?.ToList();
             }
 
             nEnumerableExpression = (model) => model.NullableEnumerableField;
@@ -68,7 +68,21 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             Expression<Func<GridModel, Object>> expression = (_) => "test";
 
-            Assert.Null(new EnumerableFilter<StringFilter>().Apply(expression));
+            Assert.Null(new EnumerableFilter<StringFilter>().Apply(expression.Body));
+        }
+
+        [Fact]
+        public void Apply_NoAppliedFilter_ReturnsNull()
+        {
+            Expression<Func<GridModel, IEnumerable<String>>> expression = (_) => Enumerable.Empty<String>();
+            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            {
+                Case = GridFilterCase.Original,
+                Values = new[] { "" },
+                Method = "contains"
+            };
+
+            Assert.Null(filter.Apply(expression.Body));
         }
 
         [Fact]
@@ -81,7 +95,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 Method = "equals"
             };
 
-            IEnumerable expected = items.Where(model => model.NullableListField.Any(item => item == "test" || item == "33"));
+            IEnumerable expected = items.Where(model => model.NullableListField!.Any(item => item == "test" || item == "33"));
             IEnumerable actual = items.Where(nListExpression, filter);
 
             Assert.Equal(expected, actual);
@@ -97,7 +111,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 Method = "equals"
             };
 
-            IEnumerable expected = items.Where(model => model.NullableArrayField.Any(item => item == "test" || item == "33"));
+            IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item == "test" || item == "33"));
             IEnumerable actual = items.Where(nArrayExpression, filter);
 
             Assert.Equal(expected, actual);
@@ -113,7 +127,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 Method = "equals"
             };
 
-            IEnumerable expected = items.Where(model => model.NullableEnumerableField.Any(item => item == "test" || item == "33"));
+            IEnumerable expected = items.Where(model => model.NullableEnumerableField!.Any(item => item == "test" || item == "33"));
             IEnumerable actual = items.Where(nEnumerableExpression, filter);
 
             Assert.Equal(expected, actual);
@@ -129,7 +143,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 Method = "equals"
             };
 
-            IEnumerable expected = items.Where(model => model.NullableArrayField.Any(item => item == "test" || item == "33"));
+            IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item == "test" || item == "33"));
             IEnumerable actual = items.Where(nListExpression, filter);
 
             Assert.Equal(expected, actual);
@@ -145,7 +159,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 Method = "equals"
             };
 
-            IEnumerable expected = items.Where(model => model.NullableArrayField.Any(item => item != null && item.ToUpper() == "TEST" || item == "33"));
+            IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item != null && item.ToUpper() == "TEST" || item == "33"));
             IEnumerable actual = items.Where(nListExpression, filter);
 
             Assert.Equal(expected, actual);

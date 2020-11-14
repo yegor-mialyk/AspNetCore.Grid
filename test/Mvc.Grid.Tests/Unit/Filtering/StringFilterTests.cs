@@ -116,7 +116,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-            Assert.Null(new StringFilter { Method = "ends-with", Values = new[] { value, "1" } }.Apply(expression));
+            Assert.Null(new StringFilter { Method = "ends-with", Values = new[] { value, "1" } }.Apply(expression.Body));
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-            Assert.Null(new StringFilter { Method = "contains", Values = new[] { value, "1" } }.Apply(expression));
+            Assert.Null(new StringFilter { Method = "contains", Values = new[] { value, "1" } }.Apply(expression.Body));
         }
 
         [Fact]
