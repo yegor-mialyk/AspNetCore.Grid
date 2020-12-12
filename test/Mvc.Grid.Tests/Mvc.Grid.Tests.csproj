@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>6.2.2</Version>
+    <Version>6.2.3</Version>
     <Nullable>enable</Nullable>
     <Company>NonFactors</Company>
     <TargetFramework>net5.0</TargetFramework>

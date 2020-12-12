@@ -1,5 +1,5 @@
 ﻿/*!
- * Mvc.Grid 6.2.2
+ * Mvc.Grid 6.2.3
  * https://github.com/NonFactors/AspNetCore.Grid
  *
  * Copyright © NonFactors
@@ -127,10 +127,13 @@ export class MvcGrid {
             number: MvcGridNumberFilter
         };
 
+        const headers = element.querySelector(".mvc-grid-headers");
         const rowFilters = element.querySelectorAll<HTMLTableHeaderCellElement>(".mvc-grid-row-filters th");
 
-        for (const [i, header] of element.querySelectorAll<HTMLTableHeaderCellElement>(".mvc-grid-headers th").entries()) {
-            grid.columns.push(new MvcGridColumn(grid, header, rowFilters[i]));
+        if (headers) {
+            for (const [i, header] of headers.querySelectorAll("th").entries()) {
+                grid.columns.push(new MvcGridColumn(grid, header, rowFilters[i]));
+            }
         }
 
         const pager = element.querySelector<HTMLElement>(".mvc-grid-pager");
@@ -328,12 +331,16 @@ export class MvcGrid {
     private bind() {
         const grid = this;
 
-        for (const row of grid.element.querySelectorAll<HTMLTableRowElement>("tbody tr")) {
+        for (const row of grid.element.querySelectorAll<HTMLTableRowElement>("tbody > tr")) {
             if (!row.classList.contains("mvc-grid-empty-row")) {
                 row.addEventListener("click", function (e) {
                     const data: { [type: string]: string; } = {};
 
                     for (const [i, column] of grid.columns.entries()) {
+                        if (row.cells.length <= i) {
+                            return;
+                        }
+
                         data[column.name] = row.cells[i].innerText;
                     }
 
