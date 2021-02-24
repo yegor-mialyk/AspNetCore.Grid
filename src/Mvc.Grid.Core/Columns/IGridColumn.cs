@@ -23,6 +23,7 @@ namespace NonFactors.Mvc.Grid
         IGrid<T> Grid { get; }
 
         new IGridColumnSort<T> Sort { get; }
+        new IGridColumnFilter<T> Filter { get; }
     }
     public interface IGridColumn<T, TValue> : IGridProcessor<T>, IGridColumn<T>
     {

@@ -28,6 +28,7 @@ namespace NonFactors.Mvc.Grid
         public IGridColumnSort<T, TValue> Sort { get; set; }
 
         IGridColumnFilter IGridColumn.Filter => Filter;
+        IGridColumnFilter<T> IGridColumn<T>.Filter => Filter;
         public IGridColumnFilter<T, TValue> Filter { get; set; }
 
         public GridColumn(IGrid<T> grid, Expression<Func<T, TValue>> expression)
