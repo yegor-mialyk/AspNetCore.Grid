@@ -115,7 +115,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
             ServiceDescriptor actual = services.Single();
 
-            configure.Received()((GridFilters)actual.ImplementationInstance);
+            configure.Received()((GridFilters)actual.ImplementationInstance!);
         }
     }
 }

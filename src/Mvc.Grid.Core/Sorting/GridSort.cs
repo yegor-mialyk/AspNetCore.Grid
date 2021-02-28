@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,7 +19,7 @@ namespace NonFactors.Mvc.Grid
                 if (!DefinitionsIsSet && Grid.Query != null)
                 {
                     String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
-                    MatchCollection matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
+                    IEnumerable<Match> matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
                         "(^|,)(?<name>.*?) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
 
                     foreach (Match match in matches)
