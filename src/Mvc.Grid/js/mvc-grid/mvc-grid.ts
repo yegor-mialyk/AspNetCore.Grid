@@ -700,12 +700,10 @@ export class MvcGridPager {
             rowsPerPage.addEventListener("change", function () {
                 const rows = parseInt(this.value);
 
-                if (rows) {
-                    const totalPages = Math.ceil(pager.totalRows / rows);
+                if (!isNaN(rows) && rows >= 0) {
+                    const totalPages = rows === 0 ? 1 : Math.ceil(pager.totalRows / rows);
 
                     pager.apply(Math.min(pager.currentPage, totalPages).toString(), rows.toString());
-                } else {
-                    pager.apply("1", rows.toString());
                 }
             });
         });
