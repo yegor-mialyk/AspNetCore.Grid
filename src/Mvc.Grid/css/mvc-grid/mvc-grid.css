@@ -54,7 +54,7 @@
 
 .mvc-grid-sort,
 .mvc-grid-filter {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgb(0 0 0 / 0.03);
     transition: background-color 0.5s;
     font-family: GridGlyphs;
     font-size: inherit;
@@ -70,7 +70,7 @@
 
 .mvc-grid-filter:focus,
 .mvc-grid-filter:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgb(0 0 0 / 0.06);
     color: inherit;
 }
 
@@ -196,7 +196,7 @@
 }
 
 .mvc-grid-popup {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 0.176);
     background-clip: padding-box;
     max-width: calc(100% - 2em);
     background-color: #ffffff;
@@ -299,7 +299,7 @@
 }
 
 .mvc-grid-popup .mvc-grid-apply:focus {
-    box-shadow: 0 0 0 0.2em rgba(40, 167, 69, 0.5);
+    box-shadow: 0 0 0 0.2em rgb(40 167 69 / 0.5);
 }
 
 .mvc-grid-popup .mvc-grid-cancel {
@@ -309,7 +309,7 @@
 }
 
 .mvc-grid-popup .mvc-grid-cancel:focus {
-    box-shadow: 0 0 0 0.2em rgba(220, 53, 69, 0.5);
+    box-shadow: 0 0 0 0.2em rgb(220 53 69 / 0.5);
 }
 
 .mvc-grid-popup .mvc-grid-column {
@@ -408,7 +408,7 @@
 }
 
 .mvc-grid-loader {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgb(0 0 0 / 0.3);
     justify-content: center;
     transition: opacity 1s;
     align-items: center;
