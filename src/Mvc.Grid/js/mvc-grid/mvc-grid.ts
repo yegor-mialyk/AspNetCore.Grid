@@ -81,7 +81,6 @@ export class MvcGrid {
     public columns: MvcGridColumn[];
 
     public pager?: MvcGridPager;
-    public loader?: HTMLDivElement;
     public controller: AbortController;
 
     public url: URL;
@@ -225,19 +224,14 @@ export class MvcGrid {
             url.searchParams.set("_", String(Date.now()));
 
             if (grid.loadingDelay !== null) {
-                if (grid.loader?.parentElement) {
-                    clearTimeout(grid.loadingTimerId);
-                } else {
-                    const loader = document.createElement("template");
+                const loader = `<td colspan="${grid.columns.length}"><div class="mvc-grid-loader"><div class="mvc-grid-spinner"></div></div></td>`;
 
-                    loader.innerHTML = `<div class="mvc-grid-loader"><div><div></div><div></div><div></div></div></div>`;
-                    grid.loader = loader.content.firstElementChild as HTMLDivElement;
-
-                    grid.element.appendChild(grid.loader);
-                }
+                clearTimeout(grid.loadingTimerId);
 
                 grid.loadingTimerId = setTimeout(() => {
-                    grid.loader!.classList.add("mvc-grid-loading");
+                    for (const row of grid.element.querySelectorAll("tbody > tr")) {
+                        row.innerHTML = loader;
+                    }
                 }, grid.loadingDelay);
             }
 
@@ -280,10 +274,6 @@ export class MvcGrid {
             }).catch(reason => {
                 if (reason.name === "AbortError") {
                     return Promise.resolve();
-                }
-
-                if (grid.loader?.parentElement) {
-                    grid.loader.parentElement.removeChild(grid.loader);
                 }
 
                 const cancelled = !grid.element.dispatchEvent(new CustomEvent("reloadfail", {

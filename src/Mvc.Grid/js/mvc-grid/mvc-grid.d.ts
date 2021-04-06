@@ -34,7 +34,6 @@ export declare class MvcGrid {
     element: HTMLElement;
     columns: MvcGridColumn[];
     pager?: MvcGridPager;
-    loader?: HTMLDivElement;
     controller: AbortController;
     url: URL;
     name: string;
@@ -65,7 +64,7 @@ export declare class MvcGridColumn {
     header: HTMLElement;
     sort: MvcGridColumnSort | null;
     filter: MvcGridColumnFilter | null;
-    constructor(grid: MvcGrid, header: HTMLElement, rowFilter: HTMLElement | null);
+    constructor(grid: MvcGrid, header: HTMLElement, rowFilter?: HTMLElement);
     private cleanUp;
 }
 export declare class MvcGridColumnSort {
@@ -92,12 +91,12 @@ export declare class MvcGridColumnFilter {
         values: string[];
     };
     column: MvcGridColumn;
+    rowFilter?: HTMLElement;
     instance?: MvcGridFilter;
     button: HTMLButtonElement;
-    rowFilter: HTMLElement | null;
     options: HTMLSelectElement | null;
     inlineInput: HTMLInputElement | null;
-    constructor(column: MvcGridColumn, rowFilter: HTMLElement | null);
+    constructor(column: MvcGridColumn, rowFilter?: HTMLElement);
     apply(): void;
     cancel(): void;
     private bind;
