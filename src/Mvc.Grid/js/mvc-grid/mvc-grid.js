@@ -133,7 +133,6 @@ class MvcGrid {
             grid.controller.abort();
             MvcGridPopup.lastActiveElement = null;
             grid.controller = new AbortController();
-            url.searchParams.set("_", String(Date.now()));
 
             if (grid.loadingDelay !== null) {
                 const loader = `<td colspan="${grid.columns.length}"><div class="mvc-grid-loader"><div class="mvc-grid-spinner"></div></div></td>`;
