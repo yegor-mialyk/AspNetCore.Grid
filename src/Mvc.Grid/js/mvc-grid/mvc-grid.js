@@ -542,7 +542,7 @@ class MvcGridColumnFilter {
             });
 
             filter.inlineInput.addEventListener("keyup", function (e) {
-                if (e.which === 13 && filter.instance.isValid(this.value)) {
+                if (e.key === "Enter" && filter.instance.isValid(this.value)) {
                     column.filter.apply();
                 }
             });
@@ -991,7 +991,7 @@ class MvcGridFilter {
                 });
 
                 input.addEventListener("keyup", function (e) {
-                    if (e.which === 13 && filter.isValid(this.value)) {
+                    if (e.key === "Enter" && filter.isValid(this.value)) {
                         filter.column.filter.apply();
                     }
                 });

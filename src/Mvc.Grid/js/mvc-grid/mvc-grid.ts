@@ -623,7 +623,7 @@ export class MvcGridColumnFilter {
             });
 
             filter.inlineInput!.addEventListener("keyup", function (e) {
-                if (e.which === 13 && filter.instance!.isValid(this.value)) {
+                if (e.key === "Enter" && filter.instance!.isValid(this.value)) {
                     column.filter!.apply();
                 }
             });
@@ -970,7 +970,7 @@ export class MvcGridFilter {
             columnFilter.second.method = filter.methods[0];
         }
     }
-    public isValid(value: string) {
+    public isValid(value: string): boolean {
         return !value || true;
     }
     public validate(input: HTMLInputElement) {
@@ -1093,7 +1093,7 @@ export class MvcGridFilter {
                 });
 
                 (input as HTMLInputElement).addEventListener("keyup", function (e) {
-                    if (e.which === 13 && filter.isValid(this.value)) {
+                    if (e.key === "Enter" && filter.isValid(this.value)) {
                         filter.column.filter!.apply();
                     }
                 });
