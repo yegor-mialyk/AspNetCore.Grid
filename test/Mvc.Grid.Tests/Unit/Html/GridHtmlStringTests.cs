@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using Xunit;
@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridHtmlStringTests
     {
-        private TextWriter writer;
+        private StringWriter writer;
 
         public GridHtmlStringTests()
         {
@@ -19,10 +19,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             new GridHtmlString("<test>").WriteTo(writer, null);
 
-            String? actual = writer.ToString();
-            String? expected = "<test>";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("<test>", writer.ToString());
         }
 
         [Fact]
@@ -30,10 +27,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             new GridHtmlString("<test>").WriteTo(writer, HtmlEncoder.Default);
 
-            String? expected = HtmlEncoder.Default.Encode("<test>");
-            String? actual = writer.ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(HtmlEncoder.Default.Encode("<test>"), writer.ToString());
         }
 
         [Theory]
@@ -41,12 +35,9 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(" ", " ")]
         [InlineData(null, "")]
         [InlineData("test", "test")]
-        public void ToString_Value(String value, String representation)
+        public void ToString_Value(String? value, String expected)
         {
-            String actual = new GridHtmlString(value).ToString();
-            String expected = representation;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, new GridHtmlString(value).ToString());
         }
     }
 }

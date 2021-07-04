@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -19,7 +19,7 @@ namespace NonFactors.Mvc.Grid
         }
         public virtual IGridColumn<T, TValue> Add<TValue>(Expression<Func<T, TValue>> expression)
         {
-            IGridColumn<T, TValue> column = new GridColumn<T, TValue>(Grid, expression);
+            GridColumn<T, TValue> column = new(Grid, expression);
             Grid.Processors.Add(column);
             Add(column);
 
@@ -32,7 +32,7 @@ namespace NonFactors.Mvc.Grid
         }
         public virtual IGridColumn<T, TValue> Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
         {
-            IGridColumn<T, TValue> column = new GridColumn<T, TValue>(Grid, expression);
+            GridColumn<T, TValue> column = new(Grid, expression);
             Grid.Processors.Add(column);
             Insert(index, column);
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections;
 using System.Linq;
@@ -9,8 +9,7 @@ namespace NonFactors.Mvc.Grid.Tests
 {
     public class DateTimeFilterTests
     {
-        private Expression<Func<GridModel, DateTime?>> nDateExpression;
-        private Expression<Func<GridModel, DateTime>> dateExpression;
+        private Expression<Func<GridModel, DateTime>> expression;
         private IQueryable<GridModel> items;
         private DateTimeFilter filter;
 
@@ -23,8 +22,7 @@ namespace NonFactors.Mvc.Grid.Tests
                 new GridModel { Date = new DateTime(2015, 01, 01), NDate = new DateTime(2014, 01, 01) }
             }.AsQueryable();
 
-            nDateExpression = (model) => model.NDate;
-            dateExpression = (model) => model.Date;
+            expression = (model) => model.Date;
             filter = new DateTimeFilter();
         }
 
@@ -33,7 +31,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             filter.Values = "Test";
 
-            Assert.Null(filter.Apply(dateExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
 
         [Theory]
@@ -44,7 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = value;
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate == (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -56,7 +54,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate == null || model.NDate == new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -70,7 +68,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "equals";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date == (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -82,7 +80,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date == new DateTime(2013, 1, 1) || model.Date == new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -96,7 +94,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate != (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -108,7 +106,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "not-equals";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate != null && model.NDate != new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -122,7 +120,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date != (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -134,7 +132,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "not-equals";
             filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date != new DateTime(2013, 1, 1) && model.Date != new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -148,7 +146,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "earlier-than";
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate < (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -160,7 +158,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "earlier-than";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate < new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -174,7 +172,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "earlier-than";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date < (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -186,7 +184,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "earlier-than";
             filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date < new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -200,7 +198,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "later-than";
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate > (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -212,7 +210,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "later-than";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate > new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -226,7 +224,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "later-than";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date > (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -238,7 +236,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "later-than";
             filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date > new DateTime(2013, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -252,7 +250,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "earlier-than-or-equal";
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate <= (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -264,7 +262,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "earlier-than-or-equal";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate <= new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -278,7 +276,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "earlier-than-or-equal";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date <= (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -290,7 +288,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "earlier-than-or-equal";
             filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date <= new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -304,7 +302,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "later-than-or-equal";
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate >= (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -316,7 +314,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "later-than-or-equal";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate >= new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -330,7 +328,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "later-than-or-equal";
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date >= (String.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.Parse(value)));
 
             Assert.Equal(expected, actual);
@@ -342,7 +340,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "later-than-or-equal";
             filter.Values = new[] { "", "2014-01-01" };
 
-            IEnumerable actual = items.Where(dateExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.Date >= new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -354,7 +352,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = new[] { "", "test", "2014-01-01" };
 
-            IEnumerable actual = items.Where(nDateExpression, filter);
+            IEnumerable actual = items.Where(model => model.NDate, filter);
             IEnumerable expected = items.Where(model => model.NDate == null || model.NDate == new DateTime(2014, 1, 1));
 
             Assert.Equal(expected, actual);
@@ -366,7 +364,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = StringValues.Empty;
 
-            Assert.Null(filter.Apply(dateExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
 
         [Fact]
@@ -375,7 +373,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "test";
             filter.Values = "2014-01-01";
 
-            Assert.Null(filter.Apply(dateExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
     }
 }

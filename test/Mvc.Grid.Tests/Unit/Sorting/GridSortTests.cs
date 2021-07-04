@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public GridSortTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
             textColumn = grid.Columns.Add(model => model.Text);
             nameColumn = grid.Columns.Add(model => model.Name);
             sumColumn = grid.Columns.Add(model => model.Sum);
@@ -57,14 +57,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "sort=sum-asc")]
         [InlineData("", "sort=name asc")]
         [InlineData("", "sort=grid-sum-asc")]
-        [InlineData(null, "")]
-        [InlineData(null, "sort=")]
-        [InlineData(null, "sort=asc")]
-        [InlineData(null, "sort=sum as")]
-        [InlineData(null, "sort=sumasc")]
-        [InlineData(null, "sort=sum-asc")]
-        [InlineData(null, "sort=name asc")]
-        [InlineData(null, "sort=grid-sum-asc")]
         [InlineData("grid", "")]
         [InlineData("grid", "grid-sort=")]
         [InlineData("grid", "grid-sort=asc")]
@@ -73,10 +65,10 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("grid", "grid-sort=sum-asc")]
         [InlineData("grid", "grid-sort=name asc")]
         [InlineData("grid", "grid-sort=grid-sum-asc")]
-        public void Indexer_NotSorted(String gridName, String query)
+        public void Indexer_NotSorted(String name, String query)
         {
             sumColumn.Name = "sum";
-            sumColumn.Grid.Name = gridName;
+            sumColumn.Grid.Name = name;
             sumColumn.Sort.IsEnabled = true;
             sumColumn.Grid.Query = HttpUtility.ParseQueryString(query);
 
@@ -91,13 +83,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "sort=name asc,sum asc", 1)]
         [InlineData("", "SORT=NAME ASC,SUM ASC", 1)]
         [InlineData("", "SORT=NAME ASC,SURNAME ASC,SUM ASC", 1)]
-        [InlineData(null, "sort=sum asc", 0)]
-        [InlineData(null, "SORT=SUM ASC", 0)]
-        [InlineData(null, "sort=sum asc,sum desc", 0)]
-        [InlineData(null, "SORT=SURNAME ASC,SUM ASC", 0)]
-        [InlineData(null, "sort=name asc,sum asc", 1)]
-        [InlineData(null, "SORT=NAME ASC,SUM ASC", 1)]
-        [InlineData(null, "SORT=SURNAME ASC,NAME ASC,SUM ASC", 1)]
         [InlineData("grid", "grid-sort=sum asc", 0)]
         [InlineData("grid", "GRID-SORT=SUM ASC", 0)]
         [InlineData("grid", "grid-sort=sum asc,sum desc", 0)]
@@ -105,10 +90,10 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("grid", "grid-sort=name asc,sum asc", 1)]
         [InlineData("grid", "GRID-SORT=NAME ASC,SUM ASC", 1)]
         [InlineData("grid", "GRID-SORT=SURNAME ASC,NAME ASC,SUM ASC", 1)]
-        public void Indexer_SortIndex(String gridName, String query, Int32 index)
+        public void Indexer_SortIndex(String name, String query, Int32 index)
         {
             sumColumn.Name = "sum";
-            sumColumn.Grid.Name = gridName;
+            sumColumn.Grid.Name = name;
             sumColumn.Sort.IsEnabled = true;
             sumColumn.Grid.Query = HttpUtility.ParseQueryString(query);
 
@@ -124,20 +109,15 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "sort=sum desc", GridSortOrder.Desc)]
         [InlineData("", "SORT=SUM DESC", GridSortOrder.Desc)]
         [InlineData("", "SORT=SUM DESC,SUM ASC", GridSortOrder.Desc)]
-        [InlineData(null, "sort=sum asc", GridSortOrder.Asc)]
-        [InlineData(null, "SORT=SUM ASC", GridSortOrder.Asc)]
-        [InlineData(null, "sort=sum desc", GridSortOrder.Desc)]
-        [InlineData(null, "SORT=SUM DESC", GridSortOrder.Desc)]
-        [InlineData(null, "SORT=SUM DESC,SUM ASC", GridSortOrder.Desc)]
         [InlineData("grid", "grid-sort=sum asc", GridSortOrder.Asc)]
         [InlineData("grid", "GRID-SORT=SUM ASC", GridSortOrder.Asc)]
         [InlineData("grid", "grid-sort=sum desc", GridSortOrder.Desc)]
         [InlineData("grid", "GRID-SORT=SUM DESC", GridSortOrder.Desc)]
         [InlineData("grid", "GRID-SORT=SUM DESC, SUM ASC", GridSortOrder.Desc)]
-        public void Indexer_SortOrder(String gridName, String query, GridSortOrder order)
+        public void Indexer_SortOrder(String name, String query, GridSortOrder order)
         {
             sumColumn.Name = "sum";
-            sumColumn.Grid.Name = gridName;
+            sumColumn.Grid.Name = name;
             sumColumn.Sort.IsEnabled = true;
             sumColumn.Grid.Query = HttpUtility.ParseQueryString(query);
 

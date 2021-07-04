@@ -7,7 +7,7 @@ namespace NonFactors.Mvc.Grid
         [Fact]
         public void GridColumnConfig_Defaults()
         {
-            GridColumnConfig actual = new GridColumnConfig();
+            GridColumnConfig actual = new();
 
             Assert.False(actual.Hidden);
             Assert.Empty(actual.Name);

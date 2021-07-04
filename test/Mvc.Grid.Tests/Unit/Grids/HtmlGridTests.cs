@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
@@ -17,8 +17,8 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public HtmlGridTests()
         {
+            Grid<GridModel> grid = new(new GridModel[8]);
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
-            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
             html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
@@ -30,7 +30,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void HtmlGrid_DoesNotChangeQuery()
         {
-            Object? expected = htmlGrid.Grid.Query = new QueryCollection();
+            Object expected = htmlGrid.Grid.Query = new QueryCollection();
             Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query;
 
             Assert.Same(expected, actual);
@@ -43,7 +43,7 @@ namespace NonFactors.Mvc.Grid.Tests
             htmlGrid.Html.ViewContext.Returns(new ViewContext());
             htmlGrid.Html.ViewContext.HttpContext = new DefaultHttpContext();
 
-            Object? expected = htmlGrid.Html.ViewContext.HttpContext.Request.Query;
+            Object expected = htmlGrid.Html.ViewContext.HttpContext.Request.Query;
             Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query;
 
             Assert.Same(expected, actual);
@@ -87,10 +87,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void HtmlGrid_SetsPartialViewName()
         {
-            String actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).PartialViewName;
-            String expected = "MvcGrid/_Grid";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("MvcGrid/_Grid", new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).PartialViewName);
         }
 
         [Fact]
@@ -114,16 +111,13 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void WriteTo_WritesPartialView()
         {
-            StringWriter writer = new StringWriter();
+            StringWriter writer = new();
             Task<IHtmlContent> view = Task.FromResult<IHtmlContent>(new HtmlString("Test"));
             htmlGrid.Html.PartialAsync(htmlGrid.PartialViewName, htmlGrid.Grid, null).Returns(view);
 
             htmlGrid.WriteTo(writer, HtmlEncoder.Default);
 
-            String actual = writer.GetStringBuilder().ToString();
-            String expected = "Test";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Test", writer.ToString());
         }
     }
 }

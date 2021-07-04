@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests
@@ -14,7 +14,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridRow_SetsModel()
         {
-            Object expected = new Object();
+            Object expected = new();
             Object actual = new GridRow<Object>(expected, 0).Model;
 
             Assert.Same(expected, actual);

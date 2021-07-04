@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -125,7 +125,7 @@ namespace NonFactors.Mvc.Grid
             if (keys.Length == 0)
                 return null;
 
-            String method = keys[0].Substring(columnName.Length);
+            String method = keys[0][columnName.Length..];
 
             if (Type == GridFilterType.Multi)
                 return CreateFilter(method, Column.Grid.Query![keys[0]]);
@@ -148,10 +148,10 @@ namespace NonFactors.Mvc.Grid
                 if (values.Count < 2)
                     return null;
 
-                return CreateFilter(keys[0].Substring(columnName.Length), values[1]);
+                return CreateFilter(keys[0][columnName.Length..], values[1]);
             }
 
-            String method = keys[1].Substring(columnName.Length);
+            String method = keys[1][columnName.Length..];
             String value = Column.Grid.Query![keys[1]][0];
 
             return CreateFilter(method, value);

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;

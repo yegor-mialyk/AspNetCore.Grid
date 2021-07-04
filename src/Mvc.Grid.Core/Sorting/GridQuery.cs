@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -14,7 +14,7 @@ namespace NonFactors.Mvc.Grid
 
         public static Boolean IsOrdered(IQueryable models)
         {
-            GridQuery expression = new GridQuery();
+            GridQuery expression = new();
             expression.Visit(models.Expression);
 
             return expression.Ordered;
@@ -23,7 +23,7 @@ namespace NonFactors.Mvc.Grid
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             if (node.Method.DeclaringType == typeof(Queryable) &&
-                (node.Method.Name == nameof(Queryable.OrderBy) || node.Method.Name == nameof(Queryable.OrderByDescending)))
+                node.Method.Name is nameof(Queryable.OrderBy) or nameof(Queryable.OrderByDescending))
             {
                 Ordered = true;
 

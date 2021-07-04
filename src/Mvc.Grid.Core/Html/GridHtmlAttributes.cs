@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
@@ -19,16 +19,16 @@ namespace NonFactors.Mvc.Grid
 
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
-            foreach (KeyValuePair<String, Object?> attribute in this)
+            foreach ((String attribute, Object? value) in this)
             {
-                if (attribute.Value == null)
+                if (value == null)
                     continue;
 
                 writer.Write(" ");
-                writer.Write(attribute.Key);
+                writer.Write(attribute);
                 writer.Write("=\"");
 
-                writer.Write(encoder.Encode(attribute.Value.ToString() ?? ""));
+                writer.Write(encoder.Encode(value.ToString() ?? ""));
 
                 writer.Write("\"");
             }

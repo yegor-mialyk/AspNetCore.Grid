@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -79,7 +79,7 @@ namespace NonFactors.Mvc.Grid
         {
             String text = expression.Body is MemberExpression member ? member.ToString() : "";
 
-            return text.IndexOf('.') > 0 ? text.Substring(text.IndexOf('.') + 1) : text;
+            return text.IndexOf('.') > 0 ? text[(text.IndexOf('.') + 1)..] : text;
         }
         private Object? ColumnValueFor(IGridRow<Object> row)
         {

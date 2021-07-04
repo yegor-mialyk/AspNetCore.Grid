@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -9,7 +9,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void IGrid_ReturnsColumns()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
 
             Object actual = ((IGrid)grid).Columns;
             Object expected = grid.Columns;
@@ -20,23 +20,17 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void IGrid_ReturnsRows()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
 
-            Object actual = ((IGrid)grid).Rows;
-            Object expected = grid.Rows;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(grid.Rows, ((IGrid)grid).Rows);
         }
 
         [Fact]
         public void IGrid_ReturnsPager()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
 
-            Object? actual = ((IGrid)grid).Pager;
-            Object? expected = grid.Pager;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(grid.Pager, ((IGrid)grid).Pager);
         }
 
         [Fact]
@@ -88,47 +82,27 @@ namespace NonFactors.Mvc.Grid.Tests
         }
 
         [Fact]
-        public void Grid_SetsColumns()
+        public void Grid_SetsEmptyColumns()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
-
-            IGridColumnsOf<GridModel> expected = new GridColumns<GridModel>(grid);
-            IGridColumnsOf<GridModel> actual = grid.Columns;
-
-            Assert.Same(expected.Grid, actual.Grid);
-            Assert.Equal(expected, actual);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Columns);
         }
 
         [Fact]
         public void Grid_SetsMode()
         {
-            GridProcessingMode actual = new Grid<GridModel>(Array.Empty<GridModel>()).Mode;
-            GridProcessingMode expected = GridProcessingMode.Automatic;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(GridProcessingMode.Automatic, new Grid<GridModel>(Array.Empty<GridModel>()).Mode);
         }
 
         [Fact]
-        public void Grid_SetsRows()
+        public void Grid_SetsEmptyRows()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
-
-            IGridRowsOf<GridModel> expected = new GridRows<GridModel>(grid);
-            IGridRowsOf<GridModel> actual = grid.Rows;
-
-            Assert.Same(expected.Grid, actual.Grid);
-            Assert.Equal(expected, actual);
+            Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Rows);
         }
 
         [Fact]
         public void Grid_SetsSort()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
-
-            IGridSort<GridModel> expected = new GridSort<GridModel>(grid);
-            IGridSort<GridModel> actual = grid.Sort;
-
-            Assert.Same(expected.Grid, actual.Grid);
+            Assert.NotNull(new Grid<GridModel>(Array.Empty<GridModel>()).Sort);
         }
     }
 }

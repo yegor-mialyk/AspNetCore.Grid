@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
@@ -20,8 +20,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_StartsWith_UsingOriginalCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "starts-with", Values = "tes" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "starts-with", Values = "tes" };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -35,7 +34,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.StartsWith("tes"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -43,8 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_StartsWith_UsingUpperCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "starts-with", Values = "tt" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "starts-with", Values = "tt" };
             filter.Case = GridFilterCase.Upper;
 
             IQueryable<GridModel> items = new[]
@@ -58,7 +56,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().StartsWith("TT"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -66,8 +64,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_StartsWith_UsingLowerCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "starts-with", Values = "TE" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "starts-with", Values = "TE" };
             filter.Case = GridFilterCase.Lower;
 
             IQueryable<GridModel> items = new[]
@@ -81,7 +78,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().StartsWith("te"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -89,8 +86,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_StartsWith_MultiFilter()
         {
-            StringFilter filter = new StringFilter { Method = "starts-with", Values = new[] { "te", "TT" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "starts-with", Values = new[] { "te", "TT" } };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -104,7 +100,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && (model.Name.StartsWith("te") || model.Name.StartsWith("TT")));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -122,8 +118,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_EndsWith_UsingOriginalCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "ends-with", Values = "est" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "ends-with", Values = "est" };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -137,7 +132,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.EndsWith("est"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -145,8 +140,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_EndsWith_UsingUpperCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "ends-with", Values = "est" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "ends-with", Values = "est" };
             filter.Case = GridFilterCase.Upper;
 
             IQueryable<GridModel> items = new[]
@@ -160,7 +154,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().EndsWith("EST"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -168,8 +162,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_EndsWith_UsingLowerCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "ends-with", Values = "EST" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "ends-with", Values = "EST" };
             filter.Case = GridFilterCase.Lower;
 
             IQueryable<GridModel> items = new[]
@@ -183,7 +176,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().EndsWith("est"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -191,8 +184,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_EndsWith_MultiFilter()
         {
-            StringFilter filter = new StringFilter { Method = "ends-with", Values = new[] { "t", "Er" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "ends-with", Values = new[] { "t", "Er" } };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -206,7 +198,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && (model.Name.EndsWith("t") || model.Name.EndsWith("Er")));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -224,8 +216,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Contains_UsingOriginalCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "contains", Values = "es" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "contains", Values = "es" };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -237,7 +228,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("es"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -245,8 +236,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Contains_UsingUpperCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "contains", Values = "es" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "contains", Values = "es" };
             filter.Case = GridFilterCase.Upper;
 
             IQueryable<GridModel> items = new[]
@@ -258,7 +248,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("ES"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -266,8 +256,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Contains_UsingLowerCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "contains", Values = "ES" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "contains", Values = "ES" };
             filter.Case = GridFilterCase.Lower;
 
             IQueryable<GridModel> items = new[]
@@ -279,7 +268,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().Contains("es"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -287,8 +276,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Contains_MultiFilter()
         {
-            StringFilter filter = new StringFilter { Method = "contains", Values = new[] { "Te", "es" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "contains", Values = new[] { "Te", "es" } };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -300,7 +288,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && (model.Name.Contains("Te") || model.Name.Contains("es")));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -311,8 +299,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(GridFilterCase.Original)]
         public void Apply_NotEquals_FiltersNotEmptyAndNotNullValues(GridFilterCase filterCase)
         {
-            StringFilter filter = new StringFilter { Method = "not-equals", Values = "" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "not-equals", Values = "" };
             filter.Case = filterCase;
 
             IQueryable<GridModel> items = new[]
@@ -325,7 +312,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => !String.IsNullOrEmpty(model.Name));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -333,8 +320,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_NotEquals_UsingOriginalCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "not-equals", Values = "test" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "not-equals", Values = "test" };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -346,7 +332,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != "test");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -354,8 +340,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_NotEquals_UsingUpperCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "not-equals", Values = "test" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "not-equals", Values = "test" };
             filter.Case = GridFilterCase.Upper;
 
             IQueryable<GridModel> items = new[]
@@ -367,7 +352,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name == null || model.Name.ToUpper() != "TEST");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -375,8 +360,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_NotEquals_UsingLowerCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "not-equals", Values = "TEST" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "not-equals", Values = "TEST" };
             filter.Case = GridFilterCase.Lower;
 
             IQueryable<GridModel> items = new[]
@@ -388,7 +372,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name == null || model.Name.ToLower() != "test");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -396,8 +380,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_NotEquals_MultiFilter()
         {
-            StringFilter filter = new StringFilter { Method = "not-equals", Values = new[] { "test", "Test2" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "not-equals", Values = new[] { "test", "Test2" } };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -409,7 +392,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != "test" && model.Name != "Test2");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -420,8 +403,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(GridFilterCase.Original)]
         public void Apply_Equals_FiltersEmptyOrNullValues(GridFilterCase filterCase)
         {
-            StringFilter filter = new StringFilter { Method = "equals", Values = "" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "equals", Values = "" };
             filter.Case = filterCase;
 
             IQueryable<GridModel> items = new[]
@@ -434,7 +416,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => String.IsNullOrEmpty(model.Name));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -442,8 +424,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Equals_UsingOriginalCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "equals", Values = "test" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "equals", Values = "test" };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -454,8 +435,8 @@ namespace NonFactors.Mvc.Grid.Tests
                 new GridModel { Name = "Test2" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name != null && model.Name == "test");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable expected = items.Where(model => model.Name == "test");
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -463,8 +444,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Equals_UsingUpperCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "equals", Values = "test" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "equals", Values = "test" };
             filter.Case = GridFilterCase.Upper;
 
             IQueryable<GridModel> items = new[]
@@ -476,7 +456,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper() == "TEST");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -484,8 +464,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Equals_UsingLowerCaseFilter()
         {
-            StringFilter filter = new StringFilter { Method = "equals", Values = "TEST" };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "equals", Values = "TEST" };
             filter.Case = GridFilterCase.Lower;
 
             IQueryable<GridModel> items = new[]
@@ -497,7 +476,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower() == "test");
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -505,8 +484,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_Equals_MultiFilter()
         {
-            StringFilter filter = new StringFilter { Method = "equals", Values = new[] { "test", "Test2" } };
-            Expression<Func<GridModel, String?>> expression = (model) => model.Name;
+            StringFilter filter = new() { Method = "equals", Values = new[] { "test", "Test2" } };
             filter.Case = GridFilterCase.Original;
 
             IQueryable<GridModel> items = new[]
@@ -517,8 +495,8 @@ namespace NonFactors.Mvc.Grid.Tests
                 new GridModel { Name = "Test2" }
             }.AsQueryable();
 
-            IQueryable expected = items.Where(model => model.Name != null && (model.Name == "test" || model.Name == "Test2"));
-            IQueryable actual = items.Where(expression, filter);
+            IQueryable expected = items.Where(model => model.Name == "test" || model.Name == "Test2");
+            IQueryable actual = items.Where(model => model.Name, filter);
 
             Assert.Equal(expected, actual);
         }

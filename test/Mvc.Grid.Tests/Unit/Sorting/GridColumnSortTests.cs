@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NSubstitute;
 using Xunit;
@@ -11,8 +11,8 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public GridColumnSortTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
-            GridColumn<GridModel, Object?> column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
+            GridColumn<GridModel, Object?> column = new(grid, model => model.Name);
 
             sort = new GridColumnSort<GridModel, Object?>(column) { IsEnabled = true };
         }
@@ -32,10 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests
             sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
             sort.Column.Grid.Sort[sort.Column].Returns((2, GridSortOrder.Desc));
 
-            Int32? actual = sort.Index;
-            Int32? expected = 2;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(2, sort.Index);
         }
 
         [Fact]
@@ -44,16 +41,13 @@ namespace NonFactors.Mvc.Grid.Tests
             sort.Column.Grid.Sort = Substitute.For<IGridSort<GridModel>>();
             sort.Column.Grid.Sort[sort.Column].Returns((0, GridSortOrder.Desc));
 
-            GridSortOrder? expected = GridSortOrder.Desc;
-            GridSortOrder? actual = sort.Order;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(GridSortOrder.Desc, sort.Order);
         }
 
         [Fact]
         public void GridColumnSort_SetsColumn()
         {
-            IGridColumn<GridModel, String?> expected = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.Name);
+            GridColumn<GridModel, String?> expected = new(sort.Column.Grid, model => model.Name);
             IGridColumn<GridModel, String?> actual = new GridColumnSort<GridModel, String?>(expected).Column;
 
             Assert.Same(expected, actual);
@@ -62,7 +56,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumnSort_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.ToString());
+            GridColumn<GridModel, String?> column = new(sort.Column.Grid, model => model.ToString());
 
             Assert.False(new GridColumnSort<GridModel, String?>(column).IsEnabled);
         }
@@ -70,7 +64,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumnSort_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(sort.Column.Grid, model => model.Name);
+            GridColumn<GridModel, String?> column = new(sort.Column.Grid, model => model.Name);
 
             Assert.Null(new GridColumnSort<GridModel, String?>(column).IsEnabled);
         }
@@ -90,10 +84,7 @@ namespace NonFactors.Mvc.Grid.Tests
             IQueryable<GridModel> items = new GridModel[2].AsQueryable();
             sort.IsEnabled = false;
 
-            Object expected = items;
-            Object actual = sort.By(items);
-
-            Assert.Same(expected, actual);
+            Assert.Equal(items, sort.By(items));
         }
 
         [Fact]
@@ -138,10 +129,7 @@ namespace NonFactors.Mvc.Grid.Tests
             IOrderedQueryable<GridModel> items = new GridModel[2].AsQueryable().OrderBy(item => item.ShortText);
             sort.IsEnabled = false;
 
-            Object expected = items;
-            Object actual = sort.ThenBy(items);
-
-            Assert.Same(expected, actual);
+            Assert.Same(items, sort.ThenBy(items));
         }
 
         [Fact]

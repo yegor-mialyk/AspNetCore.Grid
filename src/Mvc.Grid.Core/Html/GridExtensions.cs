@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +20,7 @@ namespace NonFactors.Mvc.Grid
 
         public static IHtmlContent AjaxGrid(this IHtmlHelper _, String url, Object? htmlAttributes = null)
         {
-            TagBuilder grid = new TagBuilder("div");
+            TagBuilder grid = new("div");
             grid.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
             grid.Attributes["data-url"] = url;
             grid.AddCssClass("mvc-grid");
@@ -30,7 +30,7 @@ namespace NonFactors.Mvc.Grid
 
         public static IServiceCollection AddMvcGrid(this IServiceCollection services, Action<GridFilters>? configure = null)
         {
-            GridFilters filters = new GridFilters();
+            GridFilters filters = new();
             configure?.Invoke(filters);
 
             return services.AddSingleton<IGridFilters>(filters);

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

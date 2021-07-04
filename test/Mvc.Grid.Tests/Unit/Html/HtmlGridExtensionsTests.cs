@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
@@ -15,8 +15,8 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public HtmlGridExtensionsTests()
         {
+            Grid<GridModel> grid = new(new GridModel[8]);
             IHtmlHelper html = Substitute.For<IHtmlHelper>();
-            IGrid<GridModel> grid = new Grid<GridModel>(new GridModel[8]);
             html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
             htmlGrid = new HtmlGrid<GridModel>(html, grid);
@@ -62,12 +62,12 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(GridFilterType.Double, GridFilterType.Double)]
         public void Filterable_SetsType(GridFilterType? current, GridFilterType type)
         {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
                 column.Filter.Type = current;
 
             htmlGrid.Filterable(GridFilterType.Double);
 
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
                 Assert.Equal(type, actual.Filter.Type);
         }
 
@@ -77,12 +77,12 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(false, false)]
         public void Filterable_SetsIsEnabled(Boolean? current, Boolean isEnabled)
         {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
                 column.Filter.IsEnabled = current;
 
             htmlGrid.Filterable();
 
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
                 Assert.Equal(isEnabled, actual.Filter.IsEnabled);
         }
 
@@ -101,12 +101,12 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(false, false)]
         public void Filterable_Case_SetsIsEnabled(Boolean? current, Boolean isEnabled)
         {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
                 column.Filter.IsEnabled = current;
 
             htmlGrid.Filterable(GridFilterCase.Original);
 
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
                 Assert.Equal(isEnabled, actual.Filter.IsEnabled);
         }
 
@@ -117,12 +117,12 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(GridFilterCase.Original, GridFilterCase.Original)]
         public void Filterable_SetsCase(GridFilterCase? current, GridFilterCase filterCace)
         {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
                 column.Filter.Case = current;
 
             htmlGrid.Filterable(GridFilterCase.Lower);
 
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
                 Assert.Equal(filterCace, actual.Filter.Case);
         }
 
@@ -141,28 +141,25 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(false, false)]
         public void Sortable_SetsIsEnabled(Boolean? current, Boolean? isEnabled)
         {
-            foreach (IGridColumn column in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
                 column.Sort.IsEnabled = current;
 
             htmlGrid.Sortable();
 
-            foreach (IGridColumn actual in htmlGrid.Grid.Columns)
+            foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
                 Assert.Equal(isEnabled, actual.Sort.IsEnabled);
         }
 
         [Fact]
         public void Sortable_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Sortable();
-
-            Assert.Same(expected, actual);
+            Assert.Equal(htmlGrid, htmlGrid.Sortable());
         }
 
         [Fact]
         public void RowAttributed_SetsRowAttributes()
         {
-            Func<GridModel, Object>? expected = (_) => new { data_id = 1 };
+            Func<GridModel, Object> expected = (_) => new { data_id = 1 };
             Func<GridModel, Object>? actual = htmlGrid.RowAttributed(expected).Grid.Rows.Attributes;
 
             Assert.Same(expected, actual);
@@ -183,8 +180,8 @@ namespace NonFactors.Mvc.Grid.Tests
             htmlGrid.Grid.Attributes["width"] = 10;
             htmlGrid.Grid.Attributes["class"] = "test";
 
+            Dictionary<String, Object?> expected = new() { ["width"] = 1, ["class"] = "test" };
             IDictionary<String, Object?> actual = htmlGrid.Attributed(new { width = 1 }).Grid.Attributes;
-            IDictionary<String, Object?> expected = new Dictionary<String, Object?> { ["width"] = 1, ["class"] = "test" };
 
             Assert.Equal(expected, actual);
         }
@@ -192,16 +189,12 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Attributed_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Attributed(new { width = 1 });
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Attributed(new { width = 1 }));
         }
 
         [Theory]
         [InlineData("", "", "")]
         [InlineData("", " ", "")]
-        [InlineData("", null, "")]
         [InlineData("", "test", "test")]
         [InlineData("", " test", "test")]
         [InlineData("", "test ", "test")]
@@ -209,28 +202,23 @@ namespace NonFactors.Mvc.Grid.Tests
 
         [InlineData(" ", "", "")]
         [InlineData(" ", " ", "")]
-        [InlineData(" ", null, "")]
         [InlineData(" ", "test", "test")]
         [InlineData(" ", " test", "test")]
         [InlineData(" ", "test ", "test")]
         [InlineData(" ", " test ", "test")]
 
         [InlineData("first", "", "first")]
-        [InlineData("first", null, "first")]
         [InlineData("first", "test", "first test")]
         [InlineData("first", " test", "first test")]
         [InlineData("first", "test ", "first test")]
         [InlineData("first", " test ", "first test")]
         [InlineData("first ", " test ", "first  test")]
         [InlineData(" first ", " test ", "first  test")]
-        public void AppendsCss_Classes(String current, String toAppend, String cssClasses)
+        public void AppendsCss_Classes(String current, String toAppend, String css)
         {
             htmlGrid.Grid.Attributes["class"] = current;
 
-            String? expected = cssClasses;
-            String? actual = htmlGrid.AppendCss(toAppend).Grid.Attributes["class"]?.ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(css, htmlGrid.AppendCss(toAppend).Grid.Attributes["class"]);
         }
 
         [Fact]
@@ -245,64 +233,43 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Css_SetsCssClasses()
         {
-            String? expected = "table";
-            String? actual = htmlGrid.Css(" table ").Grid.Attributes["class"]?.ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("table", htmlGrid.Css(" table ").Grid.Attributes["class"]);
         }
 
         [Fact]
         public void Css_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Css("");
-
-            Assert.Same(expected, actual);
+            Assert.Equal(htmlGrid, htmlGrid.Css(""));
         }
 
         [Fact]
         public void Empty_SetsEmptyHtmlText()
         {
-            String? expected = "<Text>";
-            String? actual = htmlGrid.Empty(new HtmlString("<Text>")).Grid.EmptyText;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("<Text>", htmlGrid.Empty(new HtmlString("<Text>")).Grid.EmptyText);
         }
 
         [Fact]
         public void Empty_Html_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Empty(new HtmlString("Text"));
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Empty(new HtmlString("Text")));
         }
 
         [Fact]
         public void Empty_SetsEncodedEmptyText()
         {
-            String? expected = "&lt;Text&gt;";
-            String? actual = htmlGrid.Empty("<Text>").Grid.EmptyText;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("&lt;Text&gt;", htmlGrid.Empty("<Text>").Grid.EmptyText);
         }
 
         [Fact]
         public void Empty_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Empty("Text");
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Empty("Text"));
         }
 
         [Fact]
         public void Named_SetsName()
         {
-            String expected = "Test";
-            String actual = htmlGrid.Named("Test").Grid.Name;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Test", htmlGrid.Named("Test").Grid.Name);
         }
 
         [Fact]
@@ -317,37 +284,25 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Id_SetsId()
         {
-            String? expected = "Test";
-            String? actual = htmlGrid.Id("Test").Grid.Id;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Test", htmlGrid.Id("Test").Grid.Id);
         }
 
         [Fact]
         public void Id_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Id("Test");
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Id("Test"));
         }
 
         [Fact]
         public void UsingFooter_SetsFooterPartialViewName()
         {
-            String actual = htmlGrid.UsingFooter("Partial").Grid.FooterPartialViewName;
-            String expected = "Partial";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Partial", htmlGrid.UsingFooter("Partial").Grid.FooterPartialViewName);
         }
 
         [Fact]
         public void UsingFooter_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingFooter("Partial");
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.UsingFooter("Partial"));
         }
 
         [Fact]
@@ -358,19 +313,13 @@ namespace NonFactors.Mvc.Grid.Tests
 
             htmlGrid.Using(processor);
 
-            Object actual = htmlGrid.Grid.Processors.Single();
-            Object expected = processor;
-
-            Assert.Same(expected, actual);
+            Assert.Same(processor, htmlGrid.Grid.Processors.Single());
         }
 
         [Fact]
         public void Using_Processor_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Using(Substitute.For<IGridProcessor<GridModel>>());
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Using(Substitute.For<IGridProcessor<GridModel>>()));
         }
 
         [Fact]
@@ -385,10 +334,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Using_ProcessingMode_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Using(GridProcessingMode.Manual);
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Using(GridProcessingMode.Manual));
         }
 
         [Fact]
@@ -403,42 +349,30 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Using_FilterMode_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Using(GridFilterMode.Header);
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.Using(GridFilterMode.Header));
         }
 
         [Fact]
         public void UsingUrl_SetsUrl()
         {
-            String actual = htmlGrid.UsingUrl("/test/index").Grid.Url;
-            String expected = "/test/index";
-
-            Assert.Same(expected, actual);
+            Assert.Same("/test/index", htmlGrid.UsingUrl("/test/index").Grid.Url);
         }
 
         [Fact]
         public void UsingUrl_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.UsingUrl("");
-
-            Assert.Same(expected, actual);
+            Assert.Same(htmlGrid, htmlGrid.UsingUrl(""));
         }
 
         [Fact]
         public void Pageable_DoesNotChangePager()
         {
-            IGridPager<GridModel> pager = new GridPager<GridModel>(htmlGrid.Grid);
+            GridPager<GridModel> pager = new(htmlGrid.Grid);
             htmlGrid.Grid.Pager = pager;
 
             htmlGrid.Pageable();
 
-            IGridPager actual = htmlGrid.Grid.Pager;
-            IGridPager expected = pager;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(pager, htmlGrid.Grid.Pager);
         }
 
         [Fact]
@@ -448,7 +382,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
             htmlGrid.Pageable();
 
-            IGridPager<GridModel> expected = new GridPager<GridModel>(htmlGrid.Grid);
+            GridPager<GridModel> expected = new(htmlGrid.Grid);
             IGridPager<GridModel> actual = htmlGrid.Grid.Pager!;
 
             Assert.Equal(expected.FirstDisplayPage, actual.FirstDisplayPage);
@@ -469,9 +403,9 @@ namespace NonFactors.Mvc.Grid.Tests
             IGridPager expected = htmlGrid.Grid.Pager;
             Boolean builderCalled = false;
 
-            htmlGrid.Pageable(actual =>
+            htmlGrid.Pageable(pager =>
             {
-                Assert.Same(expected, actual);
+                Assert.Same(expected, pager);
                 builderCalled = true;
             });
 
@@ -485,8 +419,8 @@ namespace NonFactors.Mvc.Grid.Tests
 
             htmlGrid.Pageable();
 
-            Object? actual = htmlGrid.Grid.Processors.Single();
-            Object? expected = htmlGrid.Grid.Pager;
+            Object actual = htmlGrid.Grid.Processors.Single();
+            Object expected = htmlGrid.Grid.Pager!;
 
             Assert.Same(expected, actual);
         }
@@ -494,10 +428,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Pageable_ReturnsHtmlGrid()
         {
-            Object expected = htmlGrid;
-            Object actual = htmlGrid.Pageable();
-
-            Assert.Same(expected, actual);
+            Assert.Equal(htmlGrid, htmlGrid.Pageable());
         }
 
         [Fact]

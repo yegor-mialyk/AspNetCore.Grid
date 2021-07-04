@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using NSubstitute;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +17,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public GridColumnTests()
         {
-            IGrid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
             column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
         }
 
@@ -26,10 +26,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             IGridColumn gridColumn = column;
 
-            Object actual = gridColumn.Sort;
-            Object expected = column.Sort;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(column.Sort, gridColumn.Sort);
         }
 
         [Fact]
@@ -37,10 +34,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             IGridColumn<GridModel> gridColumn = column;
 
-            Object actual = gridColumn.Sort;
-            Object expected = column.Sort;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(column.Sort, gridColumn.Sort);
         }
 
         [Fact]
@@ -48,10 +42,7 @@ namespace NonFactors.Mvc.Grid.Tests
         {
             IGridColumn gridColumn = column;
 
-            Object actual = gridColumn.Filter;
-            Object expected = column.Filter;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(column.Filter, gridColumn.Filter);
         }
 
         [Fact]
@@ -117,12 +108,9 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_SetsExpressionValue()
         {
-            GridModel model = new GridModel { Name = "Testing name" };
+            GridModel model = new() { Name = "Testing name" };
 
-            Object? actual = column.ExpressionValue(model);
-            Object expected = "Testing name";
-
-            Assert.Same(expected, actual);
+            Assert.Equal("Testing name", column.ExpressionValue(model));
         }
 
         [Fact]
@@ -150,12 +138,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumn_SetsNameFromExpression()
         {
-            Expression<Func<GridModel, Boolean?>> expression = (model) => model.NIsChecked;
-
-            String actual = new GridColumn<GridModel, Boolean?>(column.Grid, expression).Name;
-            String expected = "NIsChecked";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("NIsChecked", new GridColumn<GridModel, Boolean?>(column.Grid, model => model.NIsChecked).Name);
         }
 
         [Fact]
@@ -231,7 +214,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void ValueFor_RenderValue_ThrowsNotNullReferenceException()
         {
-            column.RenderValue = (_, __) => Int32.Parse("Zero");
+            column.RenderValue = (_, _) => Int32.Parse("Zero");
 
             Assert.Throws<FormatException>(() => column.ValueFor(new GridRow<Object>(new GridModel(), 0)));
         }
@@ -243,31 +226,25 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_RenderValue_Html(String value, String format, Boolean isEncoded, String renderedValue)
+        public void ValueFor_RenderValue_Html(String? value, String? format, Boolean isEncoded, String renderedValue)
         {
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) }, 0);
+            GridRow<GridModel> row = new(new GridModel { Content = value == null ? null : new HtmlString(value) }, 0);
             column.RenderValue = (model, _) => model.Content;
             column.ExpressionValue = (_) => "";
             column.IsEncoded = isEncoded;
             column.Format = format;
 
-            String? actual = column.ValueFor(row).ToString();
-            String? expected = renderedValue;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(renderedValue, column.ValueFor(row).ToString());
         }
 
         [Fact]
         public void ValueFor_RenderValue_Index()
         {
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = "Test" }, 33);
+            GridRow<GridModel> row = new(new GridModel { Name = "Test" }, 33);
             column.RenderValue = (model, i) => model.Name + " " + i;
             column.ExpressionValue = (_) => "";
 
-            String? actual = column.ValueFor(row).ToString();
-            String? expected = "Test 33";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("Test 33", column.ValueFor(row).ToString());
         }
 
         [Theory]
@@ -277,17 +254,14 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_ExpressionValue_Html(String value, String format, Boolean isEncoded, String expressionValue)
+        public void ValueFor_ExpressionValue_Html(String? value, String? format, Boolean isEncoded, String expressionValue)
         {
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) }, 0);
+            GridRow<GridModel> row = new(new GridModel { Content = value == null ? null : new HtmlString(value) }, 0);
             column = new GridColumn<GridModel, Object?>(column.Grid, model => model.Content);
             column.IsEncoded = isEncoded;
             column.Format = format;
 
-            String? actual = column.ValueFor(row).ToString();
-            String? expected = expressionValue;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(expressionValue, column.ValueFor(row).ToString());
         }
 
         [Theory]
@@ -297,10 +271,10 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_RenderValue(String value, String format, Boolean isEncoded, String renderedValue)
+        public void ValueFor_RenderValue(String? value, String? format, Boolean isEncoded, String renderedValue)
         {
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value }, 33);
-            TextWriter writer = new StringWriter();
+            StringWriter writer = new();
+            GridRow<GridModel> row = new(new GridModel { Name = value }, 33);
 
             column.RenderValue = (model, _) => model.Name;
             column.ExpressionValue = (_) => "";
@@ -309,22 +283,16 @@ namespace NonFactors.Mvc.Grid.Tests
 
             column.ValueFor(row).WriteTo(writer, HtmlEncoder.Default);
 
-            String? actual = writer.ToString();
-            String? expected = renderedValue;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(renderedValue, writer.ToString());
         }
 
         [Fact]
         public void ValueFor_BadValue_EnumExpressionValue()
         {
-            GridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => model.Enum);
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = (TestEnum)2 }, 0);
+            GridColumn<GridModel, TestEnum> enumColumn = new(column.Grid, model => model.Enum);
+            GridRow<GridModel> row = new(new GridModel { Enum = (TestEnum)2 }, 0);
 
-            String? actual = enumColumn.ValueFor(row).ToString();
-            String? expected = "2";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("2", enumColumn.ValueFor(row).ToString());
         }
 
         [Theory]
@@ -332,13 +300,10 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(TestEnum.Second, "2nd")]
         public void ValueFor_NullableEnumExpressionValue(TestEnum value, String expressionValue)
         {
-            GridColumn<GridModel, TestEnum?> enumColumn = new GridColumn<GridModel, TestEnum?>(column.Grid, model => model.Enum);
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = value }, 0);
+            GridRow<GridModel> row = new(new GridModel { Enum = value }, 0);
+            GridColumn<GridModel, TestEnum?> enumColumn = new(column.Grid, model => model.Enum);
 
-            String? actual = enumColumn.ValueFor(row).ToString();
-            String? expected = expressionValue;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(expressionValue, enumColumn.ValueFor(row).ToString());
         }
 
         [Theory]
@@ -346,20 +311,17 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData(TestEnum.Second, "2nd")]
         public void ValueFor_EnumExpressionValue(TestEnum value, String expressionValue)
         {
-            GridColumn<GridModel, TestEnum> enumColumn = new GridColumn<GridModel, TestEnum>(column.Grid, model => model.Enum);
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Enum = value }, 0);
+            GridRow<GridModel> row = new(new GridModel { Enum = value }, 0);
+            GridColumn<GridModel, TestEnum> enumColumn = new(column.Grid, model => model.Enum);
 
-            String? actual = enumColumn.ValueFor(row).ToString();
-            String? expected = expressionValue;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(expressionValue, enumColumn.ValueFor(row).ToString());
         }
 
         [Fact]
         public void ValueFor_NullEnum()
         {
-            GridColumn<GridModel, TestEnum?> enumColumn = new GridColumn<GridModel, TestEnum?>(column.Grid, model => model.NEnum);
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel(), 0);
+            GridRow<GridModel> row = new(new GridModel(), 0);
+            GridColumn<GridModel, TestEnum?> enumColumn = new(column.Grid, model => model.NEnum);
 
             Assert.Empty(enumColumn.ValueFor(row).ToString());
         }
@@ -371,20 +333,17 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_ExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
+        public void ValueFor_ExpressionValue(String? value, String? format, Boolean isEncoded, String expressionValue)
         {
-            IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value }, 0);
-            TextWriter writer = new StringWriter();
+            StringWriter writer = new();
+            GridRow<GridModel> row = new(new GridModel { Name = value }, 0);
 
             column.IsEncoded = isEncoded;
             column.Format = format;
 
             column.ValueFor(row).WriteTo(writer, HtmlEncoder.Default);
 
-            String? expected = expressionValue;
-            String? actual = writer.ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(expressionValue, writer.ToString());
         }
     }
 }

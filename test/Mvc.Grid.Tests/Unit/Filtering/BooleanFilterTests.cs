@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections;
 using System.Linq;
@@ -11,8 +11,7 @@ namespace NonFactors.Mvc.Grid.Tests
     {
         private BooleanFilter filter;
         private IQueryable<GridModel> items;
-        private Expression<Func<GridModel, Boolean>> booleanExpression;
-        private Expression<Func<GridModel, Boolean?>> nBooleanExpression;
+        private Expression<Func<GridModel, Boolean>> expression;
 
         public BooleanFilterTests()
         {
@@ -24,8 +23,7 @@ namespace NonFactors.Mvc.Grid.Tests
             }.AsQueryable();
 
             filter = new BooleanFilter();
-            booleanExpression = (model) => model.IsChecked;
-            nBooleanExpression = (model) => model.NIsChecked;
+            expression = (model) => model.IsChecked;
         }
 
         [Fact]
@@ -34,7 +32,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = "Test";
             filter.Method = "equals";
 
-            Assert.Null(filter.Apply(booleanExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
 
         [Theory]
@@ -48,7 +46,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "equals";
 
-            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable actual = items.Where(model => model.NIsChecked, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked == isChecked);
 
             Assert.Equal(expected, actual);
@@ -60,7 +58,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = new[] { "", "false" };
 
-            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable actual = items.Where(model => model.NIsChecked, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked != true);
 
             Assert.Equal(expected, actual);
@@ -77,7 +75,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "equals";
 
-            IEnumerable actual = items.Where(booleanExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.IsChecked == isChecked);
 
             Assert.Equal(expected, actual);
@@ -90,7 +88,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = new[] { "true", "false" };
 
             IEnumerable expected = items;
-            IEnumerable actual = items.Where(booleanExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -106,7 +104,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable actual = items.Where(model => model.NIsChecked, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked != isChecked);
 
             Assert.Equal(expected, actual);
@@ -118,7 +116,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "not-equals";
             filter.Values = new[] { "", "false" };
 
-            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable actual = items.Where(model => model.NIsChecked, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked == true);
 
             Assert.Equal(expected, actual);
@@ -135,7 +133,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Values = value;
             filter.Method = "not-equals";
 
-            IEnumerable actual = items.Where(booleanExpression, filter);
+            IEnumerable actual = items.Where(expression, filter);
             IEnumerable expected = items.Where(model => model.IsChecked != isChecked);
 
             Assert.Equal(expected, actual);
@@ -147,7 +145,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "not-equals";
             filter.Values = new[] { "true", "false" };
 
-            Assert.Empty(items.Where(booleanExpression, filter));
+            Assert.Empty(items.Where(expression, filter));
         }
 
         [Fact]
@@ -156,7 +154,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = new[] { "", "test", "false" };
 
-            IEnumerable actual = items.Where(nBooleanExpression, filter);
+            IEnumerable actual = items.Where(model => model.NIsChecked, filter);
             IEnumerable expected = items.Where(model => model.NIsChecked != true);
 
             Assert.Equal(expected, actual);
@@ -168,7 +166,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "equals";
             filter.Values = StringValues.Empty;
 
-            Assert.Null(filter.Apply(booleanExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
 
         [Fact]
@@ -177,7 +175,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Method = "test";
             filter.Values = "false";
 
-            Assert.Null(filter.Apply(booleanExpression.Body));
+            Assert.Null(filter.Apply(expression.Body));
         }
     }
 }

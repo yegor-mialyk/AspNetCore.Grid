@@ -1,18 +1,14 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.Extensions.Primitives;
 using Xunit;
 
 namespace NonFactors.Mvc.Grid.Tests
 {
     public class GridEnumerableFilterTests
     {
-        private Expression<Func<GridModel, IEnumerable<String?>?>> nEnumerableExpression;
-        private Expression<Func<GridModel, List<String?>?>> nListExpression;
-        private Expression<Func<GridModel, String?[]?>> nArrayExpression;
         private IQueryable<GridModel> items;
 
         public GridEnumerableFilterTests()
@@ -30,28 +26,18 @@ namespace NonFactors.Mvc.Grid.Tests
                 model.NullableEnumerableField = model.NullableArrayField;
                 model.NullableListField = model.NullableArrayField?.ToList();
             }
-
-            nEnumerableExpression = (model) => model.NullableEnumerableField;
-            nArrayExpression = (model) => model.NullableArrayField;
-            nListExpression = (model) => model.NullableListField;
         }
 
         [Fact]
         public void Method_Set()
         {
-            String? actual = new EnumerableFilter<StringFilter> { Method = "test" }.Method;
-            String? expected = "test";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("test", new EnumerableFilter<StringFilter> { Method = "test" }.Method);
         }
 
         [Fact]
         public void Values_Set()
         {
-            StringValues actual = new EnumerableFilter<StringFilter> { Values = "test" }.Values;
-            StringValues expected = "test";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("test", new EnumerableFilter<StringFilter> { Values = "test" }.Values);
         }
 
         [Fact]
@@ -75,7 +61,7 @@ namespace NonFactors.Mvc.Grid.Tests
         public void Apply_NoAppliedFilter_ReturnsNull()
         {
             Expression<Func<GridModel, IEnumerable<String>>> expression = (_) => Enumerable.Empty<String>();
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Case = GridFilterCase.Original,
                 Values = new[] { "" },
@@ -88,7 +74,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_OnList()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "test", "33" },
                 Case = GridFilterCase.Original,
@@ -96,7 +82,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableListField!.Any(item => item == "test" || item == "33"));
-            IEnumerable actual = items.Where(nListExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableListField, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -104,7 +90,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_OnArray()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "test", "33" },
                 Case = GridFilterCase.Original,
@@ -112,7 +98,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item == "test" || item == "33"));
-            IEnumerable actual = items.Where(nArrayExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableArrayField, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -120,7 +106,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_OnEnumerable()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "test", "33" },
                 Case = GridFilterCase.Original,
@@ -128,7 +114,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableEnumerableField!.Any(item => item == "test" || item == "33"));
-            IEnumerable actual = items.Where(nEnumerableExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableEnumerableField, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -136,7 +122,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_UsingOriginalCaseFilter()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "test", "33" },
                 Case = GridFilterCase.Original,
@@ -144,7 +130,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item == "test" || item == "33"));
-            IEnumerable actual = items.Where(nListExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableListField, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -152,7 +138,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_UsingUpperCaseFilter()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "test", "33" },
                 Case = GridFilterCase.Upper,
@@ -160,7 +146,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableArrayField!.Any(item => item != null && item.ToUpper() == "TEST" || item == "33"));
-            IEnumerable actual = items.Where(nListExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableListField, filter);
 
             Assert.Equal(expected, actual);
         }
@@ -168,7 +154,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_UsingLowerCaseFilter()
         {
-            EnumerableFilter<StringFilter> filter = new EnumerableFilter<StringFilter>
+            EnumerableFilter<StringFilter> filter = new()
             {
                 Values = new[] { "TEST", "33" },
                 Case = GridFilterCase.Lower,
@@ -176,7 +162,7 @@ namespace NonFactors.Mvc.Grid.Tests
             };
 
             IEnumerable expected = items.Where(model => model.NullableArrayField != null && model.NullableArrayField.Any(item => item != null && item.ToLower() == "test" || item == "33"));
-            IEnumerable actual = items.Where(nListExpression, filter);
+            IEnumerable actual = items.Where(model => model.NullableListField, filter);
 
             Assert.Equal(expected, actual);
         }

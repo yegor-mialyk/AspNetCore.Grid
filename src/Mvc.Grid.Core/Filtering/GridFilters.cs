@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -127,30 +127,28 @@ namespace NonFactors.Mvc.Grid
 
         public virtual IGridFilter? Create(Type type, String method, StringValues values)
         {
-            if (Get(Nullable.GetUnderlyingType(type) ?? type, method) is Type filterType)
-            {
-                if (Activator.CreateInstance(filterType) is IGridFilter filter)
-                {
-                    filter.Method = method.ToLower();
-                    filter.Values = values;
+            if (Get(Nullable.GetUnderlyingType(type) ?? type, method) is not Type filterType)
+                return null;
 
-                    return filter;
-                }
-            }
+            if (Activator.CreateInstance(filterType) is not IGridFilter filter)
+                return null;
 
-            return null;
+            filter.Method = method.ToLower();
+            filter.Values = values;
+
+            return filter;
         }
         public virtual IEnumerable<SelectListItem> OptionsFor<T, TValue>(IGridColumn<T, TValue> column)
         {
-            Type? type = GetElementType(typeof(TValue)) ?? typeof(TValue);
-            List<SelectListItem> options = new List<SelectListItem>();
+            Type type = GetElementType(typeof(TValue)) ?? typeof(TValue);
             type = Nullable.GetUnderlyingType(type) ?? type;
+            List<SelectListItem> options = new();
 
             if (type == typeof(Boolean))
             {
-                options.Add(new SelectListItem { Value = "", Text = BooleanEmptyOptionText?.Invoke() });
-                options.Add(new SelectListItem { Value = "true", Text = BooleanTrueOptionText?.Invoke() });
-                options.Add(new SelectListItem { Value = "false", Text = BooleanFalseOptionText?.Invoke() });
+                options.Add(new SelectListItem { Value = "", Text = BooleanEmptyOptionText.Invoke() });
+                options.Add(new SelectListItem { Value = "true", Text = BooleanTrueOptionText.Invoke() });
+                options.Add(new SelectListItem { Value = "false", Text = BooleanFalseOptionText.Invoke() });
             }
             else if (type.IsEnum)
             {

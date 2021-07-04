@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using System;
@@ -16,8 +16,8 @@ namespace NonFactors.Mvc.Grid.Tests
 
         public GridColumnFilterTests()
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
-            GridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(grid, model => model.Name);
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
+            GridColumn<GridModel, String?> column = new(grid, model => model.Name);
 
             filter = new GridColumnFilter<GridModel, String?>(column) { IsEnabled = true };
 
@@ -79,10 +79,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
             filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
 
-            Object actual = filter.Options;
-            Object expected = options;
-
-            Assert.Same(expected, actual);
+            Assert.Same(options, filter.Options);
         }
 
         [Fact]
@@ -119,15 +116,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "name-op-and=and", null)]
         [InlineData("", "name-op=and&name-op=or", "and")]
         [InlineData("", "NAME-OP=AND&NAME-OP=OR", "and")]
-        [InlineData(null, "", null)]
-        [InlineData(null, "op", null)]
-        [InlineData(null, "name-op", "")]
-        [InlineData(null, "name-op=", "")]
-        [InlineData(null, "name-op=or", "or")]
-        [InlineData(null, "name-op=and", "and")]
-        [InlineData(null, "name-op-and=and", null)]
-        [InlineData(null, "name-op=and&name-op=or", "and")]
-        [InlineData(null, "NAME-OP=AND&NAME-OP=OR", "and")]
         [InlineData("grid", "", null)]
         [InlineData("grid", "name-op", null)]
         [InlineData("grid", "grid-name-op", "")]
@@ -137,16 +125,13 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("grid", "grid-name-op-and=and", null)]
         [InlineData("grid", "grid-name-op=and&grid-name-op=or", "and")]
         [InlineData("grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
-        public void Operator_Get_FromQuery(String name, String query, String op)
+        public void Operator_Get_FromQuery(String name, String query, String? op)
         {
             filter.Column.Grid.Name = name;
             filter.Type = GridFilterType.Double;
             filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
-            String? actual = filter.Operator;
-            String? expected = op;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(op, filter.Operator);
         }
 
         [Fact]
@@ -159,10 +144,7 @@ namespace NonFactors.Mvc.Grid.Tests
 
             filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
-            String? actual = filter.Operator;
-            String? expected = op;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(op, filter.Operator);
         }
 
         [Fact]
@@ -189,10 +171,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "name=a")]
         [InlineData("", "name-=a")]
         [InlineData("", "name-eq=a")]
-        [InlineData(null, "")]
-        [InlineData(null, "name=a")]
-        [InlineData(null, "name-=a")]
-        [InlineData(null, "name-eq=a")]
         [InlineData("grid", "")]
         [InlineData("grid", "grid-")]
         [InlineData("grid", "grid-name=a")]
@@ -226,13 +204,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "name-equals=a&name-equals=b", "a")]
         [InlineData("", "name-equals=a&name-contains=b&name-op=or", "a")]
         [InlineData("", "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
-        [InlineData(null, "name-equals=a&name-eq=b", "a")]
-        [InlineData(null, "name-equals=&name-equals=b", "")]
-        [InlineData(null, "name-equals=&name-contains=b", "")]
-        [InlineData(null, "name-equals=a&name-contains=b", "a")]
-        [InlineData(null, "name-equals=a&name-equals=b", "a")]
-        [InlineData(null, "name-equals=a&name-contains=b&name-op=or", "a")]
-        [InlineData(null, "NAME-EQUALS=A&NAME-CONTAINS=B&NAME-OP=OR", "A")]
         [InlineData("grid", "grid-name-equals=a&grid-name-eq=b", "a")]
         [InlineData("grid", "grid-name-equals=&grid-name-equals=b", "")]
         [InlineData("grid", "grid-name-equals=&grid-name-contains=b", "")]
@@ -254,7 +225,6 @@ namespace NonFactors.Mvc.Grid.Tests
 
         [Theory]
         [InlineData("", "name-equals=a&name-equals=b", "a,b")]
-        [InlineData(null, "name-equals=a&name-equals=b", "a,b")]
         [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
         public void First_Get_MultiFilter(String name, String query, String value)
         {
@@ -321,15 +291,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "name-equals=a&name=b")]
         [InlineData("", "name-equals=a&name-=b")]
         [InlineData("", "name-equals=a&name-eq=b")]
-        [InlineData(null, "")]
-        [InlineData(null, "name=a")]
-        [InlineData(null, "name-=a")]
-        [InlineData(null, "name-eq=a")]
-        [InlineData(null, "name-equals=a")]
-        [InlineData(null, "name-equals=a&")]
-        [InlineData(null, "name-equals=a&name=b")]
-        [InlineData(null, "name-equals=a&name-=b")]
-        [InlineData(null, "name-equals=a&name-eq=b")]
         [InlineData("grid", "")]
         [InlineData("grid", "grid-")]
         [InlineData("grid", "grid-name=a")]
@@ -357,13 +318,6 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("", "name-contains=a&name-equals=ba", "ba")]
         [InlineData("", "name-contains=a&name-equals=b&name-op=or", "b")]
         [InlineData("", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
-        [InlineData(null, "name-eq=a&name-equals=b", "b")]
-        [InlineData(null, "name-equals=a&name-equals=b", "b")]
-        [InlineData(null, "name-contains=a&name-equals=", "")]
-        [InlineData(null, "name-equals=a&name-equals=", "")]
-        [InlineData(null, "name-contains=a&name-equals=ba", "ba")]
-        [InlineData(null, "name-contains=a&name-equals=b&name-op=or", "b")]
-        [InlineData(null, "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
         [InlineData("grid", "grid-name-eq=a&grid-name-equals=b", "b")]
         [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "b")]
         [InlineData("grid", "grid-name-contains=a&grid-name-equals=", "")]
@@ -630,7 +584,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumnFilter_NotMemberExpression_IsNotEnabled()
         {
-            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(filter.Column.Grid, model => model.ToString());
+            GridColumn<GridModel, String?> column = new(filter.Column.Grid, model => model.ToString());
 
             Assert.False(new GridColumnFilter<GridModel, String?>(column).IsEnabled);
         }
@@ -638,7 +592,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void GridColumnFilter_MemberExpression_IsEnabledNull()
         {
-            IGridColumn<GridModel, String?> column = new GridColumn<GridModel, String?>(filter.Column.Grid, model => model.Name);
+            GridColumn<GridModel, String?> column = new(filter.Column.Grid, model => model.Name);
 
             Assert.Null(new GridColumnFilter<GridModel, String?>(column).IsEnabled);
         }
@@ -652,10 +606,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.Type = GridFilterType.Double;
             filter.First = new StringFilter { Values = "A" };
 
-            Object actual = filter.Apply(items);
-            Object expected = items;
-
-            Assert.Same(expected, actual);
+            Assert.Equal(items, filter.Apply(items));
         }
 
         [Fact]
@@ -666,10 +617,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.IsEnabled = true;
             filter.Type = GridFilterType.Double;
 
-            Object expected = items;
-            Object actual = filter.Apply(items);
-
-            Assert.Same(expected, actual);
+            Assert.Equal(items, filter.Apply(items));
         }
 
         [Fact]
@@ -680,10 +628,7 @@ namespace NonFactors.Mvc.Grid.Tests
             filter.First = Substitute.For<IGridFilter>();
             filter.Second = Substitute.For<IGridFilter>();
 
-            Object expected = items;
-            Object actual = filter.Apply(items);
-
-            Assert.Same(expected, actual);
+            Assert.Equal(items, filter.Apply(items));
         }
 
         [Theory]
@@ -722,7 +667,7 @@ namespace NonFactors.Mvc.Grid.Tests
         [InlineData("")]
         [InlineData(null)]
         [InlineData("xor")]
-        public void Apply_InvalidOperator_FirstFilter(String op)
+        public void Apply_InvalidOperator_FirstFilter(String? op)
         {
             filter.Operator = op;
             filter.Type = GridFilterType.Double;
@@ -752,8 +697,8 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Apply_FiltersByExpressions()
         {
-            GridColumn<GridModel, Int32?> testColumn = new GridColumn<GridModel, Int32?>(new Grid<GridModel>(Array.Empty<GridModel>()), model => model.NSum);
-            GridColumnFilter<GridModel, Int32?> testFilter = new GridColumnFilter<GridModel, Int32?>(testColumn)
+            GridColumn<GridModel, Int32?> testColumn = new(new Grid<GridModel>(Array.Empty<GridModel>()), model => model.NSum);
+            GridColumnFilter<GridModel, Int32?> testFilter = new(testColumn)
             {
                 Second = new NumberFilter<Int32> { Method = "greater-than", Values = "25" },
                 First = new NumberFilter<Int32> { Method = "equals", Values = "10" },
@@ -770,12 +715,9 @@ namespace NonFactors.Mvc.Grid.Tests
 
         private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
         {
-            Grid<GridModel> grid = new Grid<GridModel>(Array.Empty<GridModel>());
+            Grid<GridModel> grid = new(Array.Empty<GridModel>());
 
-            String actual = new GridColumnFilter<GridModel, TValue>(new GridColumn<GridModel, TValue>(grid, property)).Name;
-            String expected = name;
-
-            Assert.Equal(expected, actual);
+            Assert.Equal(name, new GridColumnFilter<GridModel, TValue>(new GridColumn<GridModel, TValue>(grid, property)).Name);
         }
     }
 }

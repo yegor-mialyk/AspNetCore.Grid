@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace NonFactors.Mvc.Grid
         {
             if (String.IsNullOrEmpty(column.Filter.DefaultMethod))
                 column.Filter.DefaultMethod = "equals";
+
             column.Filter.IsEnabled ??= true;
 
             column.Filter.Options = options ?? new[] { new SelectListItem() }
@@ -115,13 +116,13 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> AppendCss<T, TValue>(this IGridColumn<T, TValue> column, String css)
         {
-            column.CssClasses = (column.CssClasses + " " + css?.Trim()).Trim();
+            column.CssClasses = (column.CssClasses + " " + css.Trim()).Trim();
 
             return column;
         }
         public static IGridColumn<T, TValue> Titled<T, TValue>(this IGridColumn<T, TValue> column, Object title)
         {
-            column.Title = title ?? "";
+            column.Title = title;
 
             return column;
         }
@@ -133,7 +134,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String css)
         {
-            column.CssClasses = css?.Trim() ?? "";
+            column.CssClasses = css.Trim();
 
             return column;
         }
@@ -146,8 +147,8 @@ namespace NonFactors.Mvc.Grid
         }
         public static GridHtmlAttributes AsAttributes(this IGridColumn column)
         {
+            GridHtmlAttributes attributes = new();
             String classes = column.CssClasses;
-            GridHtmlAttributes attributes = new GridHtmlAttributes();
 
             attributes["class"] = classes;
 

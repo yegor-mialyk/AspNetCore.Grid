@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
@@ -22,35 +22,28 @@ namespace NonFactors.Mvc.Grid
 
         public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterType? type = null)
         {
-            foreach (IGridColumn column in html.Grid.Columns)
+            foreach (IGridColumn<T> column in html.Grid.Columns)
             {
-                if (column.Filter.IsEnabled == null)
-                    column.Filter.IsEnabled = true;
-
-                if (column.Filter.Type == null)
-                    column.Filter.Type = type;
+                column.Filter.IsEnabled ??= true;
+                column.Filter.Type ??= type;
             }
 
             return html;
         }
         public static IHtmlGrid<T> Filterable<T>(this IHtmlGrid<T> html, GridFilterCase filterCase)
         {
-            foreach (IGridColumn column in html.Grid.Columns)
+            foreach (IGridColumn<T> column in html.Grid.Columns)
             {
-                if (column.Filter.IsEnabled == null)
-                    column.Filter.IsEnabled = true;
-
-                if (column.Filter.Case == null)
-                    column.Filter.Case = filterCase;
+                column.Filter.Case ??= filterCase;
+                column.Filter.IsEnabled ??= true;
             }
 
             return html;
         }
         public static IHtmlGrid<T> Sortable<T>(this IHtmlGrid<T> html)
         {
-            foreach (IGridColumn column in html.Grid.Columns)
-                if (column.Sort.IsEnabled == null)
-                    column.Sort.IsEnabled = true;
+            foreach (IGridColumn<T> column in html.Grid.Columns)
+                column.Sort.IsEnabled ??= true;
 
             return html;
         }
@@ -63,23 +56,23 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Attributed<T>(this IHtmlGrid<T> html, Object htmlAttributes)
         {
-            foreach (KeyValuePair<String, Object> attribute in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))
-                html.Grid.Attributes[attribute.Key] = attribute.Value;
+            foreach ((String key, Object? value) in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))
+                html.Grid.Attributes[key] = value;
 
             return html;
         }
         public static IHtmlGrid<T> AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
         {
             if (html.Grid.Attributes.ContainsKey("class"))
-                html.Grid.Attributes["class"] = (html.Grid.Attributes["class"] + " " + cssClasses?.TrimStart()).Trim();
+                html.Grid.Attributes["class"] = (html.Grid.Attributes["class"] + " " + cssClasses.TrimStart()).Trim();
             else
-                html.Grid.Attributes["class"] = cssClasses?.Trim();
+                html.Grid.Attributes["class"] = cssClasses.Trim();
 
             return html;
         }
         public static IHtmlGrid<T> Empty<T>(this IHtmlGrid<T> html, IHtmlContent content)
         {
-            using StringWriter writer = new StringWriter();
+            using StringWriter writer = new();
 
             content.WriteTo(writer, NullHtmlEncoder.Default);
             html.Grid.EmptyText = writer.ToString();
@@ -88,7 +81,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String cssClasses)
         {
-            html.Grid.Attributes["class"] = cssClasses?.Trim();
+            html.Grid.Attributes["class"] = cssClasses.Trim();
 
             return html;
         }
@@ -158,7 +151,7 @@ namespace NonFactors.Mvc.Grid
             html.Grid.Columns.Clear();
 
             foreach (GridColumnConfig config in grid.Columns)
-                if (columns.Find(column => String.Equals(column.Name, config.Name, StringComparison.OrdinalIgnoreCase)) is IGridColumn<T> column)
+                if (columns.Find(col => String.Equals(col.Name, config.Name, StringComparison.OrdinalIgnoreCase)) is IGridColumn<T> column)
                 {
                     columns.Remove(column);
                     html.Grid.Columns.Add(column);

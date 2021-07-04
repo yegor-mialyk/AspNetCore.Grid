@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -60,46 +60,33 @@ namespace NonFactors.Mvc.Grid.Tests
         [Fact]
         public void Grid_PartialViewName_CreatesGridWithPartialViewName()
         {
-            String actual = html.Grid("_Partial", Array.Empty<GridModel>()).PartialViewName;
-            String expected = "_Partial";
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("_Partial", html.Grid("_Partial", Array.Empty<GridModel>()).PartialViewName);
         }
 
         [Fact]
         public void AjaxGrid_Div()
         {
-            StringWriter writer = new StringWriter();
+            StringWriter writer = new();
 
             html.AjaxGrid("DataSource").WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = "<div class=\"mvc-grid\" data-url=\"DataSource\"></div>";
-            String actual = writer.GetStringBuilder().ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("<div class=\"mvc-grid\" data-url=\"DataSource\"></div>", writer.ToString());
         }
 
         [Fact]
         public void AjaxGrid_AttributedDiv()
         {
-            StringWriter writer = new StringWriter();
+            StringWriter writer = new();
 
             html.AjaxGrid("DataSource", new { @class = "classy", data_url = "Test", data_id = 1 }).WriteTo(writer, HtmlEncoder.Default);
 
-            String expected = "<div class=\"mvc-grid classy\" data-id=\"1\" data-url=\"DataSource\"></div>";
-            String actual = writer.GetStringBuilder().ToString();
-
-            Assert.Equal(expected, actual);
+            Assert.Equal("<div class=\"mvc-grid classy\" data-id=\"1\" data-url=\"DataSource\"></div>", writer.ToString());
         }
 
         [Fact]
         public void AddMvcGrid_FiltersInstance()
         {
-            IServiceCollection services = new ServiceCollection();
-
-            services.AddMvcGrid();
-
-            ServiceDescriptor actual = services.Single();
+            ServiceDescriptor actual = new ServiceCollection().AddMvcGrid().Single();
 
             Assert.Equal(typeof(IGridFilters), actual.ServiceType);
             Assert.IsType<GridFilters>(actual.ImplementationInstance);
@@ -109,11 +96,8 @@ namespace NonFactors.Mvc.Grid.Tests
         public void AddMvcGrid_ConfiguresFiltersInstance()
         {
             Action<GridFilters> configure = Substitute.For<Action<GridFilters>>();
-            IServiceCollection services = new ServiceCollection();
 
-            services.AddMvcGrid(configure);
-
-            ServiceDescriptor actual = services.Single();
+            ServiceDescriptor actual = new ServiceCollection().AddMvcGrid(configure).Single();
 
             configure.Received()((GridFilters)actual.ImplementationInstance!);
         }
