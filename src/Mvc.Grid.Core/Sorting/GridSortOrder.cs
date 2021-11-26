@@ -1,8 +1,7 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridSortOrder
 {
-    public enum GridSortOrder
-    {
-        Asc,
-        Desc
-    }
+    Asc,
+    Desc
 }

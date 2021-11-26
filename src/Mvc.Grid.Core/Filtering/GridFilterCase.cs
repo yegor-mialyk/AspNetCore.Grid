@@ -1,9 +1,8 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridFilterCase
 {
-    public enum GridFilterCase
-    {
-        Original,
-        Upper,
-        Lower
-    }
+    Original,
+    Upper,
+    Lower
 }

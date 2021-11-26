@@ -1,9 +1,8 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridFilterType
 {
-    public enum GridFilterType
-    {
-        Single,
-        Double,
-        Multi
-    }
+    Single,
+    Double,
+    Multi
 }

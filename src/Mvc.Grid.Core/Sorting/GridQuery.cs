@@ -1,36 +1,31 @@
-using System;
-using System.Linq;
-using System.Linq.Expressions;
+namespace NonFactors.Mvc.Grid;
 
-namespace NonFactors.Mvc.Grid
+public sealed class GridQuery : ExpressionVisitor
 {
-    public sealed class GridQuery : ExpressionVisitor
+    private Boolean Ordered { get; set; }
+
+    private GridQuery()
     {
-        private Boolean Ordered { get; set; }
+    }
 
-        private GridQuery()
+    public static Boolean IsOrdered(IQueryable models)
+    {
+        GridQuery expression = new();
+        expression.Visit(models.Expression);
+
+        return expression.Ordered;
+    }
+
+    protected override Expression VisitMethodCall(MethodCallExpression node)
+    {
+        if (node.Method.DeclaringType == typeof(Queryable) &&
+            node.Method.Name is nameof(Queryable.OrderBy) or nameof(Queryable.OrderByDescending))
         {
+            Ordered = true;
+
+            return node;
         }
 
-        public static Boolean IsOrdered(IQueryable models)
-        {
-            GridQuery expression = new();
-            expression.Visit(models.Expression);
-
-            return expression.Ordered;
-        }
-
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
-            if (node.Method.DeclaringType == typeof(Queryable) &&
-                node.Method.Name is nameof(Queryable.OrderBy) or nameof(Queryable.OrderByDescending))
-            {
-                Ordered = true;
-
-                return node;
-            }
-
-            return base.VisitMethodCall(node);
-        }
+        return base.VisitMethodCall(node);
     }
 }

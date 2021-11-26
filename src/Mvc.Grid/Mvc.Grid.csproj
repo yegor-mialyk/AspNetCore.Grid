@@ -4,13 +4,20 @@
     <Version>7.0.0</Version>
     <Nullable>enable</Nullable>
     <Company>NonFactors</Company>
-    <PackageId>NonFactors.Grid.Mvc6</PackageId>
-    <GenerateFullPaths>true</GenerateFullPaths>
+    <Deterministic>true</Deterministic>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net6.0</TargetFramework>
     <Copyright>Copyright © NonFactors</Copyright>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType Condition="'$(Configuration)'=='Release'">none</DebugType>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <SourceRoot Remove="$(NugetPackageRoot)" />
+    <SourceRoot Include="$(ProjectDir)" />
+  </ItemGroup>
 
 </Project>

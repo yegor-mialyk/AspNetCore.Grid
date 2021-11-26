@@ -1,27 +1,24 @@
 using Microsoft.AspNetCore.Html;
-using System;
-using System.IO;
 using System.Text.Encodings.Web;
 
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public class GridHtmlString : IHtmlContent
 {
-    public class GridHtmlString : IHtmlContent
+    private String Value { get; }
+
+    public GridHtmlString(String? value)
     {
-        private String Value { get; }
+        Value = value ?? "";
+    }
 
-        public GridHtmlString(String? value)
-        {
-            Value = value ?? "";
-        }
+    public void WriteTo(TextWriter writer, HtmlEncoder? encoder)
+    {
+        writer.Write(encoder?.Encode(Value) ?? Value);
+    }
 
-        public void WriteTo(TextWriter writer, HtmlEncoder? encoder)
-        {
-            writer.Write(encoder?.Encode(Value) ?? Value);
-        }
-
-        public override String ToString()
-        {
-            return Value;
-        }
+    public override String ToString()
+    {
+        return Value;
     }
 }

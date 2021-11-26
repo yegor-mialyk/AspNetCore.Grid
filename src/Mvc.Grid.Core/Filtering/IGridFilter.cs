@@ -1,15 +1,12 @@
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Linq.Expressions;
 
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public interface IGridFilter
 {
-    public interface IGridFilter
-    {
-        String? Method { get; set; }
-        StringValues Values { get; set; }
-        GridFilterCase Case { get; set; }
+    String? Method { get; set; }
+    StringValues Values { get; set; }
+    GridFilterCase Case { get; set; }
 
-        Expression? Apply(Expression expression);
-    }
+    Expression? Apply(Expression expression);
 }

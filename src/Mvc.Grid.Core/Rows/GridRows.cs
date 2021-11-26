@@ -1,51 +1,47 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public class GridRows<T> : IGridRowsOf<T>
 {
-    public class GridRows<T> : IGridRowsOf<T>
+    public IGrid<T> Grid { get; set; }
+
+    public Func<T, Object>? Attributes { get; set; }
+
+    private IEnumerable<IGridRow<T>>? Cache { get; set; }
+
+    public GridRows(IGrid<T> grid)
     {
-        public IGrid<T> Grid { get; set; }
+        Grid = grid;
+    }
 
-        public Func<T, Object>? Attributes { get; set; }
-
-        private IEnumerable<IGridRow<T>>? Cache { get; set; }
-
-        public GridRows(IGrid<T> grid)
+    public virtual IEnumerator<IGridRow<T>> GetEnumerator()
+    {
+        if (Cache == null)
         {
-            Grid = grid;
-        }
+            IQueryable<T> items = Grid.Source;
 
-        public virtual IEnumerator<IGridRow<T>> GetEnumerator()
-        {
-            if (Cache == null)
+            if (Grid.Mode == GridProcessingMode.Automatic)
             {
-                IQueryable<T> items = Grid.Source;
+                foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Pre))
+                    items = processor.Process(items);
 
-                if (Grid.Mode == GridProcessingMode.Automatic)
-                {
-                    foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Pre))
-                        items = processor.Process(items);
-
-                    foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Post))
-                        items = processor.Process(items);
-                }
-
-                Cache = items
-                    .ToList()
-                    .Select((model, index) => new GridRow<T>(model, index)
-                    {
-                        Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))
-                    });
+                foreach (IGridProcessor<T> processor in Grid.Processors.Where(proc => proc.ProcessorType == GridProcessorType.Post))
+                    items = processor.Process(items);
             }
 
-            return Cache.GetEnumerator();
+            Cache = items
+                .ToList()
+                .Select((model, index) => new GridRow<T>(model, index)
+                {
+                    Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))
+                });
         }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+
+        return Cache.GetEnumerator();
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

@@ -1,9 +1,8 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridFilterMode
 {
-    public enum GridFilterMode
-    {
-        Row,
-        Excel,
-        Header
-    }
+    Row,
+    Excel,
+    Header
 }

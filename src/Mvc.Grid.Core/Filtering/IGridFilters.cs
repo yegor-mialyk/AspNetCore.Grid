@@ -1,20 +1,17 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
 
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public interface IGridFilters
 {
-    public interface IGridFilters
-    {
-        Func<String> BooleanTrueOptionText { get; set; }
-        Func<String> BooleanFalseOptionText { get; set; }
-        Func<String> BooleanEmptyOptionText { get; set; }
+    Func<String> BooleanTrueOptionText { get; set; }
+    Func<String> BooleanFalseOptionText { get; set; }
+    Func<String> BooleanEmptyOptionText { get; set; }
 
-        IGridFilter? Create(Type type, String method, StringValues values);
-        IEnumerable<SelectListItem> OptionsFor<T, TValue>(IGridColumn<T, TValue> column);
+    IGridFilter? Create(Type type, String method, StringValues values);
+    IEnumerable<SelectListItem> OptionsFor<T, TValue>(IGridColumn<T, TValue> column);
 
-        void Register(Type type, String method, Type filter);
-        void Unregister(Type type, String method);
-    }
+    void Register(Type type, String method, Type filter);
+    void Unregister(Type type, String method);
 }

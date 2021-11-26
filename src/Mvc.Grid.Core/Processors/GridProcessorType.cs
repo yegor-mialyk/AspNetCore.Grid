@@ -1,8 +1,7 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridProcessorType
 {
-    public enum GridProcessorType
-    {
-        Pre,
-        Post
-    }
+    Pre,
+    Post
 }

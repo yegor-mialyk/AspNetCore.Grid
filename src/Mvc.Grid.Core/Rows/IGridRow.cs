@@ -1,12 +1,9 @@
-using System;
+namespace NonFactors.Mvc.Grid;
 
-namespace NonFactors.Mvc.Grid
+public interface IGridRow<out T>
 {
-    public interface IGridRow<out T>
-    {
-        T Model { get; }
-        Int32 Index { get; }
+    T Model { get; }
+    Int32 Index { get; }
 
-        GridHtmlAttributes? Attributes { get; set; }
-    }
+    GridHtmlAttributes? Attributes { get; set; }
 }

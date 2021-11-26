@@ -1,16 +1,13 @@
-using Xunit;
+namespace NonFactors.Mvc.Grid;
 
-namespace NonFactors.Mvc.Grid
+public class GridColumnConfigTests
 {
-    public class GridColumnConfigTests
+    [Fact]
+    public void GridColumnConfig_Defaults()
     {
-        [Fact]
-        public void GridColumnConfig_Defaults()
-        {
-            GridColumnConfig actual = new();
+        GridColumnConfig actual = new();
 
-            Assert.False(actual.Hidden);
-            Assert.Empty(actual.Name);
-        }
+        Assert.False(actual.Hidden);
+        Assert.Empty(actual.Name);
     }
 }

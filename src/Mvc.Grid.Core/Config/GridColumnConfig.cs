@@ -1,15 +1,12 @@
-using System;
+namespace NonFactors.Mvc.Grid;
 
-namespace NonFactors.Mvc.Grid
+public class GridColumnConfig
 {
-    public class GridColumnConfig
-    {
-        public String Name { get; set; }
-        public Boolean Hidden { get; set; }
+    public String Name { get; set; }
+    public Boolean Hidden { get; set; }
 
-        public GridColumnConfig()
-        {
-            Name = "";
-        }
+    public GridColumnConfig()
+    {
+        Name = "";
     }
 }

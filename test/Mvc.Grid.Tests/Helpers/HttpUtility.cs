@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
 
-namespace NonFactors.Mvc.Grid.Tests
+namespace NonFactors.Mvc.Grid;
+
+public static class HttpUtility
 {
-    public static class HttpUtility
+    public static IQueryCollection ParseQueryString(String query)
     {
-        public static IQueryCollection ParseQueryString(String query)
-        {
-            return new QueryCollection(QueryHelpers.ParseQuery(query));
-        }
+        return new QueryCollection(QueryHelpers.ParseQuery(query));
     }
 }

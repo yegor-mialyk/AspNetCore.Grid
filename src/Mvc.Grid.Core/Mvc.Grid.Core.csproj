@@ -4,18 +4,31 @@
     <Version>7.0.0</Version>
     <Nullable>enable</Nullable>
     <Company>NonFactors</Company>
-    <LangVersion>9.0</LangVersion>
-    <GenerateFullPaths>true</GenerateFullPaths>
+    <Deterministic>true</Deterministic>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net6.0</TargetFramework>
     <Copyright>Copyright © NonFactors</Copyright>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <PackageId>NonFactors.Grid.Core.Mvc6</PackageId>
-    <RootNamespace>NonFactors.Mvc.Grid</RootNamespace>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType Condition="'$(Configuration)'=='Release'">none</DebugType>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.1.1" PrivateAssets="All" Condition="'$(Configuration)'=='Release'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Reflection" />
+    <Using Include="System.ComponentModel" />
+    <Using Include="System.Linq.Expressions" />
+    <Using Include="System.Text.RegularExpressions" />
+    <Using Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 
 </Project>

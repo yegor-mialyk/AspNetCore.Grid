@@ -1,11 +1,8 @@
-using System;
+namespace NonFactors.Mvc.Grid;
 
-namespace NonFactors.Mvc.Grid
+public interface IGridSort<T> : IGridProcessor<T>
 {
-    public interface IGridSort<T> : IGridProcessor<T>
-    {
-        IGrid<T> Grid { get; set; }
+    IGrid<T> Grid { get; set; }
 
-        (Int32 Index, GridSortOrder Order)? this[IGridColumn<T> column] { get; }
-    }
+    (Int32 Index, GridSortOrder Order)? this[IGridColumn<T> column] { get; }
 }

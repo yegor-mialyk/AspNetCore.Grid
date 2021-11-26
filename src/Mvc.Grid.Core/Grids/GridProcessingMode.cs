@@ -1,8 +1,7 @@
-namespace NonFactors.Mvc.Grid
+namespace NonFactors.Mvc.Grid;
+
+public enum GridProcessingMode
 {
-    public enum GridProcessingMode
-    {
-        Automatic,
-        Manual
-    }
+    Automatic,
+    Manual
 }
