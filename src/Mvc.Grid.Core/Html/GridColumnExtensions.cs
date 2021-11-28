@@ -123,6 +123,18 @@ public static class GridColumnExtensions
 
         return column;
     }
+    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, String width)
+    {
+        column.Style = $"width: {width.Split(';').First()}";
+
+        return column;
+    }
+    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, Int32 width)
+    {
+        column.Style = $"width: {width.ToString(CultureInfo.InvariantCulture)}px";
+
+        return column;
+    }
     public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
     {
         column.Name = name;
@@ -151,6 +163,9 @@ public static class GridColumnExtensions
 
         if (!String.IsNullOrEmpty(column.Name))
             attributes["data-name"] = column.Name;
+
+        if (!String.IsNullOrEmpty(column.Style))
+            attributes["style"] = column.Style;
 
         if (column.Filter.IsEnabled == true)
         {

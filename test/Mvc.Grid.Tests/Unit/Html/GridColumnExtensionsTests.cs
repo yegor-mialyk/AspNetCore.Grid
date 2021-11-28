@@ -424,6 +424,35 @@ public class GridColumnExtensionsTests
     }
 
     [Fact]
+    public void Width_SetsInvariantStyle()
+    {
+        CultureInfo.CurrentCulture = new CultureInfo("sv");
+        CultureInfo.CurrentUICulture = new CultureInfo("sv");
+
+        Assert.Equal("width: -50px", column.Width(-50).Style);
+    }
+
+    [Fact]
+    public void Width_ReturnsColumn()
+    {
+        Assert.Same(column, column.Width(10));
+    }
+
+    [Theory]
+    [InlineData("100%", "width: 100%")]
+    [InlineData("100em;color: blue", "width: 100em")]
+    public void Width_SetsStyle(String width, String style)
+    {
+        Assert.Equal(style, column.Width(width).Style);
+    }
+
+    [Fact]
+    public void Width_Style_ReturnsColumn()
+    {
+        Assert.Same(column, column.Width("50%"));
+    }
+
+    [Fact]
     public void Named_SetsName()
     {
         Assert.Equal("Test", column.Named("Test").Name);

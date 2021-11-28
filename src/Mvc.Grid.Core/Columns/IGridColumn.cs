@@ -5,6 +5,7 @@ namespace NonFactors.Mvc.Grid;
 public interface IGridColumn
 {
     String Name { get; set; }
+    String Style { get; set; }
     Object Title { get; set; }
     String? Format { get; set; }
     Boolean IsHidden { get; set; }

@@ -7,6 +7,7 @@ public class GridColumn<T, TValue> : IGridColumn<T, TValue> where T : class
     public IGrid<T> Grid { get; set; }
 
     public String Name { get; set; }
+    public String Style { get; set; }
     public Object Title { get; set; }
     public String? Format { get; set; }
     public Boolean IsHidden { get; set; }
@@ -28,6 +29,7 @@ public class GridColumn<T, TValue> : IGridColumn<T, TValue> where T : class
 
     public GridColumn(IGrid<T> grid, Expression<Func<T, TValue>> expression)
     {
+        Style = "";
         Grid = grid;
         CssClasses = "";
         IsEncoded = true;

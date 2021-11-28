@@ -31,6 +31,7 @@
     <Using Include="Xunit" />
     <Using Include="NSubstitute" />
     <Using Include="System.Reflection" />
+    <Using Include="System.Globalization" />
     <Using Include="System.Linq.Expressions" />
     <Using Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
