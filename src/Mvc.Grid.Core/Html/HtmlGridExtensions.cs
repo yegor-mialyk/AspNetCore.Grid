@@ -152,6 +152,7 @@ public static class HtmlGridExtensions
                 columns.Remove(column);
                 html.Grid.Columns.Add(column);
                 column.IsHidden = config.Hidden;
+                column.Style = String.IsNullOrWhiteSpace(config.Width) ? column.Style : $"width: {config.Width.Split(";")[0]}";
             }
 
         foreach (IGridColumn<T> column in columns)

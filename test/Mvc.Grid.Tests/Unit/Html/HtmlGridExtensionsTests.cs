@@ -453,6 +453,32 @@ public class HtmlGridExtensionsTests
     }
 
     [Fact]
+    public void Configure_ColumnWidth()
+    {
+        htmlGrid.Grid.Columns.Clear();
+        IGridColumn<GridModel> empty = htmlGrid.Grid.Columns.Add(_ => "");
+        IGridColumn<GridModel> sum = htmlGrid.Grid.Columns.Add(model => model.Sum);
+        IGridColumn<GridModel> name = htmlGrid.Grid.Columns.Add(model => model.Name);
+        IGridColumn<GridModel> date = htmlGrid.Grid.Columns.Add(model => model.Date).Hidden();
+
+        htmlGrid.Configure(new GridConfig
+        {
+            Name = "Test",
+            Columns = new[]
+            {
+                new GridColumnConfig { Name = sum.Name, Width = "50%" },
+                new GridColumnConfig { Name = date.Name, Width = "30px" },
+                new GridColumnConfig { Name = name.Name, Width = "10%; color: red" }
+            }
+        });
+
+        Assert.Equal("width: 30px", date.Style);
+        Assert.Equal("width: 10%", name.Style);
+        Assert.Equal("width: 50%", sum.Style);
+        Assert.Empty(empty.Style);
+    }
+
+    [Fact]
     public void Configure_ColumnVisibility()
     {
         htmlGrid.Grid.Columns.Clear();

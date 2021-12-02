@@ -125,7 +125,7 @@ public static class GridColumnExtensions
     }
     public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, String width)
     {
-        column.Style = $"width: {width.Split(';').First()}";
+        column.Style = $"width: {width.Split(';')[0]}";
 
         return column;
     }

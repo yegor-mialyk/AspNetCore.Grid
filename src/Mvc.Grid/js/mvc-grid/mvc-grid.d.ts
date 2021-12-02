@@ -25,6 +25,7 @@ export interface MvcGridConfiguration {
     name: string;
     columns: {
         name: string;
+        width: string;
         hidden: boolean;
     }[];
 }

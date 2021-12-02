@@ -440,7 +440,7 @@ public class GridColumnExtensionsTests
 
     [Theory]
     [InlineData("100%", "width: 100%")]
-    [InlineData("100em;color: blue", "width: 100em")]
+    [InlineData("100em; color: blue", "width: 100em")]
     public void Width_SetsStyle(String width, String style)
     {
         Assert.Equal(style, column.Width(width).Style);

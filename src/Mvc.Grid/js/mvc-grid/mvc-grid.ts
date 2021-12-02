@@ -28,6 +28,7 @@ export interface MvcGridConfiguration {
     name: string;
     columns: {
         name: string;
+        width: string;
         hidden: boolean;
     }[];
 }
@@ -179,7 +180,11 @@ export class MvcGrid {
     public getConfiguration() {
         return {
             name: this.name,
-            columns: this.columns.map(column => ({ name: column.name, hidden: column.isHidden }))
+            columns: this.columns.map(column => ({
+                name: column.name,
+                hidden: column.isHidden,
+                width: column.header.style.width
+            }))
         } as MvcGridConfiguration;
     }
     public configure(configuration: MvcGridConfiguration) {
@@ -189,6 +194,10 @@ export class MvcGrid {
 
             if (i >= 0) {
                 this.columns[i].isHidden = column.hidden;
+
+                if (column.width.trim()) {
+                    this.columns[i].header.style.width = column.width.split(";", 2)[0];
+                }
 
                 for (const tr of rows) {
                     if (column.hidden) {
