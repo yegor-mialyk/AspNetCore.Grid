@@ -31,6 +31,16 @@ public class GridPagerTests
         Assert.Equal(pager.TotalPages, pages);
     }
 
+    [Fact]
+    public void CurrentPage_NullQuery()
+    {
+        pager.TotalRows = 100;
+        pager.CurrentPage = 3;
+        pager.Grid.Query = null;
+
+        Assert.Equal(3, pager.CurrentPage);
+    }
+
     [Theory]
     [InlineData("", "")]
     [InlineData("", "grid-page=")]
@@ -98,6 +108,17 @@ public class GridPagerTests
         pager.TotalRows = 4 * pager.RowsPerPage;
 
         Assert.Equal(2, pager.CurrentPage);
+    }
+
+    [Fact]
+    public void RowsPerPage_NullQuery()
+    {
+        pager.RowsPerPage = 3;
+        pager.Grid.Query = null;
+        pager.PageSizes.Clear();
+        pager.ShowPageSizes = true;
+
+        Assert.Equal(3, pager.RowsPerPage);
     }
 
     [Theory]
@@ -308,11 +329,19 @@ public class GridPagerTests
     [Fact]
     public void Process_ReturnsPagedItems()
     {
-        IQueryable<GridModel> items = new[] { new GridModel(), new GridModel(), new GridModel() }.AsQueryable().OrderBy(_ => 0);
-        pager.RowsPerPage = 1;
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = "test", Sum = 5 },
+            new GridModel { Name = "test", Sum = 2 },
+            new GridModel { Name = "another", Sum = 3 },
+            new GridModel { Name = "testing", Sum = 5 },
+            new GridModel { Name = "nothing", Sum = 2 },
+            new GridModel { Name = "nothing", Sum = 9 }
+        }.AsQueryable().OrderBy(model => model.Name).ThenBy(model => model.Sum);
+        pager.RowsPerPage = 2;
         pager.CurrentPage = 2;
 
-        IEnumerable expected = items.Skip(1).Take(1);
+        IEnumerable expected = items.Skip(2).Take(2);
         IEnumerable actual = pager.Process(items);
 
         Assert.Equal(expected, actual);

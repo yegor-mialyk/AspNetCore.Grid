@@ -57,6 +57,7 @@ public class GridModel
 
     public String?[]? NullableArrayField { get; set; }
     public List<String?>? NullableListField { get; set; }
+    public GridColumn<String, Int32>? GridColumnField { get; set; }
     public IEnumerable<String?>? NullableEnumerableField { get; set; }
 
     public String? StringField { get; set; }
@@ -70,5 +71,10 @@ public enum TestEnum
     First,
 
     [Display(Name = "2nd")]
-    Second
+    Second,
+
+    [Display(Name = null)]
+    Third,
+
+    Fourth
 }

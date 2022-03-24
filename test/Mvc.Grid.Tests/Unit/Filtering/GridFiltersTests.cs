@@ -152,6 +152,14 @@ public class GridFiltersTests
     }
 
     [Fact]
+    public void Create_NotFilterType_ReturnsNull()
+    {
+        filters.Register(typeof(String), "less-than", typeof(Object));
+
+        Assert.Null(filters.Create(typeof(String), "less-than", ""));
+    }
+
+    [Fact]
     public void Create_ForNullableType()
     {
         IGridFilter? actual = filters.Create(typeof(Int32?), "EQUALS", "");
@@ -206,6 +214,14 @@ public class GridFiltersTests
         IGridFilter? actual = filters.Create(typeof(IEnumerable<TestEnum>), "Equals", "");
 
         Assert.Equal("equals", Assert.IsType<EnumerableFilter<EnumFilter>>(actual).Method);
+    }
+
+    [Fact]
+    public void Create_ForNotEnumerableGenericType()
+    {
+        filters.Register(typeof(GridModel), "equals", typeof(StringFilter));
+
+        Assert.Null(filters.Create(typeof(GridColumn<GridModel, String>), "Equals", ""));
     }
 
     [Fact]

@@ -31,7 +31,8 @@ public class GridHtmlAttributesTests
         StringWriter writer = new();
         new GridHtmlAttributes(new
         {
-            value = "Temp \"str\""
+            value = "Temp \"str\"",
+            nullValue = (String?)null
         }).WriteTo(writer, HtmlEncoder.Default);
 
         Assert.Equal(" value=\"Temp &quot;str&quot;\"", writer.ToString());

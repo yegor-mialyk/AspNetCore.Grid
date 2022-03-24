@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
 
 namespace NonFactors.Mvc.Grid;
 
@@ -50,7 +51,7 @@ public class GridColumnFilterTests
     {
         filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
-        filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
+        filters.OptionsFor(filter.Column).Returns(new[] { new SelectListItem() });
         filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
         filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
@@ -96,6 +97,15 @@ public class GridColumnFilterTests
         filter.Type = type;
         filter.IsEnabled = isEnabled;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
+
+        Assert.Null(filter.Operator);
+    }
+
+    [Fact]
+    public void Operator_Get_NoQuery()
+    {
+        filter.Type = GridFilterType.Double;
+        filter.Column.Grid.Query = null;
 
         Assert.Null(filter.Operator);
     }
@@ -217,6 +227,19 @@ public class GridColumnFilterTests
         Assert.Equal(value, actual.Values);
     }
 
+    [Fact]
+    public void First_Get_SkipsOperation()
+    {
+        filter.Column.Grid.ViewContext = new ViewContext();
+        IGridFilters filters = Substitute.For<IGridFilters>();
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=test");
+        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filters.Create(Arg.Any<Type>(), Arg.Any<String>(), Arg.Any<StringValues>()).Returns(Substitute.For<IGridFilter>());
+
+        Assert.Null(filter.First);
+    }
+
     [Theory]
     [InlineData("", "name-equals=a&name-equals=b", "a,b")]
     [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
@@ -332,6 +355,19 @@ public class GridColumnFilterTests
         Assert.Equal(value, actual.Values);
     }
 
+    [Fact]
+    public void Second_Get_SkipsOperation()
+    {
+        filter.Type = GridFilterType.Double;
+        filter.Column.Grid.ViewContext = new ViewContext();
+        IGridFilters filters = Substitute.For<IGridFilters>();
+        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=test&name-op=test");
+        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filters.Create(Arg.Any<Type>(), Arg.Any<String>(), Arg.Any<StringValues>()).Returns(Substitute.For<IGridFilter>());
+
+        Assert.Null(filter.Second);
+    }
     [Fact]
     public void Second_Get_Caches()
     {
@@ -453,6 +489,12 @@ public class GridColumnFilterTests
     public void GridColumnFilter_SetsNameForStringEnumerable()
     {
         AssertFilterNameFor(model => model.NullableEnumerableField, "text");
+    }
+
+    [Fact]
+    public void GridColumnFilter_SetsNameForNotEnumerableGenericType()
+    {
+        AssertFilterNameFor(model => model.GridColumnField, "default");
     }
 
     [Fact]
@@ -635,7 +677,7 @@ public class GridColumnFilterTests
         filter.First = new StringFilter { Method = "contains", Values = "a" };
         filter.Second = new StringFilter { Method = "contains", Values = "A" };
 
-        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a") && item.Name.Contains("A"));
+        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains('a') && item.Name.Contains('A'));
         IQueryable actual = filter.Apply(items);
 
         Assert.Equal(expected, actual);
@@ -651,7 +693,7 @@ public class GridColumnFilterTests
         filter.First = new StringFilter { Method = "contains", Values = "a" };
         filter.Second = new StringFilter { Method = "contains", Values = "bB" };
 
-        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains("a") || item.Name.Contains("bB")));
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains("bB")));
         IQueryable actual = filter.Apply(items);
 
         Assert.Equal(expected, actual);
@@ -668,7 +710,21 @@ public class GridColumnFilterTests
         filter.First = new StringFilter { Method = "contains", Values = "a" };
         filter.Second = new StringFilter { Method = "contains", Values = "BB" };
 
-        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
+        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains('a'));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_NoSecondFilter()
+    {
+        filter.Second = null;
+        filter.Operator = "or";
+        filter.Type = GridFilterType.Double;
+        filter.First = new StringFilter { Method = "contains", Values = "a" };
+
+        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains('a'));
         IQueryable actual = filter.Apply(items);
 
         Assert.Equal(expected, actual);
@@ -682,7 +738,7 @@ public class GridColumnFilterTests
         filter.First = new StringFilter { Method = "contains", Values = "a" };
         filter.Second = new StringFilter { Method = "contains", Values = "bb" };
 
-        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains("a"));
+        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains('a'));
         IQueryable actual = filter.Apply(items);
 
         Assert.Equal(expected, actual);

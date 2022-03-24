@@ -141,6 +141,22 @@ public class GridSortTests
     }
 
     [Fact]
+    public void Indexer_CachesSort()
+    {
+        sumColumn.Name = "sum";
+        sumColumn.Sort.IsEnabled = true;
+        sumColumn.Grid.Query = HttpUtility.ParseQueryString("sort=sum asc");
+
+        (Int32 Index, GridSortOrder Order)? expected = sort[sumColumn];
+
+        sumColumn.Grid.Query = HttpUtility.ParseQueryString("sort=name desc");
+
+        (Int32 Index, GridSortOrder Order)? actual = sort[sumColumn];
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
     public void Process_SortsEnabledColumns()
     {
         IQueryable<GridModel> items = new[]

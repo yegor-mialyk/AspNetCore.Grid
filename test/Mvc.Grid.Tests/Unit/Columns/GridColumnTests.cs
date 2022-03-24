@@ -38,12 +38,24 @@ public class GridColumnTests
     }
 
     [Fact]
+    public void GridColumn_EmptyStyle()
+    {
+        Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).Style);
+    }
+
+    [Fact]
     public void GridColumn_SetsGrid()
     {
         Object actual = new GridColumn<GridModel, Int32>(column.Grid, _ => 0).Grid;
         Object expected = column.Grid;
 
         Assert.Same(expected, actual);
+    }
+
+    [Fact]
+    public void GridColumn_EmptyCssClasses()
+    {
+        Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).CssClasses);
     }
 
     [Fact]
@@ -128,9 +140,15 @@ public class GridColumnTests
     }
 
     [Fact]
+    public void GridColumn_SetsNameForNonMemberExpression()
+    {
+        Assert.Empty(new GridColumn<GridModel, String?>(column.Grid, model => model.ToString()).Name);
+    }
+
+    [Fact]
     public void GridColumn_SetsNameFromExpression()
     {
-        Assert.Equal("NIsChecked", new GridColumn<GridModel, Boolean?>(column.Grid, model => model.NIsChecked).Name);
+        Assert.Equal("Child.NSum", new GridColumn<GridModel, Int32?>(column.Grid, model => model.Child!.NSum).Name);
     }
 
     [Fact]
@@ -168,7 +186,7 @@ public class GridColumnTests
     [Fact]
     public void ValueFor_NullReferenceInExpressionValue_ReturnsEmpty()
     {
-        column.ExpressionValue = model => model.Name;
+        column.ExpressionValue = model => model.Name!.ToString();
 
         String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
 
@@ -281,15 +299,17 @@ public class GridColumnTests
     [Fact]
     public void ValueFor_BadValue_EnumExpressionValue()
     {
+        GridRow<GridModel> row = new(new GridModel { Enum = (TestEnum)100 }, 0);
         GridColumn<GridModel, TestEnum> enumColumn = new(column.Grid, model => model.Enum);
-        GridRow<GridModel> row = new(new GridModel { Enum = (TestEnum)2 }, 0);
 
-        Assert.Equal("2", enumColumn.ValueFor(row).ToString());
+        Assert.Equal(row.Model.Enum.ToString(), enumColumn.ValueFor(row).ToString());
     }
 
     [Theory]
     [InlineData(TestEnum.First, "1st")]
     [InlineData(TestEnum.Second, "2nd")]
+    [InlineData(TestEnum.Third, nameof(TestEnum.Third))]
+    [InlineData(TestEnum.Fourth, nameof(TestEnum.Fourth))]
     public void ValueFor_NullableEnumExpressionValue(TestEnum value, String expressionValue)
     {
         GridRow<GridModel> row = new(new GridModel { Enum = value }, 0);
@@ -301,6 +321,8 @@ public class GridColumnTests
     [Theory]
     [InlineData(TestEnum.First, "1st")]
     [InlineData(TestEnum.Second, "2nd")]
+    [InlineData(TestEnum.Third, nameof(TestEnum.Third))]
+    [InlineData(TestEnum.Fourth, nameof(TestEnum.Fourth))]
     public void ValueFor_EnumExpressionValue(TestEnum value, String expressionValue)
     {
         GridRow<GridModel> row = new(new GridModel { Enum = value }, 0);

@@ -535,6 +535,7 @@ public class GridColumnExtensionsTests
         column.Name = "name";
         column.IsHidden = true;
         column.Filter.Name = "text";
+        column.Style = "width: 10px";
         column.Sort.IsEnabled = true;
         column.Filter.IsEnabled = true;
         column.CssClasses = "test-classes";
@@ -552,8 +553,9 @@ public class GridColumnExtensionsTests
         Assert.Equal(GridSortOrder.Desc, actual["data-sort-first"]);
         Assert.Equal(GridSortOrder.Asc, actual["data-sort"]);
         Assert.Equal(true, actual["data-filter-applied"]);
+        Assert.Equal("width: 10px", actual["style"]);
         Assert.Equal("text", actual["data-filter"]);
         Assert.Equal("name", actual["data-name"]);
-        Assert.Equal(8, actual.Count);
+        Assert.Equal(9, actual.Count);
     }
 }

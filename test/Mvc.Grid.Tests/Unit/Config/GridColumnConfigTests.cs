@@ -8,6 +8,7 @@ public class GridColumnConfigTests
         GridColumnConfig actual = new();
 
         Assert.False(actual.Hidden);
+        Assert.Empty(actual.Width);
         Assert.Empty(actual.Name);
     }
 }

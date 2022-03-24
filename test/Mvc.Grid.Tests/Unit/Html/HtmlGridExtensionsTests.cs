@@ -187,6 +187,14 @@ public class HtmlGridExtensionsTests
         Assert.Same(htmlGrid, htmlGrid.Attributed(new { width = 1 }));
     }
 
+    [Fact]
+    public void AppendsCss_Class()
+    {
+        htmlGrid.Grid.Attributes.Clear();
+
+        Assert.Equal("test", htmlGrid.AppendCss("test").Grid.Attributes["class"]);
+    }
+
     [Theory]
     [InlineData("", "", "")]
     [InlineData("", " ", "")]
@@ -202,6 +210,13 @@ public class HtmlGridExtensionsTests
     [InlineData(" ", "test ", "test")]
     [InlineData(" ", " test ", "test")]
 
+    [InlineData(null, "", "")]
+    [InlineData(null, " ", "")]
+    [InlineData(null, "test", "test")]
+    [InlineData(null, " test", "test")]
+    [InlineData(null, "test ", "test")]
+    [InlineData(null, " test ", "test")]
+
     [InlineData("first", "", "first")]
     [InlineData("first", "test", "first test")]
     [InlineData("first", " test", "first test")]
@@ -209,7 +224,7 @@ public class HtmlGridExtensionsTests
     [InlineData("first", " test ", "first test")]
     [InlineData("first ", " test ", "first  test")]
     [InlineData(" first ", " test ", "first  test")]
-    public void AppendsCss_Classes(String current, String toAppend, String css)
+    public void AppendsCss_Classes(String? current, String toAppend, String css)
     {
         htmlGrid.Grid.Attributes["class"] = current;
 
