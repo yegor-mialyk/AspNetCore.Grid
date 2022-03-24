@@ -8,11 +8,6 @@ public abstract class AGridFilter : IGridFilter
     public StringValues Values { get; set; }
     public GridFilterCase Case { get; set; }
 
-    protected AGridFilter()
-    {
-        Case = GridFilterCase.Original;
-    }
-
     public virtual Expression? Apply(Expression expression)
     {
         Expression? filter = null;

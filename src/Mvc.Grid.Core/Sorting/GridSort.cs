@@ -12,15 +12,15 @@ public class GridSort<T> : IGridSort<T>
     {
         get
         {
-            if (!DefinitionsIsSet && Grid.Query != null)
+            if (Grid.Query != null && !DefinitionsIsSet)
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 IEnumerable<Match> matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
                     "(^|,)(?<name>.*?) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
 
-                foreach (Match match in matches)
-                    foreach (IGridColumn<T> column in Grid.Columns)
-                        if (match.Groups["name"].Value.Equals(column.Name, StringComparison.OrdinalIgnoreCase) && !DefinitionsValue.Contains(column))
+                foreach (IGridColumn<T> column in Grid.Columns)
+                    foreach (Match match in matches)
+                        if (match.Groups["name"].Value.Equals(column.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             if (match.Groups["order"].Value.Equals("desc", StringComparison.OrdinalIgnoreCase))
                                 DefinitionsValue.Add(column, (DefinitionsValue.Count, GridSortOrder.Desc));

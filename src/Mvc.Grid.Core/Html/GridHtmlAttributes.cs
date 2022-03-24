@@ -16,8 +16,10 @@ public class GridHtmlAttributes : Dictionary<String, Object?>, IHtmlContent
 
     public void WriteTo(TextWriter writer, HtmlEncoder encoder)
     {
-        foreach ((String attribute, Object? value) in this)
+        foreach ((String attribute, Object? rawValue) in this)
         {
+            String? value = rawValue?.ToString();
+
             if (value == null)
                 continue;
 
@@ -25,7 +27,7 @@ public class GridHtmlAttributes : Dictionary<String, Object?>, IHtmlContent
             writer.Write(attribute);
             writer.Write("=\"");
 
-            writer.Write(encoder.Encode(value.ToString() ?? ""));
+            writer.Write(encoder.Encode(value));
 
             writer.Write("\"");
         }

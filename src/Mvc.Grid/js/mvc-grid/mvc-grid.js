@@ -813,15 +813,15 @@ class MvcGridPopup {
         const arrow = element.querySelector(".popup-arrow");
         let { top, left } = (anchor || grid.element).getBoundingClientRect();
 
-        top += window.pageYOffset - parseFloat(style.borderTopWidth);
-        left += window.pageXOffset - parseFloat(style.borderLeftWidth);
+        top += window.scrollY - parseFloat(style.borderTopWidth);
+        left += window.scrollX - parseFloat(style.borderLeftWidth);
 
         if (anchor) {
             left -= parseFloat(style.marginLeft) - anchor.offsetWidth / 2 + 26;
 
             const arrowLeft = 26 - parseFloat(getComputedStyle(arrow).borderLeftWidth);
             const width = parseFloat(style.marginLeft) + element.offsetWidth + parseFloat(style.marginRight);
-            const offset = Math.max(0, left + width - window.pageXOffset - document.documentElement.clientWidth);
+            const offset = Math.max(0, left + width - window.scrollX - document.documentElement.clientWidth);
 
             top += anchor.offsetHeight / 3 * 2 + arrow.offsetHeight - parseFloat(style.marginTop);
             arrow.style.left = `${Math.max(0, arrowLeft + offset)}px`;

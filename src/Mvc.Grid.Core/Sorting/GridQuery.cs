@@ -18,8 +18,7 @@ public sealed class GridQuery : ExpressionVisitor
 
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
-        if (node.Method.DeclaringType == typeof(Queryable) &&
-            node.Method.Name is nameof(Queryable.OrderBy) or nameof(Queryable.OrderByDescending))
+        if (node.Method.Name is nameof(Queryable.OrderBy) or nameof(Queryable.OrderByDescending))
         {
             Ordered = true;
 

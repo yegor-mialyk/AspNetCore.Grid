@@ -66,9 +66,9 @@ public class StringFilter : AGridFilter
             "equals" => String.IsNullOrEmpty(value)
                 ? Expression.OrElse(Expression.Equal(expression, Null), Expression.Equal(expression, Empty))
                 : Expression.Equal(ConvertCase(expression), ConvertCase(value)),
-            "starts-with" => Expression.Call(ConvertCase(expression), StartsWith, ConvertCase(value)),
-            "ends-with" => Expression.Call(ConvertCase(expression), EndsWith, ConvertCase(value)),
-            "contains" => Expression.Call(ConvertCase(expression), Contains, ConvertCase(value)),
+            "starts-with" => Expression.Call(ConvertCase(expression), StartsWith, ConvertCase(value!)),
+            "ends-with" => Expression.Call(ConvertCase(expression), EndsWith, ConvertCase(value!)),
+            "contains" => Expression.Call(ConvertCase(expression), Contains, ConvertCase(value!)),
             _ => null
         };
     }
@@ -81,12 +81,12 @@ public class StringFilter : AGridFilter
             _ => expression
         };
     }
-    protected Expression ConvertCase(String? value)
+    protected Expression ConvertCase(String value)
     {
         return Expression.Constant(Case switch
         {
-            GridFilterCase.Upper => value?.ToUpper(),
-            GridFilterCase.Lower => value?.ToLower(),
+            GridFilterCase.Upper => value.ToUpper(),
+            GridFilterCase.Lower => value.ToLower(),
             _ => value
         });
     }

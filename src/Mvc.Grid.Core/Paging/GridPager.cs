@@ -46,9 +46,9 @@ public class GridPager<T> : IGridPager<T>
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 RowsPerPageValue = Int32.TryParse(Grid.Query?[prefix + "rows"], out Int32 rows) ? rows : RowsPerPageValue;
-                RowsPerPageValue = RowsPerPageValue < 0 ? 0 : RowsPerPageValue;
+                RowsPerPageValue = Math.Max(0, RowsPerPageValue);
 
-                if (PageSizes.Count > 0 && !PageSizes.Keys.Contains(RowsPerPageValue))
+                if (PageSizes.Count > 0 && !PageSizes.ContainsKey(RowsPerPageValue))
                     RowsPerPageValue = PageSizes.Keys.First();
             }
 
@@ -68,15 +68,11 @@ public class GridPager<T> : IGridPager<T>
     {
         get
         {
+            Int32 maxStart = Math.Max(1, TotalPages - PagesToDisplay + 1);
             Int32 middlePage = PagesToDisplay / 2 + PagesToDisplay % 2;
+            Int32 firstDisplayPage = CurrentPage - middlePage + 1;
 
-            if (CurrentPage < middlePage)
-                return 1;
-
-            if (TotalPages < CurrentPage + PagesToDisplay - middlePage)
-                return Math.Max(TotalPages - PagesToDisplay + 1, 1);
-
-            return CurrentPage - middlePage + 1;
+            return Math.Min(maxStart, Math.Max(1, firstDisplayPage));
         }
     }
     public virtual Boolean ShowPageSizes { get; set; }

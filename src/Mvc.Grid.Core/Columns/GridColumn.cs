@@ -76,7 +76,7 @@ public class GridColumn<T, TValue> : IGridColumn<T, TValue> where T : class
     {
         String text = expression.Body is MemberExpression member ? member.ToString() : "";
 
-        return text.IndexOf('.') > 0 ? text[(text.IndexOf('.') + 1)..] : text;
+        return text.Contains('.') ? text[(text.IndexOf('.') + 1)..] : text;
     }
     private Object? ColumnValueFor(IGridRow<Object> row)
     {
