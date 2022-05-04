@@ -145,7 +145,7 @@ public class GridPagerTests
     [InlineData("", "rows=-10")]
     [InlineData("grid", "grid-rows=-1")]
     [InlineData("grid", "grid-rows=-10")]
-    public void RowsPerPage_OnLessThanZeroQueryPageReturnsZero(String name, String query)
+    public void RowsPerPage_MinimumQueryPage(String name, String query)
     {
         pager.Grid.Query = HttpUtility.ParseQueryString(query);
         pager.ShowPageSizes = true;
@@ -153,31 +153,72 @@ public class GridPagerTests
         pager.Grid.Name = name;
         pager.RowsPerPage = 5;
 
-        Assert.Equal(0, pager.RowsPerPage);
+        Assert.Equal(1, pager.RowsPerPage);
     }
 
     [Theory]
     [InlineData(-1)]
     [InlineData(-10)]
-    public void RowsPerPage_OnLessThanZeroCurrentPageReturnsZero(Int32 rows)
+    public void RowsPerPage_MinimumPage(Int32 rows)
     {
-        pager.ShowPageSizes = true;
-        pager.RowsPerPage = rows;
         pager.PageSizes.Clear();
+        pager.RowsPerPage = rows;
+        pager.ShowPageSizes = true;
 
-        Assert.Equal(0, pager.RowsPerPage);
+        Assert.Equal(1, pager.RowsPerPage);
     }
 
     [Theory]
+    [InlineData("", "rows=-1", 10)]
+    [InlineData("", "rows=0", 10)]
+    [InlineData("", "rows=1", 10)]
+    [InlineData("", "rows=9", 10)]
     [InlineData("", "rows=10", 10)]
+    [InlineData("", "rows=11", 20)]
+    [InlineData("", "rows=19", 20)]
     [InlineData("", "rows=20", 20)]
-    [InlineData("", "rows=60", 10)]
+    [InlineData("", "rows=21", 20)]
+    [InlineData("grid", "grid-rows=-1", 10)]
+    [InlineData("grid", "grid-rows=0", 10)]
+    [InlineData("grid", "grid-rows=1", 10)]
+    [InlineData("grid", "grid-rows=9", 10)]
     [InlineData("grid", "grid-rows=10", 10)]
+    [InlineData("grid", "grid-rows=11", 20)]
+    [InlineData("grid", "grid-rows=19", 20)]
     [InlineData("grid", "grid-rows=20", 20)]
-    [InlineData("grid", "grid-rows=60", 10)]
+    [InlineData("grid", "grid-rows=21", 20)]
     public void RowsPerPage_AllowsOnlyFromPageSizes(String name, String query, Int32 rows)
     {
         pager.PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20" };
+        pager.Grid.Query = HttpUtility.ParseQueryString(query);
+        pager.ShowPageSizes = true;
+        pager.Grid.Name = name;
+
+        Assert.Equal(rows, pager.RowsPerPage);
+    }
+
+    [Theory]
+    [InlineData("", "rows=-1", 10)]
+    [InlineData("", "rows=0", 0)]
+    [InlineData("", "rows=1", 10)]
+    [InlineData("", "rows=9", 10)]
+    [InlineData("", "rows=10", 10)]
+    [InlineData("", "rows=11", 20)]
+    [InlineData("", "rows=19", 20)]
+    [InlineData("", "rows=20", 20)]
+    [InlineData("", "rows=21", 0)]
+    [InlineData("grid", "grid-rows=-1", 10)]
+    [InlineData("grid", "grid-rows=0", 0)]
+    [InlineData("grid", "grid-rows=1", 10)]
+    [InlineData("grid", "grid-rows=9", 10)]
+    [InlineData("grid", "grid-rows=10", 10)]
+    [InlineData("grid", "grid-rows=11", 20)]
+    [InlineData("grid", "grid-rows=19", 20)]
+    [InlineData("grid", "grid-rows=20", 20)]
+    [InlineData("grid", "grid-rows=21", 0)]
+    public void RowsPerPage_Unlimited_AllowsOnlyFromPageSizes(String name, String query, Int32 rows)
+    {
+        pager.PageSizes = new Dictionary<Int32, String> { [0] = "All", [10] = "10", [20] = "20" };
         pager.Grid.Query = HttpUtility.ParseQueryString(query);
         pager.ShowPageSizes = true;
         pager.Grid.Name = name;

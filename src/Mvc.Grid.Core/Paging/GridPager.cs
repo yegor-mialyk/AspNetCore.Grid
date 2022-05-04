@@ -46,10 +46,21 @@ public class GridPager<T> : IGridPager<T>
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 RowsPerPageValue = Int32.TryParse(Grid.Query?[prefix + "rows"], out Int32 rows) ? rows : RowsPerPageValue;
-                RowsPerPageValue = Math.Max(0, RowsPerPageValue);
 
-                if (PageSizes.Count > 0 && !PageSizes.ContainsKey(RowsPerPageValue))
-                    RowsPerPageValue = PageSizes.Keys.First();
+                if (PageSizes.Count > 0)
+                {
+                    if (!PageSizes.ContainsKey(RowsPerPageValue))
+                    {
+                        IEnumerable<Int32> sizes = PageSizes.Keys.OrderBy(value => value == 0 ? Int32.MaxValue : value);
+                        IEnumerable<Int32> higherSizes = sizes.Where(size => RowsPerPageValue < size || size == 0);
+
+                        RowsPerPageValue = higherSizes.Any() ? higherSizes.First() : sizes.Last();
+                    }
+                }
+                else
+                {
+                    RowsPerPageValue = Math.Max(1, RowsPerPageValue);
+                }
             }
 
             return RowsPerPageValue;
