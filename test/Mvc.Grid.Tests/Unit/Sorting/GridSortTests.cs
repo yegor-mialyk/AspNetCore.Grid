@@ -162,6 +162,8 @@ public class GridSortTests
         IQueryable<GridModel> items = new[]
         {
             new GridModel { Name = "a", Text = "a", Sum = 20 },
+            new GridModel { Name = "b", Text = "d", Sum = 40 },
+            new GridModel { Name = "b", Text = "e", Sum = 30 },
             new GridModel { Name = "b", Text = "b", Sum = 10 },
             new GridModel { Name = "a", Text = "c", Sum = 10 }
         }.AsQueryable();
@@ -169,9 +171,9 @@ public class GridSortTests
         sumColumn.Sort.IsEnabled = true;
         nameColumn.Sort.IsEnabled = true;
         textColumn.Sort.IsEnabled = false;
-        sort.Grid.Query = HttpUtility.ParseQueryString("sort=text asc,name asc,sum asc");
+        sort.Grid.Query = HttpUtility.ParseQueryString("sort=text asc,sum asc,name asc");
 
-        IQueryable<GridModel> expected = items.OrderBy(item => item.Name).ThenBy(item => item.Sum);
+        IQueryable<GridModel> expected = items.OrderBy(item => item.Sum).ThenBy(item => item.Name);
         IQueryable<GridModel> actual = sort.Process(items);
 
         Assert.Equal(expected, actual);

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>7.0.1</Version>
+    <Version>7.0.2</Version>
     <Nullable>enable</Nullable>
     <Company>NonFactors</Company>
     <Deterministic>true</Deterministic>

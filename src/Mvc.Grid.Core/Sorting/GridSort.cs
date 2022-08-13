@@ -16,10 +16,10 @@ public class GridSort<T> : IGridSort<T>
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
                 IEnumerable<Match> matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
-                    "(^|,)(?<name>.*?) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
+                    "(^|,)(?<name>[^ ]+) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
 
-                foreach (IGridColumn<T> column in Grid.Columns)
-                    foreach (Match match in matches)
+                foreach (Match match in matches.DistinctBy(match => match.Groups["name"].Value))
+                    foreach (IGridColumn<T> column in Grid.Columns)
                         if (match.Groups["name"].Value.Equals(column.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             if (match.Groups["order"].Value.Equals("desc", StringComparison.OrdinalIgnoreCase))
