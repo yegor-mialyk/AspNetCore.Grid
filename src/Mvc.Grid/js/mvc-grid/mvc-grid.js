@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 7.0.2
+ * Mvc.Grid 7.1.0
  *
  * Copyright © NonFactors
  *
@@ -270,6 +270,7 @@ MvcGrid.lang = {
     },
     text: {
         "contains": "Contains",
+        "consists-of": "Consists of",
         "equals": "Equals",
         "not-equals": "Not equals",
         "starts-with": "Starts with",
@@ -1022,7 +1023,7 @@ class MvcGridTextFilter extends MvcGridFilter {
         super(column);
 
         this.cssClasses = "mvc-grid-text-filter";
-        this.methods = ["contains", "equals", "not-equals", "starts-with", "ends-with"];
+        this.methods = ["contains", "consists-of", "equals", "not-equals", "starts-with", "ends-with"];
     }
 }
 

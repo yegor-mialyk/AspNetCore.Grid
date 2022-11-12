@@ -124,6 +124,7 @@ public class GridFiltersTests
     [InlineData(typeof(String), "equals", typeof(StringFilter))]
     [InlineData(typeof(String), "not-equals", typeof(StringFilter))]
     [InlineData(typeof(String), "contains", typeof(StringFilter))]
+    [InlineData(typeof(String), "consists-of", typeof(StringFilter))]
     [InlineData(typeof(String), "ends-with", typeof(StringFilter))]
     [InlineData(typeof(String), "starts-with", typeof(StringFilter))]
 

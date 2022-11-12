@@ -278,6 +278,112 @@ public class StringFilterTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact]
+    public void Apply_Consists_AllEmptyValues_ReturnsNull()
+    {
+        Expression<Func<GridModel, String?>> expression = model => model.Name;
+
+        Assert.Null(new StringFilter { Method = "consists-of", Values = new[] { null, "", " " } }.Apply(expression.Body));
+    }
+
+    [Fact]
+    public void Apply_Consists_UsingOriginalCaseFilter()
+    {
+        StringFilter filter = new() { Method = "consists-of", Values = "es T", Case = GridFilterCase.Original };
+
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = null },
+            new GridModel { Name = "Tes" },
+            new GridModel { Name = "test" },
+            new GridModel { Name = "TEST" }
+        }.AsQueryable();
+
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("T") && model.Name.Contains("es"));
+        IQueryable actual = items.Where(model => model.Name, filter);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_Consists_UsingUpperCaseFilter()
+    {
+        StringFilter filter = new() { Method = "consists-of", Values = "es t", Case = GridFilterCase.Upper };
+
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = null },
+            new GridModel { Name = "Tes" },
+            new GridModel { Name = "test" },
+            new GridModel { Name = "TEST" }
+        }.AsQueryable();
+
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("T") && model.Name.ToUpper().Contains("ES"));
+        IQueryable actual = items.Where(model => model.Name, filter);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_Consists_UsingLowerCaseFilter()
+    {
+        StringFilter filter = new() { Method = "consists-of", Values = "ES T", Case = GridFilterCase.Lower };
+
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = null },
+            new GridModel { Name = "Tes" },
+            new GridModel { Name = "test" },
+            new GridModel { Name = "TEST" }
+        }.AsQueryable();
+
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().Contains("t") && model.Name.ToLower().Contains("es"));
+        IQueryable actual = items.Where(model => model.Name, filter);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_Consists_SkippingEmptyValues()
+    {
+        StringFilter filter = new() { Method = "consists-of", Values = new[] { null, "", "  ", " e s \t " }, Case = GridFilterCase.Original };
+
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = null },
+            new GridModel { Name = "Tes" },
+            new GridModel { Name = "test" },
+            new GridModel { Name = "TEST" }
+        }.AsQueryable();
+
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("e") && model.Name.Contains("s"));
+        IQueryable actual = items.Where(model => model.Name, filter);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_Consists_MultiFilter()
+    {
+        StringFilter filter = new() { Method = "consists-of", Values = new[] { "Te s", "es t" }, Case = GridFilterCase.Original };
+
+        IQueryable<GridModel> items = new[]
+        {
+            new GridModel { Name = null },
+            new GridModel { Name = "Tes" },
+            new GridModel { Name = "test" },
+            new GridModel { Name = "TEST" }
+        }.AsQueryable();
+
+        IQueryable expected = items.Where(model =>
+            model.Name != null &&
+            (model.Name.Contains("t") && model.Name.Contains("es") ||
+            model.Name.Contains("Te") && model.Name.Contains("Te")));
+        IQueryable actual = items.Where(model => model.Name, filter);
+
+        Assert.Equal(expected, actual);
+    }
+
     [Theory]
     [InlineData(GridFilterCase.Lower)]
     [InlineData(GridFilterCase.Upper)]

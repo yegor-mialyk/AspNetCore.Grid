@@ -112,6 +112,7 @@ public class GridFilters : IGridFilters
         Register(typeof(String), "equals", typeof(StringFilter));
         Register(typeof(String), "not-equals", typeof(StringFilter));
         Register(typeof(String), "contains", typeof(StringFilter));
+        Register(typeof(String), "consists-of", typeof(StringFilter));
         Register(typeof(String), "ends-with", typeof(StringFilter));
         Register(typeof(String), "starts-with", typeof(StringFilter));
 

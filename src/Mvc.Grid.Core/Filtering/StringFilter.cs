@@ -35,6 +35,11 @@ public class StringFilter : AGridFilter
                     return null;
 
                 return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
+            case "consists-of":
+                if (Values.All(String.IsNullOrWhiteSpace))
+                    return null;
+
+                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
             case "not-equals":
                 if (Case == GridFilterCase.Original)
                     return base.Apply(expression);
@@ -69,8 +74,26 @@ public class StringFilter : AGridFilter
             "starts-with" => Expression.Call(ConvertCase(expression), StartsWith, ConvertCase(value!)),
             "ends-with" => Expression.Call(ConvertCase(expression), EndsWith, ConvertCase(value!)),
             "contains" => Expression.Call(ConvertCase(expression), Contains, ConvertCase(value!)),
+            "consists-of" => String.IsNullOrWhiteSpace(value) ? null : Consists(expression, value),
             _ => null
         };
+    }
+    protected Expression? Consists(Expression expression, String value)
+    {
+        Expression? filter = null;
+
+        foreach (String val in value.Split(' ').Distinct())
+        {
+            if (String.IsNullOrWhiteSpace(val))
+                continue;
+
+            if (filter == null)
+                filter = Expression.Call(ConvertCase(expression), Contains, ConvertCase(val));
+            else
+                filter = Expression.AndAlso(filter, Expression.Call(ConvertCase(expression), Contains, ConvertCase(val)));
+        }
+
+        return filter;
     }
     protected Expression ConvertCase(Expression expression)
     {
