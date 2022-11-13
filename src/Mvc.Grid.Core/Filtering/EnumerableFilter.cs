@@ -46,23 +46,21 @@ public class EnumerableFilter<T> : IGridFilter where T : IGridFilter
     }
     public Expression? Apply(Expression expression)
     {
-        if (GetFilterable(expression.Type) is Type type)
-        {
-            ParameterExpression parameter = Expression.Parameter(type, "x");
+        if (GetFilterable(expression.Type) is not Type type)
+            return null;
 
-            if (Filter.Apply(Expression.Lambda(parameter, parameter).Body) is Expression filter)
-            {
-                MethodInfo any = typeof(Enumerable).GetMethods()
-                    .First(method =>
-                        method.Name == nameof(Enumerable.Any) &&
-                        method.GetParameters().Length == 2)
-                    .MakeGenericMethod(type);
+        ParameterExpression parameter = Expression.Parameter(type, "x");
 
-                return Expression.Call(any, expression, Expression.Lambda(filter, parameter));
-            }
-        }
+        if (Filter.Apply(Expression.Lambda(parameter, parameter).Body) is not Expression filter)
+            return null;
 
-        return null;
+        MethodInfo any = typeof(Enumerable).GetMethods()
+            .First(method =>
+                method.Name == nameof(Enumerable.Any) &&
+                method.GetParameters().Length == 2)
+            .MakeGenericMethod(type);
+
+        return Expression.Call(any, expression, Expression.Lambda(filter, parameter));
     }
 
     private Type? GetFilterable(Type type)

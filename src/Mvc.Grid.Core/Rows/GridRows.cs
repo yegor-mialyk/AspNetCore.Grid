@@ -31,7 +31,7 @@ public class GridRows<T> : IGridRowsOf<T>
             }
 
             Cache = items
-                .ToList()
+                .AsEnumerable()
                 .Select((model, index) => new GridRow<T>(model, index)
                 {
                     Attributes = new GridHtmlAttributes(Attributes?.Invoke(model))

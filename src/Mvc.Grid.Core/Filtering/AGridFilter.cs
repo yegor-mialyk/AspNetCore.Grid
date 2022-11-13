@@ -12,7 +12,7 @@ public abstract class AGridFilter : IGridFilter
     {
         Expression? filter = null;
 
-        foreach (String value in Values)
+        foreach (String? value in Values)
             if (Apply(expression, value) is Expression next)
                 filter = filter == null
                     ? next

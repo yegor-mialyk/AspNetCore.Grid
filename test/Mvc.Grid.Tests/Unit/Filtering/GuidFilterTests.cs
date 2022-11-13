@@ -41,7 +41,7 @@ public class GuidFilterTests
         filter.Method = "equals";
 
         IEnumerable actual = items.Where(nGuidExpression, filter);
-        IEnumerable expected = items.Where(model => model.NGuid == (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+        IEnumerable expected = items.Where(model => model.NGuid == (String.IsNullOrEmpty(value) ? null : Guid.Parse(value)));
 
         Assert.Equal(expected, actual);
     }
@@ -67,7 +67,7 @@ public class GuidFilterTests
         filter.Method = "equals";
 
         IEnumerable actual = items.Where(guidExpression, filter);
-        IEnumerable expected = items.Where(model => model.Guid == (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+        IEnumerable expected = items.Where(model => model.Guid == (String.IsNullOrEmpty(value) ? null : Guid.Parse(value)));
 
         Assert.Equal(expected, actual);
     }
@@ -95,7 +95,7 @@ public class GuidFilterTests
         filter.Method = "not-equals";
 
         IEnumerable actual = items.Where(nGuidExpression, filter);
-        IEnumerable expected = items.Where(model => model.NGuid != (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+        IEnumerable expected = items.Where(model => model.NGuid != (String.IsNullOrEmpty(value) ? null : Guid.Parse(value)));
 
         Assert.Equal(expected, actual);
     }
@@ -121,7 +121,7 @@ public class GuidFilterTests
         filter.Method = "not-equals";
 
         IEnumerable actual = items.Where(guidExpression, filter);
-        IEnumerable expected = items.Where(model => model.Guid != (String.IsNullOrEmpty(value) ? null : (Guid?)Guid.Parse(value)));
+        IEnumerable expected = items.Where(model => model.Guid != (String.IsNullOrEmpty(value) ? null : Guid.Parse(value)));
 
         Assert.Equal(expected, actual);
     }

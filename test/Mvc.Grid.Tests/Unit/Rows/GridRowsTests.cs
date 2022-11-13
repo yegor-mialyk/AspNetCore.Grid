@@ -21,13 +21,12 @@ public class GridRowsTests
         IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
         IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
         IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
-        postProcessor.ProcessorType = GridProcessorType.Post;
-        preProcessor.ProcessorType = GridProcessorType.Pre;
-        Grid<GridModel> grid = new(items);
-        grid.Mode = GridProcessingMode.Manual;
-
+        Grid<GridModel> grid = new(items) { Mode = GridProcessingMode.Manual };
+        
         postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
         preProcessor.Process(items).Returns(preProcessedItems);
+        postProcessor.ProcessorType = GridProcessorType.Post;
+        preProcessor.ProcessorType = GridProcessorType.Pre;
         grid.Processors.Add(postProcessor);
         grid.Processors.Add(preProcessor);
 
@@ -45,13 +44,12 @@ public class GridRowsTests
         IGridProcessor<GridModel> preProcessor = Substitute.For<IGridProcessor<GridModel>>();
         IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
         IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
-        postProcessor.ProcessorType = GridProcessorType.Post;
-        preProcessor.ProcessorType = GridProcessorType.Pre;
-        Grid<GridModel> grid = new(items);
-        grid.Mode = GridProcessingMode.Automatic;
+        Grid<GridModel> grid = new(items) { Mode = GridProcessingMode.Automatic };
 
         postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
         preProcessor.Process(items).Returns(preProcessedItems);
+        postProcessor.ProcessorType = GridProcessorType.Post;
+        preProcessor.ProcessorType = GridProcessorType.Pre;
         grid.Processors.Add(postProcessor);
         grid.Processors.Add(preProcessor);
 

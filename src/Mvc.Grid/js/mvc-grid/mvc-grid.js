@@ -65,6 +65,8 @@ class MvcGrid {
         if (!element.children.length) {
             grid.reload();
         }
+
+        return this;
     }
 
     set(options) {
@@ -239,25 +241,23 @@ class MvcGrid {
     bind() {
         const grid = this;
 
-        for (const row of grid.element.querySelectorAll("tbody > tr")) {
-            if (!row.classList.contains("mvc-grid-empty-row")) {
-                row.addEventListener("click", function (e) {
-                    const data = {};
+        for (const row of grid.element.querySelectorAll("tbody > tr:not(.mvc-grid-empty-row)")) {
+            row.addEventListener("click", function (e) {
+                const data = {};
 
-                    for (const [i, column] of grid.columns.entries()) {
-                        if (row.cells.length <= i) {
-                            return;
-                        }
-
-                        data[column.name] = row.cells[i].innerText;
+                for (const [i, column] of grid.columns.entries()) {
+                    if (row.cells.length <= i) {
+                        return;
                     }
 
-                    this.dispatchEvent(new CustomEvent("rowclick", {
-                        detail: { grid: grid, data: data, originalEvent: e },
-                        bubbles: true
-                    }));
-                });
-            }
+                    data[column.name] = row.cells[i].innerText;
+                }
+
+                this.dispatchEvent(new CustomEvent("rowclick", {
+                    detail: { grid: grid, data: data, originalEvent: e },
+                    bubbles: true
+                }));
+            });
         }
     }
 }
@@ -1057,6 +1057,6 @@ class MvcGridGuidFilter extends MvcGridFilter {
     }
 
     isValid(value) {
-        return !value || /^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$/i.test(value);
+        return !value || /^[0-9A-F]{8}-?([0-9A-F]{4}-?){3}[0-9A-F]{12}$/i.test(value);
     }
 }

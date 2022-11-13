@@ -76,13 +76,13 @@ public class GridColumnTests
     [Fact]
     public void GridColumn_NotMemberExpression_SetsEmptyTitle()
     {
-        Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).Title.ToString());
+        Assert.Empty(new GridColumn<GridModel, Int32>(column.Grid, _ => 1).Title.ToString()!);
     }
 
     [Fact]
     public void GridColumn_NoDisplayAttribute_SetsEmptyTitle()
     {
-        Assert.Empty(new GridColumn<GridModel, Object?>(column.Grid, model => model.Name).Title.ToString());
+        Assert.Empty(new GridColumn<GridModel, Object?>(column.Grid, model => model.Name).Title.ToString()!);
     }
 
     [Fact]
@@ -168,7 +168,7 @@ public class GridColumnTests
     }
 
     [Fact]
-    public void Process_FiltereItems()
+    public void Process_FilteredItems()
     {
         column.Filter = Substitute.For<IGridColumnFilter<GridModel, Object?>>();
 
@@ -188,9 +188,7 @@ public class GridColumnTests
     {
         column.ExpressionValue = model => model.Name!.ToString();
 
-        String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
-
-        Assert.Empty(actual);
+        Assert.Empty(column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString()!);
     }
 
     [Fact]
@@ -198,9 +196,7 @@ public class GridColumnTests
     {
         column.RenderValue = (model, _) => model.Name;
 
-        String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
-
-        Assert.Empty(actual);
+        Assert.Empty(column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString()!);
     }
 
     [Fact]
@@ -208,9 +204,7 @@ public class GridColumnTests
     {
         column.ExpressionValue = model => model.Child!.Name;
 
-        String? actual = column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString();
-
-        Assert.Empty(actual);
+        Assert.Empty(column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString()!);
     }
 
     [Fact]
@@ -337,7 +331,7 @@ public class GridColumnTests
         GridRow<GridModel> row = new(new GridModel(), 0);
         GridColumn<GridModel, TestEnum?> enumColumn = new(column.Grid, model => model.NEnum);
 
-        Assert.Empty(enumColumn.ValueFor(row).ToString());
+        Assert.Empty(enumColumn.ValueFor(row).ToString()!);
     }
 
     [Theory]

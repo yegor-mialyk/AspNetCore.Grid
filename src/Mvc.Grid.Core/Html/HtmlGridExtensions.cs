@@ -57,15 +57,6 @@ public static class HtmlGridExtensions
 
         return html;
     }
-    public static IHtmlGrid<T> AppendCss<T>(this IHtmlGrid<T> html, String cssClasses)
-    {
-        if (html.Grid.Attributes.ContainsKey("class"))
-            html.Grid.Attributes["class"] = (html.Grid.Attributes["class"] + " " + cssClasses.TrimStart()).Trim();
-        else
-            html.Grid.Attributes["class"] = cssClasses.Trim();
-
-        return html;
-    }
     public static IHtmlGrid<T> Empty<T>(this IHtmlGrid<T> html, IHtmlContent content)
     {
         using StringWriter writer = new();
@@ -75,9 +66,24 @@ public static class HtmlGridExtensions
 
         return html;
     }
-    public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String cssClasses)
+    public static IHtmlGrid<T> AppendCss<T>(this IHtmlGrid<T> html, String classes)
     {
-        html.Grid.Attributes["class"] = cssClasses.Trim();
+        if (html.Grid.Attributes.ContainsKey("class"))
+            html.Grid.Attributes["class"] = (html.Grid.Attributes["class"] + " " + classes.TrimStart()).Trim();
+        else
+            html.Grid.Attributes["class"] = classes.Trim();
+
+        return html;
+    }
+    public static IHtmlGrid<T> Named<T>(this IHtmlGrid<T> html, String value)
+    {
+        html.Grid.Name = value;
+
+        return html;
+    }
+    public static IHtmlGrid<T> Css<T>(this IHtmlGrid<T> html, String classes)
+    {
+        html.Grid.Attributes["class"] = classes.Trim();
 
         return html;
     }
@@ -87,15 +93,9 @@ public static class HtmlGridExtensions
 
         return html;
     }
-    public static IHtmlGrid<T> Named<T>(this IHtmlGrid<T> html, String name)
+    public static IHtmlGrid<T> Id<T>(this IHtmlGrid<T> html, String? value)
     {
-        html.Grid.Name = name;
-
-        return html;
-    }
-    public static IHtmlGrid<T> Id<T>(this IHtmlGrid<T> html, String? id)
-    {
-        html.Grid.Id = id;
+        html.Grid.Id = value;
 
         return html;
     }

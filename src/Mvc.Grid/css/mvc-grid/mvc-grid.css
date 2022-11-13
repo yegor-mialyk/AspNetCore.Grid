@@ -63,9 +63,9 @@
 
 .mvc-grid-sort,
 .mvc-grid-filter {
+    font-family: GridGlyphs, sans-serif;
     transition: background-color 0.5s;
     background: rgb(0 0 0 / 0.03);
-    font-family: GridGlyphs;
     font-size: inherit;
     position: absolute;
     font-weight: bold;

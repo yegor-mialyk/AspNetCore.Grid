@@ -31,7 +31,7 @@ public static class GridColumnExtensions
             .OrderBy(column.Expression)
             .Select(column.Expression)
             .Distinct()
-            .ToArray()
+            .AsEnumerable()
             .Where(value => value != null)
             .Select(value => value!.ToString())
             .Select(value => new SelectListItem
@@ -123,27 +123,27 @@ public static class GridColumnExtensions
 
         return column;
     }
-    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, String width)
+    public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String value)
     {
-        column.Style = $"width: {width.Split(';')[0]}";
+        column.Name = value;
 
         return column;
     }
-    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, Int32 width)
+    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, String value)
     {
-        column.Style = $"width: {width.ToString(CultureInfo.InvariantCulture)}px";
+        column.Style = $"width: {value.Split(';')[0]}";
 
         return column;
     }
-    public static IGridColumn<T, TValue> Named<T, TValue>(this IGridColumn<T, TValue> column, String name)
+    public static IGridColumn<T, TValue> Width<T, TValue>(this IGridColumn<T, TValue> column, Int32 value)
     {
-        column.Name = name;
+        column.Style = $"width: {value.ToString(CultureInfo.InvariantCulture)}px";
 
         return column;
     }
-    public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String css)
+    public static IGridColumn<T, TValue> Css<T, TValue>(this IGridColumn<T, TValue> column, String value)
     {
-        column.CssClasses = css.Trim();
+        column.CssClasses = value.Trim();
 
         return column;
     }

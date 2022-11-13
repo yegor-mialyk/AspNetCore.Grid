@@ -110,7 +110,7 @@ public class HtmlGridExtensionsTests
     [InlineData(GridFilterCase.Lower, GridFilterCase.Lower)]
     [InlineData(GridFilterCase.Upper, GridFilterCase.Upper)]
     [InlineData(GridFilterCase.Original, GridFilterCase.Original)]
-    public void Filterable_SetsCase(GridFilterCase? current, GridFilterCase filterCace)
+    public void Filterable_SetsCase(GridFilterCase? current, GridFilterCase filterCase)
     {
         foreach (IGridColumn<GridModel> column in htmlGrid.Grid.Columns)
             column.Filter.Case = current;
@@ -118,7 +118,7 @@ public class HtmlGridExtensionsTests
         htmlGrid.Filterable(GridFilterCase.Lower);
 
         foreach (IGridColumn<GridModel> actual in htmlGrid.Grid.Columns)
-            Assert.Equal(filterCace, actual.Filter.Case);
+            Assert.Equal(filterCase, actual.Filter.Case);
     }
 
     [Fact]

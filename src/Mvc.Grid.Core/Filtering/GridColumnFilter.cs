@@ -148,20 +148,18 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
         }
 
         String method = keys[1][columnName.Length..];
-        String value = Column.Grid.Query![keys[1]][0];
+        String? value = Column.Grid.Query![keys[1]][0];
 
         return CreateFilter(method, value);
     }
     private IGridFilter? CreateFilter(String method, StringValues values)
     {
-        if (GetFilters().Create(typeof(TValue), method, values) is IGridFilter filter)
-        {
-            filter.Case = Case ?? GridFilterCase.Original;
+        if (GetFilters().Create(typeof(TValue), method, values) is not IGridFilter filter)
+            return null;
 
-            return filter;
-        }
+        filter.Case = Case ?? GridFilterCase.Original;
 
-        return null;
+        return filter;
     }
 
     private String GetName()

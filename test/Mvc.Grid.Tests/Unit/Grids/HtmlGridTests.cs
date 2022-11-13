@@ -51,7 +51,7 @@ public class HtmlGridTests
         htmlGrid.Grid.Query = null;
         htmlGrid.Html.ViewContext.ReturnsNull();
 
-        Assert.Empty(new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query);
+        Assert.Empty(new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.Query!);
     }
 
     [Fact]

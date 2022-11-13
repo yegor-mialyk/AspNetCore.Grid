@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace NonFactors.Mvc.Grid;
 
 public class EnumFilter : AGridFilter
