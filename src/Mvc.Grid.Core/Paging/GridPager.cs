@@ -101,11 +101,11 @@ public class GridPager<T> : IGridPager<T>
         Grid = grid;
         CssClasses = "";
         CurrentPage = 1;
-        RowsPerPage = 20;
+        RowsPerPage = 25;
         PagesToDisplay = 5;
         PartialViewName = "MvcGrid/_Pager";
         ProcessorType = GridProcessorType.Post;
-        PageSizes = new Dictionary<Int32, String> { [10] = "10", [20] = "20", [50] = "50", [100] = "100" };
+        PageSizes = new() { [10] = "10", [25] = "25", [50] = "50", [100] = "100", [500] = "500", [1000] = "1000" };
     }
 
     public virtual IQueryable<T> Process(IQueryable<T> items)

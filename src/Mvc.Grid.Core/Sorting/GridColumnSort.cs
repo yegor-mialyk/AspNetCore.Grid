@@ -17,6 +17,7 @@ public class GridColumnSort<T, TValue> : IGridColumnSort<T, TValue>
         }
     }
     public Boolean? IsEnabled { get; set; }
+    public bool IsDefault { get; set; }
     public GridSortOrder FirstOrder { get; set; }
 
     public IGridColumn<T, TValue> Column { get; set; }

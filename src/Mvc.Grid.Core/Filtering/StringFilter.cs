@@ -31,6 +31,7 @@ public class StringFilter : AGridFilter
             case "starts-with":
             case "ends-with":
             case "contains":
+            case "not-contains":
                 if (Values.Any(String.IsNullOrEmpty))
                     return null;
 
@@ -75,6 +76,7 @@ public class StringFilter : AGridFilter
             "ends-with" => Expression.Call(ConvertCase(expression), EndsWith, ConvertCase(value!)),
             "contains" => Expression.Call(ConvertCase(expression), Contains, ConvertCase(value!)),
             "consists-of" => String.IsNullOrWhiteSpace(value) ? null : Consists(expression, value),
+            "not-contains" => Expression.Not(Expression.Call(ConvertCase(expression), Contains, ConvertCase(value!))),
             _ => null
         };
     }
