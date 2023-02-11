@@ -34,7 +34,7 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     {
         get
         {
-            if (IsEnabled == true && Type == GridFilterType.Double && !OperatorIsSet)
+            if (IsEnabled == true && (Type == GridFilterType.Double || Type == GridFilterType.Auto) && !OperatorIsSet)
             {
                 String prefix = String.IsNullOrEmpty(Column.Grid.Name) ? "" : Column.Grid.Name + "-";
                 Operator = Column.Grid.Query?[prefix + Column.Name + "-op"].FirstOrDefault()?.ToLower();
@@ -73,8 +73,9 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     {
         get
         {
-            if (IsEnabled == true && Type == GridFilterType.Double && !SecondIsSet)
-                Second = CreateSecondFilter();
+            if (IsEnabled == true && !SecondIsSet && Operator?.Length > 0)
+                if (Type == GridFilterType.Auto || Type == GridFilterType.Double)
+                    Second = CreateSecondFilter();
 
             return SecondValue;
         }
@@ -123,7 +124,7 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
 
         String method = keys[0][columnName.Length..];
 
-        if (Type == GridFilterType.Multi)
+        if (Type == GridFilterType.Multi || Type == GridFilterType.Auto && String.IsNullOrEmpty(Operator))
             return CreateFilter(method, Column.Grid.Query![keys[0]]);
 
         return CreateFilter(method, Column.Grid.Query![keys[0]][0]);
@@ -210,7 +211,7 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     {
         Expression? left = First?.Apply(Column.Expression.Body);
 
-        if (Type == GridFilterType.Double && left != null)
+        if (left != null && (Type == GridFilterType.Double || Type == GridFilterType.Auto))
         {
             Expression? right = Second?.Apply(Column.Expression.Body);
 

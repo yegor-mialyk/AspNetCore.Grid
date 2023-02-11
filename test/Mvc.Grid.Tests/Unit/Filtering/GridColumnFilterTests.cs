@@ -77,12 +77,14 @@ public class GridColumnFilterTests
         Assert.Same(options, filter.Options);
     }
 
-    [Fact]
-    public void Operator_Set_Caches()
+    [Theory]
+    [InlineData(GridFilterType.Auto)]
+    [InlineData(GridFilterType.Double)]
+    public void Operator_Set_Caches(GridFilterType type)
     {
-        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
-
+        filter.Type = type;
         filter.Operator = "or";
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=and");
 
         Assert.Equal("or", filter.Operator);
     }
@@ -90,6 +92,7 @@ public class GridColumnFilterTests
     [Theory]
     [InlineData(null, null)]
     [InlineData(false, null)]
+    [InlineData(false, GridFilterType.Auto)]
     [InlineData(null, GridFilterType.Single)]
     [InlineData(false, GridFilterType.Double)]
     public void Operator_Get_Disabled(Boolean? isEnabled, GridFilterType? type)
@@ -101,47 +104,69 @@ public class GridColumnFilterTests
         Assert.Null(filter.Operator);
     }
 
-    [Fact]
-    public void Operator_Get_NoQuery()
+    [Theory]
+    [InlineData(GridFilterType.Auto)]
+    [InlineData(GridFilterType.Double)]
+    public void Operator_Get_NoQuery(GridFilterType type)
     {
-        filter.Type = GridFilterType.Double;
+        filter.Type = type;
         filter.Column.Grid.Query = null;
 
         Assert.Null(filter.Operator);
     }
 
     [Theory]
-    [InlineData("", "", null)]
-    [InlineData("", "op", null)]
-    [InlineData("", "name-op", "")]
-    [InlineData("", "name-op=", "")]
-    [InlineData("", "name-op=or", "or")]
-    [InlineData("", "name-op=and", "and")]
-    [InlineData("", "name-op-and=and", null)]
-    [InlineData("", "name-op=and&name-op=or", "and")]
-    [InlineData("", "NAME-OP=AND&NAME-OP=OR", "and")]
-    [InlineData("grid", "", null)]
-    [InlineData("grid", "name-op", null)]
-    [InlineData("grid", "grid-name-op", "")]
-    [InlineData("grid", "grid-name-op=", "")]
-    [InlineData("grid", "grid-name-op=or", "or")]
-    [InlineData("grid", "grid-name-op=and", "and")]
-    [InlineData("grid", "grid-name-op-and=and", null)]
-    [InlineData("grid", "grid-name-op=and&grid-name-op=or", "and")]
-    [InlineData("grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
-    public void Operator_Get_FromQuery(String name, String query, String? op)
+    [InlineData(GridFilterType.Auto, "", "", null)]
+    [InlineData(GridFilterType.Auto, "", "op", null)]
+    [InlineData(GridFilterType.Auto, "", "name-op", "")]
+    [InlineData(GridFilterType.Auto, "", "name-op=", "")]
+    [InlineData(GridFilterType.Auto, "", "name-op=or", "or")]
+    [InlineData(GridFilterType.Auto, "", "name-op=and", "and")]
+    [InlineData(GridFilterType.Auto, "", "name-op-and=and", null)]
+    [InlineData(GridFilterType.Auto, "", "name-op=and&name-op=or", "and")]
+    [InlineData(GridFilterType.Auto, "", "NAME-OP=AND&NAME-OP=OR", "and")]
+    [InlineData(GridFilterType.Auto, "grid", "", null)]
+    [InlineData(GridFilterType.Auto, "grid", "name-op", null)]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op", "")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op=", "")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op=or", "or")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op=and", "and")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op-and=and", null)]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op=and&grid-name-op=or", "and")]
+    [InlineData(GridFilterType.Auto, "grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
+    [InlineData(GridFilterType.Double, "", "", null)]
+    [InlineData(GridFilterType.Double, "", "op", null)]
+    [InlineData(GridFilterType.Double, "", "name-op", "")]
+    [InlineData(GridFilterType.Double, "", "name-op=", "")]
+    [InlineData(GridFilterType.Double, "", "name-op=or", "or")]
+    [InlineData(GridFilterType.Double, "", "name-op=and", "and")]
+    [InlineData(GridFilterType.Double, "", "name-op-and=and", null)]
+    [InlineData(GridFilterType.Double, "", "name-op=and&name-op=or", "and")]
+    [InlineData(GridFilterType.Double, "", "NAME-OP=AND&NAME-OP=OR", "and")]
+    [InlineData(GridFilterType.Double, "grid", "", null)]
+    [InlineData(GridFilterType.Double, "grid", "name-op", null)]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op", "")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op=", "")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op=or", "or")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op=and", "and")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op-and=and", null)]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op=and&grid-name-op=or", "and")]
+    [InlineData(GridFilterType.Double, "grid", "GRID-NAME-OP=AND&GRID-NAME-OP=OR", "and")]
+    public void Operator_Get_FromQuery(GridFilterType type, String name, String query, String? op)
     {
+        filter.Type = type;
         filter.Column.Grid.Name = name;
-        filter.Type = GridFilterType.Double;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
         Assert.Equal(op, filter.Operator);
     }
 
-    [Fact]
-    public void Operator_Get_Caches()
+    [Theory]
+    [InlineData(GridFilterType.Auto)]
+    [InlineData(GridFilterType.Double)]
+    public void Operator_Get_Caches(GridFilterType type)
     {
-        filter.Type = GridFilterType.Double;
+        filter.Type = type;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=or");
 
         String? op = filter.Operator;
@@ -180,7 +205,7 @@ public class GridColumnFilterTests
     [InlineData("grid", "grid-name=a")]
     [InlineData("grid", "grid-name-=a")]
     [InlineData("grid", "grid-name-eq=a")]
-    public void First_Get_NotFoundReturnNull(String name, String query)
+    public void First_Get_NotFoundReturnsNull(String name, String query)
     {
         filter.Column.Grid.Name = name;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
@@ -241,12 +266,14 @@ public class GridColumnFilterTests
     }
 
     [Theory]
-    [InlineData("", "name-equals=a&name-equals=b", "a,b")]
-    [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
-    public void First_Get_MultiFilter(String name, String query, String value)
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-equals=b", "a,b")]
+    [InlineData(GridFilterType.Multi, "", "name-equals=a&name-equals=b", "a,b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
+    [InlineData(GridFilterType.Multi, "grid", "grid-name-equals=a&grid-name-equals=b", "a,b")]
+    public void First_Get_MultiFilter(GridFilterType type, String name, String query, String value)
     {
+        filter.Type = type;
         filter.Column.Grid.Name = name;
-        filter.Type = GridFilterType.Multi;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
         IGridFilter actual = filter.First!;
@@ -287,6 +314,7 @@ public class GridColumnFilterTests
     [Theory]
     [InlineData(null, null)]
     [InlineData(false, null)]
+    [InlineData(false, GridFilterType.Auto)]
     [InlineData(null, GridFilterType.Single)]
     [InlineData(false, GridFilterType.Double)]
     public void Second_Get_Disabled(Boolean? isEnabled, GridFilterType? type)
@@ -299,53 +327,108 @@ public class GridColumnFilterTests
     }
 
     [Theory]
-    [InlineData("", "")]
-    [InlineData("", "name=a")]
-    [InlineData("", "name-=a")]
-    [InlineData("", "name-eq=a")]
-    [InlineData("", "name-equals=a")]
-    [InlineData("", "name-equals=a&")]
-    [InlineData("", "name-equals=a&name=b")]
-    [InlineData("", "name-equals=a&name-=b")]
-    [InlineData("", "name-equals=a&name-eq=b")]
-    [InlineData("grid", "")]
-    [InlineData("grid", "grid-")]
-    [InlineData("grid", "grid-name=a")]
-    [InlineData("grid", "grid-name-=a")]
-    [InlineData("grid", "grid-name-eq=a")]
-    [InlineData("grid", "grid-name-equals=a")]
-    [InlineData("grid", "grid-name-equals=a&")]
-    [InlineData("grid", "grid-name-equals=a&grid-name=b")]
-    [InlineData("grid", "grid-name-equals=a&grid-name-=b")]
-    [InlineData("grid", "grid-name-equals=a&grid-name-eq=b")]
-    public void Second_Get_NotFoundReturnNull(String name, String query)
+    [InlineData(GridFilterType.Auto, "", "")]
+    [InlineData(GridFilterType.Auto, "", "name=a")]
+    [InlineData(GridFilterType.Auto, "", "name-=a")]
+    [InlineData(GridFilterType.Auto, "", "name-eq=a")]
+    [InlineData(GridFilterType.Auto, "", "name-op=or")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name=b")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-=b")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-eq=b")]
+    [InlineData(GridFilterType.Auto, "grid", "")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name=a")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-=a")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-eq=a")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-op=or")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name=b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-=b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-eq=b")]
+    [InlineData(GridFilterType.Double, "", "")]
+    [InlineData(GridFilterType.Double, "", "name=a")]
+    [InlineData(GridFilterType.Double, "", "name-=a")]
+    [InlineData(GridFilterType.Double, "", "name-eq=a")]
+    [InlineData(GridFilterType.Double, "", "name-op=or")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name=b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-=b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-eq=b")]
+    [InlineData(GridFilterType.Double, "grid", "")]
+    [InlineData(GridFilterType.Double, "grid", "grid-")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name=a")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-=a")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-eq=a")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-op=or")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name=b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-=b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-eq=b")]
+    public void Second_Get_NotFoundReturnsNull(GridFilterType type, String name, String query)
     {
+        filter.Type = type;
         filter.Column.Grid.Name = name;
-        filter.Type = GridFilterType.Double;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
         Assert.Null(filter.Second);
     }
 
     [Theory]
-    [InlineData("", "name-eq=a&name-equals=b", "b")]
-    [InlineData("", "name-equals=a&name-equals=b", "b")]
-    [InlineData("", "name-contains=a&name-equals=", "")]
-    [InlineData("", "name-equals=a&name-equals=", "")]
-    [InlineData("", "name-contains=a&name-equals=ba", "ba")]
-    [InlineData("", "name-contains=a&name-equals=b&name-op=or", "b")]
-    [InlineData("", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
-    [InlineData("grid", "grid-name-eq=a&grid-name-equals=b", "b")]
-    [InlineData("grid", "grid-name-equals=a&grid-name-equals=b", "b")]
-    [InlineData("grid", "grid-name-contains=a&grid-name-equals=", "")]
-    [InlineData("grid", "grid-name-equals=a&grid-name-equals=", "")]
-    [InlineData("grid", "grid-name-contains=a&grid-name-equals=ba", "ba")]
-    [InlineData("grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=or", "b")]
-    [InlineData("grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
-    public void Second_Get_FromQuery(String name, String query, String value)
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-equals=b")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-op&name-equals=b")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-op=&name-equals=b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-equals=b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-op&grid-name-equals=b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-op=&grid-name-equals=b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-equals=b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-op&name-equals=b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-op=&name-equals=b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-equals=b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-op&grid-name-equals=b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-op=&grid-name-equals=b")]
+    public void Second_Get_NoOperatorReturnsNull(GridFilterType type, String name, String query)
     {
+        filter.Type = type;
         filter.Column.Grid.Name = name;
-        filter.Type = GridFilterType.Double;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
+
+        Assert.Null(filter.Second);
+    }
+
+    [Theory]
+    [InlineData(GridFilterType.Auto, "", "name-eq=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "", "name-contains=a&name-equals=&name-op=or", "")]
+    [InlineData(GridFilterType.Auto, "", "name-equals=a&name-equals=&name-op=or", "")]
+    [InlineData(GridFilterType.Auto, "", "name-contains=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-eq=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-contains=a&grid-name-equals=&grid-name-op=or", "")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-equals=a&grid-name-equals=&grid-name-op=or", "")]
+    [InlineData(GridFilterType.Auto, "grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Auto, "grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
+    [InlineData(GridFilterType.Double, "", "name-eq=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "", "name-contains=a&name-equals=&name-op=or", "")]
+    [InlineData(GridFilterType.Double, "", "name-equals=a&name-equals=&name-op=or", "")]
+    [InlineData(GridFilterType.Double, "", "name-contains=a&name-equals=b&name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "", "NAME-CONTAINS=A&NAME-EQUALS=B&NAME-OP=OR", "B")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-eq=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-contains=a&grid-name-equals=&grid-name-op=or", "")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-equals=a&grid-name-equals=&grid-name-op=or", "")]
+    [InlineData(GridFilterType.Double, "grid", "grid-name-contains=a&grid-name-equals=b&grid-name-op=or", "b")]
+    [InlineData(GridFilterType.Double, "grid", "GRID-NAME-CONTAINS=A&GRID-NAME-EQUALS=B&GRID-NAME-OP=OR", "B")]
+    public void Second_Get_FromQuery(GridFilterType type, String name, String query, String value)
+    {
+        filter.Type = type;
+        filter.Column.Grid.Name = name;
         filter.Column.Grid.Query = HttpUtility.ParseQueryString(query);
 
         IGridFilter actual = filter.Second!;
@@ -355,10 +438,12 @@ public class GridColumnFilterTests
         Assert.Equal(value, actual.Values);
     }
 
-    [Fact]
-    public void Second_Get_SkipsOperation()
+    [Theory]
+    [InlineData(GridFilterType.Auto)]
+    [InlineData(GridFilterType.Double)]
+    public void Second_Get_SkipsOperation(GridFilterType type)
     {
-        filter.Type = GridFilterType.Double;
+        filter.Type = type;
         filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
         filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
@@ -368,15 +453,18 @@ public class GridColumnFilterTests
 
         Assert.Null(filter.Second);
     }
-    [Fact]
-    public void Second_Get_Caches()
+
+    [Theory]
+    [InlineData(GridFilterType.Auto)]
+    [InlineData(GridFilterType.Double)]
+    public void Second_Get_Caches(GridFilterType type)
     {
-        filter.Type = GridFilterType.Double;
-        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-equals=b");
+        filter.Type = type;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-op=and&name-equals=b");
 
         IGridFilter? expected = filter.Second;
 
-        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-starts-with=d&name-ends-with=e");
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-starts-with=d&name-op=and&name-ends-with=e");
 
         IGridFilter actual = filter.Second!;
 
@@ -759,6 +847,52 @@ public class GridColumnFilterTests
 
         IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
         IQueryable actual = testFilter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public void Apply_AutomaticSingleFilter(String? op)
+    {
+        filter.Operator = op;
+        filter.Type = GridFilterType.Auto;
+        filter.First = new StringFilter { Method = "contains", Values = "a" };
+        filter.Second = new StringFilter { Method = "contains", Values = "b" };
+
+        IQueryable expected = items.Where(item => item.Name != null && item.Name.Contains('a'));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_AutomaticDoubleFilter()
+    {
+        filter.Operator = "or";
+        filter.Type = GridFilterType.Auto;
+        filter.First = new StringFilter { Method = "contains", Values = "a" };
+        filter.Second = new StringFilter { Method = "contains", Values = "b" };
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains('b')));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public void Apply_AutomaticMultiFilter(String? op)
+    {
+        filter.Operator = op;
+        filter.Type = GridFilterType.Auto;
+        filter.First = new StringFilter { Method = "contains", Values = new StringValues(new[] { "a", "b" }) };
+        filter.Second = new StringFilter { Method = "contains", Values = "c" };
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains('b')));
+        IQueryable actual = filter.Apply(items);
 
         Assert.Equal(expected, actual);
     }
