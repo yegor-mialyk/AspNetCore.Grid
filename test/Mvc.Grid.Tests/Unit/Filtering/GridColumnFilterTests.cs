@@ -897,6 +897,62 @@ public class GridColumnFilterTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact]
+    public void Apply_OriginalCaseFilter()
+    {
+        filter.Operator = null;
+        filter.Type = GridFilterType.Auto;
+        filter.Case = GridFilterCase.Original;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-contains=b");
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains('b')));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_LowerCaseFilter()
+    {
+        filter.Operator = null;
+        filter.Type = GridFilterType.Auto;
+        filter.Case = GridFilterCase.Lower;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=A&name-contains=B");
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.ToLower().Contains('a') || item.Name.ToLower().Contains('b')));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_UpperCaseFilter()
+    {
+        filter.Operator = null;
+        filter.Type = GridFilterType.Auto;
+        filter.Case = GridFilterCase.Upper;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-contains=b");
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.ToUpper().Contains('A') || item.Name.ToUpper().Contains('B')));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_DefaultCaseFilter()
+    {
+        filter.Case = null;
+        filter.Operator = null;
+        filter.Type = GridFilterType.Auto;
+        filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-contains=a&name-contains=b");
+
+        IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains('b')));
+        IQueryable actual = filter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
     private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
     {
         Grid<GridModel> grid = new(Array.Empty<GridModel>());

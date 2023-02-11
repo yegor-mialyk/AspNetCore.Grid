@@ -216,8 +216,6 @@ public class GridFilters : IGridFilters
         if (type == typeof(String))
             return null;
 
-        type = Nullable.GetUnderlyingType(type) ?? type;
-
         if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             return type.GetGenericArguments()[0];
 
