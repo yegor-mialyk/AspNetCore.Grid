@@ -96,7 +96,7 @@ export class MvcGrid {
         if (element.dataset.id) {
             return MvcGrid.instances[parseInt(element.dataset.id)].set(options);
         }
-        
+
         grid.columns = [];
         grid.element = element;
         grid.loadingDelay = null;
@@ -120,7 +120,7 @@ export class MvcGrid {
         };
 
         const headers = element.querySelector(".mvc-grid-headers");
-        const rowFilters = element.querySelectorAll<HTMLTableHeaderCellElement>(".mvc-grid-row-filters th");
+        const rowFilters = element.querySelectorAll<HTMLTableCellElement>(".mvc-grid-row-filters th");
 
         if (headers) {
             for (const [i, header] of headers.querySelectorAll("th").entries()) {
@@ -175,7 +175,7 @@ export class MvcGrid {
 
         if (MvcGridPopup.opened && smooth) {
             MvcGridPopup.reloadNeeded = true;
-            
+
             return;
         }
 
@@ -548,7 +548,7 @@ export class MvcGridColumnFilter {
                     query.delete(key);
                 }
             }
-            
+
             grid.reload();
         } else {
             filter.first.values = [];
@@ -688,14 +688,14 @@ export class MvcGridPopup {
         if (!filter.instance) {
             return;
         }
-        
-        this.grid = grid; 
+
+        this.grid = grid;
 
         const popup = this;
         const filterer = filter.instance;
 
         popup.opened = true;
-        
+
         popup.lastActiveElement = document.activeElement as HTMLElement;
         popup.element.className = `mvc-grid-popup ${filterer.cssClasses}`.trim();
         popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content">${filterer.render()}</div>`;

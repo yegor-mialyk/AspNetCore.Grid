@@ -151,7 +151,7 @@
                 }
                 </!tr>
             }
-            @if (!Model.Rows.Any() && Model.EmptyText != null)
+            @if (rows.Length == 0 && Model.EmptyText != null)
             {
                 <tr class="mvc-grid-empty-row">
                     <td colspan="@Model.Columns.Count()">
