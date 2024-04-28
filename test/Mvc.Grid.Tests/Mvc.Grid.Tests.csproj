@@ -10,9 +10,9 @@
     <Copyright>Copyright © NonFactors</Copyright>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <ContinuousIntegrationBuild Condition="'$(Configuration)'=='Release'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,11 +37,6 @@
     <Using Include="System.Globalization" />
     <Using Include="System.Linq.Expressions" />
     <Using Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <SourceRoot Remove="$(NugetPackageRoot)" />
-    <SourceRoot Include="$(ProjectDir)" />
   </ItemGroup>
 
 </Project>
