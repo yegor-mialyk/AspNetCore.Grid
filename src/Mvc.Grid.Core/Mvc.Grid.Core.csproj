@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>7.2.0</Version>
+    <Version>7.2.1</Version>
     <Nullable>enable</Nullable>
     <Company>NonFactors</Company>
     <Deterministic>true</Deterministic>
@@ -10,17 +10,13 @@
     <Copyright>Copyright © NonFactors</Copyright>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <ContinuousIntegrationBuild Condition="'$(Configuration)'=='Release'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.1.1" PrivateAssets="All" Condition="'$(Configuration)'=='Release'" />
   </ItemGroup>
 
   <ItemGroup>
