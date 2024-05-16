@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 7.2.1
+ * Mvc.Grid 7.3.0
  *
  * Copyright © NonFactors
  *
@@ -157,6 +157,12 @@ export declare class MvcGridNumberFilter extends MvcGridFilter {
     isValid(value: string): boolean;
 }
 export declare class MvcGridDateFilter extends MvcGridFilter {
+    constructor(column: MvcGridColumn);
+}
+export declare class MvcGridDateOnlyFilter extends MvcGridDateFilter {
+    constructor(column: MvcGridColumn);
+}
+export declare class MvcGridTimeOnlyFilter extends MvcGridDateFilter {
     constructor(column: MvcGridColumn);
 }
 export declare class MvcGridGuidFilter extends MvcGridFilter {

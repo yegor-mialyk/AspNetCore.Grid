@@ -99,12 +99,26 @@ public class GridFilters : IGridFilters
         Register(typeof(Decimal), "less-than-or-equal", typeof(NumberFilter<Decimal>));
         Register(typeof(Decimal), "greater-than-or-equal", typeof(NumberFilter<Decimal>));
 
+        Register(typeof(DateOnly), "equals", typeof(DateTimeFilter));
+        Register(typeof(DateOnly), "not-equals", typeof(DateTimeFilter));
+        Register(typeof(DateOnly), "earlier-than", typeof(DateTimeFilter));
+        Register(typeof(DateOnly), "later-than", typeof(DateTimeFilter));
+        Register(typeof(DateOnly), "earlier-than-or-equal", typeof(DateTimeFilter));
+        Register(typeof(DateOnly), "later-than-or-equal", typeof(DateTimeFilter));
+
         Register(typeof(DateTime), "equals", typeof(DateTimeFilter));
         Register(typeof(DateTime), "not-equals", typeof(DateTimeFilter));
         Register(typeof(DateTime), "earlier-than", typeof(DateTimeFilter));
         Register(typeof(DateTime), "later-than", typeof(DateTimeFilter));
         Register(typeof(DateTime), "earlier-than-or-equal", typeof(DateTimeFilter));
         Register(typeof(DateTime), "later-than-or-equal", typeof(DateTimeFilter));
+
+        Register(typeof(TimeOnly), "equals", typeof(DateTimeFilter));
+        Register(typeof(TimeOnly), "not-equals", typeof(DateTimeFilter));
+        Register(typeof(TimeOnly), "earlier-than", typeof(DateTimeFilter));
+        Register(typeof(TimeOnly), "later-than", typeof(DateTimeFilter));
+        Register(typeof(TimeOnly), "earlier-than-or-equal", typeof(DateTimeFilter));
+        Register(typeof(TimeOnly), "later-than-or-equal", typeof(DateTimeFilter));
 
         Register(typeof(Boolean), "equals", typeof(BooleanFilter));
         Register(typeof(Boolean), "not-equals", typeof(BooleanFilter));

@@ -190,6 +190,12 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
             case TypeCode.DateTime:
                 return "date";
             default:
+                if (type == typeof(DateOnly))
+                    return "date-only";
+
+                if (type == typeof(TimeOnly))
+                    return "time-only";
+
                 return type == typeof(Guid) ? "guid" : "default";
         }
     }
