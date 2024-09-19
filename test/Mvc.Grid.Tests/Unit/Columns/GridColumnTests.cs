@@ -9,7 +9,7 @@ public class GridColumnTests
 
     public GridColumnTests()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
         column = new GridColumn<GridModel, Object?>(grid, model => model.Name);
     }
 
@@ -186,7 +186,7 @@ public class GridColumnTests
     [Fact]
     public void ValueFor_NullReferenceInExpressionValue_ReturnsEmpty()
     {
-        column.ExpressionValue = model => model.Name!.ToString();
+        column.ExpressionValue = model => model.Name;
 
         Assert.Empty(column.ValueFor(new GridRow<Object>(new GridModel(), 0)).ToString()!);
     }

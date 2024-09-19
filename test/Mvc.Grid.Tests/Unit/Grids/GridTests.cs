@@ -5,7 +5,7 @@ public class GridTests
     [Fact]
     public void IGrid_ReturnsColumns()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
 
         Object actual = ((IGrid)grid).Columns;
         Object expected = grid.Columns;
@@ -16,7 +16,7 @@ public class GridTests
     [Fact]
     public void IGrid_ReturnsRows()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
 
         Assert.Equal(grid.Rows, ((IGrid)grid).Rows);
     }
@@ -24,7 +24,7 @@ public class GridTests
     [Fact]
     public void IGrid_ReturnsPager()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
 
         Assert.Equal(grid.Pager, ((IGrid)grid).Pager);
     }
@@ -32,25 +32,25 @@ public class GridTests
     [Fact]
     public void Grid_SetsName()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Name);
+        Assert.Empty(new Grid<GridModel>([]).Name);
     }
 
     [Fact]
     public void Grid_SetsUrl()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Url);
+        Assert.Empty(new Grid<GridModel>([]).Url);
     }
 
     [Fact]
     public void Grid_SetsFooterPartialViewName()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).FooterPartialViewName);
+        Assert.Empty(new Grid<GridModel>([]).FooterPartialViewName);
     }
 
     [Fact]
     public void Grid_SetsProcessors()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Processors);
+        Assert.Empty(new Grid<GridModel>([]).Processors);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class GridTests
     [Fact]
     public void Grid_SetsFilterMode()
     {
-        GridFilterMode actual = new Grid<GridModel>(Array.Empty<GridModel>()).FilterMode;
+        GridFilterMode actual = new Grid<GridModel>([]).FilterMode;
         GridFilterMode expected = GridFilterMode.Excel;
 
         Assert.Equal(expected, actual);
@@ -74,30 +74,30 @@ public class GridTests
     [Fact]
     public void Grid_SetsEmptyAttributes()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Attributes);
+        Assert.Empty(new Grid<GridModel>([]).Attributes);
     }
 
     [Fact]
     public void Grid_SetsEmptyColumns()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Columns);
+        Assert.Empty(new Grid<GridModel>([]).Columns);
     }
 
     [Fact]
     public void Grid_SetsMode()
     {
-        Assert.Equal(GridProcessingMode.Automatic, new Grid<GridModel>(Array.Empty<GridModel>()).Mode);
+        Assert.Equal(GridProcessingMode.Automatic, new Grid<GridModel>([]).Mode);
     }
 
     [Fact]
     public void Grid_SetsEmptyRows()
     {
-        Assert.Empty(new Grid<GridModel>(Array.Empty<GridModel>()).Rows);
+        Assert.Empty(new Grid<GridModel>([]).Rows);
     }
 
     [Fact]
     public void Grid_SetsSort()
     {
-        Assert.NotNull(new Grid<GridModel>(Array.Empty<GridModel>()).Sort);
+        Assert.NotNull(new Grid<GridModel>([]).Sort);
     }
 }

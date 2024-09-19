@@ -9,7 +9,7 @@ public class GridPagerTests
 
     public GridPagerTests()
     {
-        pager = new GridPager<GridModel>(new Grid<GridModel>(Array.Empty<GridModel>()) { Query = new QueryCollection() });
+        pager = new GridPager<GridModel>(new Grid<GridModel>([]) { Query = new QueryCollection() });
     }
 
     [Theory]

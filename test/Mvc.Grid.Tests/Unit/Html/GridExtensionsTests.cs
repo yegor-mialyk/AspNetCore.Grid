@@ -19,7 +19,7 @@ public class MvcGridExtensionsTests
     public void Grid_CreatesHtmlGridWithHtml()
     {
         Object expected = html;
-        Object actual = html.Grid(Array.Empty<GridModel>()).Html;
+        Object actual = html.Grid<GridModel>([]).Html;
 
         Assert.Same(expected, actual);
     }
@@ -37,7 +37,7 @@ public class MvcGridExtensionsTests
     public void Grid_PartialViewName_CreatesHtmlGridWithHtml()
     {
         Object expected = html;
-        Object actual = html.Grid("_Partial", Array.Empty<GridModel>()).Html;
+        Object actual = html.Grid<GridModel>("_Partial", []).Html;
 
         Assert.Same(expected, actual);
     }
@@ -54,7 +54,7 @@ public class MvcGridExtensionsTests
     [Fact]
     public void Grid_PartialViewName_CreatesGridWithPartialViewName()
     {
-        Assert.Equal("_Partial", html.Grid("_Partial", Array.Empty<GridModel>()).PartialViewName);
+        Assert.Equal("_Partial", html.Grid<GridModel>("_Partial", []).PartialViewName);
     }
 
     [Fact]

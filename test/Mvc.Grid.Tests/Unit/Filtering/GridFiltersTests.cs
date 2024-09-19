@@ -11,7 +11,7 @@ public class GridFiltersTests
     public GridFiltersTests()
     {
         filters = new GridFilters();
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
         column = new GridColumn<GridModel, String?>(grid, model => model.Name);
     }
 

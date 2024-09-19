@@ -17,18 +17,3 @@ public interface IGridColumn
 
     IHtmlContent ValueFor(IGridRow<Object> row);
 }
-public interface IGridColumn<T> : IGridColumn
-{
-    IGrid<T> Grid { get; }
-
-    new IGridColumnSort<T> Sort { get; }
-    new IGridColumnFilter<T> Filter { get; }
-}
-public interface IGridColumn<T, TValue> : IGridProcessor<T>, IGridColumn<T>
-{
-    Func<T, Int32, Object?>? RenderValue { get; set; }
-    Expression<Func<T, TValue>> Expression { get; set; }
-
-    new IGridColumnSort<T, TValue> Sort { get; set; }
-    new IGridColumnFilter<T, TValue> Filter { get; set; }
-}

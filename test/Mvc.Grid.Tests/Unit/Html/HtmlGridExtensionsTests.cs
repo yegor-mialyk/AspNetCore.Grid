@@ -453,15 +453,15 @@ public class HtmlGridExtensionsTests
         htmlGrid.Configure(new GridConfig
         {
             Name = "Test",
-            Columns = new[]
-            {
+            Columns =
+            [
                 new GridColumnConfig { Name = date.Name },
                 new GridColumnConfig { Name = sum.Name },
                 new GridColumnConfig { Name = name.Name }
-            }
+            ]
         });
 
-        IList<IGridColumn<GridModel>> expected = new[] { date, sum, name, empty };
+        IList<IGridColumn<GridModel>> expected = [date, sum, name, empty];
         IList<IGridColumn<GridModel>> actual = htmlGrid.Grid.Columns;
 
         Assert.Equal(expected, actual);
@@ -479,12 +479,12 @@ public class HtmlGridExtensionsTests
         htmlGrid.Configure(new GridConfig
         {
             Name = "Test",
-            Columns = new[]
-            {
+            Columns =
+            [
                 new GridColumnConfig { Name = sum.Name, Width = "50%" },
                 new GridColumnConfig { Name = date.Name, Width = "30px" },
                 new GridColumnConfig { Name = name.Name, Width = "10%; color: red" }
-            }
+            ]
         });
 
         Assert.Equal("width: 30px", date.Style);
@@ -505,12 +505,12 @@ public class HtmlGridExtensionsTests
         htmlGrid.Configure(new GridConfig
         {
             Name = "Test",
-            Columns = new[]
-            {
+            Columns =
+            [
                 new GridColumnConfig { Name = sum.Name, Hidden = true },
                 new GridColumnConfig { Name = date.Name, Hidden = true },
                 new GridColumnConfig { Name = name.Name, Hidden = false }
-            }
+            ]
         });
 
         Assert.False(empty.IsHidden);

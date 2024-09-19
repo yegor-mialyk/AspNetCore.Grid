@@ -11,7 +11,7 @@ public class GridColumnFilterTests
 
     public GridColumnFilterTests()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
         GridColumn<GridModel, String?> column = new(grid, model => model.Name);
 
         filter = new GridColumnFilter<GridModel, String?>(column) { IsEnabled = true };
@@ -831,7 +831,7 @@ public class GridColumnFilterTests
     [Fact]
     public void Apply_FiltersByExpressions()
     {
-        GridColumn<GridModel, Int32?> testColumn = new(new Grid<GridModel>(Array.Empty<GridModel>()), model => model.NSum);
+        GridColumn<GridModel, Int32?> testColumn = new(new Grid<GridModel>([]), model => model.NSum);
         GridColumnFilter<GridModel, Int32?> testFilter = new(testColumn)
         {
             Second = new NumberFilter<Int32> { Method = "greater-than", Values = "25" },
@@ -884,7 +884,7 @@ public class GridColumnFilterTests
     {
         filter.Operator = op;
         filter.Type = GridFilterType.Auto;
-        filter.First = new StringFilter { Method = "contains", Values = new StringValues(new[] { "a", "b" }) };
+        filter.First = new StringFilter { Method = "contains", Values = new StringValues(["a", "b"]) };
         filter.Second = new StringFilter { Method = "contains", Values = "c" };
 
         IQueryable expected = items.Where(item => item.Name != null && (item.Name.Contains('a') || item.Name.Contains('b')));
@@ -951,7 +951,7 @@ public class GridColumnFilterTests
 
     private void AssertFilterNameFor<TValue>(Expression<Func<GridModel, TValue>> property, String name)
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
 
         Assert.Equal(name, new GridColumnFilter<GridModel, TValue>(new GridColumn<GridModel, TValue>(grid, property)).Name);
     }

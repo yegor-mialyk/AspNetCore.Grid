@@ -7,7 +7,7 @@ public class GridRowsTests
     [Fact]
     public void GridRows_SetsGrid()
     {
-        Grid<GridModel> expected = new(Array.Empty<GridModel>());
+        Grid<GridModel> expected = new([]);
         IGrid<GridModel> actual = new GridRows<GridModel>(expected).Grid;
 
         Assert.Same(expected, actual);
@@ -22,7 +22,7 @@ public class GridRowsTests
         IQueryable<GridModel> postProcessedItems = new[] { new GridModel() }.AsQueryable();
         IQueryable<GridModel> preProcessedItems = new[] { new GridModel() }.AsQueryable();
         Grid<GridModel> grid = new(items) { Mode = GridProcessingMode.Manual };
-        
+
         postProcessor.Process(preProcessedItems).Returns(postProcessedItems);
         preProcessor.Process(items).Returns(preProcessedItems);
         postProcessor.ProcessorType = GridProcessorType.Post;

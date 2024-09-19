@@ -186,7 +186,7 @@ public class StringFilterTests
             new GridModel { Name = "TESTEr" }
         }.AsQueryable();
 
-        IQueryable expected = items.Where(model => model.Name != null && (model.Name.EndsWith("t") || model.Name.EndsWith("Er")));
+        IQueryable expected = items.Where(model => model.Name != null && (model.Name.EndsWith('t') || model.Name.EndsWith("Er")));
         IQueryable actual = items.Where(model => model.Name, filter);
 
         Assert.Equal(expected, actual);
@@ -299,7 +299,7 @@ public class StringFilterTests
             new GridModel { Name = "TEST" }
         }.AsQueryable();
 
-        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("T") && model.Name.Contains("es"));
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains('T') && model.Name.Contains("es"));
         IQueryable actual = items.Where(model => model.Name, filter);
 
         Assert.Equal(expected, actual);
@@ -318,7 +318,7 @@ public class StringFilterTests
             new GridModel { Name = "TEST" }
         }.AsQueryable();
 
-        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains("T") && model.Name.ToUpper().Contains("ES"));
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToUpper().Contains('T') && model.Name.ToUpper().Contains("ES"));
         IQueryable actual = items.Where(model => model.Name, filter);
 
         Assert.Equal(expected, actual);
@@ -337,7 +337,7 @@ public class StringFilterTests
             new GridModel { Name = "TEST" }
         }.AsQueryable();
 
-        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().Contains("t") && model.Name.ToLower().Contains("es"));
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.ToLower().Contains('t') && model.Name.ToLower().Contains("es"));
         IQueryable actual = items.Where(model => model.Name, filter);
 
         Assert.Equal(expected, actual);
@@ -356,7 +356,7 @@ public class StringFilterTests
             new GridModel { Name = "TEST" }
         }.AsQueryable();
 
-        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains("e") && model.Name.Contains("s"));
+        IQueryable expected = items.Where(model => model.Name != null && model.Name.Contains('e') && model.Name.Contains('s'));
         IQueryable actual = items.Where(model => model.Name, filter);
 
         Assert.Equal(expected, actual);
@@ -377,7 +377,7 @@ public class StringFilterTests
 
         IQueryable expected = items.Where(model =>
             model.Name != null &&
-            (model.Name.Contains("t") && model.Name.Contains("es") ||
+            (model.Name.Contains('t') && model.Name.Contains("es") ||
             model.Name.Contains("Te") && model.Name.Contains("Te")));
         IQueryable actual = items.Where(model => model.Name, filter);
 

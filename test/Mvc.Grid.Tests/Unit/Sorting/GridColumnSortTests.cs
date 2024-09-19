@@ -6,7 +6,7 @@ public class GridColumnSortTests
 
     public GridColumnSortTests()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
+        Grid<GridModel> grid = new([]);
         GridColumn<GridModel, Object?> column = new(grid, model => model.Name);
 
         sort = new GridColumnSort<GridModel, Object?>(column) { IsEnabled = true };

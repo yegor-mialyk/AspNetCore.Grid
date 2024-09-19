@@ -10,10 +10,10 @@ public class GridEnumerableFilterTests
     {
         items = new[]
         {
-            new GridModel { NullableArrayField = new[] { "", "678", "retest", "58" } },
-            new GridModel { NullableArrayField = new[] { "10", "12", "33", "84", "58" } },
-            new GridModel { NullableArrayField = new[] { null, "test", "2", "3", "4", "5" } },
-            new GridModel { NullableArrayField = new[] { null, "TEST", "2", "3", "4", "5" } }
+            new GridModel { NullableArrayField = ["", "678", "retest", "58"] },
+            new GridModel { NullableArrayField = ["10", "12", "33", "84", "58"] },
+            new GridModel { NullableArrayField = [null, "test", "2", "3", "4", "5"] },
+            new GridModel { NullableArrayField = [null, "TEST", "2", "3", "4", "5"] }
         }.AsQueryable();
 
         foreach (GridModel model in items)

@@ -9,11 +9,11 @@ public class GridSortTests
 
     public GridSortTests()
     {
-        Grid<GridModel> grid = new(Array.Empty<GridModel>());
-        textColumn = grid.Columns.Add(model => model.Text);
-        nameColumn = grid.Columns.Add(model => model.Name);
-        sumColumn = grid.Columns.Add(model => model.Sum);
+        Grid<GridModel> grid = new([]);
         sort = new GridSort<GridModel>(grid);
+        sumColumn = grid.Columns.Add(model => model.Sum);
+        nameColumn = grid.Columns.Add(model => model.Name);
+        textColumn = grid.Columns.Add(model => model.Text);
     }
 
     [Fact]

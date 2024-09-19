@@ -14,8 +14,3 @@ public interface IGridPager
     String CssClasses { get; set; }
     String PartialViewName { get; set; }
 }
-
-public interface IGridPager<T> : IGridProcessor<T>, IGridPager
-{
-    IGrid<T> Grid { get; }
-}

@@ -6,7 +6,7 @@ public class GridColumnsTests
 
     public GridColumnsTests()
     {
-        columns = new GridColumns<GridModel>(new Grid<GridModel>(Array.Empty<GridModel>()));
+        columns = new GridColumns<GridModel>(new Grid<GridModel>([]));
     }
 
     [Fact]
