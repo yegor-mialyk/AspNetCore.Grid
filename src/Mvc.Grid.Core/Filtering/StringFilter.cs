@@ -21,7 +21,7 @@ public class StringFilter : AGridFilter
         StartsWith = typeof(String).GetMethod(nameof(String.StartsWith), new[] { typeof(String) })!;
     }
 
-    public override Expression? Apply(Expression expression)
+    public override Expression? Apply(Expression expression, CultureInfo culture)
     {
         if (Values.Count == 0)
             return null;
@@ -34,34 +34,34 @@ public class StringFilter : AGridFilter
                 if (Values.Any(String.IsNullOrEmpty))
                     return null;
 
-                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
+                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression, culture)!);
             case "consists-of":
                 if (Values.All(String.IsNullOrWhiteSpace))
                     return null;
 
-                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
+                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression, culture)!);
             case "not-equals":
                 if (Case == GridFilterCase.Original)
-                    return base.Apply(expression);
+                    return base.Apply(expression, culture);
 
                 if (Values.Any(String.IsNullOrEmpty))
-                    return Expression.AndAlso(Apply(expression, null)!, base.Apply(expression)!);
+                    return Expression.AndAlso(Apply(expression, null, culture)!, base.Apply(expression, culture)!);
 
-                return Expression.OrElse(Expression.Equal(expression, Null), base.Apply(expression)!);
+                return Expression.OrElse(Expression.Equal(expression, Null), base.Apply(expression, culture)!);
             case "equals":
                 if (Case == GridFilterCase.Original)
-                    return base.Apply(expression);
+                    return base.Apply(expression, culture);
 
                 if (Values.Any(String.IsNullOrEmpty))
-                    return Expression.OrElse(Apply(expression, null)!, base.Apply(expression)!);
+                    return Expression.OrElse(Apply(expression, null, culture)!, base.Apply(expression, culture)!);
 
-                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression)!);
+                return Expression.AndAlso(Expression.NotEqual(expression, Null), base.Apply(expression, culture)!);
         }
 
-        return base.Apply(expression);
+        return base.Apply(expression, culture);
     }
 
-    protected override Expression? Apply(Expression expression, String? value)
+    protected override Expression? Apply(Expression expression, String? value, CultureInfo culture)
     {
         return Method switch
         {

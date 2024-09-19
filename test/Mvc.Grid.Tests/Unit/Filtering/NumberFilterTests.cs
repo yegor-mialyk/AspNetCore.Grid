@@ -14,8 +14,10 @@ public class NumberFilterTests
         items = new[]
         {
             new GridModel(),
-            new GridModel { NSum = 1, Sum = 2 },
-            new GridModel { NSum = 2, Sum = 1 }
+            new GridModel { NSum = 1, Sum = 2, DecimalField = 0.7M },
+            new GridModel { NSum = 2, Sum = 1, DecimalField = 2457.504M },
+            new GridModel { NSum = 20477, Sum = 11500, DecimalField = 11.47M },
+            new GridModel { NSum = 340457, Sum = 54399, DecimalField = 830.26M }
         }.AsQueryable();
 
         nSumExpression = model => model.NSum;
@@ -30,7 +32,7 @@ public class NumberFilterTests
     {
         NumberFilter<Decimal> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -41,7 +43,7 @@ public class NumberFilterTests
     {
         NumberFilter<Double> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -52,7 +54,7 @@ public class NumberFilterTests
     {
         NumberFilter<Single> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -63,7 +65,7 @@ public class NumberFilterTests
     {
         NumberFilter<Int64> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -74,7 +76,7 @@ public class NumberFilterTests
     {
         NumberFilter<UInt64> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -85,7 +87,7 @@ public class NumberFilterTests
     {
         NumberFilter<Int32> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -96,7 +98,7 @@ public class NumberFilterTests
     {
         NumberFilter<UInt32> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -107,7 +109,7 @@ public class NumberFilterTests
     {
         NumberFilter<Int16> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -118,7 +120,7 @@ public class NumberFilterTests
     {
         NumberFilter<UInt16> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -129,7 +131,7 @@ public class NumberFilterTests
     {
         NumberFilter<SByte> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -140,7 +142,7 @@ public class NumberFilterTests
     {
         NumberFilter<Byte> filter = new() { Method = "equals", Values = value };
 
-        Assert.Null(filter.Apply(sumExpression.Body));
+        Assert.Null(filter.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -432,6 +434,18 @@ public class NumberFilterTests
     }
 
     [Fact]
+    public void Apply_FilterBasedOnCulture()
+    {
+        NumberFilter<Decimal> filter = new() { Method = "greater-than-or-equal", Values = new[] { "2030,07" } };
+        Expression<Func<GridModel, Decimal>> expression = model => model.DecimalField;
+
+        IEnumerable expected = items.Where(model => model.DecimalField >= 2030.07M);
+        IEnumerable actual = items.Where(Expression.Lambda<Func<GridModel, Boolean>>(filter.Apply(expression.Body, new CultureInfo("fr-FR"))!, expression.Parameters[0]));
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
     public void Apply_MultipleWithBadValues()
     {
         NumberFilter<Int32> filter = new() { Method = "equals", Values = new[] { "", "test", "1" } };
@@ -447,12 +461,21 @@ public class NumberFilterTests
     {
         NumberFilter<Int32> filter = new() { Method = "equals", Values = StringValues.Empty };
 
-        Assert.Null(filter.Apply(nSumExpression.Body));
+        Assert.Null(filter.Apply(nSumExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
     public void Apply_BadMethod_ReturnsNull()
     {
-        Assert.Null(new NumberFilter<Int32> { Method = "test", Values = "1" }.Apply(sumExpression.Body));
+        Assert.Null(new NumberFilter<Int32> { Method = "test", Values = "1" }.Apply(sumExpression.Body, CultureInfo.CurrentCulture));
+    }
+
+    [Fact]
+    public void Apply_BadCultureValue_ReturnsNull()
+    {
+        NumberFilter<Decimal> filter = new() { Method = "equals", Values = new[] { "2,030.07" } };
+        Expression<Func<GridModel, Decimal>> expression = model => model.DecimalField;
+
+        Assert.Null(filter.Apply(expression.Body, new CultureInfo("fr-FR")));
     }
 }

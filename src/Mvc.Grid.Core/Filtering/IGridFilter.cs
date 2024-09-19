@@ -8,5 +8,5 @@ public interface IGridFilter
     StringValues Values { get; set; }
     GridFilterCase Case { get; set; }
 
-    Expression? Apply(Expression expression);
+    Expression? Apply(Expression expression, CultureInfo culture);
 }

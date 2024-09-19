@@ -124,6 +124,12 @@ public static class HtmlGridExtensions
 
         return html;
     }
+    public static IHtmlGrid<T> Using<T>(this IHtmlGrid<T> html, CultureInfo culture)
+    {
+        html.Grid.Culture = culture;
+
+        return html;
+    }
     public static IHtmlGrid<T> UsingUrl<T>(this IHtmlGrid<T> html, String url)
     {
         html.Grid.Url = url;

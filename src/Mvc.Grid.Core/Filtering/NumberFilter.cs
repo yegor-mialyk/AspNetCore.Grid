@@ -2,14 +2,14 @@ namespace NonFactors.Mvc.Grid;
 
 public class NumberFilter<T> : AGridFilter
 {
-    protected override Expression? Apply(Expression expression, String? value)
+    protected override Expression? Apply(Expression expression, String? value, CultureInfo culture)
     {
         if (String.IsNullOrEmpty(value) && Nullable.GetUnderlyingType(expression.Type) == null)
             expression = Expression.Convert(expression, typeof(Nullable<>).MakeGenericType(expression.Type));
 
         try
         {
-            Object? numberValue = String.IsNullOrEmpty(value) ? null : TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(value);
+            Object? numberValue = String.IsNullOrEmpty(value) ? null : TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(null, culture, value);
 
             return Method switch
             {

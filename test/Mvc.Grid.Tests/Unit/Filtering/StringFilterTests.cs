@@ -11,7 +11,7 @@ public class StringFilterTests
     {
         Expression<Func<GridModel, String?>> expression = model => model.Name;
 
-        Assert.Null(new StringFilter { Method = "starts-with", Values = new[] { value, "1" } }.Apply(expression.Body));
+        Assert.Null(new StringFilter { Method = "starts-with", Values = new[] { value, "1" } }.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class StringFilterTests
     {
         Expression<Func<GridModel, String?>> expression = model => model.Name;
 
-        Assert.Null(new StringFilter { Method = "ends-with", Values = new[] { value, "1" } }.Apply(expression.Body));
+        Assert.Null(new StringFilter { Method = "ends-with", Values = new[] { value, "1" } }.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -199,7 +199,7 @@ public class StringFilterTests
     {
         Expression<Func<GridModel, String?>> expression = model => model.Name;
 
-        Assert.Null(new StringFilter { Method = "contains", Values = new[] { value, "1" } }.Apply(expression.Body));
+        Assert.Null(new StringFilter { Method = "contains", Values = new[] { value, "1" } }.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -283,7 +283,7 @@ public class StringFilterTests
     {
         Expression<Func<GridModel, String?>> expression = model => model.Name;
 
-        Assert.Null(new StringFilter { Method = "consists-of", Values = new[] { null, "", " " } }.Apply(expression.Body));
+        Assert.Null(new StringFilter { Method = "consists-of", Values = new[] { null, "", " " } }.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -590,7 +590,7 @@ public class StringFilterTests
         StringFilter filter = new() { Method = "equals", Values = StringValues.Empty };
         Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -599,6 +599,6 @@ public class StringFilterTests
         StringFilter filter = new() { Method = "test", Values = new[] { "a", "b" } };
         Expression<Func<GridModel, String?>> expression = (model) => model.Name;
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 }

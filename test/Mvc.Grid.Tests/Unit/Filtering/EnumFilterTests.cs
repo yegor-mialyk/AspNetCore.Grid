@@ -30,7 +30,7 @@ public class EnumFilterTests
         filter.Values = "test";
         filter.Method = "equals";
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -95,7 +95,7 @@ public class EnumFilterTests
         filter.Method = "equals";
         filter.Values = StringValues.Empty;
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -104,6 +104,6 @@ public class EnumFilterTests
         filter.Values = "0";
         filter.Method = "test";
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 }

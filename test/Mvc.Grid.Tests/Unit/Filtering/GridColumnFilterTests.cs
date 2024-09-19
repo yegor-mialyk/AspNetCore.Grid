@@ -18,14 +18,14 @@ public class GridColumnFilterTests
 
         items = new[]
         {
-            new GridModel { Name = "aa", NSum = 10, Sum = 40 },
-            new GridModel { Name = "Aa", NSum = 15, Sum = 35 },
-            new GridModel { Name = "AA", NSum = 20, Sum = 35 },
-            new GridModel { Name = "bb", NSum = 20, Sum = 30 },
-            new GridModel { Name = "Bb", NSum = 25, Sum = 25 },
-            new GridModel { Name = "BB", NSum = 30, Sum = 15 },
-            new GridModel { Name = null, NSum = 30, Sum = 20 },
-            new GridModel { Name = "Cc", NSum = null, Sum = 10 }
+            new GridModel { Name = "aa", NSum = 10, Sum = 40, DecimalField = 40437.52M },
+            new GridModel { Name = "Aa", NSum = 15, Sum = 35, DecimalField = 35437.28M },
+            new GridModel { Name = "AA", NSum = 20, Sum = 35, DecimalField = 35437.33M },
+            new GridModel { Name = "bb", NSum = 20, Sum = 30, DecimalField = 30437.07M },
+            new GridModel { Name = "Bb", NSum = 25, Sum = 25, DecimalField = 25437.67M },
+            new GridModel { Name = "BB", NSum = 30, Sum = 15, DecimalField = 15437.04M },
+            new GridModel { Name = null, NSum = 30, Sum = 20, DecimalField = 20437.12M },
+            new GridModel { Name = "Cc", NSum = null, Sum = 10, DecimalField = 10437.44M }
         }.AsQueryable();
     }
 
@@ -842,6 +842,25 @@ public class GridColumnFilterTests
         };
 
         IQueryable expected = items.Where(item => item.NSum == 10 || item.NSum > 25);
+        IQueryable actual = testFilter.Apply(items);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Apply_FiltersByGridCulture()
+    {
+        GridColumn<GridModel, Decimal> testColumn = new(new Grid<GridModel>([], new CultureInfo("fr-FR")), model => model.DecimalField);
+        GridColumnFilter<GridModel, Decimal> testFilter = new(testColumn)
+        {
+            Second = new NumberFilter<Decimal> { Method = "greater-than", Values = "35437,33" },
+            First = new NumberFilter<Decimal> { Method = "equals", Values = "15437,04" },
+            Type = GridFilterType.Double,
+            IsEnabled = true,
+            Operator = "or"
+        };
+
+        IQueryable expected = items.Where(item => item.DecimalField == 15437.04M || item.DecimalField > 35437.33M);
         IQueryable actual = testFilter.Apply(items);
 
         Assert.Equal(expected, actual);

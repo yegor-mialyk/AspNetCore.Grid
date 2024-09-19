@@ -42,6 +42,22 @@ public class GridTests
     }
 
     [Fact]
+    public void IGrid_SetsCulture()
+    {
+        Grid<GridModel> grid = new([], new CultureInfo("fr-FR"));
+
+        Assert.Equal(new CultureInfo("fr-FR"), grid.Culture);
+    }
+
+    [Fact]
+    public void IGrid_SetsDefaultCulture()
+    {
+        Grid<GridModel> grid = new([]);
+
+        Assert.Equal(CultureInfo.CurrentCulture, grid.Culture);
+    }
+
+    [Fact]
     public void Grid_SetsFooterPartialViewName()
     {
         Assert.Empty(new Grid<GridModel>([]).FooterPartialViewName);

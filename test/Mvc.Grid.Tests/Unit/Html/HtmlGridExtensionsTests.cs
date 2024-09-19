@@ -363,6 +363,21 @@ public class HtmlGridExtensionsTests
     }
 
     [Fact]
+    public void Using_Culture_SetsCulture()
+    {
+        CultureInfo actual = htmlGrid.Using(new CultureInfo("fr-FR")).Grid.Culture;
+        CultureInfo expected = new("fr-FR");
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Using_Culture_ReturnsHtmlGrid()
+    {
+        Assert.Same(htmlGrid, htmlGrid.Using(new CultureInfo("fr-FR")));
+    }
+
+    [Fact]
     public void UsingUrl_SetsUrl()
     {
         Assert.Same("/test/index", htmlGrid.UsingUrl("/test/index").Grid.Url);

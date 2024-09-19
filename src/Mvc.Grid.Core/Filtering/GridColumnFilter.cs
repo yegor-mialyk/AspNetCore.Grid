@@ -215,11 +215,11 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
     }
     private Expression? BuildFilterExpression()
     {
-        Expression? left = First?.Apply(Column.Expression.Body);
+        Expression? left = First?.Apply(Column.Expression.Body, Column.Grid.Culture);
 
         if (left != null && (Type == GridFilterType.Double || Type == GridFilterType.Auto))
         {
-            Expression? right = Second?.Apply(Column.Expression.Body);
+            Expression? right = Second?.Apply(Column.Expression.Body, Column.Grid.Culture);
 
             if (right != null && "and".Equals(Operator, StringComparison.OrdinalIgnoreCase))
                 return Expression.AndAlso(left, right);

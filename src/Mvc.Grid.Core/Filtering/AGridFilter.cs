@@ -8,12 +8,12 @@ public abstract class AGridFilter : IGridFilter
     public StringValues Values { get; set; }
     public GridFilterCase Case { get; set; }
 
-    public virtual Expression? Apply(Expression expression)
+    public virtual Expression? Apply(Expression expression, CultureInfo culture)
     {
         Expression? filter = null;
 
         foreach (String? value in Values)
-            if (Apply(expression, value) is Expression next)
+            if (Apply(expression, value, culture) is Expression next)
                 filter = filter == null
                     ? next
                     : Method == "not-equals"
@@ -22,5 +22,5 @@ public abstract class AGridFilter : IGridFilter
 
         return filter;
     }
-    protected abstract Expression? Apply(Expression expression, String? value);
+    protected abstract Expression? Apply(Expression expression, String? value, CultureInfo culture);
 }

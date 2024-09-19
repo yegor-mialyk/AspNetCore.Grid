@@ -29,7 +29,7 @@ public class GuidFilterTests
     {
         filter.Values = "Test";
 
-        Assert.Null(filter.Apply(guidExpression.Body));
+        Assert.Null(filter.Apply(guidExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -158,7 +158,7 @@ public class GuidFilterTests
         filter.Method = "equals";
         filter.Values = StringValues.Empty;
 
-        Assert.Null(filter.Apply(guidExpression.Body));
+        Assert.Null(filter.Apply(guidExpression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -167,6 +167,6 @@ public class GuidFilterTests
         filter.Method = "test";
         filter.Values = "bf64a86e-0b70-4430-99f6-8dd947e64948";
 
-        Assert.Null(filter.Apply(guidExpression.Body));
+        Assert.Null(filter.Apply(guidExpression.Body, CultureInfo.CurrentCulture));
     }
 }

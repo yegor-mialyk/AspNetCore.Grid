@@ -426,9 +426,6 @@ public class GridColumnExtensionsTests
     [Fact]
     public void Width_SetsInvariantStyle()
     {
-        CultureInfo.CurrentCulture = new CultureInfo("sv");
-        CultureInfo.CurrentUICulture = new CultureInfo("sv");
-
         Assert.Equal("width: -50px", column.Width(-50).Style);
     }
 

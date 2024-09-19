@@ -49,7 +49,7 @@ public class GridEnumerableFilterTests
     {
         Expression<Func<GridModel, Type>> expression = (_) => typeof(String);
 
-        Assert.Null(new EnumerableFilter<StringFilter>().Apply(expression.Body));
+        Assert.Null(new EnumerableFilter<StringFilter>().Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class GridEnumerableFilterTests
             Method = "contains"
         };
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]

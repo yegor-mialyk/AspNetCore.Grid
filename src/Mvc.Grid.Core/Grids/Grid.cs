@@ -10,6 +10,7 @@ public class Grid<T> : IGrid<T> where T : class
     public String? EmptyText { get; set; }
 
     public IGridSort<T> Sort { get; set; }
+    public CultureInfo Culture { get; set; }
     public IQueryable<T> Source { get; set; }
     public IQueryCollection? Query { get; set; }
     public GridProcessingMode Mode { get; set; }
@@ -29,9 +30,14 @@ public class Grid<T> : IGrid<T> where T : class
     public IGridPager<T>? Pager { get; set; }
 
     public Grid(IEnumerable<T> source)
+        : this(source, CultureInfo.CurrentCulture)
+    {
+    }
+    public Grid(IEnumerable<T> source, CultureInfo culture)
     {
         Url = "";
         Name = "";
+        Culture = culture;
         FooterPartialViewName = "";
         Source = source.AsQueryable();
         FilterMode = GridFilterMode.Excel;

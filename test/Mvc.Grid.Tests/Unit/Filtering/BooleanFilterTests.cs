@@ -28,7 +28,7 @@ public class BooleanFilterTests
         filter.Values = "Test";
         filter.Method = "equals";
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Theory]
@@ -162,7 +162,7 @@ public class BooleanFilterTests
         filter.Method = "equals";
         filter.Values = StringValues.Empty;
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -171,6 +171,6 @@ public class BooleanFilterTests
         filter.Method = "test";
         filter.Values = "false";
 
-        Assert.Null(filter.Apply(expression.Body));
+        Assert.Null(filter.Apply(expression.Body, CultureInfo.CurrentCulture));
     }
 }
