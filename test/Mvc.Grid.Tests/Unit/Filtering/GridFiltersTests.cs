@@ -111,12 +111,26 @@ public class GridFiltersTests
     [InlineData(typeof(Decimal), "less-than-or-equal", typeof(NumberFilter<Decimal>))]
     [InlineData(typeof(Decimal), "greater-than-or-equal", typeof(NumberFilter<Decimal>))]
 
+    [InlineData(typeof(DateOnly), "equals", typeof(DateTimeFilter))]
+    [InlineData(typeof(DateOnly), "not-equals", typeof(DateTimeFilter))]
+    [InlineData(typeof(DateOnly), "earlier-than", typeof(DateTimeFilter))]
+    [InlineData(typeof(DateOnly), "later-than", typeof(DateTimeFilter))]
+    [InlineData(typeof(DateOnly), "earlier-than-or-equal", typeof(DateTimeFilter))]
+    [InlineData(typeof(DateOnly), "later-than-or-equal", typeof(DateTimeFilter))]
+
     [InlineData(typeof(DateTime), "equals", typeof(DateTimeFilter))]
     [InlineData(typeof(DateTime), "not-equals", typeof(DateTimeFilter))]
     [InlineData(typeof(DateTime), "earlier-than", typeof(DateTimeFilter))]
     [InlineData(typeof(DateTime), "later-than", typeof(DateTimeFilter))]
     [InlineData(typeof(DateTime), "earlier-than-or-equal", typeof(DateTimeFilter))]
     [InlineData(typeof(DateTime), "later-than-or-equal", typeof(DateTimeFilter))]
+
+    [InlineData(typeof(TimeOnly), "equals", typeof(DateTimeFilter))]
+    [InlineData(typeof(TimeOnly), "not-equals", typeof(DateTimeFilter))]
+    [InlineData(typeof(TimeOnly), "earlier-than", typeof(DateTimeFilter))]
+    [InlineData(typeof(TimeOnly), "later-than", typeof(DateTimeFilter))]
+    [InlineData(typeof(TimeOnly), "earlier-than-or-equal", typeof(DateTimeFilter))]
+    [InlineData(typeof(TimeOnly), "later-than-or-equal", typeof(DateTimeFilter))]
 
     [InlineData(typeof(Boolean), "equals", typeof(BooleanFilter))]
     [InlineData(typeof(Boolean), "not-equals", typeof(BooleanFilter))]

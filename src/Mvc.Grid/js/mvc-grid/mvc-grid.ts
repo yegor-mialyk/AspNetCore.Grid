@@ -1,5 +1,5 @@
 /*!
- * Mvc.Grid 7.2.1
+ * Mvc.Grid 8.0.0
  *
  * Copyright © NonFactors
  *
@@ -120,11 +120,13 @@ export class MvcGrid {
         grid.url = options.query ? new URL(`?${options.query}`, grid.url.href) : grid.url;
         grid.sort = grid.buildSort();
         grid.filters = {
-            default: MvcGridFilter,
-            date: MvcGridDateFilter,
-            guid: MvcGridGuidFilter,
-            text: MvcGridTextFilter,
-            number: MvcGridNumberFilter
+            "default": MvcGridFilter,
+            "date": MvcGridDateFilter,
+            "date-only": MvcGridDateOnlyFilter,
+            "time-only": MvcGridTimeOnlyFilter,
+            "guid": MvcGridGuidFilter,
+            "text": MvcGridTextFilter,
+            "number": MvcGridNumberFilter
         };
 
         const headers = element.querySelector(".mvc-grid-headers");
@@ -980,6 +982,15 @@ export class MvcGridFilter {
             columnFilter.second.method = filter.methods[0];
         }
     }
+    public lang() {
+        if (this.column.filter!.name == "date-only") {
+            return MvcGrid.lang["date-only"] || MvcGrid.lang["date"] || {};
+        } else if (this.column.filter!.name == "time-only") {
+            return MvcGrid.lang["time-only"] || MvcGrid.lang["date"] || {};
+        }
+
+        return MvcGrid.lang[this.column.filter!.name] || {};
+    }
     public isValid(value: string): boolean {
         return !value || true;
     }
@@ -1007,8 +1018,8 @@ export class MvcGridFilter {
     }
     public renderFilter(name: "first" | "second") {
         const filter = this;
+        const lang = filter.lang();
         const options = filter.column.filter!.options;
-        const lang = MvcGrid.lang[filter.column.filter!.name] || {};
         const multiple = filter.type === "multi" ? " multiple" : "";
         const methods = filter.methods.map(method => `<option value="${method}">${lang[method] || ""}</option>`).join("");
 
@@ -1149,6 +1160,22 @@ export class MvcGridDateFilter extends MvcGridFilter {
 
         this.cssClasses = "mvc-grid-date-filter";
         this.methods = ["equals", "not-equals", "earlier-than", "later-than", "earlier-than-or-equal", "later-than-or-equal"];
+    }
+}
+
+export class MvcGridDateOnlyFilter extends MvcGridDateFilter {
+    public constructor(column: MvcGridColumn) {
+        super(column);
+
+        this.cssClasses = "mvc-grid-date-only-filter";
+    }
+}
+
+export class MvcGridTimeOnlyFilter extends MvcGridDateFilter {
+    public constructor(column: MvcGridColumn) {
+        super(column);
+
+        this.cssClasses = "mvc-grid-time-only-filter";
     }
 }
 

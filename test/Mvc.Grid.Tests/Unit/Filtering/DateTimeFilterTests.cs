@@ -5,7 +5,6 @@ namespace NonFactors.Mvc.Grid;
 
 public class DateTimeFilterTests
 {
-    private Expression<Func<GridModel, DateTime>> expression;
     private IQueryable<GridModel> items;
     private DateTimeFilter filter;
 
@@ -18,13 +17,31 @@ public class DateTimeFilterTests
             new GridModel { Date = new DateTime(2015, 01, 01), NDate = new DateTime(2014, 01, 01) }
         }.AsQueryable();
 
-        expression = model => model.Date;
         filter = new DateTimeFilter();
     }
 
     [Fact]
-    public void Apply_BadValue_ReturnsItems()
+    public void Apply_BadDateOnlyValue_ReturnsItems()
     {
+        Expression<Func<GridModel, DateOnly>> expression = model => model.DateOnly;
+        filter.Values = "Test";
+
+        Assert.Null(filter.Apply(expression.Body));
+    }
+
+    [Fact]
+    public void Apply_BadDateTimeValue_ReturnsItems()
+    {
+        Expression<Func<GridModel, DateTime>> expression = model => model.Date;
+        filter.Values = "Test";
+
+        Assert.Null(filter.Apply(expression.Body));
+    }
+
+    [Fact]
+    public void Apply_BadTimeOnlyValue_ReturnsItems()
+    {
+        Expression<Func<GridModel, TimeOnly>> expression = model => model.TimeOnly;
         filter.Values = "Test";
 
         Assert.Null(filter.Apply(expression.Body));
@@ -35,8 +52,8 @@ public class DateTimeFilterTests
     [InlineData("2014-01-01")]
     public void Apply_NullableEqualsFilter(String value)
     {
-        filter.Method = "equals";
         filter.Values = value;
+        filter.Method = "equals";
 
         IEnumerable actual = items.Where(model => model.NDate, filter);
         IEnumerable expected = items.Where(model => model.NDate == (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
@@ -64,7 +81,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "equals";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date == (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -76,7 +93,7 @@ public class DateTimeFilterTests
         filter.Method = "equals";
         filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date == new DateTime(2013, 1, 1) || model.Date == new DateTime(2014, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -116,7 +133,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "not-equals";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date != (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -128,7 +145,7 @@ public class DateTimeFilterTests
         filter.Method = "not-equals";
         filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date != new DateTime(2013, 1, 1) && model.Date != new DateTime(2014, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -168,7 +185,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "earlier-than";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date < (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -180,7 +197,7 @@ public class DateTimeFilterTests
         filter.Method = "earlier-than";
         filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date < new DateTime(2014, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -220,7 +237,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "later-than";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date > (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -232,7 +249,7 @@ public class DateTimeFilterTests
         filter.Method = "later-than";
         filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date > new DateTime(2013, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -272,7 +289,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "earlier-than-or-equal";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date <= (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -284,7 +301,7 @@ public class DateTimeFilterTests
         filter.Method = "earlier-than-or-equal";
         filter.Values = new[] { "2013-01-01", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date <= new DateTime(2014, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -324,7 +341,7 @@ public class DateTimeFilterTests
         filter.Values = value;
         filter.Method = "later-than-or-equal";
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date >= (String.IsNullOrEmpty(value) ? null : DateTime.Parse(value)));
 
         Assert.Equal(expected, actual);
@@ -336,7 +353,7 @@ public class DateTimeFilterTests
         filter.Method = "later-than-or-equal";
         filter.Values = new[] { "", "2014-01-01" };
 
-        IEnumerable actual = items.Where(expression, filter);
+        IEnumerable actual = items.Where(model => model.Date, filter);
         IEnumerable expected = items.Where(model => model.Date >= new DateTime(2014, 1, 1));
 
         Assert.Equal(expected, actual);
@@ -357,8 +374,9 @@ public class DateTimeFilterTests
     [Fact]
     public void Apply_EmptyValue_ReturnsNull()
     {
-        filter.Method = "equals";
+        Expression<Func<GridModel, DateTime>> expression = model => model.Date;
         filter.Values = StringValues.Empty;
+        filter.Method = "equals";
 
         Assert.Null(filter.Apply(expression.Body));
     }
@@ -366,8 +384,9 @@ public class DateTimeFilterTests
     [Fact]
     public void Apply_BadMethod_ReturnsNull()
     {
-        filter.Method = "test";
+        Expression<Func<GridModel, DateTime>> expression = model => model.Date;
         filter.Values = "2014-01-01";
+        filter.Method = "test";
 
         Assert.Null(filter.Apply(expression.Body));
     }

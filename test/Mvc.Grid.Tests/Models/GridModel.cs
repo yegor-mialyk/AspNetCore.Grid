@@ -12,7 +12,11 @@ public class GridModel
 
     public IHtmlContent? Content { get; set; }
     public Boolean? NIsChecked { get; set; }
+    public DateOnly? NDateOnly { get; set; }
+    public TimeOnly? NTimeOnly { get; set; }
     public Boolean IsChecked { get; set; }
+    public DateOnly DateOnly { get; set; }
+    public TimeOnly TimeOnly { get; set; }
     public DateTime? NDate { get; set; }
     public TestEnum? NEnum { get; set; }
     public DateTime Date { get; set; }
@@ -37,7 +41,9 @@ public class GridModel
     public Double DoubleField { get; set; }
     public Decimal DecimalField { get; set; }
     public Boolean BooleanField { get; set; }
+    public DateOnly DateOnlyField { get; set; }
     public DateTime DateTimeField { get; set; }
+    public TimeOnly TimeOnlyField { get; set; }
 
     public TestEnum? NullableEnumField { get; set; }
     public Guid? NullableGuidField { get; set; }
@@ -53,7 +59,9 @@ public class GridModel
     public Double? NullableDoubleField { get; set; }
     public Decimal? NullableDecimalField { get; set; }
     public Boolean? NullableBooleanField { get; set; }
+    public DateOnly? NullableDateOnlyField { get; set; }
     public DateTime? NullableDateTimeField { get; set; }
+    public TimeOnly? NullableTimeOnlyField { get; set; }
 
     public String?[]? NullableArrayField { get; set; }
     public List<String?>? NullableListField { get; set; }
