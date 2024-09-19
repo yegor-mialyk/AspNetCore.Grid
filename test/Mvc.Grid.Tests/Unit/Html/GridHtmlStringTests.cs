@@ -2,13 +2,17 @@ using System.Text.Encodings.Web;
 
 namespace NonFactors.Mvc.Grid;
 
-public class GridHtmlStringTests
+public class GridHtmlStringTests : IDisposable
 {
     private StringWriter writer;
 
     public GridHtmlStringTests()
     {
         writer = new StringWriter();
+    }
+    public void Dispose()
+    {
+        writer.Dispose();
     }
 
     [Fact]

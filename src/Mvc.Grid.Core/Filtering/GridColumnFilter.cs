@@ -111,7 +111,7 @@ public class GridColumnFilter<T, TValue> : IGridColumnFilter<T, TValue>
 
     private IGridFilters GetFilters()
     {
-        return Column.Grid.ViewContext?.HttpContext.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
+        return Column.Grid.HttpContext?.RequestServices.GetService<IGridFilters>() ?? new GridFilters();
     }
     private IGridFilter? CreateFirstFilter()
     {

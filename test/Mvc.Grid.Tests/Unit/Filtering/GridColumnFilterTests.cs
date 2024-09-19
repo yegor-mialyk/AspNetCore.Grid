@@ -49,11 +49,10 @@ public class GridColumnFilterTests
     [Fact]
     public void Options_Get_FromFilters()
     {
-        filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
-        filters.OptionsFor(filter.Column).Returns(new[] { new SelectListItem() });
-        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filter.Column.Grid.HttpContext = Substitute.For<HttpContext>();
+        filters.OptionsFor(filter.Column).Returns([new SelectListItem()]);
+        filter.Column.Grid.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
         Object expected = filters.OptionsFor(filter.Column);
         Object actual = filter.Options;
@@ -64,11 +63,10 @@ public class GridColumnFilterTests
     [Fact]
     public void Options_Get_Caches()
     {
-        filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
         filters.OptionsFor(filter.Column).Returns(Array.Empty<SelectListItem>());
-        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filter.Column.Grid.HttpContext = Substitute.For<HttpContext>();
+        filter.Column.Grid.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
 
         Object options = filter.Options;
 
@@ -255,11 +253,10 @@ public class GridColumnFilterTests
     [Fact]
     public void First_Get_SkipsOperation()
     {
-        filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
+        filter.Column.Grid.HttpContext = Substitute.For<HttpContext>();
         filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-op=test");
-        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
-        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filter.Column.Grid.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
         filters.Create(Arg.Any<Type>(), Arg.Any<String>(), Arg.Any<StringValues>()).Returns(Substitute.For<IGridFilter>());
 
         Assert.Null(filter.First);
@@ -444,11 +441,10 @@ public class GridColumnFilterTests
     public void Second_Get_SkipsOperation(GridFilterType type)
     {
         filter.Type = type;
-        filter.Column.Grid.ViewContext = new ViewContext();
         IGridFilters filters = Substitute.For<IGridFilters>();
-        filter.Column.Grid.ViewContext.HttpContext = Substitute.For<HttpContext>();
+        filter.Column.Grid.HttpContext = Substitute.For<HttpContext>();
         filter.Column.Grid.Query = HttpUtility.ParseQueryString("name-equals=test&name-op=test");
-        filter.Column.Grid.ViewContext.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
+        filter.Column.Grid.HttpContext.RequestServices.GetService(typeof(IGridFilters)).Returns(filters);
         filters.Create(Arg.Any<Type>(), Arg.Any<String>(), Arg.Any<StringValues>()).Returns(Substitute.For<IGridFilter>());
 
         Assert.Null(filter.Second);

@@ -167,8 +167,7 @@ public class GridFilters : IGridFilters
             options.Add(new SelectListItem());
 
             IEnumerable<SelectListItem>? items = column.Grid
-                .ViewContext?
-                .HttpContext
+                .HttpContext?
                 .RequestServices
                 .GetRequiredService<IHtmlHelper>()
                 .GetEnumSelectList(type)

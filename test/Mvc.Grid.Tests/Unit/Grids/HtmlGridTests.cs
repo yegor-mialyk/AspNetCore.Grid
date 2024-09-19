@@ -55,26 +55,26 @@ public class HtmlGridTests
     }
 
     [Fact]
-    public void HtmlGrid_DoesNotChangeViewContext()
+    public void HtmlGrid_DoesNotChangeHttpContext()
     {
-        htmlGrid.Grid.ViewContext = new ViewContext { HttpContext = new DefaultHttpContext() };
+        htmlGrid.Grid.HttpContext = new DefaultHttpContext();
         htmlGrid.Html.ViewContext.Returns(new ViewContext { HttpContext = new DefaultHttpContext() });
 
-        Object? expected = htmlGrid.Grid.ViewContext;
-        Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.ViewContext;
+        Object? expected = htmlGrid.Grid.HttpContext;
+        Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.HttpContext;
 
         Assert.Same(expected, actual);
     }
 
     [Fact]
-    public void HtmlGrid_SetsViewContext()
+    public void HtmlGrid_SetsHttpContext()
     {
-        htmlGrid.Grid.ViewContext = null;
+        htmlGrid.Grid.HttpContext = null;
         htmlGrid.Html.ViewContext.Returns(new ViewContext());
         htmlGrid.Html.ViewContext.HttpContext = new DefaultHttpContext();
 
-        Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.ViewContext;
-        Object? expected = htmlGrid.Html.ViewContext;
+        Object? actual = new HtmlGrid<GridModel>(htmlGrid.Html, htmlGrid.Grid).Grid.HttpContext;
+        Object? expected = htmlGrid.Html.ViewContext.HttpContext;
 
         Assert.Same(expected, actual);
     }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NonFactors.Mvc.Grid;
 
@@ -12,7 +11,7 @@ public interface IGrid
 
     IQueryCollection? Query { get; set; }
     GridProcessingMode Mode { get; set; }
-    ViewContext? ViewContext { get; set; }
+    HttpContext? HttpContext { get; set; }
     GridFilterMode FilterMode { get; set; }
     String FooterPartialViewName { get; set; }
     GridHtmlAttributes Attributes { get; set; }
