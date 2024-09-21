@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NonFactors.Mvc.Grid;
@@ -13,6 +14,13 @@ public static class GridColumnExtensions
     public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Object?> value)
     {
         column.RenderValue = (t, _) => value(t);
+
+        return column;
+    }
+
+    public static IGridColumn<T, TValue> RenderedAs<T, TValue>(this IGridColumn<T, TValue> column, Func<T, Func<object?, HelperResult>> value)
+    {
+        column.RenderValue = (t, _) => value(t)(null);
 
         return column;
     }
@@ -85,10 +93,12 @@ public static class GridColumnExtensions
         return column;
     }
 
-    public static IGridColumn<T, TValue> Sortable<T, TValue>(this IGridColumn<T, TValue> column, GridSortOrder firstOrder)
+    public static IGridColumn<T, TValue> Sortable<T, TValue>(this IGridColumn<T, TValue> column,
+        GridSortOrder firstOrder, bool isDefault = false)
     {
         column.Sort.FirstOrder = firstOrder;
         column.Sort.IsEnabled ??= true;
+        column.Sort.IsDefault = isDefault;
 
         return column;
     }

@@ -14,9 +14,9 @@
 
 .mvc-grid {
     position: relative;
-    line-height: 1.5;
+    line-height: 1.2;
     overflow-x: auto;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 
 .mvc-grid-table {
@@ -31,7 +31,7 @@
 
 .mvc-grid-table > table > thead > tr > th {
     background-clip: padding-box;
-    background-color: #f7f7f7;
+    background-color: #D0D7DB;
     position: relative;
 }
 
@@ -39,7 +39,7 @@
 .mvc-grid-table > table > tbody > tr > td,
 .mvc-grid-table > table > tfoot > tr > td {
     border: 1px solid #dee2e6;
-    padding: 0.5em;
+    padding: 0.2em;
 }
 
 .mvc-grid-table .sortable {
@@ -64,11 +64,10 @@
 .mvc-grid-sort,
 .mvc-grid-filter {
     font-family: GridGlyphs, sans-serif;
+    background-color: #D0D7DB;
     transition: background-color 0.5s;
-    background: rgb(0 0 0 / 0.03);
     font-size: inherit;
     position: absolute;
-    font-weight: bold;
     cursor: pointer;
     border: none;
     height: 100%;
@@ -79,7 +78,7 @@
 
 .mvc-grid-filter:focus,
 .mvc-grid-filter:hover {
-    background: rgb(0 0 0 / 0.06);
+    background-color: rgb(0 0 0 / 0.06);
     color: inherit;
 }
 
@@ -88,6 +87,9 @@
 }
 
 .mvc-grid-filter.applied::before {
+    color: #134290;
+    font-weight: bold;
+    font-size: 1.1em;
     content: "\0042";
 }
 
@@ -121,6 +123,12 @@
     top: 40%;
 }
 
+.mvc-grid .desc .mvc-grid-sort::after,
+.mvc-grid .asc .mvc-grid-sort::before {
+    opacity: 1;
+    color: #134290;
+}
+
 .mvc-grid-row-filters .filterable {
     padding: 0.25em;
 }
@@ -129,11 +137,15 @@
     display: flex;
 }
 
+.mvc-grid-highlight {
+    background-color: rgba(0, 191, 240, 0.1);
+}
+
 .mvc-grid-row-filters .mvc-grid-value {
+    background-color: #ffffff;
     border: 1px solid #cccccc;
     text-overflow: ellipsis;
     margin-right: 0.25em;
-    background: #ffffff;
     font-size: inherit;
     font-weight: 500;
     padding: 0 0.5em;
@@ -150,6 +162,10 @@
 }
 
 .mvc-grid-row-filters .mvc-grid-value::placeholder {
+    color: #bbbbbb;
+}
+
+.mvc-grid-row-filters .mvc-grid-value::-ms-input-placeholder {
     color: #bbbbbb;
 }
 
@@ -178,7 +194,7 @@
 }
 
 .mvc-grid-header-mode .mvc-grid-value {
-    background: #f7f7f7;
+    background-color: #f7f7f7;
     line-height: 1.5;
     font-weight: 500;
     padding: 0.5em;
@@ -258,8 +274,8 @@
 .mvc-grid-popup .mvc-grid-method,
 .mvc-grid-popup .mvc-grid-operator {
     border: 1px solid #cccccc;
+    background-color: #ffffff;
     box-sizing: border-box;
-    background: #ffffff;
     font-size: 0.9em;
     padding: 0 0.2em;
     height: 2.5em;
@@ -296,10 +312,33 @@
 }
 
 .mvc-grid-popup .mvc-grid-apply {
+    background-color: #28a745;
     border-color: #28a745;
     margin-right: 0.3em;
-    background: #28a745;
     font-weight: bold;
+}
+
+.mvc-grid-popup button.mvc-grid-apply,
+.mvc-grid-popup button.mvc-grid-cancel {
+    width: 3.625em;
+    height: 2em;
+    border-radius: 0.25em;
+    border: none;
+    padding: 0.0625em;
+    cursor: pointer;
+    outline: 0;
+    font-weight: normal;
+    font-size: 0.875em;
+}
+
+.mvc-grid-popup button.mvc-grid-apply {
+    background-color: #2970CA;
+    color: #ffffff;
+}
+
+.mvc-grid-popup button.mvc-grid-cancel {
+    background-color: transparent;
+    color: #134290;
 }
 
 .mvc-grid-popup .mvc-grid-apply:focus {
@@ -307,8 +346,8 @@
 }
 
 .mvc-grid-popup .mvc-grid-cancel {
+    background-color: #dc3545;
     border-color: #dc3545;
-    background: #dc3545;
     margin-left: 0.3em;
 }
 
@@ -343,13 +382,13 @@
 }
 
 .mvc-grid-popup .mvc-grid-dragging .mvc-grid-dropzone {
-    background: #c4daff;
+    background-color: #c4daff;
     padding: 0.5em;
     opacity: 0.4;
 }
 
 .mvc-grid-popup .mvc-grid-dragging .mvc-grid-dropzone.hover {
-    background: #5a90ea;
+    background-color: #5a90ea;
 }
 
 .mvc-grid-pager,
@@ -358,9 +397,9 @@
 }
 
 .mvc-grid-pager button {
+    background-color: #ffffff;
     border: 1px solid #dddddd;
     box-sizing: content-box;
-    background: #ffffff;
     padding: 0 0.25em;
     line-height: 2.5;
     cursor: pointer;
@@ -371,21 +410,21 @@
 
 .mvc-grid-pager button:focus,
 .mvc-grid-pager button:hover {
-    background: #f7f7f7;
+    background-color: #f7f7f7;
     color: #014c8c;
 }
 
 .mvc-grid-pager .active,
 .mvc-grid-pager .active:focus,
 .mvc-grid-pager .active:hover {
+    background-color: #0275d8;
     border-color: #0275d8;
-    background: #0275d8;
     color: #ffffff;
 }
 
 .mvc-grid-pager [disabled],
 .mvc-grid-pager [disabled]:hover {
-    background: #efefef;
+    background-color: #efefef;
     cursor: not-allowed;
     color: #777777;
     outline: 0;

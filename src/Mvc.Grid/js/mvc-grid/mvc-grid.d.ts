@@ -40,21 +40,19 @@ export declare class MvcGrid {
     name: string;
     prefix: string;
     isAjax: boolean;
-    loadingTimerId: number;
+    loadingTimerId: ReturnType<typeof setTimeout> | null;
     loadingDelay: number | null;
     sort: Map<string, "asc" | "desc">;
     filterMode: "row" | "excel" | "header";
     filters: {
         [type: string]: typeof MvcGridFilter | undefined;
     };
-    constructor(container: HTMLElement, options?: Partial<MvcGridOptions>);
+    constructor(container: Element, options?: Partial<MvcGridOptions>);
     set(options: Partial<MvcGridOptions>): this;
-    showConfiguration(anchor?: HTMLElement): void;
-    getConfiguration(): MvcGridConfiguration;
     configure(configuration: MvcGridConfiguration): void;
-    reload(): void;
+    reload(smooth: boolean): void;
     private buildSort;
-    private findGrid;
+    private static findGrid;
     private cleanUp;
     private bind;
 }
@@ -117,16 +115,12 @@ export declare class MvcGridPager {
 }
 export declare class MvcGridPopup {
     static draggedElement: HTMLElement | null;
-    static draggedColumn: MvcGridColumn | null;
     static lastActiveElement: HTMLElement | null;
     static element: HTMLDivElement;
-    static showConfiguration(grid: MvcGrid, anchor?: HTMLElement): void;
     static show(filter: MvcGridColumnFilter): void;
     static hide(e?: UIEvent): void;
     private static setValues;
     private static setValue;
-    private static createPreference;
-    private static createDropzone;
     private static reposition;
     private static bind;
 }

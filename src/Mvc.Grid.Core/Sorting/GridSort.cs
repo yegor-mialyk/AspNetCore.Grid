@@ -15,20 +15,34 @@ public class GridSort<T> : IGridSort<T>
             if (Grid.Query != null && !DefinitionsIsSet)
             {
                 String prefix = String.IsNullOrEmpty(Grid.Name) ? "" : Grid.Name + "-";
-                IEnumerable<Match> matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
+                var matches = Regex.Matches(Grid.Query[prefix + "sort"].ToString(),
                     "(^|,)(?<name>[^ ]+) (?<order>asc|desc)(?=($|,))", RegexOptions.IgnoreCase);
 
-                foreach (Match match in matches.DistinctBy(match => match.Groups["name"].Value))
-                    foreach (IGridColumn<T> column in Grid.Columns)
-                        if (match.Groups["name"].Value.Equals(column.Name, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (match.Groups["order"].Value.Equals("desc", StringComparison.OrdinalIgnoreCase))
-                                DefinitionsValue.Add(column, (DefinitionsValue.Count, GridSortOrder.Desc));
-                            else
-                                DefinitionsValue.Add(column, (DefinitionsValue.Count, GridSortOrder.Asc));
+                if (matches.Count != 0)
+                {
+                    foreach (Match match in matches.DistinctBy(match => match.Groups["name"].Value))
+                        foreach (IGridColumn<T> column in Grid.Columns)
+	                        if (match.Groups["name"].Value.Equals(column.Name, StringComparison.OrdinalIgnoreCase))
+	                        {
+	                            if (match.Groups["order"].Value.Equals("desc", StringComparison.OrdinalIgnoreCase))
+	                                DefinitionsValue.Add(column, (DefinitionsValue.Count, GridSortOrder.Desc));
+	                            else
+	                                DefinitionsValue.Add(column, (DefinitionsValue.Count, GridSortOrder.Asc));
 
-                            break;
+	                            break;
+	                        }
+                }
+                else
+                {
+                    foreach (var column in Grid.Columns)
+                        if (column.Sort.IsDefault)
+                        {
+                            DefinitionsValue.Add(column,
+                                column.Sort.FirstOrder == GridSortOrder.Desc
+                                    ? (DefinitionsValue.Count, GridSortOrder.Desc)
+                                    : (DefinitionsValue.Count, GridSortOrder.Asc));
                         }
+                }
 
                 DefinitionsIsSet = true;
             }

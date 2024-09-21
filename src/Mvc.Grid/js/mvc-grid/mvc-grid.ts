@@ -24,33 +24,25 @@ export interface MvcGridLanguage {
     } | undefined;
 }
 
-export interface MvcGridConfiguration {
-    name: string;
-    columns: {
-        name: string;
-        width: string;
-        hidden: boolean;
-    }[];
-}
-
 export class MvcGrid {
     private static instances: MvcGrid[] = [];
     public static lang: MvcGridLanguage = {
         default: {
             "equals": "Equals",
-            "not-equals": "Not equals"
+            "not-equals": "Does not equal"
         },
         text: {
             "contains": "Contains",
+            "not-contains": "Does not contain",
             "consists-of": "Consists of",
             "equals": "Equals",
-            "not-equals": "Not equals",
+            "not-equals": "Does not equal",
             "starts-with": "Starts with",
             "ends-with": "Ends with"
         },
         number: {
             "equals": "Equals",
-            "not-equals": "Not equals",
+            "not-equals": "Does not equal",
             "less-than": "Less than",
             "greater-than": "Greater than",
             "less-than-or-equal": "Less than or equal",
@@ -58,7 +50,7 @@ export class MvcGrid {
         },
         date: {
             "equals": "Equals",
-            "not-equals": "Not equals",
+            "not-equals": "Does not equal",
             "earlier-than": "Earlier than",
             "later-than": "Later than",
             "earlier-than-or-equal": "Earlier than or equal",
@@ -66,11 +58,11 @@ export class MvcGrid {
         },
         guid: {
             "equals": "Equals",
-            "not-equals": "Not equals"
+            "not-equals": "Does not equal"
         },
         filter: {
-            "apply": "&#10003;",
-            "remove": "&#10008;"
+            "apply": "Apply",
+            "remove": "Clear"
         },
         operator: {
             "select": "",
@@ -89,7 +81,7 @@ export class MvcGrid {
     public name: string;
     public prefix: string;
     public isAjax: boolean;
-    public loadingTimerId: number;
+    public loadingTimerId: ReturnType<typeof setTimeout> | null;
     public loadingDelay: number | null;
     public sort: Map<string, "asc" | "desc">;
     public filterMode: "row" | "excel" | "header";
@@ -97,9 +89,9 @@ export class MvcGrid {
         [type: string]: typeof MvcGridFilter | undefined;
     };
 
-    public constructor(container: HTMLElement, options: Partial<MvcGridOptions> = {}) {
+    public constructor(container: Element, options: Partial<MvcGridOptions> = {}) {
         const grid = this;
-        const element = grid.findGrid(container);
+        const element = MvcGrid.findGrid(container);
 
         if (element.dataset.id) {
             return MvcGrid.instances[parseInt(element.dataset.id)].set(options);
@@ -107,9 +99,9 @@ export class MvcGrid {
 
         grid.columns = [];
         grid.element = element;
-        grid.loadingDelay = 300;
-        grid.loadingTimerId = 0;
-        grid.name = element.dataset.name!;
+        grid.loadingDelay = null;
+        grid.loadingTimerId = null;
+        grid.name = element.dataset.name ?? "";
         grid.controller = new AbortController();
         grid.isAjax = Boolean(element.dataset.url);
         grid.prefix = grid.name ? `${grid.name}-` : "";
@@ -179,52 +171,19 @@ export class MvcGrid {
 
         return grid;
     }
-    public showConfiguration(anchor?: HTMLElement) {
-        MvcGridPopup.showConfiguration(this, anchor);
-    }
-    public getConfiguration() {
-        return {
-            name: this.name,
-            columns: this.columns.map(column => ({
-                name: column.name,
-                hidden: column.isHidden,
-                width: column.header.style.width
-            }))
-        } as MvcGridConfiguration;
-    }
-    public configure(configuration: MvcGridConfiguration) {
-        configuration.columns.forEach((column, index) => {
-            const rows = this.element.querySelectorAll("tr");
-            const i = this.columns.findIndex(col => col.name.toLowerCase() === column.name.toLowerCase());
 
-            if (i >= 0) {
-                this.columns[i].isHidden = column.hidden;
-
-                if (column.width.trim()) {
-                    this.columns[i].header.style.width = column.width.split(";", 2)[0];
-                }
-
-                for (const tr of rows) {
-                    if (column.hidden) {
-                        tr.children[i].classList.add("mvc-grid-hidden");
-                    } else {
-                        tr.children[i].classList.remove("mvc-grid-hidden");
-                    }
-
-                    if (i !== index) {
-                        tr.insertBefore(tr.children[i], tr.children[index]);
-                    }
-                }
-
-                this.columns.splice(i - (index < i ? 1 : 0), 0, this.columns.splice(index, 1)[0]);
-            }
-        });
-    }
-
-    public reload() {
+    public reload(smooth: boolean = false) {
         const grid = this;
 
-        grid.element.dispatchEvent(new CustomEvent("reloadstart", {
+        if (MvcGridPopup.opened && smooth) {
+            MvcGridPopup.reloadNeeded = true;
+
+            return;
+        }
+
+        MvcGridPopup.reloadNeeded = false;
+
+        grid.element.dispatchEvent(new CustomEvent("reloadStart", {
             detail: { grid },
             bubbles: true
         }));
@@ -239,7 +198,7 @@ export class MvcGrid {
             if (grid.loadingDelay !== null) {
                 const loader = `<td colspan="${grid.columns.length}"><div class="mvc-grid-loader"><div class="mvc-grid-spinner"></div></div></td>`;
 
-                clearTimeout(grid.loadingTimerId);
+                clearTimeout(grid.loadingTimerId!);
 
                 grid.loadingTimerId = setTimeout(() => {
                     for (const row of grid.element.querySelectorAll("tbody > tr")) {
@@ -280,7 +239,7 @@ export class MvcGrid {
                     url: grid.url
                 });
 
-                newGrid.element.dispatchEvent(new CustomEvent("reloadend", {
+                newGrid.element.dispatchEvent(new CustomEvent("reloadEnd", {
                     detail: { grid: newGrid },
                     bubbles: true
                 }));
@@ -289,7 +248,7 @@ export class MvcGrid {
                     return Promise.resolve();
                 }
 
-                const cancelled = !grid.element.dispatchEvent(new CustomEvent("reloadfail", {
+                const cancelled = !grid.element.dispatchEvent(new CustomEvent("reloadFail", {
                     detail: { grid, reason },
                     cancelable: true,
                     bubbles: true
@@ -317,7 +276,7 @@ export class MvcGrid {
 
         return map;
     }
-    private findGrid(element: HTMLElement) {
+    private static findGrid(element: Element) {
         const grid = element.closest<HTMLElement>(".mvc-grid");
 
         if (!grid) {
@@ -330,6 +289,7 @@ export class MvcGrid {
         delete this.element.dataset.filterMode;
         delete this.element.dataset.url;
     }
+
     private bind() {
         const grid = this;
 
@@ -345,7 +305,7 @@ export class MvcGrid {
                     data[column.name] = row.cells[i].innerText;
                 }
 
-                this.dispatchEvent(new CustomEvent("rowclick", {
+                this.dispatchEvent(new CustomEvent("rowClick", {
                     detail: { grid: grid, data: data, originalEvent: e },
                     bubbles: true
                 }));
@@ -600,7 +560,7 @@ export class MvcGridColumnFilter {
                 filter.inlineInput!.value = "";
             }
 
-            MvcGridPopup.hide();
+            MvcGridPopup.hidePopup();
         }
     }
 
@@ -610,7 +570,7 @@ export class MvcGridColumnFilter {
         const mode = column.grid.filterMode;
 
         filter.button.addEventListener("click", () => {
-            MvcGridPopup.show(filter);
+            MvcGridPopup.show(filter, column.grid);
         });
 
         if (filter.options) {
@@ -623,7 +583,7 @@ export class MvcGridColumnFilter {
             } else if (mode === "header" || mode === "row") {
                 filter.inlineInput!.addEventListener("click", function () {
                     if (this.selectionStart === this.selectionEnd) {
-                        MvcGridPopup.show(filter);
+                        MvcGridPopup.show(filter, column.grid);
                     }
                 });
             }
@@ -712,41 +672,31 @@ export class MvcGridPager {
 }
 
 export class MvcGridPopup {
-    public static draggedElement: HTMLElement | null;
-    public static draggedColumn: MvcGridColumn | null;
     public static lastActiveElement: HTMLElement | null;
     public static element = document.createElement("div");
+    public static opened: boolean = false;
+    public static reloadNeeded: boolean = false;
+    public static grid: MvcGrid;
 
-    public static showConfiguration(grid: MvcGrid, anchor?: HTMLElement) {
-        const popup = this;
+    public static hidePopup(e?: UIEvent) {
+        MvcGridPopup.hide(e);
 
-        popup.lastActiveElement = document.activeElement as HTMLElement;
-        popup.element.className = "mvc-grid-popup mvc-grid-configuration";
-        popup.element.innerHTML = `<div class="popup-arrow"></div><div class="popup-content"></div>`;
-
-        const content = popup.element.querySelector(".popup-content")!;
-
-        content.appendChild(popup.createDropzone());
-
-        for (const column of grid.columns) {
-            content.appendChild(popup.createPreference(column));
-            content.appendChild(popup.createDropzone());
+        if (MvcGridPopup.reloadNeeded && !MvcGridPopup.opened) {
+            MvcGridPopup.grid.reload();
         }
-
-        if (grid.columns.length) {
-            document.body.appendChild(popup.element);
-        }
-
-        popup.reposition(grid, anchor);
-        popup.bind();
     }
-    public static show(filter: MvcGridColumnFilter) {
+
+    public static show(filter: MvcGridColumnFilter, grid: MvcGrid) {
         if (!filter.instance) {
             return;
         }
 
+        this.grid = grid;
+
         const popup = this;
         const filterer = filter.instance;
+
+        popup.opened = true;
 
         popup.lastActiveElement = document.activeElement as HTMLElement;
         popup.element.className = `mvc-grid-popup ${filterer.cssClasses}`.trim();
@@ -778,6 +728,8 @@ export class MvcGridPopup {
                 popup.lastActiveElement.focus();
                 popup.lastActiveElement = null;
             }
+
+            popup.opened = false;
         }
     }
 
@@ -802,109 +754,6 @@ export class MvcGridPopup {
                 (input as HTMLInputElement).value = values[0] || "";
             }
         }
-    }
-
-    private static createPreference(column: MvcGridColumn) {
-        const popup = this;
-        const name = document.createElement("span");
-        const checkbox = document.createElement("input");
-        const preference = document.createElement("label");
-
-        checkbox.type = "checkbox";
-        preference.draggable = true;
-        preference.className = "mvc-grid-column";
-
-        if (column.filter?.inlineInput) {
-            name.innerText = column.filter.inlineInput.placeholder;
-        } else {
-            name.innerText = column.header.innerText.trim();
-        }
-
-        checkbox.checked = !column.isHidden;
-
-        checkbox.addEventListener("change", () => {
-            const i = column.grid.columns.indexOf(column);
-
-            for (const tr of column.grid.element.querySelectorAll("tr")) {
-                if (checkbox.checked) {
-                    tr.children[i].classList.remove("mvc-grid-hidden");
-                } else {
-                    tr.children[i].classList.add("mvc-grid-hidden");
-                }
-            }
-
-            column.isHidden = !checkbox.checked;
-
-            column.grid.element.dispatchEvent(new CustomEvent("gridconfigure", {
-                detail: { grid: column.grid },
-                bubbles: true
-            }));
-        });
-
-        preference.addEventListener("dragstart", () => {
-            popup.draggedColumn = column;
-            popup.draggedElement = preference;
-            preference.style.opacity = "0.4";
-            preference.parentElement!.classList.add("mvc-grid-dragging");
-        });
-
-        preference.addEventListener("dragend", () => {
-            popup.draggedColumn = null;
-            popup.draggedElement = null;
-            preference.style.opacity = "";
-            preference.parentElement!.classList.remove("mvc-grid-dragging");
-        });
-
-        preference.appendChild(checkbox);
-        preference.appendChild(name);
-
-        return preference;
-    }
-    private static createDropzone() {
-        const dropzone = document.createElement("div");
-
-        dropzone.className = "mvc-grid-dropzone";
-
-        dropzone.addEventListener("dragenter", () => {
-            dropzone.classList.add("hover");
-        });
-
-        dropzone.addEventListener("dragover", e => {
-            e.preventDefault();
-        });
-
-        dropzone.addEventListener("dragleave", () => {
-            dropzone.classList.remove("hover");
-        });
-
-        dropzone.addEventListener("drop", () => {
-            const popup = this;
-            const dragged = popup.draggedElement!;
-            const grid = popup.draggedColumn!.grid;
-
-            if (dropzone !== dragged.previousElementSibling && dropzone !== dragged.nextElementSibling) {
-                const index = Array.from(popup.element.querySelectorAll(".mvc-grid-dropzone")).indexOf(dropzone);
-                const i = grid.columns.indexOf(popup.draggedColumn!);
-
-                dropzone.parentElement!.insertBefore(dragged.previousElementSibling!, dropzone);
-                dropzone.parentElement!.insertBefore(dragged, dropzone);
-
-                for (const tr of grid.element.querySelectorAll("tr")) {
-                    tr.insertBefore(tr.children[i], tr.children[index]);
-                }
-
-                grid.columns.splice(index - (i < index ? 1 : 0), 0, grid.columns.splice(i, 1)[0]);
-
-                grid.element.dispatchEvent(new CustomEvent("gridconfigure", {
-                    detail: { grid },
-                    bubbles: true
-                }));
-            }
-
-            dropzone.classList.remove("hover");
-        });
-
-        return dropzone;
     }
 
     private static reposition(grid: MvcGrid, anchor?: HTMLElement) {
@@ -935,8 +784,8 @@ export class MvcGridPopup {
     private static bind() {
         const popup = this;
 
-        window.addEventListener("mousedown", popup.hide);
-        window.addEventListener("touchstart", popup.hide);
+        window.addEventListener("mousedown", popup.hidePopup);
+        window.addEventListener("touchstart", popup.hidePopup);
     }
 }
 
@@ -1029,7 +878,7 @@ export class MvcGridFilter {
                     </select>
                 </div>
                 <div class="popup-group">${options
-                    ? `<select class="mvc-grid-value" data-filter="${name}"${multiple}>
+                    ? `<select class="mvc-grid-value" data-filter="${name}" ${multiple}>
                           ${options.innerHTML}
                        </select>`
                     : `<input class="mvc-grid-value" data-filter="${name}">`}
@@ -1049,11 +898,9 @@ export class MvcGridFilter {
                 </div>`;
     }
     public renderActions() {
-        const lang = MvcGrid.lang.filter!;
-
         return `<div class="popup-actions">
-                    <button type="button" class="mvc-grid-apply" type="button">${lang.apply}</button>
-                    <button type="button" class="mvc-grid-cancel" type="button">${lang.remove}</button>
+                    <button class="mvc-grid-cancel" type="button">Clear</button>
+                    <button class="mvc-grid-apply" type="button">Apply</button>
                 </div>`;
     }
 
@@ -1137,7 +984,7 @@ export class MvcGridTextFilter extends MvcGridFilter {
         super(column);
 
         this.cssClasses = "mvc-grid-text-filter";
-        this.methods = ["contains", "consists-of", "equals", "not-equals", "starts-with", "ends-with"];
+        this.methods = ["contains", "not-contains", "consists-of", "equals", "not-equals", "starts-with", "ends-with"];
     }
 }
 
