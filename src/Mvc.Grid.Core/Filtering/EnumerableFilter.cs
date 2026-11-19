@@ -51,7 +51,7 @@ public class EnumerableFilter<T> : IGridFilter where T : IGridFilter
 
         ParameterExpression parameter = Expression.Parameter(type, "x");
 
-        if (Filter.Apply(Expression.Lambda(parameter, parameter).Body, culture) is not Expression filter)
+        if (Filter.Apply(parameter, culture) is not Expression filter)
             return null;
 
         MethodInfo any = typeof(Enumerable).GetMethods()

@@ -87,7 +87,7 @@ public class GridColumnExtensionsTests
             new() { Value = "Last", Text = "Last" },
             new() { Value = "Next", Text = "Next" },
             new() { Value = "Test", Text = "Test" }
-        }.GetEnumerator();
+        }.AsEnumerable().GetEnumerator();
 
         while (expected.MoveNext() | actual.MoveNext())
         {
@@ -520,7 +520,7 @@ public class GridColumnExtensionsTests
         column.Grid.Query = new QueryCollection();
         column.Sort.FirstOrder = GridSortOrder.Asc;
 
-        IDictionary<String, Object?> actual = column.AsAttributes();
+        GridHtmlAttributes actual = column.AsAttributes();
 
         Assert.Single(actual);
         Assert.Equal("filterable sortable", actual["class"]);
@@ -542,7 +542,7 @@ public class GridColumnExtensionsTests
         column.Filter.First = Substitute.For<IGridFilter>();
         column.Grid.Query = HttpUtility.ParseQueryString("sort=name asc");
 
-        IDictionary<String, Object?> actual = column.AsAttributes();
+        GridHtmlAttributes actual = column.AsAttributes();
 
         Assert.Equal("test-classes filterable sortable asc mvc-grid-hidden", actual["class"]);
         Assert.Equal(GridFilterType.Double, actual["data-filter-type"]);

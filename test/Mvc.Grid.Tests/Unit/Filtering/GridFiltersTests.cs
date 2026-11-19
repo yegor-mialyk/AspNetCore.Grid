@@ -6,7 +6,7 @@ namespace NonFactors.Mvc.Grid;
 public class GridFiltersTests
 {
     private GridFilters filters;
-    private IGridColumn<GridModel, String?> column;
+    private GridColumn<GridModel, String?> column;
 
     public GridFiltersTests()
     {
@@ -321,7 +321,7 @@ public class GridFiltersTests
         GridColumn<GridModel, TestEnum?> enumColumn = new(column.Grid, _ => TestEnum.First);
         column.Grid.HttpContext = Substitute.For<HttpContext>();
         column.Grid.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
-        helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
+        helper.GetEnumSelectList(typeof(TestEnum)).Returns([new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" }]);
 
         SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
 
@@ -342,7 +342,7 @@ public class GridFiltersTests
         column.Grid.HttpContext = Substitute.For<HttpContext>();
         column.Grid.HttpContext.RequestServices.GetService(typeof(IHtmlHelper)).Returns(helper);
         GridColumn<GridModel, IEnumerable<TestEnum?>> enumColumn = new(column.Grid, _ => new TestEnum?[] { TestEnum.First });
-        helper.GetEnumSelectList(typeof(TestEnum)).Returns(new[] { new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" } });
+        helper.GetEnumSelectList(typeof(TestEnum)).Returns([new SelectListItem { Value = "0", Text = "1st" }, new SelectListItem { Value = "1", Text = "2nd" }]);
 
         SelectListItem[] actual = filters.OptionsFor(enumColumn).ToArray();
 
